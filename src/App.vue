@@ -1,28 +1,43 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div id="topbar">
+      <Login/>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+/* eslint-disable */
+import Vue from "vue";
+import SuiVue from "semantic-ui-vue";
+import GAuth from "vue-google-oauth2";
+import Login from "./components/Login";
+import "semantic-ui-css/semantic.min.css";
+import VeeValidate from "vee-validate";
+
+Vue.use(VeeValidate);
+Vue.use(SuiVue);
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    HelloWorld
+    Login: Login
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+#topbar {
+  height: 30%;
+  text-align: right;
+  padding-top: 1%;
+  padding-bottom: 1%;
 }
 </style>
