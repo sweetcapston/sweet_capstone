@@ -1,28 +1,21 @@
 <template>
   <div>
-    <div is="sui-button-group" id="loginbtn">
+    <div v-if="!profile" is="sui-button-group" id="loginbtn">
       <sui-button @click="Logintoggle">Login</sui-button>
       <sui-button-or id="or"/>
       <sui-button positive @click.native="Signtoggle" id="signbtn">Sign Up</sui-button>
     </div>
+    <div v-else>profile</div>
     <sui-modal v-model="login" id="modal" size="mini">
       <sui-modal-header>Login to OpenClass</sui-modal-header>
       <div class="grid-container login">
         <sui-modal-content>
           <div class="login_body">
             <div class="Email">
-              <sui-input
-                type="email"
-                placeholder="Email"
-                v-model="email"
-                name="email"
-                v-validate="'required|email'"
-                data-vv-as="Email"
-              />
+              <sui-input type="email" placeholder="Email" v-model="email" name="email"/>
             </div>
-            <p class="e-error" v-show="errors.has('email') && email">{{errors.first('email')}}</p>
             <div class="Password">
-              <sui-input type="password" placeholder="Password" v-model="password"/>
+              <sui-input type="password" placeholder="Password" name="password" v-model="password"/>
             </div>
           </div>
         </sui-modal-content>
@@ -55,8 +48,16 @@
         <sui-modal-content>
           <div class="sign_body">
             <div class="Name">
-              <sui-input placeholder="Name" v-model="name"/>
+              <sui-input
+                placeholder="Name"
+                v-model="name"
+                name="name"
+                v-validate="'required'"
+                data-vv-as="Name"
+                @input="validate"
+              />
             </div>
+            <p class="n-error" v-show="errors.has('name') && errsign">{{errors.first('name')}}</p>
             <div class="Email">
               <sui-input
                 type="text"
@@ -65,12 +66,29 @@
                 name="email"
                 v-validate="'required|email'"
                 data-vv-as="Email"
+                @input="validate"
               />
             </div>
-            <p class="e-error" v-show="errors.has('email') && email">{{errors.first('email')}}</p>
+            <p
+              class="e-error"
+              v-show="errors.has('email') && (email || errsign)"
+            >{{errors.first('email')}}</p>
             <div class="Password">
-              <sui-input type="password" placeholder="Password" v-model="password"/>
+              <sui-input
+                type="password"
+                placeholder="Password"
+                name="password"
+                v-model="password"
+                v-validate="'required|min:6'"
+                data-vv-as="Password"
+                @input="validate"
+                ref="password"
+              />
             </div>
+            <p
+              class="pw-error"
+              v-show="errors.has('password') && (password || errsign)"
+            >{{errors.first('password')}}</p>
             <div class="Password2">
               <sui-input
                 type="password"
@@ -78,18 +96,19 @@
                 v-model="password2"
                 name="password2"
                 v-validate="'required|confirmed:password'"
-                data-vv-as="Password"
+                data-vv-as="Confirm Password"
+                @input="validate"
               />
             </div>
             <p
               class="p-error"
-              v-show="errors.has('password2') && password != password2"
+              v-show="errors.has('password2') && (password2 || errsign) "
             >{{errors.first('password2')}}</p>
           </div>
         </sui-modal-content>
         <div class="sign_end">
           <div class="btn-Create">
-            <sui-button class="Create" positive @click="email_singup" id="Create">Create Account</sui-button>
+            <sui-button class="Create" positive @click="email_signup" id="Create">Create Account</sui-button>
           </div>
           <div class="btn-GCreate">
             <sui-button
@@ -97,7 +116,7 @@
               icon="google"
               basic
               content="Sign up with Google"
-              @click.native="gmail_singup"
+              @click.native="gmail_signup"
               id="GLogin"
             />
           </div>
@@ -112,7 +131,7 @@
 </template>
 <script>
 /* eslint-disable */
-import { mapState } from "vuex";
+const baseURI = "https://localhost:3000";
 
 export default {
   data() {
@@ -121,51 +140,105 @@ export default {
       password: "",
       password2: "",
       name: "",
+      errsign: false,
       sign: false,
-      login: false
+      login: false,
+      profile: false
     };
   },
   methods: {
-    Logintoggle() {
-      this.login = !this.login;
-      this.email = "";
-      this.password = "";
-    },
-    Signtoggle() {
-      this.sign = !this.sign;
-      this.email = "";
-      this.password = "";
-      this.name = "";
-    },
-    modalChange() {
-      this.login = !this.login;
-      this.sign = !this.sign;
+    ClearData() {
       this.email = "";
       this.password = "";
       this.password2 = "";
       this.name = "";
+      this.errsign = false;
     },
-    LogIn() {
+    Logintoggle() {
       this.login = !this.login;
-      this.email = "";
-      this.password = "";
+      this.validate();
+      this.ClearData();
     },
-    handleClickGetAuth() {
+    Signtoggle() {
+      this.sign = !this.sign;
+      this.validate();
+      this.ClearData();
+    },
+    modalChange() {
       this.login = !this.login;
-      this.email = "";
-      this.password = "";
-    },
-    email_singup() {
       this.sign = !this.sign;
-      this.email = "";
-      this.password = "";
-      this.name = "";
+      this.ClearData();
     },
-    gmail_singup() {
+    async LogIn() {
+      let form = new FormData();
+      form.append("email", this.email);
+      form.append("password", this.password);
+      await this.$http
+        .post(`${baseURI}/login`, form)
+        .then(response => {
+          console.log("response", JSON.stringify(response));
+          this.ClearData();
+          this.profile = true;
+          this.login = false;
+        })
+        .catch(error => {
+          console.log("failed", error);
+          alert("로그인 실패")
+        });
+    },
+    async handleClickGetAuth() {
+      this.login = !this.login;
+      await this.$http
+        .get(`${baseURI}/login`)
+        .then(response => {
+          console.log("response", JSON.stringify(response));
+          this.ClearData();
+          this.profile = true;
+          this.login = false;
+        })
+        .catch(error => {
+          console.log("failed", error);
+          alert("로그인 실패")
+        });
+    },
+    async email_signup() {
+      if (this.errors.items.length != 0) {
+        this.errsign = true;
+        return false;
+      }
+      console.log(this.errors);
+      this.errsign = false;
+      let form = new FormData();
+      form.append("name", this.name);
+      form.append("email", this.email);
+      form.append("password", this.password);
+      await this.$http
+        .post(`${baseURI}/signup`, form)
+        .then(response => {
+          console.log("response", JSON.stringify(response));
+          this.ClearData();
+          this.sign = false;
+        })
+        .catch(error => {
+          console.log("failed", error);
+          alert("회원가입 실패")
+        });
+    },
+    async gmail_signup() {
       this.sign = !this.sign;
-      this.email = "";
-      this.password = "";
-      this.name = "";
+      this.ClearData();
+      await this.$http
+        .get(`${baseURI}/signup`)
+        .then(response => {
+          console.log("response", JSON.stringify(response));
+        })
+        .catch(error => {
+          console.log("failed", error);
+          alert("회원가입 실패")
+        });
+    },
+    validate: function() {
+      this.$validator.validateAll();
     }
   }
 };
@@ -205,7 +278,7 @@ button.ui.positive.button:hover {
   display: grid;
   grid-template-columns: 0.2fr 3.5fr 0.3fr;
   grid-template-rows: 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr;
-  grid-template-areas: ". . . " ". Email ." ". e-error ." ". Password ." ". . .";
+  grid-template-areas: ". . . " ". Email ." ". . ." ". Password ." ". . .";
   grid-area: login_body;
 }
 .login_end {
@@ -219,7 +292,7 @@ button.ui.positive.button:hover {
   display: grid;
   grid-template-columns: 0.2fr 3.5fr 0.3fr;
   grid-template-rows: 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr;
-  grid-template-areas: ". . . " ". Name ." ". . . " ". Email ." ". e-error ." ". Password ." ". . ." ". Password2 ." ". p-error .";
+  grid-template-areas: ". . . " ". Name ." ". n-error . " ". Email ." ". e-error ." ". Password ." ". pw-error ." ". Password2 ." ". p-error .";
   grid-area: sign_body;
 }
 .sign_end {
@@ -241,8 +314,22 @@ button.ui.positive.button:hover {
 .Password2 {
   grid-area: Password2;
 }
+.n-error {
+  grid-area: n-error;
+  padding-left: 3px;
+  color: rgba(247, 64, 64, 0.816);
+  font-size: 80%;
+  user-select: none;
+}
 .e-error {
   grid-area: e-error;
+  padding-left: 3px;
+  color: rgba(247, 64, 64, 0.816);
+  font-size: 80%;
+  user-select: none;
+}
+.pw-error {
+  grid-area: pw-error;
   padding-left: 3px;
   color: rgba(247, 64, 64, 0.816);
   font-size: 80%;
@@ -281,5 +368,9 @@ button.Create {
 }
 .input {
   width: 100%;
+}
+.has-error {
+  background: #843534;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 </style>
