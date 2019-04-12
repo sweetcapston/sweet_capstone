@@ -1,11 +1,10 @@
 import Vue from "vue";
-import "./plugins/vuetify";
+import "./plugins";
+import "./components";
 import App from "./App.vue";
-import "vuetify/dist/vuetify.min.css";
-import axios from "axios";
 
 Vue.config.productionTip = false;
-Vue.prototype.$http = axios;
+Vue.prototype.$EventBus = new Vue();
 
 new Vue({
   render: h => h(App)

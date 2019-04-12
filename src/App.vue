@@ -1,28 +1,31 @@
 <template>
   <div id="app">
-    <div id="topbar">
-      <Login/>
-    </div>
+    <modal-login-form/>
+    <modal-sign-up-form/>
   </div>
 </template>
 
 <script>
-/* eslint-disable */
 import Vue from "vue";
-import SuiVue from "semantic-ui-vue";
-import GAuth from "vue-google-oauth2";
-import Login from "./components/Login";
 import "semantic-ui-css/semantic.min.css";
+import SuiVue from "semantic-ui-vue";
 import VeeValidate from "vee-validate";
-
-Vue.use(VeeValidate);
+import ko from "vee-validate/dist/locale/ko.js";
+const config = {
+  locale: "ko",
+  dictionary: {
+    ko
+  }
+};
+Vue.use(VeeValidate, config);
 Vue.use(SuiVue);
-
+/* eslint-disable */
 export default {
   name: "app",
-  components: {
-    Login: Login
-  }
+  data() {
+    return {};
+  },
+  methods: {}
 };
 </script>
 
@@ -34,10 +37,36 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-#topbar {
-  height: 30%;
-  text-align: right;
-  padding-top: 1%;
-  padding-bottom: 1%;
+button.ui.positive.button {
+  background: black;
+}
+button.ui.positive.button:active {
+  background: black;
+}
+button.ui.positive.button:focus {
+  background: rgb(63, 62, 62);
+}
+button.ui.positive.button:hover {
+  background: rgb(63, 62, 62);
+}
+.unselectable {
+  -webkit-user-select: none; /* Safari, Chrome */
+  -khtml-user-select: none; /* Konqueror */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE */
+  user-select: none; /* CSS3 */
+}
+.undraggable {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+label {
+  font-size: 90%;
+  font-weight: bold;
+  color: rgb(33, 74, 74);
+  padding-left: 1%;
 }
 </style>
