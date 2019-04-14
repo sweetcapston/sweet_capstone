@@ -30,8 +30,8 @@
                 @input="validate"
               />
             </div>
-            <div class="duplicate">
-              <sui-button class="btn-duplicate" @click="IDcheck">중복확인</sui-button>
+            <div class="gridline">
+              <sui-button class="duplicate btn-duplicate" @click="IDcheck">중복확인</sui-button>
             </div>
             <p
               class="e-error"
@@ -87,8 +87,8 @@
               @input="validate"
             />
           </div>
-          <div class="IDcheck">
-            <sui-checkbox v-model="checkbox" ref="check" label="교수" @click="validate"/>
+          <div class="gridline2">
+            <sui-checkbox class="IDcheck" v-model="checkbox" ref="check" label="교수" @click="validate"/>
           </div>
           <p
             class="ID-error"
@@ -237,14 +237,14 @@ export default {
   display: grid;
   grid-template-columns: 0.2fr 3fr 1fr;
   grid-template-rows: 0.4fr 1.1fr 0.5fr 1.1fr 0.5fr 1.1fr 0.5fr 1.1fr 0.5fr;
-  grid-template-areas: ". . . " ". Name ." ". n-error . " ". Email duplicate" ". e-error ." ". Password ." ". pw-error ." ". Password2 ." ". p-error .";
+  grid-template-areas: ". . . " ". Name ." ". n-error . " ". Email gridline" ". e-error ." ". Password ." ". pw-error ." ". Password2 ." ". p-error .";
   grid-area: sign_body;
 }
 .sign_IDcheck {
   display: grid;
   grid-template-columns: 0.2fr 3fr 1fr;
   grid-template-rows: 1.1fr 0.5fr;
-  grid-template-areas: ". StudentId IDcheck" ". ID-error .";
+  grid-template-areas: ". StudentId gridline2" ". ID-error .";
   grid-area: sign_IDcheck;
 }
 .sign_end {
@@ -267,20 +267,37 @@ export default {
   grid-area: IDcheck;
   text-align: center;
 }
-.duplicate {
-  grid-area: duplicate;
+.gridline {
+  grid-area: gridline;
+  display: grid;
+  grid-template-rows: 30% 70%;
+  grid-template-columns: 8% 84% 8%;
+  grid-template-areas: ". . ." ". duplicate . " ". . .";
   text-align: center;
 }
-.btn-duplicate.ui.button {
-  width: 80%;
+.gridline2 {
+  grid-area: gridline2;
+  display: grid;
+  grid-template-rows: 45% 25% 30%;
+  grid-template-columns: 20% 70% 10%;
+  grid-template-areas: ". . ." ". IDcheck ." ". . .";
+  
+}
+.duplicate {
+  grid-area: duplicate;
+  width: 100%;
   font-size: 75%;
-  padding: 0;
-  height: 60%;
-  margin-top: 25%;
+  height: 100%;
+  text-align: center;
+}
+.duplicate.btn-duplicate.ui.button{
+  padding:0px;
+  font-size: 80%;
+  width:100%;
+  height:100%;
 }
 .ui.checkbox {
-  margin-top: 35%;
-  font-size: 90%;
+  font-size: 78%;
   font-weight: bold;
   color: rgb(33, 74, 74);
 }
