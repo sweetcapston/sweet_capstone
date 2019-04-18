@@ -11,6 +11,10 @@ import "semantic-ui-css/semantic.min.css";
 import SuiVue from "semantic-ui-vue";
 import VeeValidate from "vee-validate";
 import ko from "vee-validate/dist/locale/ko.js";
+import Auth from "./api/Auth";
+import VueSession from 'vue-session'
+
+
 const config = {
   locale: "ko",
   dictionary: {
@@ -19,9 +23,15 @@ const config = {
 };
 Vue.use(VeeValidate, config);
 Vue.use(SuiVue);
+Vue.use(VueSession)
 /* eslint-disable */
 export default {
   name: "app",
+  created() {
+    Auth.auth(this.$session.get('token')).then(res=> {
+        console.log(res)
+      })
+  },
   data() {
     return {};
   },

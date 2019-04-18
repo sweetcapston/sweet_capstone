@@ -195,21 +195,25 @@ export default {
       };
       Auth.SingUp(form)
         .then(response => {
-          this.ClearData();
-          this.Opensign = false;
+          if(response.data == true){
+            this.ClearData();
+            this.Opensign = false;
+            alert("회원가입에 성공했습니다.")
+          }
+          else{
+            alert("회원가입에 실패했습니다.");
+          }
         })
         .catch(error => {
-          alert("회원가입 실패");
+            alert("error")          
         });
     },
     IDcheck: function() {
       if (this.email != "") {
-        let form = {
-          email: this.email
-        };
-        Auth.duplicate(form)
+        Auth.duplicate(this.email)
           .then(res => {
-            if (res == true) {
+            console.log(res)
+            if (res.data == true) {
               alert("중복된 아이디 입니다.");
             } else {
               alert("사용가능한 아이디 입니다.");

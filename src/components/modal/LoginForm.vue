@@ -1,6 +1,6 @@
 <template>
   <div>
-    <sui-button @click="OpenLoginModal">로그인</sui-button>
+    <sui-button @click="OpenLoginModal" v-show="!logined">로그인</sui-button>
     <sui-modal v-model="Openlogin" id="modal" size="mini">
       <sui-modal-header class="undraggable unselectable">로그인</sui-modal-header>
       <div class="grid-container login">
@@ -50,6 +50,7 @@
 </template>
 <script>
 import Auth from "../../api/Auth";
+
 /* eslint-disable */
 export default {
   data() {
@@ -57,7 +58,8 @@ export default {
       email: "",
       password: "",
       Openlogin: false,
-      errsign: false
+      errsign: false,
+      logined: false
     };
   },
   created() {
@@ -75,8 +77,7 @@ export default {
       this.validate();
       this.ClearData();
     },
-
-    async LogIn() {
+    LogIn() {
       if (this.errors.items.length != 0) {
         this.errsign = true;
         return false;
@@ -86,15 +87,22 @@ export default {
         email: this.email,
         password: this.password
       };
-      await Auth.login(form)
+      Auth.login(form)
         .then(res => {
-          console.log(res);
-          this.ClearData();
-          this.Openlogin = false;
+          if(res.data){
+            this.ClearData();
+            this.Openlogin = false;
+            alert("로그인 성공")
+            this.$session.set('token', res.data)
+            // this.logined = true;
+            console.log(res.data)
+          }else{
+            alert("로그인 실패")
+          }
+          
         })
         .catch(error => {
-          console.log("failed", error);
-          alert("로그인 실패");
+          alert("error");
         });
     },
     modalChange() {
