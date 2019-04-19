@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     {{$store.state.test}}
+    <Home></Home>
     <modal-login-form/>
     <modal-sign-up-form/>
   </div>
@@ -13,7 +14,8 @@ import SuiVue from "semantic-ui-vue";
 import VeeValidate from "vee-validate";
 import ko from "vee-validate/dist/locale/ko.js";
 import Auth from "./api/Auth";
-import VueSession from 'vue-session'
+import VueSession from 'vue-session';
+import Home from './components/core/Home'
 
 
 const config = {
@@ -28,6 +30,9 @@ Vue.use(VueSession)
 /* eslint-disable */
 export default {
   name: "app",
+  components: {
+    Home
+  },
   created() {
     Auth.auth(this.$session.get('token')).then(res=> {
         console.log(res)
