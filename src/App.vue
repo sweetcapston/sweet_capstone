@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    {{$store.state.test}}
     <modal-login-form/>
     <modal-sign-up-form/>
   </div>
