@@ -1,10 +1,15 @@
 <template>
-  <div id="app">
-    {{$store.state.test}}
-    <Home></Home>
-    <modal-login-form/>
-    <modal-sign-up-form/>
-  </div>
+  <v-app id="app">
+    <v-content>
+      <v-container fluid grid-list-md fill-height>
+        <v-layout row wrap>
+          <Home></Home>
+          <modal-login-form/>
+          <modal-sign-up-form/>
+        </v-layout>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
@@ -14,9 +19,8 @@ import SuiVue from "semantic-ui-vue";
 import VeeValidate from "vee-validate";
 import ko from "vee-validate/dist/locale/ko.js";
 import Auth from "./api/Auth";
-import VueSession from 'vue-session';
-import Home from './components/core/Home'
-
+import VueSession from "vue-session";
+import Home from "./components/core/Home";
 
 const config = {
   locale: "ko",
@@ -26,7 +30,7 @@ const config = {
 };
 Vue.use(VeeValidate, config);
 Vue.use(SuiVue);
-Vue.use(VueSession)
+Vue.use(VueSession);
 /* eslint-disable */
 export default {
   name: "app",
@@ -34,9 +38,9 @@ export default {
     Home
   },
   created() {
-    Auth.auth(this.$session.get('token')).then(res=> {
-        console.log(res)
-      })
+    Auth.auth(this.$session.get("token")).then(res => {
+      console.log(res);
+    });
   },
   data() {
     return {};
