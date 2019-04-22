@@ -3,7 +3,8 @@
     <v-content>
       <v-container fluid grid-list-md fill-height>
         <v-layout row wrap>
-          <Home></Home>
+          <Drawer/>
+          <Toolbar/>
           <modal-login-form/>
           <modal-sign-up-form/>
         </v-layout>
@@ -21,6 +22,8 @@ import ko from "vee-validate/dist/locale/ko.js";
 import Auth from "./api/Auth";
 import VueSession from "vue-session";
 import Home from "./components/core/Home";
+import Drawer from "./components/core/Drawer";
+import Toolbar from "./components/core/Toolbar";
 
 const config = {
   locale: "ko",
@@ -35,7 +38,7 @@ Vue.use(VueSession);
 export default {
   name: "app",
   components: {
-    Home
+    Home,Drawer,Toolbar
   },
   created() {
     Auth.auth(this.$session.get("token")).then(res => {
