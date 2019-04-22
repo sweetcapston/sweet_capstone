@@ -30,11 +30,6 @@ export default new Vuex.Store({
         to: '/chartClass',
         icon: 'dashboard',
         text: '통계'
-      },
-      {
-        to: '/feedbackClass',
-        icon: 'chat',
-        text: '피드백 클래스'
       }
     ]
   },

@@ -5,9 +5,10 @@
         <v-layout row wrap>
           <Drawer/>
           <Toolbar/>
+          <router-view/>
+        </v-layout>
           <modal-login-form/>
           <modal-sign-up-form/>
-        </v-layout>
       </v-container>
     </v-content>
   </v-app>
@@ -52,7 +53,9 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@import '@/styles/index.scss';
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
