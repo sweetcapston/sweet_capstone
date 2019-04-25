@@ -38,7 +38,7 @@
         <v-list-tile
           v-for="(link, i) in $store.state.links"
           :key="i"
-          :to="link.to"
+          @click="moveToPage(link)"
           :active-class= "color"
           avatar
           class="v-list-item"
@@ -87,7 +87,10 @@
       }
     },
     methods: {
-      ...mapMutations(['setDrawer'])
+      ...mapMutations(['setDrawer']),
+      moveToPage: function(link){
+        this.$router.push(link.to+this.$store.state.classCode+link.to2)
+      }
     }
   }
 </script>

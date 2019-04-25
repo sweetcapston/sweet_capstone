@@ -1,19 +1,20 @@
 <template>
   <v-app>
     <v-content>
-      <router-view/>
+        <modal-login-form/>
+        <modal-sign-up-form/>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import Vue from "vue";
 import "semantic-ui-css/semantic.min.css";
 import SuiVue from "semantic-ui-vue";
 import VeeValidate from "vee-validate";
 import ko from "vee-validate/dist/locale/ko.js";
-import Auth from "./api/Auth";
+import Auth from "../api/Auth";
 import VueSession from "vue-session";
+import Vue from "vue";
 
 const config = {
   locale: "ko",
@@ -25,24 +26,33 @@ const config = {
 Vue.use(VeeValidate, config);
 Vue.use(SuiVue);
 Vue.use(VueSession);
-/* eslint-disable */
 
+/* eslint-disable */
 export default {
+  name: "app",
   created() {
     Auth.auth(this.$session.get("token")).then(res => {
-      console.log(res);
+    console.log(res);
     });
   },
   data() {
-    return {};
+    return {
+      username:'',
+      password:''
+    };
   },
-  methods: {}
+  methods: {
+    login(){
+      this.$store.dispatch('retrieveToken',{
+        username: this.username,
+        password: this.password
+      })
+    }
+  }
 };
 </script>
 
-<style lang="scss">
-@import '@/styles/index.scss';
-
+<style>
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

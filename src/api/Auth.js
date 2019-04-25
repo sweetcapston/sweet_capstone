@@ -11,7 +11,7 @@ export default {
   login(params) {
     return axios.post(`${BaseUrl}/users/login`, params);
   },
-  SingUp(params) {
+  SignUp(params) {
     return axios.post(`${BaseUrl}/users/signup`, params);
   },
   duplicate(params) {

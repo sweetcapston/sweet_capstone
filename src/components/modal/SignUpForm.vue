@@ -193,7 +193,7 @@ export default {
         password: this.password,
         StudentId: this.StudentId
       };
-      Auth.SingUp(form)
+      Auth.SignUp(form)
         .then(response => {
           if(response.data == true){
             this.ClearData();

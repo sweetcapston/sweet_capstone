@@ -1,35 +1,51 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from './components/core/Home.vue'
-import chartClass from './components/core/chartClass.vue'
-import questionClass from './components/core/questionClass.vue'
-import surveyClass from './components/core/surveyClass.vue'
+import Vue from "vue";
+import Router from "vue-router";
+import Home from "./components/core/Home.vue";
+import Chart from "./components/core/chartClass.vue";
+import Question from "./components/core/questionClass.vue";
+import Survey from "./components/core/surveyClass.vue";
+import Login from "./views/Login.vue";
+import Main from "./views/Main.vue";
+import Class from "./components/core/Class.vue";
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/home',
-      name: 'home',
-      component: Home
+      path: "/",
+      name: "login",
+      component: Login
     },
     {
-      path: '/chartclass',
-      name: 'chartclass',
-      component: chartClass
+      path: "/main",
+      name: "main",
+      component: Main
     },
     {
-      path: '/questionclass',
-      name: 'questionclass',
-      component: questionClass
-    },
-    {
-      path: '/surveyclass',
-      name: 'surveyclass',
-      component: surveyClass
+      path: "/class/:classCode",
+      name: "class",
+      component : Class,
+      children: [
+        {
+          path : 'home',
+          component : Home
+        },
+        {
+          path: 'question',
+          component : Question
+        },
+        {
+          path: 'survey',
+          component : Survey
+        },
+        {
+          path: 'chart',
+          component : Chart
+        }
+      ]
     }
   ]
-})
+});

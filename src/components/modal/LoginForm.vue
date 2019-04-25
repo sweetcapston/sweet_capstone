@@ -87,6 +87,7 @@ export default {
         email: this.email,
         password: this.password
       };
+
       Auth.login(form)
         .then(res => {
           if(res.data){
@@ -94,12 +95,13 @@ export default {
             this.Openlogin = false;
             alert("로그인 성공")
             this.$session.set('token', res.data)
+            //this.$router.push({name: 'class', params: { classCode: this.$store.state.classCode }}) // 로그인 성공후 화면 이동.
+            this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
             // this.logined = true;
             console.log(res.data)
           }else{
             alert("로그인 실패")
           }
-          
         })
         .catch(error => {
           alert("error");
