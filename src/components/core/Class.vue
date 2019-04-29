@@ -3,8 +3,8 @@
     <v-content>
       <v-container fluid grid-list-md fill-height>
         <v-layout row wrap>
-          <Drawer/>
-          <Toolbar/>
+          <core-drawer/>
+          <core-toolbar/>
           <router-view/>
         </v-layout>
       </v-container>
@@ -13,14 +13,9 @@
 </template>
 
 <script>
-import Drawer from "./Drawer";
-import Toolbar from "./Toolbar";
 
 export default {
-  name: "app",
-  components: {
-    Drawer,Toolbar
-  },
+  name: "app"
 };
 </script>
 

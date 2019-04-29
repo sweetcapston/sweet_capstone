@@ -1,12 +1,17 @@
 <template>
   <v-app>
-    <span>
-      <input v-model="classCode" placeholder="클래스코드">
+    <v-content>
+      <input v-model="classCode" placeholder="클래스코드" >
       <v-btn dark @click="test">입장하기</v-btn>
+<<<<<<< HEAD
       <v-btn dark @click="createClass">클래스 생성하기</v-btn>
 
       <v-btn dark @click="logout">로그아웃</v-btn>
     </span>
+=======
+      <modal-create-class-form/>
+    </v-content>
+>>>>>>> 37c63d56766f5aa9118a912d237fbfd084872613
   </v-app>
 </template>
 
@@ -28,7 +33,7 @@ export default {
     });
   },
   updated() {
-      this.$store.commit('setClassCode',this.classCode)
+      this.$store.commit('setClassCode',this.classCode) // 클래스 코드 입력받기 
   },
   data(){
       return {classCode:''}
@@ -37,6 +42,7 @@ export default {
     test() {
       alert(this.classCode);
       this.$router.push({name: 'class', params: { classCode: this.classCode }})
+<<<<<<< HEAD
     },
     createClass(){
 
@@ -48,6 +54,8 @@ export default {
           this.$router.push({name: 'login'})
         }
       })
+=======
+>>>>>>> 37c63d56766f5aa9118a912d237fbfd084872613
     }
   }
 };

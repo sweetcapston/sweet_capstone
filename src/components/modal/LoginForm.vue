@@ -95,11 +95,19 @@ export default {
             this.ClearData();
             this.Openlogin = false;
             alert("로그인 성공")
+<<<<<<< HEAD
             this.$session.set('Identity', data.Identity) //추후 수정 가능
             // this.$store.commit("setIdentity", res.data.Identity); //page refresh 시 초기화됨
             switch(data.Identity){
               case 1: //학생
                 this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
+=======
+            this.$session.set('token', res.data.token)
+            this.$store.commit("setIdentity", res.data.Identity);
+            switch(res.data.Identity){
+              case 1: //학생
+                this.$router.push({name: 'main'}); // 로그인 성공후 메인페이지로 이동
+>>>>>>> 37c63d56766f5aa9118a912d237fbfd084872613
                 break;
               case 2: //교수
                 break;
