@@ -13,14 +13,9 @@
 </template>
 
 <script>
-
-export default {
-  name: "app"
-};
+export default {};
 </script>
 
 <style lang="scss">
-
-@import '@/styles/index.scss';
-
+@import "@/styles/index.scss";
 </style>
