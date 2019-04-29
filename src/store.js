@@ -37,9 +37,11 @@ export default new Vuex.Store({
     Identity: 0
   },
   getters: { // 반복사용되는 값을 재사용하기 위해 사용. computed와 같은 기능
-    allLinksCount: function(state)
-    {
+    allLinksCount: function(state){
       return state.links.length;
+    },
+    getIdentity: function(state){
+      return state.Identity;
     }
   },
   mutations: { // state값을 변경하고자 할 때, commit을 이용해서 변경시킬 것임, State 관리
@@ -53,6 +55,9 @@ export default new Vuex.Store({
   },
   actions: { // mutations는 모든기능이 동기로 동작합니다. 비동기로 사용하기위해 이 actions을 사용. ditpatch로 사용.
     retrieveToken(context, credentials){
+
+      //수정 필요할 듯
+      //token cookie로 저장하고 있습니다. 
       Axios.post('/login', {
         username: credentials.username,
         password: credentials.password,
