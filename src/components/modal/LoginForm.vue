@@ -94,15 +94,14 @@ export default {
             this.ClearData();
             this.Openlogin = false;
             alert("로그인 성공")
-            console.log(1)
             this.$session.set('token', res.data.token)
-            console.log(2)
             this.$store.commit("setIdentity", res.data.Identity);
+            console.log(res.data.Identity);
             switch(res.data.Identity){
-              
               case 1: //학생
-                console.log(4)
-                this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
+                console.log(4);
+                this.$router.push({name: 'main'}); // 로그인 성공후 메인페이지로 이동
+                console.log(5);
                 break;
               case 2: //교수
                 break;
