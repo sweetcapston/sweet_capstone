@@ -78,6 +78,7 @@ export default {
       this.ClearData();
     },
     LogIn() {
+      
       if (this.errors.items.length != 0) {
         this.errsign = true;
         return false;
@@ -87,18 +88,29 @@ export default {
         email: this.email,
         password: this.password
       };
-
       Auth.login(form)
         .then(res => {
           if(res.data){
             this.ClearData();
             this.Openlogin = false;
             alert("로그인 성공")
-            this.$session.set('token', res.data)
-            //this.$router.push({name: 'class', params: { classCode: this.$store.state.classCode }}) // 로그인 성공후 화면 이동.
-            this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
+            console.log(1)
+            this.$session.set('token', res.data.token)
+            console.log(2)
+            this.$store.commit("setIdentity", res.data.Identity);
+            switch(res.data.Identity){
+              
+              case 1: //학생
+                console.log(4)
+                this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
+                break;
+              case 2: //교수
+                break;
+              case 3: //관리자
+                break;
+            }
+            console.log(4)
             // this.logined = true;
-            console.log(res.data)
           }else{
             alert("로그인 실패")
           }
@@ -122,55 +134,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.header {
-  text-align: center;
-}
-.grid-container {
-  display: grid;
-}
-.grid-container.login {
-  grid-template-areas: "login_body" "login_end";
-}
-.login_body {
-  display: grid;
-  grid-template-columns: 0.3fr 3.5fr 0.3fr;
-  grid-template-rows: 0.4fr 1.1fr 0.6fr 1.1fr 0.4fr;
-  grid-template-areas: ". . . " ". Email ." ". e-error ." ". Password ." ". pw-error .";
-  grid-area: login_body;
-}
-.login_end {
-  display: grid;
-  grid-template-columns: 0.3fr 3.5fr 0.3fr;
-  grid-template-rows: 0.2fr 1fr 0.4fr 1fr;
-  grid-template-areas: ". . ." ". btn-Login ." ". . ." ". modalChange .";
-  grid-area: login_end;
-}
-.Email {
-  grid-area: Email;
-}
-.Password {
-  grid-area: Password;
-}
-
-.modalChange {
-  grid-area: modalChange;
-  text-align: center;
-  padding-top: 5px;
-}
-
-.btn-Login {
-  grid-area: btn-Login;
-}
-button.Login {
-  width: 100%;
-  font-size: 80%;
-}
-.ui.input {
-  margin-top: 1%;
-}
-.input {
-  width: 100%;
-}
-</style>

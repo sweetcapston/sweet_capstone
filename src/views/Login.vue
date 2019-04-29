@@ -32,64 +32,31 @@ export default {
   name: "app",
   created() {
     Auth.auth(this.$session.get("token")).then(res => {
-    console.log(res);
+      console.log(res);
+      res.data
     });
   },
   data() {
     return {
       username:'',
-      password:''
+      password:'',
+      Identity: 0   //0 로그인x, 1 학생 , 2 교수, 3 관리자
     };
   },
   methods: {
+    // this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
     login(){
       this.$store.dispatch('retrieveToken',{
         username: this.username,
         password: this.password
       })
-    }
+    },
+
   }
 };
 </script>
+<style lang="scss">
 
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-button.ui.positive.button {
-  background: black;
-}
-button.ui.positive.button:active {
-  background: black;
-}
-button.ui.positive.button:focus {
-  background: rgb(63, 62, 62);
-}
-button.ui.positive.button:hover {
-  background: rgb(63, 62, 62);
-}
-.unselectable {
-  -webkit-user-select: none; /* Safari, Chrome */
-  -khtml-user-select: none; /* Konqueror */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE */
-  user-select: none; /* CSS3 */
-}
-.undraggable {
-  -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
-  user-drag: none;
-}
-label {
-  font-size: 90%;
-  font-weight: bold;
-  color: rgb(33, 74, 74);
-  padding-left: 1%;
-}
+@import '@/styles/index.scss';
+
 </style>

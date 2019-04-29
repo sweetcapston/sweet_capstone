@@ -33,7 +33,8 @@ export default new Vuex.Store({
         icon: 'dashboard',
         text: '통계'
       }
-    ]
+    ],
+    Identity: 0
   },
   getters: { // 반복사용되는 값을 재사용하기 위해 사용. computed와 같은 기능
     allLinksCount: function(state)
@@ -42,6 +43,7 @@ export default new Vuex.Store({
     }
   },
   mutations: { // state값을 변경하고자 할 때, commit을 이용해서 변경시킬 것임, State 관리
+    setIdentity: (state, Identity) => state.Identity = Identity,
     setDrawer: (state, payload) => (state.drawer = payload),
     toggleDrawer: state => (state.drawer = !state.drawer), // 상태 토글
     retrieveToken(state, token){

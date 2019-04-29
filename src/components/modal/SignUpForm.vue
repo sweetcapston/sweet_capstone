@@ -186,7 +186,7 @@ export default {
         alert("아이디 중복확인을 해주세요");
         return false;
       }
-      if (this.checkbox == true) StudentId = "9999";
+      if (this.checkbox == true) this.StudentId = "9999";
       let form = {
         name: this.name,
         email: this.email,
@@ -207,9 +207,11 @@ export default {
         .catch(error => {
             alert("error")          
         });
+        this.modalChange();
     },
     IDcheck: function() {
-      if (this.email != "") {
+      this.validate()
+      if (!this.errors.has('email')) {
         Auth.duplicate(this.email)
           .then(res => {
             console.log(res)
@@ -224,6 +226,7 @@ export default {
             alert("오류");
           });
       } else {
+        alert("형식을 맞춰주세요")
         return false;
       }
     },
@@ -233,122 +236,4 @@ export default {
   }
 };
 </script>
-<style>
-.grid-container.sign {
-  grid-template-areas: "sign_body" "sign_IDcheck" "sign_end";
-}
-.sign_body {
-  display: grid;
-  grid-template-columns: 0.2fr 3fr 1fr;
-  grid-template-rows: 0.4fr 1.1fr 0.5fr 1.1fr 0.5fr 1.1fr 0.5fr 1.1fr 0.5fr;
-  grid-template-areas: ". . . " ". Name ." ". n-error . " ". Email gridline" ". e-error ." ". Password ." ". pw-error ." ". Password2 ." ". p-error .";
-  grid-area: sign_body;
-}
-.sign_IDcheck {
-  display: grid;
-  grid-template-columns: 0.2fr 3fr 1fr;
-  grid-template-rows: 1.1fr 0.5fr;
-  grid-template-areas: ". StudentId gridline2" ". ID-error .";
-  grid-area: sign_IDcheck;
-}
-.sign_end {
-  display: grid;
-  grid-template-columns: 0.2fr 3.5fr 0.3fr;
-  grid-template-rows: 0.2fr 1fr 0.4fr 1fr;
-  grid-template-areas: ". . ." ". btn-Create ." ". . ." ". modalChange .";
-  grid-area: sign_end;
-}
-.Name {
-  grid-area: Name;
-}
-.Password2 {
-  grid-area: Password2;
-}
-.StudentId {
-  grid-area: StudentId;
-}
-.IDcheck {
-  grid-area: IDcheck;
-  text-align: center;
-}
-.gridline {
-  grid-area: gridline;
-  display: grid;
-  grid-template-rows: 30% 70%;
-  grid-template-columns: 8% 84% 8%;
-  grid-template-areas: ". . ." ". duplicate . " ". . .";
-  text-align: center;
-}
-.gridline2 {
-  grid-area: gridline2;
-  display: grid;
-  grid-template-rows: 45% 25% 30%;
-  grid-template-columns: 20% 70% 10%;
-  grid-template-areas: ". . ." ". IDcheck ." ". . .";
-  
-}
-.duplicate {
-  grid-area: duplicate;
-  width: 100%;
-  font-size: 75%;
-  height: 100%;
-  text-align: center;
-}
-.duplicate.btn-duplicate.ui.button{
-  padding:0px;
-  font-size: 80%;
-  width:100%;
-  height:100%;
-}
-.ui.checkbox {
-  font-size: 78%;
-  font-weight: bold;
-  color: rgb(33, 74, 74);
-}
-.n-error {
-  grid-area: n-error;
-  padding-left: 3px;
-  color: rgba(247, 64, 64, 0.816);
-  font-size: 80%;
-  user-select: none;
-}
-.e-error {
-  grid-area: e-error;
-  padding-left: 3px;
-  color: rgba(247, 64, 64, 0.816);
-  font-size: 80%;
-  user-select: none;
-}
-.pw-error {
-  grid-area: pw-error;
-  padding-left: 3px;
-  color: rgba(247, 64, 64, 0.816);
-  font-size: 80%;
-  user-select: none;
-}
-.p-error {
-  grid-area: p-error;
-  padding-left: 3px;
-  color: rgba(247, 64, 64, 0.816);
-  font-size: 80%;
-  user-select: none;
-}
-.ID-error {
-  grid-area: ID-error;
-  padding-left: 3px;
-  color: rgba(247, 64, 64, 0.816);
-  font-size: 80%;
-  user-select: none;
-}
-.btn-Create {
-  grid-area: btn-Create;
-}
-button.Create {
-  width: 100%;
-}
-.has-error {
-  background: #843534;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-}
-</style>
 

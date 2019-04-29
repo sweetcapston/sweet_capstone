@@ -1,0 +1,203 @@
+
+button.ui.positive.button {
+  background: black;
+}
+button.ui.positive.button:active {
+  background: black;
+}
+button.ui.positive.button:focus {
+  background: rgb(63, 62, 62);
+}
+button.ui.positive.button:hover {
+  background: rgb(63, 62, 62);
+}
+.unselectable {
+  -webkit-user-select: none; /* Safari, Chrome */
+  -khtml-user-select: none; /* Konqueror */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE */
+  user-select: none; /* CSS3 */
+}
+.undraggable {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+label {
+  font-size: 90%;
+  font-weight: bold;
+  color: rgb(33, 74, 74);
+  padding-left: 1%;
+}
+.modalChange {
+  grid-area: modalChange;
+  text-align: center;
+  padding-top: 5px;
+}
+.ui.input {
+  margin-top: 1%;
+}
+.input {
+  width: 100%;
+}
+
+.grid-container {
+  display: grid;
+}
+
+.Name {
+  grid-area: Name;
+}
+.Email {
+  grid-area: Email;
+}
+.Password {
+  grid-area: Password;
+}
+.Password2 {
+  grid-area: Password2;
+}
+.StudentId {
+  grid-area: StudentId;
+}
+.IDcheck {
+  grid-area: IDcheck;
+  text-align: center;
+}
+
+.n-error {
+  grid-area: n-error;
+  padding-left: 3px;
+  color: rgba(247, 64, 64, 0.816);
+  font-size: 80%;
+  user-select: none;
+}
+.e-error {
+  grid-area: e-error;
+  padding-left: 3px;
+  color: rgba(247, 64, 64, 0.816);
+  font-size: 80%;
+  user-select: none;
+}
+.pw-error {
+  grid-area: pw-error;
+  padding-left: 3px;
+  color: rgba(247, 64, 64, 0.816);
+  font-size: 80%;
+  user-select: none;
+}
+.p-error {
+  grid-area: p-error;
+  padding-left: 3px;
+  color: rgba(247, 64, 64, 0.816);
+  font-size: 80%;
+  user-select: none;
+}
+.ID-error {
+  grid-area: ID-error;
+  padding-left: 3px;
+  color: rgba(247, 64, 64, 0.816);
+  font-size: 80%;
+  user-select: none;
+}
+.has-error {
+  background: #843534;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+// SingUpForm
+.grid-container.sign {
+  grid-template-areas: "sign_body" "sign_IDcheck" "sign_end";
+}
+.sign_body {
+  display: grid;
+  grid-template-columns: 0.2fr 3fr 1fr;
+  grid-template-rows: 0.4fr 1.1fr 0.5fr 1.1fr 0.5fr 1.1fr 0.5fr 1.1fr 0.5fr;
+  grid-template-areas: ". . . " ". Name ." ". n-error . " ". Email gridline" ". e-error ." ". Password ." ". pw-error ." ". Password2 ." ". p-error .";
+  grid-area: sign_body;
+}
+.sign_IDcheck {
+  display: grid;
+  grid-template-columns: 0.2fr 3fr 1fr;
+  grid-template-rows: 1.1fr 0.5fr;
+  grid-template-areas: ". StudentId gridline2" ". ID-error .";
+  grid-area: sign_IDcheck;
+}
+.sign_end {
+  display: grid;
+  grid-template-columns: 0.2fr 3.5fr 0.3fr;
+  grid-template-rows: 0.2fr 1fr 0.4fr 1fr;
+  grid-template-areas: ". . ." ". btn-Create ." ". . ." ". modalChange .";
+  grid-area: sign_end;
+}
+.gridline {
+  grid-area: gridline;
+  display: grid;
+  grid-template-rows: 30% 70%;
+  grid-template-columns: 8% 84% 8%;
+  grid-template-areas: ". . ." ". duplicate . " ". . .";
+  text-align: center;
+}
+.gridline2 {
+  grid-area: gridline2;
+  display: grid;
+  grid-template-rows: 45% 25% 30%;
+  grid-template-columns: 20% 70% 10%;
+  grid-template-areas: ". . ." ". IDcheck ." ". . .";
+  
+}
+.duplicate {
+  grid-area: duplicate;
+  width: 100%;
+  font-size: 75%;
+  height: 100%;
+  text-align: center;
+}
+.duplicate.btn-duplicate.ui.button{
+  padding:0px;
+  font-size: 80%;
+  width:100%;
+  height:100%;
+}
+.ui.checkbox {
+  font-size: 78%;
+  font-weight: bold;
+  color: rgb(33, 74, 74);
+}
+.btn-Create {
+  grid-area: btn-Create;
+}
+button.Create {
+  width: 100%;
+}
+
+
+//loginForm
+.header {
+  text-align: center;
+}
+.grid-container.login {
+  grid-template-areas: "login_body" "login_end";
+}
+.login_body {
+  display: grid;
+  grid-template-columns: 0.3fr 3.5fr 0.3fr;
+  grid-template-rows: 0.4fr 1.1fr 0.6fr 1.1fr 0.4fr;
+  grid-template-areas: ". . . " ". Email ." ". e-error ." ". Password ." ". pw-error .";
+  grid-area: login_body;
+}
+.login_end {
+  display: grid;
+  grid-template-columns: 0.3fr 3.5fr 0.3fr;
+  grid-template-rows: 0.2fr 1fr 0.4fr 1fr;
+  grid-template-areas: ". . ." ". btn-Login ." ". . ." ". modalChange .";
+  grid-area: login_end;
+}
+.btn-Login {
+  grid-area: btn-Login;
+}
+button.Login {
+  width: 100%;
+  font-size: 80%;
+}
