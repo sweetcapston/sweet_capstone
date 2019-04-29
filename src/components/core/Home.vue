@@ -1,9 +1,9 @@
 <template>
   <v-app>
-         <h1>클래스 코드 : {{this.$route.params.classCode}}</h1>
-            <span><v-btn dark @click="checkAuth">TEST!</v-btn></span>
-            <span><v-btn dark @click="showAuth">Show!</v-btn></span>
-            <span><v-btn dark @click="removeAuth">SESSION REMOVE!</v-btn></span>
+    <h1>클래스 코드 : {{this.$store.state.classCode}}</h1>
+    <span><v-btn dark @click="checkAuth">TEST!</v-btn></span>
+    <span><v-btn dark @click="showAuth">Show!</v-btn></span>
+    <span><v-btn dark @click="removeAuth">SESSION REMOVE!</v-btn></span>
   </v-app>
 </template>
 
