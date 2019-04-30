@@ -1,10 +1,12 @@
 <template>
-  <v-app>
-    <v-content>
-      <input v-model="classCode" placeholder="클래스코드" >
-      <v-btn dark @click="test">입장하기</v-btn>
-      <modal-create-class-form/>
-    </v-content>
+  <v-app dark>
+    <v-container>
+      <v-layout>
+          <input v-model="classCode" placeholder="클래스코드를 입력하세요." >
+          <v-btn dark @click="test">입장하기</v-btn>
+          <modal-create-class-form/>
+      </v-layout>
+    </v-container>
   </v-app>
 </template>
 
