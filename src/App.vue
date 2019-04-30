@@ -14,6 +14,7 @@ import VeeValidate from "vee-validate";
 import ko from "vee-validate/dist/locale/ko.js";
 import Auth from "./api/Auth";
 import VueSession from "vue-session";
+import ClassList from "./components/core/Class.vue";
 
 const config = {
   locale: "ko",
@@ -25,6 +26,8 @@ const config = {
 Vue.use(VeeValidate, config);
 Vue.use(SuiVue);
 Vue.use(VueSession);
+Vue.use(ClassList);
+
 /* eslint-disable */
 
 export default {
@@ -48,7 +51,6 @@ export default {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 button.ui.positive.button {

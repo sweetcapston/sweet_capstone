@@ -28,14 +28,10 @@
       <v-sheet
         class="d-flex"
       >
-        <core-class-list/>
-        <core-class-list/>
-        <core-class-list/>
-        <core-class-list/>
-        <core-class-list/>
-        <core-class-list/>
-        <core-class-list/>
-        <core-class-list/>
+        <core-class-list id="Class1" :classname="'SW캡스톤디자인'" :professorname="'윤대균교수님'" :classtime="'월F목F'"/>
+        <core-class-list id="Class2" :classname="'인공지능'" :professorname="'김민구교수님'" :classtime="'월F목F'"/>
+        <core-class-list id="Class3" :classname="'웹시설'" :professorname="'A교수님'" :classtime="'월F목F'"/>
+        <core-class-list id="Class4" :classname="'임베디드'" :professorname="'B교수님'" :classtime="'월F목F'"/>
       </v-sheet>
     </v-content>
   </v-app>
@@ -44,6 +40,7 @@
 <script>
 /* eslint-disable */
 import Auth from "../api/Auth.js"
+import ClassList from "../components/core/ClassList.vue";
 
 export default {
   created() {

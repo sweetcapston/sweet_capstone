@@ -7,7 +7,6 @@ import Survey from "./views/SurveyClass.vue";
 import Login from "./views/Login.vue";
 import Main from "./views/Main.vue";
 import Class from "./components/core/Class.vue";
-import ClassList from "./components/core/ClassList.vue"
 
 Vue.use(Router);
 
@@ -23,28 +22,28 @@ export default new Router({
     {
       path: "/main",
       name: "main",
-      component: Main, ClassList
+      component: Main
     },
     {
       path: "/class/:classCode",
       name: "class",
-      component: Class,
+      component : Class,
       children: [
         {
-          path: "home",
-          component: Home
+          path : 'home',
+          component : Home
         },
         {
-          path: "question",
-          component: Question
+          path: 'question',
+          component : Question
         },
         {
-          path: "survey",
-          component: Survey
+          path: 'survey',
+          component : Survey
         },
         {
-          path: "chart",
-          component: Chart
+          path: 'chart',
+          component : Chart
         }
       ]
     }
