@@ -1,10 +1,12 @@
-language: node.js
+language: node_js
 node_js:
-        - "10"
+        - 10
 before_script:
         - npm install
-        
 script: 
         - npm run serve
 
 cache: npm
+
+# notifications:
+#   slack: ajousweet:rxTiNutNKvONZpgRoDBkFVdY
