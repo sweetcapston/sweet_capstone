@@ -7,6 +7,7 @@ import Survey from "./components/core/surveyClass.vue";
 import Login from "./views/Login.vue";
 import Main from "./views/Main.vue";
 import Class from "./components/core/Class.vue";
+import ClassList from "./components/core/ClassList.vue"
 
 Vue.use(Router);
 
@@ -22,7 +23,7 @@ export default new Router({
     {
       path: "/main",
       name: "main",
-      component: Main
+      component: Main, ClassList
     },
     {
       path: "/class/:classCode",
