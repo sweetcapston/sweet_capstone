@@ -74,7 +74,7 @@ button.ui.positive.button:hover {
   -khtml-user-drag: none;
   -moz-user-drag: none;
   -o-user-drag: none;
-  user-drag: none;
+  -user-drag: none;
 }
 label {
   font-size: 90%;
