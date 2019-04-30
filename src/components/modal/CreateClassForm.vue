@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn @click.native="toggle">방 생성하기</v-btn>
+    <v-btn dark @click.native="toggle">방 생성하기</v-btn>
     <sui-modal v-model="open" size="mini">
       <sui-modal-header>클래스 생성하기</sui-modal-header>
       <sui-modal-content image>

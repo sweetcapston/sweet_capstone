@@ -8,36 +8,31 @@
       <v-spacer></v-spacer>
       <v-btn
         flat
-        href="https://github.com/sweetcapston"
-        target="_blank"
+        @click="logout"
       >
         <span class="mr-2">logout</span>
       </v-btn>
     </v-toolbar>
 
     <v-content>
-      <span>
-        <input v-model="classCode" placeholder="클래스코드">
-        <v-btn dark @click="test">입장하기</v-btn>
-        <v-if >
-          <v-btn dark @click="createClass">클래스 생성하기</v-btn>
-        </v-if>
-      </span>
       <v-container>
         <v-layout>
             <input v-model="classCode" placeholder="클래스코드를 입력하세요." >
             <v-btn dark @click="enterClass">입장하기</v-btn>
-            <modal-create-class-form/>
-            <v-btn dark @click="logout">로그아웃</v-btn>
+            <modal-create-class-form v-if="this.$store.state.Identity==1"/>
         </v-layout>
       </v-container>
       <v-sheet
         class="d-flex"
       >
-        <ClassList id='Class1'></ClassList>
-        <ClassList id='Class2'></ClassList>
-        <ClassList id='Class3'></ClassList>
-        <ClassList id='Class4'></ClassList>
+        <core-class-list/>
+        <core-class-list/>
+        <core-class-list/>
+        <core-class-list/>
+        <core-class-list/>
+        <core-class-list/>
+        <core-class-list/>
+        <core-class-list/>
       </v-sheet>
     </v-content>
   </v-app>
@@ -46,6 +41,7 @@
 <script>
 /* eslint-disable */
 import Auth from "../api/Auth.js"
+
 export default {
   created() {
     Auth.auth().then(res => {
@@ -92,3 +88,7 @@ export default {
   }
 };
 </script>
+
+<style>
+
+</style>
