@@ -25,7 +25,7 @@ export default new Vuex.Store({
         to: '/class/',
         to2: '/survey',
         icon: 'call',
-        text: '서베이 클래스' 
+        text: '설문 클래스' 
       },
       {
         to: '/class/',
