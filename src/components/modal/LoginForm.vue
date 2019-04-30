@@ -78,6 +78,7 @@ export default {
       this.ClearData();
     },
     LogIn() {
+      
       if (this.errors.items.length != 0) {
         this.errsign = true;
         return false;
@@ -89,17 +90,25 @@ export default {
       };
       Auth.login(form)
         .then(res => {
-          if(res.data){
+          var { data } = res;
+          if(data){
             this.ClearData();
             this.Openlogin = false;
             alert("로그인 성공")
-            this.$session.set('token', res.data)
-            // this.logined = true;
-            console.log(res.data)
+            this.$session.set('Identity', data.Identity) //추후 수정 가능
+            // this.$store.commit("setIdentity", res.data.Identity); //page refresh 시 초기화됨
+            switch(data.Identity){
+              case 1: //학생
+                this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
+                break;
+              case 2: //교수
+                break;
+              case 3: //관리자
+                break;
+            }
           }else{
             alert("로그인 실패")
           }
-          
         })
         .catch(error => {
           alert("error");
@@ -120,55 +129,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.header {
-  text-align: center;
-}
-.grid-container {
-  display: grid;
-}
-.grid-container.login {
-  grid-template-areas: "login_body" "login_end";
-}
-.login_body {
-  display: grid;
-  grid-template-columns: 0.3fr 3.5fr 0.3fr;
-  grid-template-rows: 0.4fr 1.1fr 0.6fr 1.1fr 0.4fr;
-  grid-template-areas: ". . . " ". Email ." ". e-error ." ". Password ." ". pw-error .";
-  grid-area: login_body;
-}
-.login_end {
-  display: grid;
-  grid-template-columns: 0.3fr 3.5fr 0.3fr;
-  grid-template-rows: 0.2fr 1fr 0.4fr 1fr;
-  grid-template-areas: ". . ." ". btn-Login ." ". . ." ". modalChange .";
-  grid-area: login_end;
-}
-.Email {
-  grid-area: Email;
-}
-.Password {
-  grid-area: Password;
-}
-
-.modalChange {
-  grid-area: modalChange;
-  text-align: center;
-  padding-top: 5px;
-}
-
-.btn-Login {
-  grid-area: btn-Login;
-}
-button.Login {
-  width: 100%;
-  font-size: 80%;
-}
-.ui.input {
-  margin-top: 1%;
-}
-.input {
-  width: 100%;
-}
-</style>

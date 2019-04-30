@@ -1,8 +1,9 @@
 <template>
-  <div id="app">
-    <modal-login-form/>
-    <modal-sign-up-form/>
-  </div>
+  <v-app>
+    <v-content>
+      <router-view/>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
@@ -12,8 +13,7 @@ import SuiVue from "semantic-ui-vue";
 import VeeValidate from "vee-validate";
 import ko from "vee-validate/dist/locale/ko.js";
 import Auth from "./api/Auth";
-import VueSession from 'vue-session'
-
+import VueSession from "vue-session";
 
 const config = {
   locale: "ko",
@@ -21,16 +21,17 @@ const config = {
     ko
   }
 };
+
 Vue.use(VeeValidate, config);
 Vue.use(SuiVue);
-Vue.use(VueSession)
+Vue.use(VueSession);
 /* eslint-disable */
+
 export default {
-  name: "app",
   created() {
-    Auth.auth(this.$session.get('token')).then(res=> {
-        console.log(res)
-      })
+    Auth.auth(this.$session.get("token")).then(res => {
+      console.log(res);
+    });
   },
   data() {
     return {};
@@ -39,7 +40,10 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@import '@/styles/index.scss';
+
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -71,7 +75,6 @@ button.ui.positive.button:hover {
   -khtml-user-drag: none;
   -moz-user-drag: none;
   -o-user-drag: none;
-  user-drag: none;
 }
 label {
   font-size: 90%;
