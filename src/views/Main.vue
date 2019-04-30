@@ -16,10 +16,13 @@
 
     <v-content>
       <v-container>
-        <v-layout>
-            <input v-model="classCode" placeholder="클래스코드를 입력하세요." >
+        <v-layout v-if="this.$session.get('Identity')==1">
+            <input v-model="classCode" placeholder="클래스코드를 입력하세요.">
             <v-btn dark @click="enterClass">입장하기</v-btn>
-            <modal-create-class-form v-if="this.$store.state.Identity==1"/>
+        </v-layout>
+         <v-layout v-if="this.$session.get('Identity')==2">
+            <input v-model="className" placeholder="클래스이름을 입력하세요.">
+            <v-btn dark @click="createClass">생성하기</v-btn>
         </v-layout>
       </v-container>
       <v-sheet
@@ -67,7 +70,8 @@ export default {
   },
   data(){
     return {
-      classCode:''
+      classCode:'',
+      className:'',
     }
   },
   methods: {
@@ -76,6 +80,7 @@ export default {
       this.$router.push({name: 'class', params: { classCode: this.classCode }})
     },
     createClass(){
+      alert(this.className + " 클래스 생성이 완료 되었습니다.");
     },
     logout(){
       this.$session.destroy();

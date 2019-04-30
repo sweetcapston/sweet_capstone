@@ -100,8 +100,9 @@ export default {
             switch(data.Identity){
               case 1: //학생
                 this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
-                break;
+                break;  
               case 2: //교수
+                this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
                 break;
               case 3: //관리자
                 break;
