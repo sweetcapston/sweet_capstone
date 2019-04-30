@@ -31,16 +31,24 @@ Vue.use(VueSession);
 export default {
   name: "app",
   created() {
-    Auth.auth(this.$session.get("token")).then(res => {
-      console.log(res);
-      res.data
+    Auth.auth().then(res => {
+      if(!res.data)
+        return;
+      switch(this.$session.get("Identity")){
+          case 1: //학생
+            this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
+            break;
+          case 2: //교수
+            break;
+          case 3: //관리자
+            break;
+      }
     });
   },
   data() {
     return {
       username:'',
       password:'',
-      Identity: 0   //0 로그인x, 1 학생 , 2 교수, 3 관리자
     };
   },
   methods: {

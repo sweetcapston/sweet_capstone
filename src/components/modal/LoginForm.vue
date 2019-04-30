@@ -90,23 +90,22 @@ export default {
       };
       Auth.login(form)
         .then(res => {
-          if(res.data){
+          var { data } = res;
+          if(data){
             this.ClearData();
             this.Openlogin = false;
             alert("로그인 성공")
-            this.$session.set('token', res.data.token)
-            this.$store.commit("setIdentity", res.data.Identity);
-            switch(res.data.Identity){
+            this.$session.set('Identity', data.Identity) //추후 수정 가능
+            // this.$store.commit("setIdentity", res.data.Identity); //page refresh 시 초기화됨
+            switch(data.Identity){
               case 1: //학생
-                this.$router.push({name: 'main'}); // 로그인 성공후 메인페이지로 이동
+                this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
                 break;
               case 2: //교수
                 break;
               case 3: //관리자
                 break;
             }
-            console.log(4)
-            // this.logined = true;
           }else{
             alert("로그인 실패")
           }
