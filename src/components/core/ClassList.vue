@@ -31,6 +31,11 @@
 
 <script>
 export default {
+  data(){
+    return{
+      classCode: ''
+    }
+  },
   props: {
     classcode: {
       type: String

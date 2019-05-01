@@ -64,9 +64,9 @@ export default {
     }
   })
   },
-  updated() {
-    this.$store.commit('setClassCode',this.classCode) // 클래스 코드 입력받기 
-  },
+  // updated() {
+  //   this.$store.commit('setClassCode',this.classCode) // 클래스 코드 입력받기 
+  // },
   data(){
     return {
       classCode:'',
@@ -76,15 +76,20 @@ export default {
   methods: {
     enterClass() {
       alert(this.classCode);
-      this.$router.push({name: 'class', params: { classCode: this.classCode }})
+      axios.get(`${BaseUrl}/class`, {
+      })
+      .then(res=>{
+        this.$router.push({name: 'class', params: { classCode: this.classCode }}) // 해당 클래스 페이지로 이동
+      });
     },
     createClass(){
       axios.post(`${BaseUrl}/prof/classcreate`, {
-        className : this.className
+        className : this.className // 클래스이름 서버로 전송
       })
-      .then(response=>{
-        if (response.data)
+      .then(res=>{
+        if (res.data)
         alert(this.className + " 클래스 생성이 완료 되었습니다.");
+        // 교수 클래스 리스트에 해당 클래스 추가
       });
     },
     logout(){
