@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     Identity: 0, // 신분 구분
     drawer: true, // 네비게이션 바 
+    classcode: '', // 현재 클래스 코드 저장.
     links: [
       {
         to: '/class/',
@@ -50,7 +51,7 @@ export default new Vuex.Store({
     retrieveToken(state, token){
       state.token = token
     },
-    // setClassCode:(state, payload) => (state.classCode = payload)
+    setClassCode:(state, payload) => (state.classCode = payload)
   },
   actions: { // mutations는 모든기능이 동기로 동작합니다. 비동기로 사용하기위해 이 actions을 사용. ditpatch로 사용.
     retrieveToken(context, credentials){
