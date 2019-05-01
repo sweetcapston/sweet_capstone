@@ -41,6 +41,8 @@
 /* eslint-disable */
 import Auth from "../api/Auth.js"
 import ClassList from "../components/core/ClassList.vue";
+import axios from "axios";
+const BaseUrl = "http://localhost:5000";
 
 export default {
   created() {
@@ -77,7 +79,13 @@ export default {
       this.$router.push({name: 'class', params: { classCode: this.classCode }})
     },
     createClass(){
-      alert(this.className + " 클래스 생성이 완료 되었습니다.");
+      axios.post(`${BaseUrl}/prof/classcreate`, {
+        className : this.className
+      })
+      .then(response=>{
+        if (response.data)
+        alert(this.className + " 클래스 생성이 완료 되었습니다.");
+      });
     },
     logout(){
       this.$session.destroy();
