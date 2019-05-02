@@ -14,11 +14,16 @@
       </v-btn>
     </v-toolbar>
 
-
     <v-content>
         <v-layout justify-center v-if="this.$session.get('Identity')==1">
-            <input v-model="classCode" placeholder="클래스코드를 입력하세요."/>
-            <v-btn dark @click="enterClass">입장하기</v-btn>
+          <v-flex xs12 sm6 md3 order-12>
+          <v-text-field
+              v-model="classCode"
+              placeholder="클래스코드를 입력하세요."
+              solo
+            ></v-text-field>
+          </v-flex>
+            <v-btn bottom dark @click="enterClass">입장하기</v-btn>
         </v-layout>
          <v-layout justify-center v-if="this.$session.get('Identity')==2" >
             <v-flex xs12 sm6 md3 order-12>
@@ -27,9 +32,8 @@
               placeholder="클래스이름을 입력하세요."
               solo
             ></v-text-field>
-           
-          </v-flex>
-             <v-btn bottom="" dark @click="createClass">생성하기</v-btn>
+            </v-flex>
+             <v-btn bottom dark @click="createClass">생성하기</v-btn>
         </v-layout>
       
 
@@ -83,13 +87,15 @@ export default {
     enterClass() {
       Stud.classEnter(this.classCode)
       .then(res => {
-        if(res.data == true)
-        {
-          // 클래스 입장시에 해당 클래스코드 vuex에 저장. 클래스 퇴장시 저장된 클래스코드 삭제(새로고침하면 자동으로 되는듯.)
-          this.$store.commit("setClassCode", this.classCode);
-          this.$router.push({name: 'class', params: { classCode: this.classCode }}) // 해당 클래스 페이지로 이동
+        if(res.data == false) alert('error');
+        else{
+           alert(res.data.className + res.data.profName);
+           //클래스 입장시에 해당 클래스코드 vuex에 저장. 클래스 퇴장시 저장된 클래스코드 삭제(새로고침하면 자동으로 되는듯.)
+           this.$store.commit("setClassCode", this.classCode); // classCode, className, profName을 합칠까?
+           this.$store.commit("setClassName", res.data.className);
+           this.$store.commit("setProfName", res.data.profName);
+           this.$router.push({name: 'class'}) // 해당 클래스 페이지로 이동
         }
-        else alert('없는 클래스코드 입니다.');
       })
     },
     createClass(){

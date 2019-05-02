@@ -55,6 +55,7 @@ export default {
   },
   methods:{
     enterClass: function(classCode){
+      this.$store.commit("setClassCode", classCode);
       this.$router.push({name: 'class', params: { classCode: classCode }}) // 해당 클래스 페이지로 이동
     },
     deleteClass: function(classCode){

@@ -8,5 +8,9 @@ const config = {
 export default {
     classEnter(classCode){
       return axios.post(`${BaseUrl}/stud/enter`,{classCode: classCode}, config);
-    }
+    },
+    classAdd(classCode){
+      alert(classCode);
+      return axios.get(`${BaseUrl}/stud/${classCode}/classAdd`, config);
+    },
 };
