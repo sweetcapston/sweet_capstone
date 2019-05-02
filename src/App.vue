@@ -41,47 +41,14 @@ export default {
   },
   methods: {}
 };
+
 </script>
 
 <style lang="scss">
 @import '@/styles/index.scss';
 
-
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-}
-button.ui.positive.button {
-  background: black;
-}
-button.ui.positive.button:active {
-  background: black;
-}
-button.ui.positive.button:focus {
-  background: rgb(63, 62, 62);
-}
-button.ui.positive.button:hover {
-  background: rgb(63, 62, 62);
-}
-.unselectable {
-  -webkit-user-select: none; /* Safari, Chrome */
-  -khtml-user-select: none; /* Konqueror */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE */
-  user-select: none; /* CSS3 */
-}
-.undraggable {
-  -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
-}
-label {
-  font-size: 90%;
-  font-weight: bold;
-  color: rgb(33, 74, 74);
-  padding-left: 1%;
+/* Remove in 1.2 */
+.v-datatable thead th.column.sortable i {
+  vertical-align: unset;
 }
 </style>

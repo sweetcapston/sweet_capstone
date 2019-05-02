@@ -33,7 +33,7 @@
 export default {
   data: () => ({
     links: [
-      { name: 'Home', Link: '/dashboard' },
+      { name: 'Home', Link: '/' },
       { name: 'Sweet Team', Link: 'https://github.com/sweetcapston' }
     ]
   })
