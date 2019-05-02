@@ -1,9 +1,11 @@
 <template>
   <v-app>
-    <v-content>
-        <modal-login-form/>
-        <modal-sign-up-form/>
-    </v-content>
+    <div class="bg-animation" />  
+    <v-layout justify-end>
+      <modal-login-form/>
+      <modal-sign-up-form/>
+    </v-layout>    
+    <core-footer />
   </v-app>
 </template>
 
@@ -63,8 +65,20 @@ export default {
   }
 };
 </script>
-<style lang="scss">
 
-@import '@/styles/index.scss';
-
+<style> 
+.bg-animation {
+  position: absolute;
+  opacity: 1;
+  left: 0;
+  top: -20%;
+  width: 100%;
+  height: 100%;
+  background-image: url(https://ploi.io/images/headbg-green.svg);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-color: #60a7a6;
+  transform: skewY(-10deg);
+  z-index: -1;
+}
 </style>
