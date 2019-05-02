@@ -19,12 +19,7 @@
             <img src="../assets/logo.svg" alt="Vuetify.js" height="200">
             <h1 class="white--text mb-2 display-1 text-xs-center">OpenClass</h1>
             <div class="subheading mb-3 text-xs-center">Powered by Sweet</div>
-            <v-btn
-              class="blue lighten-2 mt-5"
-              dark
-              large
-              href="/pre-made-themes"
-            >
+            <v-btn class="blue lighten-2 mt-5" dark large @click="alert(1)">
               How to use
             </v-btn>
           </v-layout>

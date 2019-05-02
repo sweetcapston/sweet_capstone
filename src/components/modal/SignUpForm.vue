@@ -1,6 +1,6 @@
 <template>
   <div>
-    <sui-button positive @click.native="OpenSignModal" id="signbtn">회원가입</sui-button>
+    <sui-button color="primary" @click.native="OpenSignModal" id="signbtn">회원가입</sui-button>
     <sui-modal v-model="Opensign" id="modal" size="mini">
       <sui-modal-header class="undraggable unselectable">회원가입</sui-modal-header>
       <div class="grid-container sign">

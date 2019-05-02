@@ -1,6 +1,6 @@
 <template>
   <div>
-    <sui-button positive @click="OpenLoginModal" v-show="!logined">로그인</sui-button>
+    <sui-button class="transparent" @click="OpenLoginModal" v-show="!logined">로그인</sui-button>
     <sui-modal v-model="Openlogin" id="modal" size="mini">
       <sui-modal-header class="undraggable unselectable">로그인</sui-modal-header>
       <div class="grid-container login">
