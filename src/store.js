@@ -6,8 +6,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    classCode: '', // 랜덤생성.
+    Identity: 0, // 신분 구분
     drawer: true, // 네비게이션 바 
+    classcode: '', // 현재 클래스 코드 저장.
     links: [
       {
         to: '/class/',
@@ -34,7 +35,6 @@ export default new Vuex.Store({
         text: '통계'
       }
     ],
-    Identity: 0
   },
   getters: { // 반복사용되는 값을 재사용하기 위해 사용. computed와 같은 기능
     allLinksCount: function(state){

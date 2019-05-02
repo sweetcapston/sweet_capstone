@@ -207,7 +207,7 @@ export default {
         .catch(error => {
             alert("error")          
         });
-        this.modalChange();
+        this.$router.push({name:'login'})
     },
     IDcheck: function() {
       this.validate()
