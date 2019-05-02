@@ -1,11 +1,9 @@
-"use strict";
 var path = require('path')
 var webpack = require('webpack')
-function resolve (dir) {
-  return path.join(__dirname, '..', dir)
-}
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 module.exports = {
   entry: './src/main.js',
+
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
@@ -14,24 +12,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        loader: 'eslint',
-        exclude: /(node_modules|bower_components)/
-      },
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader',
-        options: {
-          loaders: {
-          }
-          // other vue-loader options go here
-        }
-      },
-      {
-        test: /\.sass$/,
-        loader: 'style!css!sass'
-      }, 
-      {
         test: /\.css$/,
         use: [
           'vue-style-loader',
@@ -39,13 +19,52 @@ module.exports = {
         ],
       },
       {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/
+        test: /\.scss$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'sass-loader'
+        ],
+      },
+      {
+        test: /\.sass$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'sass-loader?indentedSyntax'
+        ],
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: {
+          loaders: {
+            'scss': [
+              'vue-style-loader',
+              'css-loader',
+              'sass-loader'
+            ],
+            'sass': [
+              'vue-style-loader',
+              'css-loader',
+              'sass-loader?indentedSyntax'
+            ]
+          }
+        }
       },
       {
         test: /\.styl$/,
-        loader: ['style-loader', 'css-loader', 'stylus-loader']
+        loader: ['style-loader', 'css-loader', 'stylus-loader', {
+          loader: 'vuetify-loader',
+          options: {
+            theme: path.resolve('./node_modules/vuetify/src/stylus/theme.styl')
+          }
+        }]
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
@@ -53,16 +72,19 @@ module.exports = {
         options: {
           name: '[name].[ext]?[hash]'
         }
+      },
+      {
+        test: /\.(woff|woff2|ttf|svg|eot)$/,
+        loader: 'url-loader?name=/fonts/[name].[ext]'
       }
     ]
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json', '.scss'],
-   alias: {
-     'vue$': 'vue/dist/vue.esm.js',
-     '@': resolve('src'),
-     styles: resolve('src/assets/scss')
-   }
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js',
+      '@': path.resolve(__dirname, "./src")
+    },
+    extensions: ['*', '.js', '.vue', '.json', '.scss']
   },
   devServer: {
     historyApiFallback: true,
@@ -72,7 +94,15 @@ module.exports = {
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
+  devtool: '#eval-source-map',
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+          NODE_ENV: 'development'
+      }
+    }),
+    new VueLoaderPlugin()
+  ]
 }
 
 if (process.env.NODE_ENV === 'production') {
