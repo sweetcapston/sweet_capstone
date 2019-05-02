@@ -14,25 +14,30 @@
       </v-btn>
     </v-toolbar>
 
-        <h1>{{classList}}</h1>
-        
+
     <v-content>
-      <v-container>
-        <v-layout v-if="this.$session.get('Identity')==1">
-            <input v-model="classCode" placeholder="클래스코드를 입력하세요.">
+        <v-layout justify-center v-if="this.$session.get('Identity')==1">
+            <input v-model="classCode" placeholder="클래스코드를 입력하세요."/>
             <v-btn dark @click="enterClass">입장하기</v-btn>
         </v-layout>
-         <v-layout v-if="this.$session.get('Identity')==2">
-            <input v-model="className" placeholder="클래스이름을 입력하세요.">
-            <v-btn dark @click="createClass">생성하기</v-btn>
+         <v-layout justify-center v-if="this.$session.get('Identity')==2" >
+            <v-flex xs12 sm6 md3 order-12>
+            <v-text-field
+              v-model="className"
+              placeholder="클래스이름을 입력하세요."
+              solo
+            ></v-text-field>
+           
+          </v-flex>
+             <v-btn bottom="" dark @click="createClass">생성하기</v-btn>
         </v-layout>
-      </v-container>
       
+
       <v-sheet mobile-break-point="960">
       <v-layout row wrap>
         <core-class-list  
           v-for="(Class, i) in this.classList"
-          :classList='Class'
+          :classes='Class'
           :key="i"
           avatar
         />
