@@ -56,7 +56,7 @@ export default {
     login(){
       this.$store.dispatch('retrieveToken',{
         username: this.username,
-        password: this.password
+        password: this.password,
       })
     },
 

@@ -8,28 +8,29 @@
       height="150px"
       src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
     >
-      <v-card-title class="align-start fill-height" :profs="prof">{{profs.classname}}</v-card-title>
+      <v-card-title class="align-start fill-height" :classList="classList">{{classList.className}}</v-card-title>
     </v-img>
 
-    <v-card-text :professorname="professorname" :profs="prof">
+    <v-card-text :classList="classList">
       <span class="text--primary">
-        <span>{{profs.profname}}</span><br>
-        <span>{{profs.classtime}}</span><br>
+        <span>교수명: {{classList.profName}}</span><br>
+        <span>클래스코드: {{classList.classCode}}</span><br>
       </span>
     </v-card-text>
 
-    <v-card-actions>
+    <v-card-actions >
       <v-btn
         text 
         color="orange"
-        @click="enterClass(profs.classcode)"
+        @click="enterClass(classList.classCode)"
       >
         입장
       </v-btn>
       <v-btn
         text 
         color="green"
-        @click="deleteClass(profs.classcode)"
+        :classList="classList"
+        @click="deleteClass(classList.classCode)"
         v-if="this.$session.get('Identity')===2"
       >
         삭제
@@ -39,8 +40,7 @@
 </template>
 
 <script>
-// import axios from "axios";
-// const BaseUrl = "http://localhost:5000";
+import Prof from "../../api/Prof";
 
 export default {
   data(){
@@ -49,38 +49,25 @@ export default {
     }
   },
   props: {
-    classcode: {
-      type: String
-    },
-    classname: {
-      type: String
-    },
-    professorname: {
-      type: String
-    },
-    classtime: {
-      type: String
-    },
-    profs: {
+    classList: {
       type: Object
     }
   },
   methods:{
-    enterClass: function(classcode){
-      this.$router.push({name: 'class', params: { classCode: classcode }}) // 해당 클래스 페이지로 이동
+    enterClass: function(classCode){
+      this.$router.push({name: 'class', params: { classCode: classCode }}) // 해당 클래스 페이지로 이동
     },
-    deleteClass: function(classcode){
-      // axios.post(`${BaseUrl}/prof/deletecreate`, {
-      //   classcode : classcode // 클래스코드 서버로 전송
-      // })
-      // .then(res=>{
-      //   if (res.data) alert(res.data);
-      //   alert(this.className + " 클래스 제거가 완료 되었습니다.");
-      // });
-
-      // 클래스 제거 로컬 테스트(서버 연동후 삭제)
-      const idx = this.profs.findIndex(function(item) {return item.classcode === classcode})
-      if (idx > -1) this.profs.splice(idx, 1)
+    deleteClass: function(classCode){
+      alert(classCode);
+      Prof.classDelete(classCode)
+      .then(res=>{
+        alert(classCode);
+        const idx = this.classList.findIndex(function(item) {return item.classCode === classCode})
+        if (idx > -1) this.classList.splice(idx, 1);
+        localStorage.removeItem('access_classList');
+        localStorage.setItem('access_classList', JSON.stringify(this.classList));
+        alert(res);
+      });
     }
   }
 }
