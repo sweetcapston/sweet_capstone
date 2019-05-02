@@ -52,7 +52,7 @@
                 <v-flex xs12 md3>
                   <v-card class="elevation-0 transparent">
                     <v-card-text class="text-xs-center">
-                      <v-icon x-large class="blue--text text--lighten-2">color_lens</v-icon>
+                      <v-icon x-large class="blue--text text--lighten-2">home</v-icon>
                     </v-card-text>
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline text-xs-center">홈</div>
@@ -65,7 +65,7 @@
                 <v-flex xs12 md3>
                   <v-card class="elevation-0 transparent">
                     <v-card-text class="text-xs-center">
-                      <v-icon x-large class="blue--text text--lighten-2">flash_on</v-icon>
+                      <v-icon x-large class="blue--text text--lighten-2">lightbulb</v-icon>
                     </v-card-text>
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline">질문</div>
@@ -78,7 +78,7 @@
                 <v-flex xs12 md3>
                   <v-card class="elevation-0 transparent">
                     <v-card-text class="text-xs-center">
-                      <v-icon x-large class="blue--text text--lighten-2">build</v-icon>
+                      <v-icon x-large class="blue--text text--lighten-2">call</v-icon>
                     </v-card-text>
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline text-xs-center">설문</div>
@@ -91,7 +91,7 @@
                 <v-flex xs12 md3>
                   <v-card class="elevation-0 transparent">
                     <v-card-text class="text-xs-center">
-                      <v-icon x-large class="blue--text text--lighten-2">build</v-icon>
+                      <v-icon x-large class="blue--text text--lighten-2">dashboard</v-icon>
                     </v-card-text>
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline text-xs-center">통계</div>
@@ -224,7 +224,7 @@ export default {
   data() {
     return {
       username:'',
-      password:'',
+      password:''
     };
   },
   methods: {
@@ -239,20 +239,3 @@ export default {
   }
 };
 </script>
-
-<style> 
-.bg-animation {
-  position: absolute;
-  opacity: 1;
-  left: 0;
-  top: -20%;
-  width: 100%;
-  height: 100%;
-  background-image: url(https://ploi.io/images/headbg-green.svg);
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-color: #60a7a6;
-  transform: skewY(-10deg);
-  z-index: -1;
-}
-</style>
