@@ -112,5 +112,9 @@
       padding-left: 15px;
       padding-right: 15px;
     }
+
+    .fill-height > .v-list{
+      background: 0;
+    }
   }
 </style>
