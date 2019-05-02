@@ -14,6 +14,7 @@ export default {
   data(){
     return{
       classList: [],
+      // 클래스 정보 필요
     }
   },
   methods: {

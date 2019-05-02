@@ -4,7 +4,6 @@
       <v-container fluid grid-list-md fill-height>
         <v-layout row wrap>
           <core-drawer/>
-     
           <router-view/>
         </v-layout>
       </v-container>
