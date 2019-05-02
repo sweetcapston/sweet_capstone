@@ -7,7 +7,7 @@ const config = {
                
 export default {
     classCreate(className){
-      return axios.post(`${BaseUrl}/prof/classCreate`,{className:className}, config);
+      return axios.post(`${BaseUrl}/prof/classCreate`,{className: className}, config);
     },
     classDelete(classCode){
       return axios.get(`${BaseUrl}/prof/:${classCode}/delete`, config);

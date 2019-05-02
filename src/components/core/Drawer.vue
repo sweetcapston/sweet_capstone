@@ -34,8 +34,7 @@
         </v-list-tile>
       <v-divider/>
 
-      <v-list
-      class="theme--white">
+      <v-list>
         <v-list-tile
           v-for="(link, i) in $store.state.links"
           :key="i"

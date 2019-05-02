@@ -59,7 +59,7 @@ export default {
       password: "",
       Openlogin: false,
       errsign: false,
-      logined: false,
+      logined: false
     };
   },
   created() {

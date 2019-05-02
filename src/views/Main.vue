@@ -29,13 +29,12 @@
       </v-container>
       
       <v-sheet mobile-break-point="960">
-      <v-layout row wrap md4 lg4 xs4>
+      <v-layout row wrap>
         <core-class-list  
           v-for="(Class, i) in this.classList"
           :classList='Class'
           :key="i"
           avatar
-          md4 lg4
         />
       </v-layout>
       </v-sheet>
