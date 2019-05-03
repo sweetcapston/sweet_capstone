@@ -8,6 +8,7 @@
 
 <script>
 import Vue from "vue";
+import Vuetify from "vuetify";
 import "semantic-ui-css/semantic.min.css";
 import SuiVue from "semantic-ui-vue";
 import VeeValidate from "vee-validate";
@@ -27,6 +28,9 @@ Vue.use(VeeValidate, config);
 Vue.use(SuiVue);
 Vue.use(VueSession);
 Vue.use(ClassList);
+Vue.use(Vuetify, {
+  iconfont: 'mdi'
+});
 
 /* eslint-disable */
 

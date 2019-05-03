@@ -14,7 +14,6 @@
       </v-btn>
     </v-toolbar>
 
-
     <v-content>
         <v-layout justify-center v-if="this.$session.get('Identity')==1">
             <input v-model="classCode" placeholder="클래스코드를 입력하세요."/>
@@ -112,8 +111,5 @@ export default {
     }
   }
 };
+
 </script>
-
-<style>
-
-</style>

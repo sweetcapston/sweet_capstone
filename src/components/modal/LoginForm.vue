@@ -1,6 +1,6 @@
 <template>
   <div>
-    <sui-button positive @click="OpenLoginModal" v-show="!logined">로그인</sui-button>
+    <sui-button class="transparent" positive @click="OpenLoginModal" v-show="!logined">로그인</sui-button>
     <sui-modal v-model="Openlogin" id="modal" size="mini">
       <sui-modal-header class="undraggable unselectable">로그인</sui-modal-header>
       <div class="grid-container login">
@@ -48,6 +48,7 @@
     </sui-modal>
   </div>
 </template>
+
 <script>
 import Auth from "../../api/Auth";
 
@@ -77,8 +78,7 @@ export default {
       this.validate();
       this.ClearData();
     },
-    LogIn() {
-      
+    LogIn() {     
       if (this.errors.items.length != 0) {
         this.errsign = true;
         return false;
@@ -132,43 +132,3 @@ export default {
   }
 };
 </script>
-
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-}
-button.ui.positive.button {
-  background: black;
-}
-button.ui.positive.button:active {
-  background: black;
-}
-button.ui.positive.button:focus {
-  background: rgb(63, 62, 62);
-}
-button.ui.positive.button:hover {
-  background: rgb(63, 62, 62);
-}
-.unselectable {
-  -webkit-user-select: none; /* Safari, Chrome */
-  -khtml-user-select: none; /* Konqueror */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE */
-  user-select: none; /* CSS3 */
-}
-.undraggable {
-  -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
-}
-label {
-  font-size: 90%;
-  font-weight: bold;
-  color: rgb(33, 74, 74);
-  padding-left: 1%;
-}
-</style>

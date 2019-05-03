@@ -1,15 +1,17 @@
 <template>
   <v-app>
+    <v-toolbar class="v-toolbar--fixed elevation-0 transparent">
+      <img src="../assets/logo.svg" height="50">
+      <v-spacer />
+      <modal-login-form />
+      <modal-sign-up-form />
+    </v-toolbar>
     <v-content>
       <section>
         <v-parallax 
-          height="600"
+          height="700"
           src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
         >
-          <v-layout justify-end>
-            <modal-login-form />
-            <modal-sign-up-form />
-          </v-layout>
           <v-layout
             column
             align-center
@@ -20,7 +22,7 @@
             <h1 class="white--text mb-2 display-1 text-xs-center">OpenClass</h1>
             <div class="subheading mb-3 text-xs-center">Powered by Sweet</div>
             <v-btn
-              class="blue lighten-2 mt-5"
+              class="cyan lighten-1 mt-5"
               dark
               large
               href="/pre-made-themes"
@@ -52,7 +54,7 @@
                 <v-flex xs12 md3>
                   <v-card class="elevation-0 transparent">
                     <v-card-text class="text-xs-center">
-                      <v-icon x-large class="blue--text text--lighten-2">home</v-icon>
+                      <v-icon x-large class="cyan--text text--lighten-1">home</v-icon>
                     </v-card-text>
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline text-xs-center">홈</div>
@@ -65,7 +67,7 @@
                 <v-flex xs12 md3>
                   <v-card class="elevation-0 transparent">
                     <v-card-text class="text-xs-center">
-                      <v-icon x-large class="blue--text text--lighten-2">lightbulb</v-icon>
+                      <v-icon x-large class="cyan--text text--lighten-1">lightbulb</v-icon>
                     </v-card-text>
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline">질문</div>
@@ -78,7 +80,7 @@
                 <v-flex xs12 md3>
                   <v-card class="elevation-0 transparent">
                     <v-card-text class="text-xs-center">
-                      <v-icon x-large class="blue--text text--lighten-2">call</v-icon>
+                      <v-icon x-large class="cyan--text text--lighten-1">call</v-icon>
                     </v-card-text>
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline text-xs-center">설문</div>
@@ -91,7 +93,7 @@
                 <v-flex xs12 md3>
                   <v-card class="elevation-0 transparent">
                     <v-card-text class="text-xs-center">
-                      <v-icon x-large class="blue--text text--lighten-2">dashboard</v-icon>
+                      <v-icon x-large class="cyan--text text--lighten-1">dashboard</v-icon>
                     </v-card-text>
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline text-xs-center">통계</div>
@@ -108,12 +110,14 @@
       </section>
 
       <section>
-        <v-parallax src="https://cdn.vuetifyjs.com/images/parallax/material2.jpg" height="380">
+        <v-parallax
+          height="500" 
+          src="https://cdn.vuetifyjs.com/images/parallax/material2.jpg">
           <v-layout column align-center justify-center>
             <div class="headline white--text mb-3 text-xs-center">For a better lecture</div>
             <em>Sweet</em>
             <v-btn
-              class="blue lighten-2 mt-5"
+              class="cyan lighten-1 mt-5"
               dark
               large
               href="/pre-made-themes"
@@ -150,7 +154,7 @@
                 <v-list class="transparent">
                   <v-list-tile>
                     <v-list-tile-action>
-                      <v-icon class="blue--text text--lighten-2">phone</v-icon>
+                      <v-icon class="cyan--text text--lighten-1">phone</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
                       <v-list-tile-title>777-867-5309</v-list-tile-title>
@@ -158,7 +162,7 @@
                   </v-list-tile>
                   <v-list-tile>
                     <v-list-tile-action>
-                      <v-icon class="blue--text text--lighten-2">place</v-icon>
+                      <v-icon class="cyan--text text--lighten-1">place</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
                       <v-list-tile-title>Chicago, US</v-list-tile-title>
@@ -166,7 +170,7 @@
                   </v-list-tile>
                   <v-list-tile>
                     <v-list-tile-action>
-                      <v-icon class="blue--text text--lighten-2">email</v-icon>
+                      <v-icon class="cyan--text text--lighten-1">email</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
                       <v-list-tile-title>john@vuetifyjs.com</v-list-tile-title>
@@ -235,7 +239,13 @@ export default {
         password: this.password
       })
     },
-
+     OpenLoginModal() {
+      this.Openlogin = !this.Openlogin;
+      this.validate();
+      this.ClearData();
+    }
   }
 };
 </script>
+
+
