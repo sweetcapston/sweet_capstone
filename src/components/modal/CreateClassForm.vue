@@ -4,7 +4,7 @@
     <sui-modal v-model="open" size="mini">
       <sui-modal-header>클래스 생성하기</sui-modal-header>
       <sui-modal-content image>
-        <img height="80px" width="80px" src="../../assets/logo.svg">
+        <img height="80px" width="80px" src="@/assets/logo.svg">
         <sui-modal-content>
           <label>클래스 이름</label>
           <sui-input placeholder="클래스이름을 입력해주세요" v-model="className"/>

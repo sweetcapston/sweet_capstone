@@ -14,7 +14,7 @@
     >
       <v-layout>
         <v-img
-          :src="require('../../assets/logo.svg')"
+          :src="require('@/assets/logo.svg')"
           class="mr-4"
           contain
           height="48"

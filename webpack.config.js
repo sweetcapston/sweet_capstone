@@ -1,27 +1,28 @@
-var path = require('path')
-var webpack = require('webpack')
-// const TerserJSPlugin = require('terser-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-var MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const path = require('path')
+const webpack = require('webpack')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
-var OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-var VueLoaderPlugin = require('vue-loader/lib/plugin')
-var CleanWebpackPlugin = require('clean-webpack-plugin');
-var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const isDev = process.env.NODE_ENV == 'development';
+const resolve = (sub) => {
+  return path.resolve(__dirname, sub)
+}
 
 module.exports = {
   entry: {
-    js_custom: './src/main.js',
-    js_lib: ["jquery"]
+    main: './src/main.js',
+    lib: ["jquery"]
   },
   output:{
     publicPath: '/',
     filename: 'js/[name].bundle.js',
     chunkFilename: 'js/[id].chunk.js',
-    path: path.resolve(__dirname, './dist')
+    path: resolve('./dist')
   },
   optimization:{
     minimizer: [
@@ -34,9 +35,17 @@ module.exports = {
         }
       }),
       new UglifyJSPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: isDev
+        uglifyOptions: {
+          compress: {
+              warnings: false,
+              unused: true
+          },
+          mangle: true,   
+          beautify: false,   
+          output: {
+            comments: false  
+          }
+      }
      })
     ],
     splitChunks: {
@@ -55,21 +64,16 @@ module.exports = {
           chunks: 'all',
           enforce: true
         },
-        js_lib:{
+        lib:{
           test:function (module) {
             return module.context && module.context.indexOf('node_modules') !== -1;
           },
-          name:'js_lib',
+          name:'lib',
           chunks:'all'
         },
         manifest:{
           name:'manifest',
           chunks:'all'
-        },
-        loadash:{
-          test:(m) => /node_modules\/(?:lodash|moment)/.test(m.context),
-          name: 'loadash',
-          chunks: 'all'
         },
         moment:{
           test:(m) => /node_modules\/(?:moment)/.test(m.context),
@@ -82,30 +86,12 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: [
-          isDev ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
-          { loader: 'css-loader', options: { sourceMap: isDev } },
-        ]
-      },
-      {
-        test: /\.less$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [ 'css-loader', 'less-loader' ]
-        })
-      },
-      {
-        test: /\.scss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
-      },
-      {
-        test: /\.sass$/,
-        use: [
-          isDev ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
-          { loader: 'css-loader', options: { sourceMap: isDev } },
-          { loader: 'sass-loader', options: { sourceMap: isDev } }
-        ]
+        test: /\.(sa|sc|c)ss$/,
+          use: [
+              isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+              'css-loader',
+              'sass-loader',
+        ],
       },
       {
         test: /\.vue$/,
@@ -120,14 +106,14 @@ module.exports = {
               ],
           }
         },
-        include: [ path.resolve(__dirname, './src') ]
+        include: [ resolve('./src') ]
       },
       {
         test: /\.styl$/,
         loader: ['style-loader', 'css-loader', 'stylus-loader', {
           loader: 'vuetify-loader',
           options: {
-            theme: path.resolve(__dirname, './node_modules/vuetify/src/stylus/theme.styl')
+            theme: resolve('./node_modules/vuetify/src/stylus/theme.styl')
           }
         }]
       },
@@ -138,7 +124,7 @@ module.exports = {
         options: {
           presets: ['@babel/preset-env']
         },
-        include: [ path.resolve(__dirname, 'src'), path.resolve(__dirname, './test') ]
+        include: [ resolve('src'), resolve('./test') ]
       },
       {
         test: /\.js$/,
@@ -146,14 +132,11 @@ module.exports = {
         use: ['babel-loader', 'eslint-loader']
       },
       {
-        test: /\.(png|jpg|gif|svg)$/,
-        loader: 'url-loader',
-        options: {
-          limit: 8192
-        }
+        test: /\.(png|jpg|gif|svg|ico)$/,
+        loader: 'file-loader',
       },
       {
-        test: /\.(woff|woff2|ttf|svg|eot)$/,
+        test: /\.(woff|woff2|ttf|eot)$/,
         loader: 'url-loader?name=/fonts/[name].[ext]'
       }
     ]
@@ -161,9 +144,9 @@ module.exports = {
   resolve: {
     alias: {
       'vue$': isDev ? 'vue/dist/vue.runtime.esm.js' : 'vue/dist/vue.esm.js',
-      '@': path.resolve(__dirname, "./src")
+      '@': resolve("./src")
     },
-    extensions: ['*', '.js', '.vue', '.json', '.scss', ]
+    extensions: ['*', '.js', '.vue', '.json', '.scss' ]
   },
   plugins: [
     new webpack.ProvidePlugin({
@@ -171,44 +154,43 @@ module.exports = {
       $: 'jquery',
       Popper: 'popper.js'
     }),
-    new ExtractTextPlugin('../css/index.css'),
     new ManifestPlugin(),
-    
-    new HtmlWebPackPlugin({
-      template: './public/index.html',
-      filename: './index.html'
-    }),
     new MiniCssExtractPlugin({
-      filename: 'css/[name].[hash].css',
-      chunkFilename: 'css/[id].[hash].css'
-   }),
-   new webpack.HashedModuleIdsPlugin()
+      filename: 'css/[name].css',
+      chunkFilename: 'css/[id].css'
+    }),
+    new webpack.ProgressPlugin(),
+    new VueLoaderPlugin(),
+    new VuetifyLoaderPlugin()
   ],
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map',
   mode : process.env.NODE_ENV ? 'development' : 'production'
 }
 if(process.env.NODE_ENV === 'development') {
   module.exports.devServer= {
     hot: true, // 서버에서 HMR을 켠다.
-    host: 'localhost', // 디폴트로는 "localhost" 로 잡혀있다. 외부에서 개발 서버에 접속해서 테스트하기 위해서는 '0.0.0.0'으로 설정해야 한다.
+    host: 'localhost', 
     contentBase: path.join(__dirname, 'dist'),
     historyApiFallback: true,
     compress: true,
     port: 8080,
+    stats: {
+      color: true
+    }
   };
-  module.exports.plugins = [
-    new webpack.ProgressPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(), // dev
-    new VueLoaderPlugin(),
-    new MiniCssExtractPlugin({
-      filename: "[name].css"
+  module.exports.plugins = module.exports.plugins.concat([
+    new HtmlWebPackPlugin({
+      title: 'Development',
+      showErrors: true, // 에러 발생시 메세지가 브라우저 화면에 노출 된다.
+      template: './public/index.html',
+      filename: './index.html',
+      favicon: "./public/favicon.ico"
     }),
-    new webpack.HotModuleReplacementPlugin(),
-    new VuetifyLoaderPlugin()
-  ];
+    new webpack.NoEmitOnErrorsPlugin(),  //컴파일 도중 오류가 발생한 리소스들은 제외하고 작업을 진행
+    // new webpack.HotModuleReplacementPlugin(), //recompiling 없이 실행가능
+  ]);
 
   module.exports.devtool = 'inline-source-map';
 }
@@ -227,21 +209,21 @@ else if (process.env.NODE_ENV === 'production') {
     }
   },
   module.exports.devtool = '#source-map'
-  module.exports.plugins = (module.exports.plugins || []).concat([
+  module.exports.plugins = (module.exports.plugins).concat([
     new CleanWebpackPlugin(),
-    new VueLoaderPlugin(),
-    new webpack.ProgressPlugin(),
-    new MiniCssExtractPlugin({
-      filename: "[name].css"
-    }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"'
       }
     }),
+    new HtmlWebPackPlugin({
+      title: 'production',
+      template: './public/index.html',
+      filename: './index.html',
+      favicon: "./public/favicon.ico"
+    }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
-    }),
-    new VuetifyLoaderPlugin()
+    })
   ])
 }

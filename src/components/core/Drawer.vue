@@ -23,7 +23,7 @@
             color="white"
           >
             <v-img
-              :src="require('../../assets/logo.svg')"
+              :src="require('@/assets/logo.svg')"
               height="34"
               contain
             />
@@ -65,7 +65,7 @@
     name: 'drawer',
     data: () => ({
     image: 'https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg',
-    logo: '../assets/logo.svg',
+    logo: '@/assets/logo.svg',
     color: 'error',
     colors: [
       'purple',
