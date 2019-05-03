@@ -9,7 +9,9 @@ var OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 var VueLoaderPlugin = require('vue-loader/lib/plugin')
 var CleanWebpackPlugin = require('clean-webpack-plugin');
 var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 const isDev = process.env.NODE_ENV == 'development';
+
 module.exports = {
   entry: {
     js_custom: './src/main.js',
@@ -95,11 +97,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: [
-          isDev ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
-          { loader: 'css-loader', options: { sourceMap: isDev } },
-          { loader: 'sass-loader', options: { sourceMap: isDev } }
-        ]
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
       {
         test: /\.sass$/,
@@ -114,23 +112,12 @@ module.exports = {
         loader: 'vue-loader',
         options: {
           loaders: {
-            css: [
-              isDev ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
-              { loader: 'css-loader', options: { sourceMap: isDev } },
-            ],
-            js: [
-                'babel-loader',
-            ],
-            scss: [
-              isDev ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
-              { loader: 'css-loader', options: { sourceMap: isDev } },
-              { loader: 'sass-loader', options: { sourceMap: isDev } }
-            ],
-            sass: [
-              isDev ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
-              { loader: 'css-loader', options: { sourceMap: isDev } },
-              { loader: 'sass-loader', options: { sourceMap: isDev } }
-            ]
+            test: /\.(sa|sc|c)ss$/,
+              use: [
+                  isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+                  'css-loader',
+                  'sass-loader',
+              ],
           }
         },
         include: [ path.resolve(__dirname, './src') ]
@@ -173,7 +160,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'vue$': isDev ? 'vue/dist/vue.runtime.js' : 'vue/dist/vue.runtime.min.js',
+      'vue$': isDev ? 'vue/dist/vue.runtime.esm.js' : 'vue/dist/vue.esm.js',
       '@': path.resolve(__dirname, "./src")
     },
     extensions: ['*', '.js', '.vue', '.json', '.scss', ]
@@ -200,19 +187,6 @@ module.exports = {
   performance: {
     hints: false
   },
-  devServer: {
-    hot: true, // 서버에서 HMR을 켠다.
-    host: 'localhost', // 디폴트로는 "localhost" 로 잡혀있다. 외부에서 개발 서버에 접속해서 테스트하기 위해서는 '0.0.0.0'으로 설정해야 한다.
-    compress: true,
-    historyApiFallback: true,
-    contentBase: path.join(__dirname, 'dist'),
-    open: true,
-    overlay: true,
-    port: 8080,
-    stats: {
-    normal: true
-    }
-  },
   devtool: '#eval-source-map',
   mode : process.env.NODE_ENV ? 'development' : 'production'
 }
@@ -232,12 +206,26 @@ if(process.env.NODE_ENV === 'development') {
     new MiniCssExtractPlugin({
       filename: "[name].css"
     }),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new VuetifyLoaderPlugin()
   ];
 
   module.exports.devtool = 'inline-source-map';
 }
 else if (process.env.NODE_ENV === 'production') {
+  module.exports.devServer = {
+    hot: true, 
+    host: '127.0.0.1', 
+    compress: true,
+    historyApiFallback: true,
+    contentBase: path.join(__dirname, 'dist'),
+    open: true,
+    overlay: true,
+    port: 8080,
+    stats: {
+    normal: true
+    }
+  },
   module.exports.devtool = '#source-map'
   module.exports.plugins = (module.exports.plugins || []).concat([
     new CleanWebpackPlugin(),
@@ -254,5 +242,6 @@ else if (process.env.NODE_ENV === 'production') {
     new webpack.LoaderOptionsPlugin({
       minimize: true
     }),
+    new VuetifyLoaderPlugin()
   ])
 }

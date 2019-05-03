@@ -15,6 +15,7 @@ module.exports = {
           return args
         })
     },
+    transpileDependencies:[/node_modules[/\\\\]vuetify[/\\\\]/],
     css: {
       loaderOptions: {
         sass: {
