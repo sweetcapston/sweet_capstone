@@ -21,12 +21,16 @@
             <img src="../assets/logo.svg" alt="Vuetify.js" height="200">
             <h1 class="white--text mb-2 display-1 text-xs-center">OpenClass</h1>
             <div class="subheading mb-3 text-xs-center">Powered by Sweet</div>
+<<<<<<< HEAD
             <v-btn
               class="cyan lighten-1 mt-5"
               dark
               large
               href="/pre-made-themes"
             >
+=======
+            <v-btn class="blue lighten-2 mt-5" dark large @click="alert(1)">
+>>>>>>> 28577d69dece42fa83f40b9a868320b2c145c94a
               How to use
             </v-btn>
           </v-layout>
@@ -214,15 +218,7 @@ export default {
     Auth.auth().then(res => {
       if(!res.data)
         return;
-      switch(this.$session.get("Identity")){
-          case 1: //학생
-            this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
-            break;
-          case 2: //교수
-            break;
-          case 3: //관리자
-            break;
-      }
+      this.$router.push({name: 'main'});
     });
   },
   data() {
