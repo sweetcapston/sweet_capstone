@@ -22,7 +22,7 @@ export default new Router({
     {
       path: "/main",
       name: "main",
-      component: Main
+      component: Main,
     },
     {
       path: "/class/:classCode",

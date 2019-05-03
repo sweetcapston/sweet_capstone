@@ -29,7 +29,7 @@
             />
           </v-list-tile-avatar>
           <v-list-tile-title class="title">
-            Open Class
+            {{this.$store.state.className + ' ' + this.$store.state.profName}}
           </v-list-tile-title>
         </v-list-tile>
       <v-divider/>
@@ -101,16 +101,17 @@
     .v-list__tile {
       border-radius: 4px;
     }
-
     .v-image__image--contain {
       top: 9px;
       height: 60%;
     }
-
     .search-input {
       margin-bottom: 30px !important;
       padding-left: 15px;
       padding-right: 15px;
+    }
+    .fill-height > .v-list{
+      background: 0;
     }
   }
 </style>
