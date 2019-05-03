@@ -41,6 +41,7 @@
 /* eslint-disable */
 import Auth from "../api/Auth.js"
 import ClassList from "../components/core/ClassList.vue";
+import axios from "axios";
 
 export default {
   created() {
