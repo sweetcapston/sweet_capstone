@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-toolbar class="v-toolbar--fixed elevation-0 transparent">
+    <v-toolbar class="v-toolbar--fixed white--text elevation-0 transparent">
       <img src="../assets/logo.svg" height="50">
       <v-spacer />
       <modal-login-form />
@@ -21,16 +21,7 @@
             <img src="../assets/logo.svg" alt="Vuetify.js" height="200">
             <h1 class="white--text mb-2 display-1 text-xs-center">OpenClass</h1>
             <div class="subheading mb-3 text-xs-center">Powered by Sweet</div>
-<<<<<<< HEAD
-            <v-btn
-              class="cyan lighten-1 mt-5"
-              dark
-              large
-              href="/pre-made-themes"
-            >
-=======
-            <v-btn class="blue lighten-2 mt-5" dark large @click="alert(1)">
->>>>>>> 28577d69dece42fa83f40b9a868320b2c145c94a
+            <v-btn class="cyan lighten-1 mt-5" dark large @click="alert(1)">
               How to use
             </v-btn>
           </v-layout>
