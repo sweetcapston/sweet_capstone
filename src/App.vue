@@ -8,8 +8,6 @@
 
 <script>
 import Vue from "vue";
-import "semantic-ui-css/semantic.min.css";
-import SuiVue from "semantic-ui-vue";
 import VeeValidate from "vee-validate";
 import ko from "vee-validate/dist/locale/ko.js";
 import Auth from "./api/Auth";
@@ -24,7 +22,6 @@ const config = {
 };
 
 Vue.use(VeeValidate, config);
-Vue.use(SuiVue);
 Vue.use(VueSession);
 Vue.use(ClassList);
 

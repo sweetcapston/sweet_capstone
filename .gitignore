@@ -2,6 +2,7 @@
 node_modules
 /dist
 .nyc_output
+.editorconfig
 # local env files
 .env.local
 .env.*.local

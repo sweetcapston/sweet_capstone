@@ -8,7 +8,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const isDev = process.env.NODE_ENV == 'development';
+const isDev = process.env.NODE_ENV == 'development' || 'test';
 const resolve = (sub) => {
   return path.resolve(__dirname, sub)
 }
@@ -168,7 +168,18 @@ module.exports = {
   },
   mode : process.env.NODE_ENV ? 'development' : 'production'
 }
-if(process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'test') {
+  module.exports.externals = [require('webpack-node-externals')()]
+  module.exports.devtool = 'inline-cheap-module-source-map'
+  module.exports.resolve = {
+    alias: {
+      'vue$': isDev ? 'vue/dist/vue.runtime.esm.js' : 'vue/dist/vue.esm.js',
+      '@': resolve("./src")
+    },
+    extensions: ['*', '.js', '.vue', '.json' ]
+  }
+}
+else if(process.env.NODE_ENV === 'development') {
   module.exports.devServer= {
     hot: true, // 서버에서 HMR을 켠다.
     host: 'localhost', 

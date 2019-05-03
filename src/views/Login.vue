@@ -8,9 +8,9 @@
 </template>
 
 <script>
-import "semantic-ui-css/semantic.min.css";
-import SuiVue from "semantic-ui-vue";
 import VeeValidate from "vee-validate";
+import "@/styles/semantic.min.css";
+import SuiVue from "semantic-ui-vue";
 import ko from "vee-validate/dist/locale/ko.js";
 import Auth from "../api/Auth";
 import VueSession from "vue-session";
@@ -24,7 +24,7 @@ const config = {
 };
 
 Vue.use(VeeValidate, config);
-Vue.use(SuiVue);
+Vue.use(SuiVue)
 Vue.use(VueSession);
 
 /* eslint-disable */
