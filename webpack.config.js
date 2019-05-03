@@ -16,7 +16,6 @@ const resolve = (sub) => {
 module.exports = {
   entry: {
     main: './src/main.js',
-    lib: ["jquery"]
   },
   output:{
     publicPath: '/',
@@ -63,13 +62,6 @@ module.exports = {
           name: 'styles',
           chunks: 'all',
           enforce: true
-        },
-        lib:{
-          test:function (module) {
-            return module.context && module.context.indexOf('node_modules') !== -1;
-          },
-          name:'lib',
-          chunks:'all'
         },
         manifest:{
           name:'manifest',

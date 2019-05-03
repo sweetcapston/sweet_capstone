@@ -3,9 +3,11 @@
     <v-toolbar class="v-toolbar--fixed white--text elevation-0 transparent">
       <img src="@/assets/logo.svg" height="50">
       <v-spacer />
-      <modal-login-form />
-      <modal-sign-up-form />
+      <sui-button class="transparent" positive @click="OpenLogin">로그인</sui-button>
+      <sui-button class="cyan lighten-1" positive @click.native="OpenRegister" id="signbtn">회원가입</sui-button>
     </v-toolbar>
+    <modal-login-form />
+    <modal-sign-up-form />
     <v-content>
       <section>
         <v-parallax 
@@ -188,7 +190,7 @@ import VeeValidate from "vee-validate";
 import "@/styles/semantic.min.css";
 import SuiVue from "semantic-ui-vue";
 import ko from "vee-validate/dist/locale/ko.js";
-import Auth from "../api/Auth";
+import {Auth} from "@/api";
 import VueSession from "vue-session";
 import Vue from "vue";
 
@@ -216,21 +218,23 @@ export default {
   data() {
     return {
       username:'',
-      password:''
+      password:'',
+      RegisterSign:false,
+      LoginSing:false
     };
   },
   methods: {
-    // this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
     login(){
       this.$store.dispatch('retrieveToken',{
         username: this.username,
         password: this.password
       })
     },
-     OpenLoginModal() {
-      this.Openlogin = !this.Openlogin;
-      this.validate();
-      this.ClearData();
+    OpenLogin() {
+      this.$EventBus.$emit("LoginSign");
+    },
+    OpenRegister() {
+      this.$EventBus.$emit("RegisterSign");
     }
   }
 };

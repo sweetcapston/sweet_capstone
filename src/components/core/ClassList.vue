@@ -44,8 +44,7 @@
 </template>
 
 <script>
-import Prof from "../../api/Prof";
-import Stud from "../../api/Stud";
+import {Prof, Stud} from "../../api";
 
 export default {
   data(){

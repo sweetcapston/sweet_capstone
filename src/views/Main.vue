@@ -53,10 +53,7 @@
 
 <script>
 /* eslint-disable */
-import Auth from "../api/Auth.js"
-import Class from "../api/Class.js"
-import Prof from "../api/Prof.js"
-import Stud from "../api/Stud.js"
+import {Auth, Class, Prof, Stud} from "@/api"
 
 export default {
   created() {

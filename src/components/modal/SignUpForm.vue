@@ -1,7 +1,6 @@
 <template>
   <div>
-    <sui-button color="cyan lighten-1" positive @click.native="OpenSignModal" id="signbtn">회원가입</sui-button>
-    <sui-modal v-model="Opensign" id="modal" size="mini">
+    <sui-modal v-model="RegisterSign" id="modal" size="mini">
       <sui-modal-header class="undraggable unselectable">회원가입</sui-modal-header>
       <div class="grid-container sign">
         <sui-modal-content>
@@ -96,7 +95,7 @@
           >{{errors.first('studentId')}}</p>
         </div>
         <div class="sign_end">
-          <sui-button class="Create btn-Create" positive @click="email_signup" id="Create">회원가입</sui-button>
+          <sui-button class="Create btn-Create cyan lighten-1" positive @click="email_signup" id="Create">회원가입</sui-button>
           <p class="modalChange undraggable unselectable">
             이미 회원이세요?
             <a href="javascript:;" @click="modalChange">로그인</a>
@@ -110,7 +109,7 @@
 <script>
 /* eslint-disable */
 import ko from "vee-validate/dist/locale/ko.js";
-import Auth from "../../api/Auth.js";
+import {Auth} from "@/api";
 
 ko.messages.email = field => `올바른 ${field} 형식이어야 합니다.`;
 ko.messages.confirmed = field =>
@@ -129,7 +128,7 @@ export default {
       duplicate: true,
       errsign: false,
       checkbox: false,
-      Opensign: false
+      RegisterSign: false
     };
   },
   watch: {
@@ -141,7 +140,12 @@ export default {
   },
   created() {
     this.$EventBus.$on("toggleSign", () => {
-      this.Opensign = !this.Opensign;
+      this.RegisterSign = !this.RegisterSign;
+    });
+    this.$EventBus.$on("RegisterSign", () => {
+      this.RegisterSign = !this.RegisterSign;
+      this.validate();
+      this.ClearData();
     });
   },
   methods: {
@@ -164,20 +168,15 @@ export default {
       this.checkbox = false;
       this.duplicate = false;
     },
-    OpenSignModal() {
-      this.Opensign = !this.Opensign;
-      this.validate();
-      this.ClearData();
-    },
     modalChange() {
-      this.Opensign = !this.Opensign;
+      this.RegisterSign = !this.RegisterSign;
       this.validate();
       this.ClearData();
       this.$EventBus.$emit("toggleLogin");
     },
     email_signup() {
       if (this.errors.items.length != 0) {
-        console.log(this.errors);
+        alert(this.errors);
         this.errsign = true;
         return false;
       }

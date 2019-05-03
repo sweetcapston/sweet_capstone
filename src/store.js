@@ -39,12 +39,12 @@ export default new Vuex.Store({
     ],
   },
   getters: { // 반복사용되는 값을 재사용하기 위해 사용. computed와 같은 기능
-    allLinksCount: function(state){
+    allLinksCount: (state) => {
       return state.links.length;
     },
-    getIdentity: function(state){
+    getIdentity: (state) => {
       return state.Identity;
-    }
+    },
   },
   mutations: { // state값을 변경하고자 할 때, commit을 이용해서 변경시킬 것임, State 관리
     setIdentity: (state, Identity) => state.Identity = Identity,

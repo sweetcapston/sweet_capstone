@@ -1,7 +1,6 @@
 <template>
   <div>
-    <sui-button class="transparent" positive @click="OpenLoginModal" v-show="!logined">로그인</sui-button>
-    <sui-modal v-model="Openlogin" id="modal" size="mini">
+    <sui-modal v-model="LoginSign" id="modal" size="mini">
       <sui-modal-header class="undraggable unselectable">로그인</sui-modal-header>
       <div class="grid-container login">
         <sui-modal-content>
@@ -38,7 +37,7 @@
           </div>
         </sui-modal-content>
         <div class="login_end">
-          <sui-button class="Login btn-Login" positive @click="LogIn" id="Login">로그인</sui-button>
+          <sui-button class="Login btn-Login cyan lighten-1" positive @click="LogIn" id="Login">로그인</sui-button>
           <p class="modalChange undraggable unselectable">
             아직 회원이 아니세요?
             <a href="javascript:;" @click="modalChange">회원가입</a>
@@ -50,7 +49,7 @@
 </template>
 
 <script>
-import Auth from "../../api/Auth";
+import {Auth} from "@/api";
 
 /* eslint-disable */
 export default {
@@ -58,14 +57,18 @@ export default {
     return {
       email: "",
       password: "",
-      Openlogin: false,
+      LoginSign: false,
       errsign: false,
-      logined: false
     };
   },
   created() {
     this.$EventBus.$on("toggleLogin", () => {
-      this.Openlogin = !this.Openlogin;
+      this.LoginSign = !this.LoginSign;
+    });
+    this.$EventBus.$on("LoginSign", () => {
+      this.LoginSign = !this.LoginSign;
+      this.validate();
+      this.ClearData();
     });
   },
   methods: {
@@ -73,14 +76,10 @@ export default {
       this.email = "";
       this.password = "";
     },
-    OpenLoginModal() {
-      this.Openlogin = !this.Openlogin;
-      this.validate();
-      this.ClearData();
-    },
     LogIn() {     
       if (this.errors.items.length != 0) {
         this.errsign = true;
+        alert(this.errors)
         return false;
       }
       this.errsign = false;
@@ -94,7 +93,6 @@ export default {
           if(data){
             this.ClearData();
             this.Openlogin = false;
-            alert("로그인 성공");
             this.$session.set('Identity', data.Identity) //추후 수정 가능
             localStorage.setItem('access_classList', JSON.stringify(data.classList))
             // this.$store.commit("setIdentity", res.data.Identity); //page refresh 시 초기화됨
@@ -118,13 +116,10 @@ export default {
         });
     },
     modalChange() {
-      this.Openlogin = !this.Openlogin;
+      this.LoginSign = !this.LoginSign;
       this.validate();
       this.ClearData();
       this.$EventBus.$emit("toggleSign");
-    },
-    change() {
-      this.Openlogin = !this.Openlogin;
     },
     validate: function() {
       this.$validator.validateAll();
