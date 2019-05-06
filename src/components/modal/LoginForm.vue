@@ -94,10 +94,9 @@ export default {
           if(data){
             this.ClearData();
             this.Openlogin = false;
-            this.$session.set('Identity', data.Identity) //추후 수정 가능
             this.$store.commit("setClassList", data.classList);
             this.$store.commit("setUserName", data.name);
-            // this.$store.commit("setIdentity", res.data.Identity); //page refresh 시 초기화됨
+            this.$store.commit("setIdentity", data.Identity); //page refresh 시 초기화됨
             switch(data.Identity){
               case 1: //학생
                 this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동

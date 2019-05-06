@@ -29,13 +29,13 @@
       <v-btn
        text color="green"
        @click="deleteClassList(classes.classCode)"
-       v-if="this.$session.get('Identity')===1"
+       v-if="this.$store.getters.getIdentity === 1"
       >
         삭제
       </v-btn>
       <v-btn text color="green"
        @click="deleteClass(classes.classCode)"
-       v-if="this.$session.get('Identity')===2"
+       v-if="this.$store.getters.getIdentity === 2"
       >
         삭제
       </v-btn>

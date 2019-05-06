@@ -15,7 +15,7 @@
     </v-toolbar>
 
     <v-content>
-        <v-layout justify-center v-if="this.$session.get('Identity') == 1">
+        <v-layout justify-center v-if="this.$store.getters.getIdentity == 1">
           <v-flex xs12 sm6 md3 order-12>
           <v-text-field
               v-model="classCode"
@@ -25,7 +25,7 @@
           </v-flex>
             <v-btn bottom dark @click="enterClass(getClassCode())">입장하기</v-btn>
         </v-layout>
-         <v-layout justify-center v-if="this.$session.get('Identity') == 2" >
+         <v-layout justify-center v-if="this.$store.getters.getIdentity == 2" >
             <v-flex xs12 sm6 md3 order-12>
             <v-text-field
               v-model="className"
