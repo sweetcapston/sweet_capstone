@@ -22,8 +22,7 @@ export default {
         className: '',
         classCode: '',
         profName: '',
-      },
-      classList: []
+      }
     }
   },
   methods: {

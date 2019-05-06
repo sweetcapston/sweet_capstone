@@ -94,7 +94,6 @@ export default {
           if(data){
             this.ClearData();
             this.Openlogin = false;
-            alert(data.name);
             this.$session.set('Identity', data.Identity) //추후 수정 가능
             this.$store.commit("setClassList", data.classList);
             this.$store.commit("setUserName", data.name);
