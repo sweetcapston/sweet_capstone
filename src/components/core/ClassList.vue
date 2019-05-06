@@ -27,7 +27,7 @@
         입장
       </v-btn>
       <v-btn
-       text color="green" 
+       text color="green"
        @click="deleteClassList(classes.classCode)"
        v-if="this.$session.get('Identity')===1"
       >
@@ -62,41 +62,41 @@ export default {
   methods:{
     // 클래스 입장
     enterClass: function(classCode){
-      this.classList = JSON.parse(localStorage.getItem('access_classList'));
-      //const idx = this.classList.findIndex(function(item) {return item.classCode === classCode})
-      var classTempData = this.classList.find(function(item) {return item.classCode === classCode})
-
-      this.$store.commit("setClassCode", classCode);
-      this.$store.commit("setClassName", classTempData.className);
-      this.$store.commit("setProfName", classTempData.profName);
+      this.$store.commit("setCurrentClass", 
+      {
+        classCode: classCode,
+        className: this.classes.className,
+        profName: this.classes.profName
+      });
+      const idx = this.$store.state.classList.findIndex( function(item) { return item.classCode === classCode })
+      this.$store.commit('setAlready', idx);
       this.$router.push({path: `class/${classCode}/home`});
     },
     // 클래스 리스트에서 삭제(학생)
     deleteClassList: function(classCode){
       Stud.classDelete(classCode)
       .then(res => {
-        if(res.data == true)
-          this.classList = JSON.parse(localStorage.getItem('access_classList'));
-
-        const idx = this.classList.findIndex(function(item) {return item.classCode === classCode})
-        if (idx > -1) this.classList.splice(idx, 1);
-        localStorage.removeItem('access_classList');
-        localStorage.setItem('access_classList', JSON.stringify(this.classList));
-        alert('클래스 코드번호' + '(' + classCode + ')' + '가 삭제 되었습니다.');
+        if(res.data == false) alert('error!!');
+        else {
+          // 클래스리스트에서 클래스 삭제하고 새로운 클래스 리스트로 업데이트
+          this.classList = this.$store.state.classList;
+          const idx = this.classList.findIndex(function(item) {return item.classCode === classCode})
+          if (idx > -1) this.classList.splice(idx, 1);
+          this.$store.commit('removeClassList', this.classList);
+        }
       });
     },
     // 클래스 삭제(교수)
     deleteClass: function(classCode){
       Prof.classDelete(classCode)
       .then(res => {
-        if(res.data == true)
-          this.classList = JSON.parse(localStorage.getItem('access_classList'));
-
-        const idx = this.classList.findIndex(function(item) {return item.classCode === classCode})
-        if (idx > -1) this.classList.splice(idx, 1);
-        localStorage.removeItem('access_classList');
-        localStorage.setItem('access_classList', JSON.stringify(this.classList));
-        alert('클래스 코드번호' + '(' + classCode + ')' + '가 삭제 되었습니다.');
+        if(res.data === false) alert('error!!');
+        else {
+          this.classList = this.$store.state.classList;
+          const idx = this.classList.findIndex(function(item) {return item.classCode === classCode})
+          if (idx > -1) this.classList.splice(idx, 1);
+          this.$store.commit('removeClassList', this.classList);
+        }
       });
     }
   }

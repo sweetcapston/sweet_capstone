@@ -3,7 +3,7 @@
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
         <span>OpenClass</span>
-        <span class="font-weight-light"> username </span>
+        <span class="font-weight-light"> {{this.$store.state.userName}} </span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
@@ -15,7 +15,7 @@
     </v-toolbar>
 
     <v-content>
-        <v-layout justify-center v-if="this.$session.get('Identity')==1">
+        <v-layout justify-center v-if="this.$session.get('Identity') == 1">
           <v-flex xs12 sm6 md3 order-12>
           <v-text-field
               v-model="classCode"
@@ -23,9 +23,9 @@
               solo
             ></v-text-field>
           </v-flex>
-            <v-btn bottom dark @click="enterClass">입장하기</v-btn>
+            <v-btn bottom dark @click="enterClass(getClassCode())">입장하기</v-btn>
         </v-layout>
-         <v-layout justify-center v-if="this.$session.get('Identity')==2" >
+         <v-layout justify-center v-if="this.$session.get('Identity') == 2" >
             <v-flex xs12 sm6 md3 order-12>
             <v-text-field
               v-model="className"
@@ -33,14 +33,14 @@
               solo
             ></v-text-field>
             </v-flex>
-             <v-btn bottom dark @click="createClass">생성하기</v-btn>
+             <v-btn bottom dark @click="createClass(getClassName())">생성하기</v-btn>
         </v-layout>
       
 
       <v-sheet mobile-break-point="960">
       <v-layout row wrap>
         <core-class-list  
-          v-for="(Class, i) in this.classList"
+          v-for="(Class, i) in this.$store.state.classList"
           :classes='Class'
           :key="i"
           avatar
@@ -60,7 +60,6 @@ import Stud from "../api/Stud.js"
 
 export default {
   created() {
-    this.classList = JSON.parse(localStorage.getItem('access_classList'));
     Auth.auth().then(res => {
       if(!res.data){
         this.$router.push({name: 'login'})
@@ -70,49 +69,63 @@ export default {
           break;
             this.$session.set('token', res.data.token)
             this.$store.commit("setIdentity", res.data.Identity);
-
-    }
-  })
+      }
+    })
   },
- 
   data(){ 
     return {
-      classCode:'',
-      className:'',
+      classCode: '',
+      className: '',
       classList: [],
     }
   },
-
   methods: {
-    enterClass() {
-      Stud.classEnter(this.classCode)
+    // v-model의 코드와 이름을 얻기 위한 임시 비동기 처리
+    getClassCode(){
+      return this.classCode;
+    },
+    getClassName(){
+      return this.className;
+    },
+    enterClass(classCode) {
+      alert(classCode);
+      Stud.classEnter(classCode)
       .then(res => {
         if(res.data == false) alert('error');
         else{
-           alert(res.data.className + res.data.profName);
-           //클래스 입장시에 해당 클래스코드 vuex에 저장. 클래스 퇴장시 저장된 클래스코드 삭제(새로고침하면 자동으로 되는듯.)
-           this.$store.commit("setClassCode", this.classCode); // classCode, className, profName을 합칠까?
-           this.$store.commit("setClassName", res.data.className);
-           this.$store.commit("setProfName", res.data.profName);
-           this.$router.push({name: 'class'}) // 해당 클래스 페이지로 이동
+          alert(classCode);
+          //클래스 입장시에 해당 클래스코드 vuex에 저장. 클래스 퇴장시 저장된 클래스코드 삭제
+          this.$store.commit("setCurrentClass", {
+            classCode: classCode,
+            className: res.data.className,
+            profName: res.data.profName
+          });
+          const idx = this.$store.state.classList.findIndex(function(item) { return item.classCode == classCode })
+          this.$store.commit('setAlready', idx);
+          this.$router.push({path: `/class/${this.classCode}/home`}) // 해당 클래스 페이지로 이동
         }
       })
     },
-    createClass(){
-      Prof.classCreate(this.className)
-      .then(res=>{
-        if (res.data) alert(res.data);
-        alert(this.className + " 클래스 생성이 완료 되었습니다.");
-        this.classList.push({className : this.className, classCode : res.data}); // 현재 유저 네임도 받아와야함. 세션으로?
-        localStorage.removeItem('access_classList');
-        localStorage.setItem('access_classList', JSON.stringify(this.classList));
+    createClass(className){
+      Prof.classCreate(className)
+      .then(res => {
+        if (res.data == false) alert('error');
+        else{
+          // currentClass객체로 하면 오류남.
+          this.$store.commit("addClassList", {
+            className: className,
+            classCode: res.data.classCode,
+            profName: this.$store.state.userName
+          });
+        }
       });
     },
     logout(){
       this.$session.destroy();
       Auth.logout().then(res => {
         if(res.data == "logout"){
-          this.$router.push({name: 'login'})
+          this.$store.commit('removeUserName');
+          this.$router.push({name: 'login'});
         }
       })
     }
