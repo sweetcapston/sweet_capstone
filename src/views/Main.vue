@@ -41,7 +41,7 @@
       <v-layout row wrap>
         <core-class-list  
           v-for="(Class, i) in this.$store.state.classList"
-          :classes='Class'
+          :currentClass='Class'
           :key="i"
           avatar
         />
@@ -100,8 +100,8 @@ export default {
             className: res.data.className,
             profName: res.data.profName
           });
-          const idx = this.$store.state.classList.findIndex(function(item) { return item.classCode == classCode })
-          this.$store.commit('setAlready', idx);
+          const checkApply = this.$store.state.classList.findIndex(function(item) { return item.classCode == classCode })
+          this.$store.commit('setCheckApply', checkApply);
           this.$router.push({path: `/class/${this.classCode}/home`}) // 해당 클래스 페이지로 이동
         }
       })

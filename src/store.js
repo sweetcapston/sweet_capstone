@@ -10,14 +10,14 @@ export default new Vuex.Store({
     drawer: true, // 네비게이션 바
     Identity: 0, // 1: 학생, 2: 교수, 3: 관리자
     userName:'', // 사용자 이름
-    already: '',
+    checkApply: '', // 수광중인 클래스여부
     currentClass: { // 현재 클래스 정보
       classCode: '', 
       className: '', 
       profName: '', 
     },
     classList: [], // 사용자의 클래스 리스트
-    links: [
+    links: [ // 메인페이지 관련
       {
         to: '/class/',
         to2: '/home',
@@ -80,9 +80,9 @@ export default new Vuex.Store({
       state.currentClass.profName = ''
     ),
 
-    setAlready:(state, payload) => 
+    setCheckApply:(state, payload) => 
     (
-      state.already = payload
+      state.checkApply = payload
     ),
 
   },

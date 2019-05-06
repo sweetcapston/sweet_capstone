@@ -8,13 +8,13 @@
       height="150px"
       src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
     >
-      <v-card-title class="align-start fill-height">{{classes.className}}</v-card-title>
+      <v-card-title class="align-start fill-height">{{currentClass.className}}</v-card-title>
     </v-img>
 
     <v-card-text>
       <span class="text--primary">
-        <span>교수명: {{ classes.profName }}</span><br>
-        <span>클래스코드: {{ classes.classCode }}</span><br>
+        <span>교수명: {{ currentClass.profName }}</span><br>
+        <span>클래스코드: {{ currentClass.classCode }}</span><br>
       </span>
     </v-card-text>
 
@@ -22,19 +22,19 @@
       <v-btn
        text
        color="orange" 
-       @click="enterClass(classes.classCode)"
+       @click="enterClass(currentClass.classCode)"
       >
         입장
       </v-btn>
       <v-btn
        text color="green"
-       @click="deleteClassList(classes.classCode)"
+       @click="deleteClassList(currentClass.classCode)"
        v-if="this.$store.getters.getIdentity === 1"
       >
         삭제
       </v-btn>
       <v-btn text color="green"
-       @click="deleteClass(classes.classCode)"
+       @click="deleteClass(currentClass.classCode)"
        v-if="this.$store.getters.getIdentity === 2"
       >
         삭제
@@ -55,7 +55,7 @@ export default {
     }
   },
   props: {
-    classes: {
+    currentClass: {
       type: Object
     }
   },
@@ -65,11 +65,11 @@ export default {
       this.$store.commit("setCurrentClass", 
       {
         classCode: classCode,
-        className: this.classes.className,
-        profName: this.classes.profName
+        className: this.currentClass.className,
+        profName: this.currentClass.profName
       });
-      const idx = this.$store.state.classList.findIndex( function(item) { return item.classCode === classCode })
-      this.$store.commit('setAlready', idx);
+      const checkApply = this.$store.state.classList.findIndex( function(item) { return item.classCode === classCode })
+      this.$store.commit('setCheckApply', checkApply);
       this.$router.push({path: `class/${classCode}/home`});
     },
     // 클래스 리스트에서 삭제(학생)

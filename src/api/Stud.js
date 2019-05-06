@@ -10,7 +10,6 @@ export default {
       return axios.post(`${BaseUrl}/enter`,{classCode: classCode}, config);
     },
     classAdd(classCode){
-      alert(classCode);
       return axios.get(`${BaseUrl}/${classCode}/classAdd`, config);
     },
     classDelete(classCode){
