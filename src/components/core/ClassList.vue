@@ -1,6 +1,5 @@
 <template>
   <v-btn 
-    style="text-transform: none !important;"
     id = "classCard"
     @click="enterClass(currentClass.classCode)"
     flat
@@ -14,9 +13,25 @@
         height="150px"
         src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
       >
-        <v-card-title class="align-start fill-height">{{currentClass.className}}</v-card-title>
-      </v-img>
+        <v-layout justify-end align-start>
+          <v-icon 
+            id="delete"
+            color="white"
+            flat
+            @click="deleteClassList(currentClass.classCode)"
+            v-if="this.$store.getters.getIdentity === 1"
+          >mdi-close</v-icon>
 
+          <v-icon 
+            id="delete"
+            color="white"
+            flat
+            @click="deleteClass(currentClass.classCode)"
+            v-if="this.$store.getters.getIdentity === 2"
+          >mdi-close</v-icon>
+        </v-layout>
+      </v-img>
+      <v-card-title class="align-start fill-height">{{currentClass.className}}</v-card-title>
       <v-card-text>
         <span class="text--primary">
           <span>교수명: {{ currentClass.profName }}</span><br>
@@ -28,7 +43,7 @@
 </template>
 
 <script>
-import {Prof, Stud} from "../../api";
+import {Prof, Stud} from "@/api";
 
 export default {
   data(){
@@ -86,10 +101,16 @@ export default {
 }
 </script>
 <style>
+  #classCard {
+    text-transform: none !important;
+  }
   #classCard::before{
     background:transparent;
   }
   #classCard:hover{
     background:#EDEDED;
+  }
+  .v-icon.mdi.mdi-close.theme--light.white--text:hover{
+    background:#CFD8DC;
   }
 </style>
