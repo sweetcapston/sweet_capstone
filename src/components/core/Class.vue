@@ -1,8 +1,9 @@
 <template>
   <v-app>
+    <core-toolbar/> 
     <v-content>
       <v-container fluid grid-list-md fill-height>
-        <v-layout row wrap>
+        <v-layout row wrap> 
           <core-drawer/>
           <router-view/>
         </v-layout>

@@ -15,25 +15,25 @@ export default new Vuex.Store({
       {
         to: '/class/',
         to2: '/home',
-        icon: 'home',
+        icon: 'mdi-home',
         text: '홈'
       },
       {
         to: '/class/',
         to2: '/question',
-        icon: 'lightbulb',
+        icon: 'mdi-comment-question-outline',
         text: '질문 클래스'
       },
       {
         to: '/class/',
         to2: '/survey',
-        icon: 'call',
+        icon: 'mdi-clipboard-text-outline',
         text: '설문 클래스' 
       },
       {
         to: '/class/',
         to2: '/chart',
-        icon: 'dashboard',
+        icon: 'mdi-chart-bar',
         text: '통계'
       }
     ],

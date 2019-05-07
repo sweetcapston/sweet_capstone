@@ -64,18 +64,18 @@
   export default {
     name: 'drawer',
     data: () => ({
-    image: 'https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg',
-    logo: '@/assets/logo.svg',
-    color: 'error',
-    colors: [
-      'purple',
-      'info',
-      'success',
-      'warning',
-      'error'
-    ],
-    responsive: false
-   }),
+      image: 'https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg',
+      logo: '@/assets/logo.svg',
+      color: 'error',
+      colors: [
+        'purple',
+        'info',
+        'success',
+        'warning',
+        'error'
+      ],
+      responsive: false
+    }),
     computed: {
       drawer: {
         get () {

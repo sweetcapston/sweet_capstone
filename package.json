@@ -12,7 +12,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
     "@babel/runtime": "^7.4.4",
-    "@mdi/font": "^3.5.95",
+    "@mdi/font": "^3.6.95",
     "@vue/cli": "^3.7.0",
     "axios": "^0.18.0",
     "core-js": "^2.6.5",

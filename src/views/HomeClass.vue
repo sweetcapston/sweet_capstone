@@ -2,7 +2,7 @@
   <v-app>
     <h1>클래스 코드 : {{this.$store.state.classCode}}</h1>
     <span>
-      <v-btn color="primary" @click="addClass()" >수광하기</v-btn>
+      <v-btn color="primary" @click="addClass()" >수강하기</v-btn>
       <v-btn color="error" @click="outClass()" >클래스 나가기</v-btn>
     </span>
   </v-app>
@@ -19,7 +19,7 @@ export default {
     }
   },
   methods: {
-    addClass() { // 중복 수광 안되도록...
+    addClass() { // 중복 수강 안되도록... 아직 수정 필요
       Stud.classAdd(this.$store.state.classCode).then(res=>{
         if(res.data === 'false') alert('error');
         else{
