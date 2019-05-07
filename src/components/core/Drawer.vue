@@ -32,6 +32,10 @@
             {{this.$store.state.currentClass.className + ' ' + this.$store.state.currentClass.profName}}
           </v-list-tile-title>
         </v-list-tile>
+
+        <v-list-tile>
+            {{`클래스코드 : ${this.$store.state.currentClass.classCode}`}}
+        </v-list-tile>
       <v-divider/>
 
       <v-list>

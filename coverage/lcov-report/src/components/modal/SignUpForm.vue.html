@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">16.13% </span>
+        <span class="strong">17.46% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>10/62</span>
+        <span class='fraction'>11/63</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>2/20</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">16.13% </span>
+        <span class="strong">17.46% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>10/62</span>
+        <span class='fraction'>11/63</span>
       </div>
     </div>
     <p class="quiet">
@@ -284,9 +284,7 @@
 <a name='L236'></a><a href='#L236'>236</a>
 <a name='L237'></a><a href='#L237'>237</a>
 <a name='L238'></a><a href='#L238'>238</a>
-<a name='L239'></a><a href='#L239'>239</a>
-<a name='L240'></a><a href='#L240'>240</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L239'></a><a href='#L239'>239</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -430,6 +428,11 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -447,11 +450,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -526,8 +524,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&lt;template&gt;
   &lt;div&gt;
-    &lt;sui-button positive @click.native="OpenSignModal" id="signbtn"&gt;회원가입&lt;/sui-button&gt;
-    &lt;sui-modal v-model="Opensign" id="modal" size="mini"&gt;
+    &lt;sui-modal v-model="RegisterSign" id="modal" size="mini"&gt;
       &lt;sui-modal-header class="undraggable unselectable"&gt;회원가입&lt;/sui-modal-header&gt;
       &lt;div class="grid-container sign"&gt;
         &lt;sui-modal-content&gt;
@@ -622,7 +619,7 @@
           &gt;{{errors.first('studentId')}}&lt;/p&gt;
         &lt;/div&gt;
         &lt;div class="sign_end"&gt;
-          &lt;sui-button class="Create btn-Create" positive @click="email_signup" id="Create"&gt;회원가입&lt;/sui-button&gt;
+          &lt;sui-button class="Create btn-Create cyan lighten-1" positive @click="email_signup" id="Create"&gt;회원가입&lt;/sui-button&gt;
           &lt;p class="modalChange undraggable unselectable"&gt;
             이미 회원이세요?
             &lt;a href="javascript:;" @click="modalChange"&gt;로그인&lt;/a&gt;
@@ -636,7 +633,7 @@
 &lt;script&gt;
 /* eslint-disable */
 import ko from "vee-validate/dist/locale/ko.js";
-import Auth from "../../api/Auth.js";
+import {Auth} from "@/api";
 &nbsp;
 <span class="fstat-no" title="function not covered" >ko.messages.email = field =&gt; `올바른 ${field} 형식이어야 합니다.`;</span>
 <span class="fstat-no" title="function not covered" >ko.messages.confirmed = field =&gt;</span>
@@ -655,7 +652,7 @@ export default {
       duplicate: true,
       errsign: false,
       checkbox: false,
-      Opensign: false
+      RegisterSign: false
     };
   },
   watch: {
@@ -667,7 +664,12 @@ export default {
   },
   created() {
 <span class="fstat-no" title="function not covered" >    this.$EventBus.$on("toggleSign", () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      this.Opensign = !this.Opensign;</span>
+<span class="cstat-no" title="statement not covered" >      this.RegisterSign = !this.RegisterSign;</span>
+    });
+<span class="fstat-no" title="function not covered" >    this.$EventBus.$on("RegisterSign", () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      this.RegisterSign = !this.RegisterSign;</span>
+<span class="cstat-no" title="statement not covered" >      this.validate();</span>
+<span class="cstat-no" title="statement not covered" >      this.ClearData();</span>
     });
   },
   methods: {
@@ -690,20 +692,15 @@ export default {
 <span class="cstat-no" title="statement not covered" >      this.checkbox = false;</span>
 <span class="cstat-no" title="statement not covered" >      this.duplicate = false;</span>
     },
-<span class="fstat-no" title="function not covered" >    OpenSignModal() {</span>
-<span class="cstat-no" title="statement not covered" >      this.Opensign = !this.Opensign;</span>
-<span class="cstat-no" title="statement not covered" >      this.validate();</span>
-<span class="cstat-no" title="statement not covered" >      this.ClearData();</span>
-    },
 <span class="fstat-no" title="function not covered" >    modalChange() {</span>
-<span class="cstat-no" title="statement not covered" >      this.Opensign = !this.Opensign;</span>
+<span class="cstat-no" title="statement not covered" >      this.RegisterSign = !this.RegisterSign;</span>
 <span class="cstat-no" title="statement not covered" >      this.validate();</span>
 <span class="cstat-no" title="statement not covered" >      this.ClearData();</span>
 <span class="cstat-no" title="statement not covered" >      this.$EventBus.$emit("toggleLogin");</span>
     },
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >    email_signup() {</span></span>
 <span class="cstat-no" title="statement not covered" >      if (this.errors.items.length != 0) {</span>
-<span class="cstat-no" title="statement not covered" >        console.log(this.errors);</span>
+<span class="cstat-no" title="statement not covered" >        alert(this.errors);</span>
 <span class="cstat-no" title="statement not covered" >        this.errsign = true;</span>
 <span class="cstat-no" title="statement not covered" >        return false;</span>
       }
@@ -733,7 +730,7 @@ export default {
         .catch(error =&gt; {
 <span class="cstat-no" title="statement not covered" >            alert("error")          </span>
         });
-<span class="cstat-no" title="statement not covered" >        this.modalChange();</span>
+<span class="cstat-no" title="statement not covered" >        this.$router.push({name:'login'})</span>
     },
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >    IDcheck: function() {</span></span>
 <span class="cstat-no" title="statement not covered" >      this.validate()</span>
@@ -769,7 +766,7 @@ export default {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri May 03 2019 23:32:19 GMT+0900 (GMT+09:00)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sat May 04 2019 03:26:35 GMT+0900 (GMT+09:00)
 </div>
 </div>
 <script src="..\..\..\prettify.js"></script>

@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <v-toolbar app>
+    <v-toolbar  app flat >
       <v-toolbar-title class="headline text-uppercase">
-        <span>OpenClass</span>
+        <span >OpenClass</span>
         <span class="font-weight-light"> {{this.$store.state.userName}} </span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
@@ -13,32 +13,42 @@
         <span class="mr-2">logout</span>
       </v-btn>
     </v-toolbar>
-
+    <br>
+    <br>
+    <img src="@/assets/logo.svg" alt="Vuetify.js" height="150">
     <v-content>
-        <v-layout justify-center v-if="this.$store.getters.getIdentity == 1">
+        <v-layout align-center justify-center v-if="this.$store.getters.getIdentity == 1">
           <v-flex xs12 sm6 md3 order-12>
           <v-text-field
               v-model="classCode"
               placeholder="클래스코드를 입력하세요."
               solo
+              outline
+              flat
             ></v-text-field>
           </v-flex>
-            <v-btn bottom dark @click="enterClass(getClassCode())">입장하기</v-btn>
+          &nbsp;&nbsp;
+            <v-btn bottom positive class="cyan lighten-1 white--text" large @click="enterClass(getClassCode())">입장하기</v-btn>
         </v-layout>
-         <v-layout justify-center v-if="this.$store.getters.getIdentity == 2" >
-            <v-flex xs12 sm6 md3 order-12>
-            <v-text-field
-              v-model="className"
-              placeholder="클래스이름을 입력하세요."
-              solo
-            ></v-text-field>
+         <v-layout align-center justify-center v-if="this.$store.getters.getIdentity == 2" >
+            <v-flex xs12 sm6 md3 order-12 lg2>
+              <v-text-field
+                v-model="className"
+                placeholder="클래스이름을 입력하세요."
+                outline
+                solo
+                flat
+              ></v-text-field>
             </v-flex>
-             <v-btn bottom dark @click="createClass(getClassName())">생성하기</v-btn>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <v-flex xs12 sm6 md3 order-12 lg2>
+              <v-btn bottom class="cyan lighten-1 white--text" large @click="createClass(getClassName())">생성하기</v-btn>
+            </v-flex>
         </v-layout>
       
 
       <v-sheet mobile-break-point="960">
-      <v-layout row wrap>
+      <v-layout row wrap width="800">
         <core-class-list  
           v-for="(Class, i) in this.$store.state.classList"
           :currentClass='Class'
@@ -130,3 +140,14 @@ export default {
 };
 
 </script>
+<style>
+  div.layout.row.wrap{
+    background:#FAFAFA
+  }
+  .v-text-field--box.v-text-field--single-line input, .v-text-field--full-width.v-text-field--single-line input, .v-text-field--outline.v-text-field--single-line input{
+    margin-top:0px;
+  }
+  .v-text-field--box input, .v-text-field--full-width input, .v-text-field--outline input {
+    margin-top: 0px;
+}
+</style>

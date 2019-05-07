@@ -20,9 +20,9 @@
             justify-center
             class="white--text"
           >
-            <img src="@/assets/logo.svg" alt="Vuetify.js" height="200">
-            <h1 class="white--text mb-2 display-1 text-xs-center">OpenClass</h1>
-            <div class="subheading mb-3 text-xs-center">Powered by Sweet</div>
+            <img src="@/assets/logo.svg" class="unselectable undraggable" alt="Vuetify.js" height="200">
+            <h1 class="white--text mb-2 display-1 text-xs-center unselectable undraggable">OpenClass</h1>
+            <div class="subheading mb-3 text-xs-center unselectable undraggable">Powered by Sweet</div>
             <v-btn class="cyan lighten-1 mt-5" dark large @click="alert(1)">
               How to use
             </v-btn>
@@ -239,5 +239,11 @@ export default {
   }
 };
 </script>
-
-
+<style>
+  html{
+    overflow-x:hidden;
+  }
+  body::-webkit-scrollbar { 
+    display: none; 
+}
+</style>

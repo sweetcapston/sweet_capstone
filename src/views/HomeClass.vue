@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Stud from "../api/Stud";
+import {Stud} from "@/api";
 
 export default {
   data(){

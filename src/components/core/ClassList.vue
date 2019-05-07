@@ -1,46 +1,30 @@
 <template>
-  <v-card
-    class="mx-auto"
-    width="200"
+  <v-btn 
+    style="text-transform: none !important;"
+    id = "classCard"
+    @click="enterClass(currentClass.classCode)"
+    flat
   >
-    <v-img
-      class="white--text"
-      height="150px"
-      src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+    <v-card
+      class="mx-auto"
+      width="200"
     >
-      <v-card-title class="align-start fill-height">{{currentClass.className}}</v-card-title>
-    </v-img>
+      <v-img
+        class="white--text"
+        height="150px"
+        src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+      >
+        <v-card-title class="align-start fill-height">{{currentClass.className}}</v-card-title>
+      </v-img>
 
-    <v-card-text>
-      <span class="text--primary">
-        <span>교수명: {{ currentClass.profName }}</span><br>
-        <span>클래스코드: {{ currentClass.classCode }}</span><br>
-      </span>
-    </v-card-text>
-
-    <v-card-actions >
-      <v-btn
-       text
-       color="orange" 
-       @click="enterClass(currentClass.classCode)"
-      >
-        입장
-      </v-btn>
-      <v-btn
-       text color="green"
-       @click="deleteClassList(currentClass.classCode)"
-       v-if="this.$store.getters.getIdentity === 1"
-      >
-        삭제
-      </v-btn>
-      <v-btn text color="green"
-       @click="deleteClass(currentClass.classCode)"
-       v-if="this.$store.getters.getIdentity === 2"
-      >
-        삭제
-      </v-btn>
-    </v-card-actions>
-  </v-card>
+      <v-card-text>
+        <span class="text--primary">
+          <span>교수명: {{ currentClass.profName }}</span><br>
+          <span>클래스코드: {{ currentClass.classCode }}</span><br>
+        </span>
+      </v-card-text>
+    </v-card>
+  </v-btn>
 </template>
 
 <script>
@@ -101,3 +85,11 @@ export default {
   }
 }
 </script>
+<style>
+  #classCard::before{
+    background:transparent;
+  }
+  #classCard:hover{
+    background:#EDEDED;
+  }
+</style>
