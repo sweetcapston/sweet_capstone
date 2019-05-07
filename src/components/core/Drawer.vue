@@ -29,7 +29,7 @@
             />
           </v-list-tile-avatar>
           <v-list-tile-title class="title">
-            {{this.$store.state.className + ' ' + this.$store.state.profName}}
+            {{this.$store.state.currentClass.className + ' ' + this.$store.state.currentClass.profName}}
           </v-list-tile-title>
         </v-list-tile>
       <v-divider/>
@@ -89,7 +89,7 @@
     methods: {
       ...mapMutations(['setDrawer']),
       moveToPage: function(link){
-        this.$router.push(link.to+this.$store.state.classCode+link.to2)
+        this.$router.push(link.to+this.$store.state.currentClass.classCode+link.to2)
       }
     }
   }

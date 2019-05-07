@@ -1,8 +1,13 @@
 <template>
   <v-app>
-    <h1>클래스 코드 : {{this.$store.state.classCode}}</h1>
+    <h1>클래스 이름 : {{this.$store.state.currentClass.className}}</h1>
+    <h1>클래스 코드 : {{this.$store.state.currentClass.classCode}}</h1>
+    <h1>교수 이름 : {{this.$store.state.currentClass.profName}}</h1>
+    <h2>{{this.$store.state.checkApply}}</h2>
     <span>
-      <v-btn color="primary" @click="addClass()" >수강하기</v-btn>
+      <v-btn color="primary"
+        @click="addClass()"
+        v-if="this.$store.getters.getIdentity == 1 && (this.$store.state.checkApply == -1)" >수광하기</v-btn> <!-- 수광하지않고있는 학생에게만 보여지도록.. 학생의 수광리스트에서 -->
       <v-btn color="error" @click="outClass()" >클래스 나가기</v-btn>
     </span>
   </v-app>
@@ -14,25 +19,27 @@ import Stud from "../api/Stud";
 export default {
   data(){
     return{
-      classList: [],
-      // 클래스 정보 필요
     }
   },
   methods: {
-    addClass() { // 중복 수강 안되도록... 아직 수정 필요
-      Stud.classAdd(this.$store.state.classCode).then(res=>{
-        if(res.data === 'false') alert('error');
+    addClass() {
+      Stud.classAdd(this.$store.state.currentClass.classCode).then(res => {
+        if(res.data === 'false') alert('클래스 수광 실패');
         else{
-          // 로컬 스토리지에 클래스 리스트 추가
-          this.classList = JSON.parse(localStorage.getItem('access_classList'));
-          this.classList.push({classCode : this.$store.state.classCode, className : this.$store.state.className, profName : this.$store.state.profName});
-          localStorage.removeItem('access_classList');
-          localStorage.setItem('access_classList', JSON.stringify(this.classList));
+          // currentClass객체로 하면 오류남.
+          this.$store.commit("addClassList", {
+            className: this.$store.state.currentClass.className,
+            classCode: this.$store.state.currentClass.classCode,
+            profName: this.$store.state.currentClass.profName
+          });
+          this.$store.commit('setCheckApply', 1);
           alert('성공');
         } 
       })
     },
     outClass(){
+      this.$store.commit("removeCurrentClass");
+      alert('클래스에서 나괍니다.');
       this.$router.push({name: 'main'});
     }
     //...

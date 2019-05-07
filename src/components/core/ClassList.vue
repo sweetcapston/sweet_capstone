@@ -8,13 +8,13 @@
       height="150px"
       src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
     >
-      <v-card-title class="align-start fill-height">{{classes.className}}</v-card-title>
+      <v-card-title class="align-start fill-height">{{currentClass.className}}</v-card-title>
     </v-img>
 
     <v-card-text>
       <span class="text--primary">
-        <span>교수명: {{ classes.profName }}</span><br>
-        <span>클래스코드: {{ classes.classCode }}</span><br>
+        <span>교수명: {{ currentClass.profName }}</span><br>
+        <span>클래스코드: {{ currentClass.classCode }}</span><br>
       </span>
     </v-card-text>
 
@@ -22,20 +22,20 @@
       <v-btn
        text
        color="orange" 
-       @click="enterClass(classes.classCode)"
+       @click="enterClass(currentClass.classCode)"
       >
         입장
       </v-btn>
       <v-btn
-       text color="green" 
-       @click="deleteClassList(classes.classCode)"
-       v-if="this.$session.get('Identity')===1"
+       text color="green"
+       @click="deleteClassList(currentClass.classCode)"
+       v-if="this.$store.getters.getIdentity === 1"
       >
         삭제
       </v-btn>
       <v-btn text color="green"
-       @click="deleteClass(classes.classCode)"
-       v-if="this.$session.get('Identity')===2"
+       @click="deleteClass(currentClass.classCode)"
+       v-if="this.$store.getters.getIdentity === 2"
       >
         삭제
       </v-btn>
@@ -54,48 +54,48 @@ export default {
     }
   },
   props: {
-    classes: {
+    currentClass: {
       type: Object
     }
   },
   methods:{
     // 클래스 입장
     enterClass: function(classCode){
-      this.classList = JSON.parse(localStorage.getItem('access_classList'));
-      //const idx = this.classList.findIndex(function(item) {return item.classCode === classCode})
-      var classTempData = this.classList.find(function(item) {return item.classCode === classCode})
-
-      this.$store.commit("setClassCode", classCode);
-      this.$store.commit("setClassName", classTempData.className);
-      this.$store.commit("setProfName", classTempData.profName);
+      this.$store.commit("setCurrentClass", 
+      {
+        classCode: classCode,
+        className: this.currentClass.className,
+        profName: this.currentClass.profName
+      });
+      const checkApply = this.$store.state.classList.findIndex( function(item) { return item.classCode === classCode })
+      this.$store.commit('setCheckApply', checkApply);
       this.$router.push({path: `class/${classCode}/home`});
     },
     // 클래스 리스트에서 삭제(학생)
     deleteClassList: function(classCode){
       Stud.classDelete(classCode)
       .then(res => {
-        if(res.data == true)
-          this.classList = JSON.parse(localStorage.getItem('access_classList'));
-
-        const idx = this.classList.findIndex(function(item) {return item.classCode === classCode})
-        if (idx > -1) this.classList.splice(idx, 1);
-        localStorage.removeItem('access_classList');
-        localStorage.setItem('access_classList', JSON.stringify(this.classList));
-        alert('클래스 코드번호' + '(' + classCode + ')' + '가 삭제 되었습니다.');
+        if(res.data == false) alert('error!!');
+        else {
+          // 클래스리스트에서 클래스 삭제하고 새로운 클래스 리스트로 업데이트
+          this.classList = this.$store.state.classList;
+          const idx = this.classList.findIndex(function(item) {return item.classCode === classCode})
+          if (idx > -1) this.classList.splice(idx, 1);
+          this.$store.commit('removeClassList', this.classList);
+        }
       });
     },
     // 클래스 삭제(교수)
     deleteClass: function(classCode){
       Prof.classDelete(classCode)
       .then(res => {
-        if(res.data == true)
-          this.classList = JSON.parse(localStorage.getItem('access_classList'));
-
-        const idx = this.classList.findIndex(function(item) {return item.classCode === classCode})
-        if (idx > -1) this.classList.splice(idx, 1);
-        localStorage.removeItem('access_classList');
-        localStorage.setItem('access_classList', JSON.stringify(this.classList));
-        alert('클래스 코드번호' + '(' + classCode + ')' + '가 삭제 되었습니다.');
+        if(res.data === false) alert('error!!');
+        else {
+          this.classList = this.$store.state.classList;
+          const idx = this.classList.findIndex(function(item) {return item.classCode === classCode})
+          if (idx > -1) this.classList.splice(idx, 1);
+          this.$store.commit('removeClassList', this.classList);
+        }
       });
     }
   }
