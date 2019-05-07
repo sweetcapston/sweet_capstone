@@ -4,6 +4,10 @@
     flat
     prominent
   >
+  <v-toolbar-side-icon
+      class="hidden-md-and-up"
+      @click="toggleDrawer"
+    />
     <div class="v-toolbar-title">
       <v-toolbar-title
         class="tertiary--text font-weight-light"
