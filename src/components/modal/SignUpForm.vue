@@ -95,7 +95,7 @@
           >{{errors.first('studentId')}}</p>
         </div>
         <div class="sign_end">
-          <sui-button class="Create btn-Create cyan lighten-1" positive @click="email_signup" id="Create">회원가입</sui-button>
+          <sui-button class="Create btn-Create cyan lighten-1" positive @keyup.enter="email_signup" @click="email_signup" id="Create">회원가입</sui-button>
           <p class="modalChange undraggable unselectable">
             이미 회원이세요?
             <a href="javascript:;" @click="modalChange">로그인</a>

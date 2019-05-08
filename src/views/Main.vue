@@ -18,7 +18,7 @@
     <img src="@/assets/logo.svg" alt="Vuetify.js" height="150">
     <v-content>
         <v-layout align-center justify-center v-if="this.$store.getters.getIdentity == 1">
-          <v-flex xs12 sm6 md3 order-12>
+          <v-flex xs6 sm6 md3 order-12>
           <v-text-field
               v-model="classCode"
               placeholder="클래스코드를 입력하세요."
@@ -27,11 +27,11 @@
               flat
             ></v-text-field>
           </v-flex>
-          &nbsp;&nbsp;
-            <v-btn bottom positive class="cyan lighten-1 white--text" large @click="enterClass(getClassCode())">입장하기</v-btn>
+          &nbsp;&nbsp;&nbsp;
+          <v-btn bottom positive class="cyan lighten-1 white--text" large @click="enterClass(getClassCode())">입장하기</v-btn>
         </v-layout>
-         <v-layout align-center justify-center v-if="this.$store.getters.getIdentity == 2" >
-            <v-flex xs12 sm6 md3 order-12 lg2>
+        <v-layout align-center justify-center v-if="this.$store.getters.getIdentity == 2" >
+            <v-flex xs6 sm6 md3 order-12 lg2>
               <v-text-field
                 v-model="className"
                 placeholder="클래스이름을 입력하세요."
@@ -40,22 +40,20 @@
                 flat
               ></v-text-field>
             </v-flex>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <v-flex xs12 sm6 md3 order-12 lg2>
-              <v-btn bottom class="cyan lighten-1 white--text" large @click="createClass(getClassName())">생성하기</v-btn>
-            </v-flex>
+            &nbsp;&nbsp;&nbsp;
+            <v-btn bottom class="cyan lighten-1 white--text" large @click="createClass(getClassName())">생성하기</v-btn>
         </v-layout>
-      
 
       <v-sheet mobile-break-point="960">
-      <v-layout row wrap width="800">
-        <core-class-list  
-          v-for="(Class, i) in this.$store.state.classList"
-          :currentClass='Class'
-          :key="i"
-          avatar
-        />
-      </v-layout>
+        <v-layout row wrap width="800" justify-center>
+          
+          <core-class-list  
+            v-for="(Class, i) in this.$store.state.classList"
+            :currentClass='Class'
+            :key="i"
+            avatar
+          />
+        </v-layout>
       </v-sheet>
     </v-content>
   </v-app>
@@ -116,9 +114,10 @@ export default {
     createClass(className){
       Prof.classCreate(className)
       .then(res => {
-        if (res.data == false) alert('error');
+        if (res.data == undefined ) alert('error');
         else{
           // currentClass객체로 하면 오류남.
+          if(res.data.errors) return false;
           this.$store.commit("addClassList", {
             className: className,
             classCode: res.data.classCode,

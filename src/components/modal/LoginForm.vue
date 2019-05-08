@@ -37,10 +37,10 @@
           </div>
         </sui-modal-content>
         <div class="login_end">
-          <sui-button class="Login btn-Login cyan lighten-1" positive @click="LogIn" id="Login">로그인</sui-button>
+          <sui-button class="Login btn-Login cyan lighten-1" positive @click="LogIn" @keyup.enter="Login" id="Login">로그인</sui-button>
           <p class="modalChange undraggable unselectable">
             아직 회원이 아니세요?
-            <a href="javascript:;" @click="modalChange">회원가입</a>
+            <a href="javascript:;" @click="modalChange" >회원가입</a>
           </p>
         </div>
       </div>
