@@ -13,7 +13,8 @@
         height="150px"
         src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
       >
-        <v-layout justify-end align-start>
+        <v-layout>
+          <v-spacer />
           <v-icon 
             id="delete"
             color="white"
