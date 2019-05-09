@@ -84,19 +84,19 @@ export default {
         email: this.email,
         password: this.password
       })
-      .then(res => this.setData(res.data))
+      .then(res => {
+        const {data} = res
+        if(data){
+          this.ClearData();
+          this.$store.commit("setLoginData", data);
+          this.routeChange(data.Identity);
+        } else{
+          alert("로그인 실패")
+        }
+      })
       .catch(error => {
         alert("error");
       });
-    },
-    setDate(data) {
-      if(data){
-        this.ClearData();
-        this.$store.commit("setLoginData", data);
-        this.routeChange(data.Identity);
-      } else{
-        alert("로그인 실패")
-      }
     },
     routeChange(Identity){
       switch(Identity){
