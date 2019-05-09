@@ -1,14 +1,12 @@
 <template>
   <v-app>
-    <core-toolbar/> 
-    <v-content>
-      <v-container>
-        <v-layout row wrap> 
-          <core-drawer/>
-          <router-view/>
-        </v-layout>
+    <core-drawer/>
+    <v-layout>
+      <core-toolbar/> 
+      <v-container fluid>
+        <router-view/>
       </v-container>
-    </v-content>
+    </v-layout>
   </v-app>
 </template>
 <script>
