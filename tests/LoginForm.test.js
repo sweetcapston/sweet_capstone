@@ -44,12 +44,8 @@ describe('LoginForm test', () => {
     // wrapper.find("button").trigger("click");
     // expect(alert).toHaveBeenCalled();
     wrapper.find("button").trigger ("click");
-    console.log(wrapper.vm)
-    console.log(wrapper)
     httpMock.wait(() => {
       Vue.nextTick(() => {
-        console.log(wrapper)
-        console.log(wrapper.vm)
           expect(wrapper.html()).toContain("Something wrong here");
           expect(wrapper.vm.$data.password).toBe("");
           done();

@@ -156,6 +156,6 @@ export default {
     margin-top: 0px;
   }
   .gradient {
-    background: linear-gradient(100deg, #26C6DA, #9198e5)
+    background: linear-gradient(100deg, #9198e5, #26C6DA)
   }  
 </style>

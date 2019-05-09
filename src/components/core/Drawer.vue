@@ -68,7 +68,7 @@
   export default {
     name: 'drawer',
     data: () => ({
-      image: 'https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg',
+      image: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg',
       logo: '@/assets/logo.svg',
       color: 'error',
       colors: [
