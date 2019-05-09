@@ -9,7 +9,7 @@
               <label>이름</label>
               <sui-input
                 placeholder="이름을 입력해주세요"
-                v-model="name"
+                v-model="userName"
                 name="name"
                 v-validate="'required'"
                 data-vv-as="이름"
@@ -22,7 +22,7 @@
               <sui-input
                 type="text"
                 placeholder="이메일을 입력해주세요"
-                v-model="email"
+                v-model="userID"
                 name="email"
                 v-validate="'required|email'"
                 data-vv-as="이메일"
@@ -78,7 +78,7 @@
               type="text"
               class="ID"
               placeholder="학번을 입력해주세요"
-              v-model="StudentId"
+              v-model="studentId"
               name="studentId"
               v-validate="'required_if:check,false'"
               data-vv-as="학번"
@@ -120,11 +120,11 @@ ko.messages.required_if = (field, n) => `${field} 항목은 필수 정보입니�
 export default {
   data() {
     return {
-      email: "",
+      userID: "",
       password: "",
       password2: "",
-      name: "",
-      StudentId: "",
+      userName: "",
+      studentId: "",
       duplicate: true,
       errsign: false,
       checkbox: false,
@@ -156,7 +156,7 @@ export default {
       this.password = "";
       this.password2 = "";
       this.name = "";
-      this.StudentId = "";
+      this.studentId = "";
       this.errsign = false;
       this.checkbox = false;
       this.duplicate = false;
@@ -178,12 +178,12 @@ export default {
         alert("아이디 중복확인을 해주세요");
         return false;
       }
-      if (this.checkbox == true) this.StudentId = "9999";
+      if (this.checkbox == true) this.studentId = "9999";
       let form = {
         name: this.name,
         email: this.email,
         password: this.password,
-        StudentId: this.StudentId
+        studentId: this.studentId
       };
       Auth.SignUp(form)
         .then(response => {

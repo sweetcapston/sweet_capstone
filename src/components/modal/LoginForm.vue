@@ -10,7 +10,7 @@
               <sui-input
                 type="email"
                 placeholder="이메일을 입력해주세요"
-                v-model="email"
+                v-model="userID"
                 name="email"
                 v-validate="'required'"
                 data-vv-as="이메일"
@@ -55,7 +55,7 @@ import {Auth} from "@/api";
 export default {
   data() {
     return {
-      email: "",
+      userID: "",
       password: "",
       errsign: false,
       LoginSign:true
@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     ClearData() {
-      this.email = "";
+      this.userID = "";
       this.password = "";
     },
     LogIn() {     
@@ -81,28 +81,31 @@ export default {
       }
       this.errsign = false;
       Auth.login({
-        email: this.email,
+        userID: this.userID,
         password: this.password
       })
-      .then(res => this.setData(res.data))
+      .then(res => {
+        const {data} = res;
+        if(data){
+          this.ClearData();
+          this.$store.commit("setLoginData", data);
+          this.routeChange(data.Identity);
+        } else{
+          alert("로그인 실패")
+        }
+      })
       .catch(error => {
         alert("error");
       });
     },
-    setDate(data) {
-      if(data){
-        this.ClearData();
-        this.$store.commit("setLoginData", data);
-        this.routeChange(data.Identity);
-      } else{
-        alert("로그인 실패")
-      }
-    },
     routeChange(Identity){
       switch(Identity){
-        case (1 || 2): //학생, 교수
+        case 1: //학생
           this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
           break;  
+        case 2: //교수
+          this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
+          break;
         case 3: //관리자
           // 로그인 성공후 관리자페이지로 이동
           break;

@@ -69,13 +69,8 @@ export default {
       if(!res.data){
         this.$router.push({name: 'login'})
       }
-      switch(this.$session.get("Identity")){
-        case 2: 
-          break;
-            this.$session.set('token', res.data.token)
-            this.$store.commit("setIdentity", res.data.Identity);
-      }
-    })
+    });
+    this.$store.commit("setDrawer", true);
   },
   data(){ 
     return {
@@ -128,8 +123,7 @@ export default {
       this.$session.destroy();
       Auth.logout().then(res => {
         if(res.data == "logout"){
-          this.$store.commit('removeUserName');
-          this.$store.commit('removeUserID');
+          this.$store.commit('removeLoginData');
           this.$router.push({name: 'login'});
         }
       })
