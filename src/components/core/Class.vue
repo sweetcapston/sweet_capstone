@@ -28,6 +28,16 @@ Vue.use(new VueSocketIO({
   })
 );
 export default {
+  created() {
+    if (!(Notification && Notification.permission === "granted")) {
+      Notification.requestPermission(function (status) {
+        // This allows to use Notification.permission with Chrome/Safari
+        if (Notification.permission !== status) {
+          Notification.permission = status;
+        }
+      });
+    }
+  },
   sockets: {
     connect: function () {
       console.log('socket connected')

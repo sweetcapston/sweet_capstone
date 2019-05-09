@@ -93,12 +93,10 @@ export default {
       return this.className;
     },
     enterClass(classCode) {
-      alert(classCode);
       Stud.classEnter(classCode)
       .then(res => {
         if(res.data == false) alert('error');
         else{
-          alert(classCode);
           //클래스 입장시에 해당 클래스코드 vuex에 저장. 클래스 퇴장시 저장된 클래스코드 삭제
           this.$store.commit("setCurrentClass", {
             classCode: classCode,
@@ -131,6 +129,7 @@ export default {
       Auth.logout().then(res => {
         if(res.data == "logout"){
           this.$store.commit('removeUserName');
+          this.$store.commit('removeUserID');
           this.$router.push({name: 'login'});
         }
       })

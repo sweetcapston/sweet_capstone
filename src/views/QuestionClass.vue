@@ -10,7 +10,21 @@
 export default {
   sockets:{
     MESSAGE: function(data){
-      console.log("data")
+      if (Notification && Notification.permission === "granted" && data) 
+      {
+        const options = {
+          body: `${data._question}`,
+          icon: '@/assets/logo.png',
+          badge: '@/assets/logo.png',
+          image: '@/assets/logo.png',
+          tag: 'example-notification'
+        };
+        var notify = new Notification("오픈클래스", options);
+        console.log("data")
+        // notify.onshow = function () { 
+        //   setTimeout(notify.close(), 5); 
+        // }
+      }
     }
   },
   methods:{
@@ -20,7 +34,7 @@ export default {
         classCode:this.$store.state.currentClass.classCode,
         userID:this.$store.state.userID,
         userName:this.$store.state.userName,
-        question:"messsssssage",
+        _question:"messsssssage",
         anonymous:false
       })
     },

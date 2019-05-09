@@ -128,25 +128,18 @@ export default {
       duplicate: true,
       errsign: false,
       checkbox: false,
-      RegisterSign: false
+      RegisterSign: true
     };
   },
   watch: {
     checkbox: data => {
       document.getElementsByClassName("ID")[0].classList.toggle("disabled");
-      if (data == true) {
+    },
+    RegisterSign (val) {
+      if(!val){
+        this.$router.replace({name:'login'});
       }
     }
-  },
-  created() {
-    this.$EventBus.$on("toggleSign", () => {
-      this.RegisterSign = !this.RegisterSign;
-    });
-    this.$EventBus.$on("RegisterSign", () => {
-      this.RegisterSign = !this.RegisterSign;
-      this.validate();
-      this.ClearData();
-    });
   },
   methods: {
     numCheck() {
@@ -169,10 +162,10 @@ export default {
       this.duplicate = false;
     },
     modalChange() {
-      this.RegisterSign = !this.RegisterSign;
       this.validate();
       this.ClearData();
-      this.$EventBus.$emit("toggleLogin");
+      this.$router.replace('login')
+      
     },
     email_signup() {
       if (this.errors.items.length != 0) {
@@ -196,7 +189,7 @@ export default {
         .then(response => {
           if(response.data == true){
             this.ClearData();
-            this.Opensign = false;
+            // this.Opensign = false;
             alert("회원가입에 성공했습니다.")
           }
           else{
@@ -213,7 +206,6 @@ export default {
       if (!this.errors.has('email')) {
         Auth.duplicate(this.email)
           .then(res => {
-            console.log(res)
             if (res.data == true) {
               alert("중복된 아이디 입니다.");
             } else {

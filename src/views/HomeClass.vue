@@ -33,13 +33,11 @@ export default {
             profName: this.$store.state.currentClass.profName
           });
           this.$store.commit('setCheckApply', 1);
-          alert('성공');
         } 
       })
     },
     outClass(){
       this.$store.commit("removeCurrentClass");
-      alert('클래스에서 나괍니다.');
       this.$router.push({name: 'main'});
     }
     //...
