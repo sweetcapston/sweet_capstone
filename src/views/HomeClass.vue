@@ -8,7 +8,7 @@
       <v-btn color="primary"
         @click="addClass()"
         v-if="this.$store.getters.getIdentity == 1 && (this.$store.state.checkApply == -1)" >수광하기</v-btn> <!-- 수광하지않고있는 학생에게만 보여지도록.. 학생의 수광리스트에서 -->
-      <v-btn color="error" @click="outClass()" >클래스 나가기</v-btn>
+      <v-btn color="error" @click="outClass" >클래스 나가기</v-btn>
     </span>
   </v-app>
 </template>
@@ -40,7 +40,6 @@ export default {
       this.$store.commit("removeCurrentClass");
       this.$router.push({name: 'main'});
     }
-    //...
   }
 };
 </script>

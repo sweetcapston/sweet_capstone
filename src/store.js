@@ -61,7 +61,7 @@ export default new Vuex.Store({
       state.classList = payload.classList;
       state.Identity = payload.Identity;
     },
-    removeLoginData:(state, payload) => {
+    removeLoginData:(state) => {
       state.userName = '';
       state.userID = '';
       state.classList = '';
