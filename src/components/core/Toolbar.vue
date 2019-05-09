@@ -20,9 +20,11 @@
         align-center
         layout
         py-2
+        
       >
-        <v-icon color="tertiary">mdi-bell</v-icon>
-        <v-icon color="tertiary">mdi-account-circle</v-icon>
+        <v-icon color="tertiary" margin="2px">mdi-bell</v-icon>
+        <v-icon color="tertiary" margin="2px">mdi-account-circle</v-icon>
+        <v-icon color="tertiary" margin="2px">mdi-cogs</v-icon>
       </v-flex>
     </v-toolbar-items>
 
@@ -41,6 +43,9 @@
   import {
     mapMutations
   } from 'vuex'
+  import {
+    Auth
+  } from "@/api"
 
   export default {
     data: () => ({
@@ -54,8 +59,18 @@
     },
 
     methods: {
-      ...mapMutations(['toggleDrawer'])
-    }
+      ...mapMutations(['toggleDrawer']),
+      logout(){
+        this.$session.destroy();
+        Auth.logout().then(res => {
+          if(res.data == "logout"){
+            this.$store.commit('removeLoginData');
+            this.$router.push({name: 'login'});
+          }
+        })
+      }
+    },
+    //...
   }
 </script>
 
