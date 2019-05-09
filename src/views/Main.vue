@@ -1,68 +1,75 @@
 <template>
   <v-app>
-    <v-toolbar  app flat >
-      <v-toolbar-title class="headline text-uppercase">
-        <span >OpenClass</span>
-        <span class="font-weight-light"> {{this.$store.state.userName}} </span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn
-        flat
-        @click="logout"
+    <v-container >
+      <v-toolbar
+        class="gradient white--text"
+        app 
+        flat   
       >
-        <span class="mr-2">logout</span>
-      </v-btn>
-    </v-toolbar>
-    <br>
-    <br>
-    <img src="@/assets/logo.svg" alt="Vuetify.js" height="150">
-    <v-content>
-        <v-layout align-center justify-center v-if="this.$store.getters.getIdentity == 1">
-          <v-flex xs6 sm6 md3 order-12>
-          <v-text-field
-              v-model="classCode"
-              placeholder="클래스코드를 입력하세요."
-              solo
-              outline
-              flat
-            ></v-text-field>
-          </v-flex>
-          &nbsp;&nbsp;&nbsp;
-          <v-btn bottom positive class="cyan lighten-1 white--text" large @click="enterClass(getClassCode())">입장하기</v-btn>
+        <v-toolbar-title class="headline text-uppercase">
+          <span >OpenClass</span>
+          <span class="font-weight-light"> {{this.$store.state.userName}} </span>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn
+          flat
+          @click="logout"
+        >
+          <span class="mr-2 white--text" >logout</span>
+        </v-btn>
+      </v-toolbar>     
+      <br>
+      <br>
+      <v-layout justify-center>
+        <img src="@/assets/logo.svg" alt="Vuetify.js" height="150">
         </v-layout>
-        <v-layout align-center justify-center v-if="this.$store.getters.getIdentity == 2" >
+      <v-content>
+          <v-layout align-center justify-center v-if="this.$store.getters.getIdentity == 1">
             <v-flex xs6 sm6 md3 order-12>
-              <v-text-field
-                v-model="className"
-                placeholder="클래스이름을 입력하세요."
-                outline
+            <v-text-field
+                v-model="classCode"
+                placeholder="클래스코드를 입력하세요."
                 solo
+                outline
                 flat
               ></v-text-field>
             </v-flex>
             &nbsp;&nbsp;&nbsp;
-            <v-btn bottom class="cyan lighten-1 white--text" large @click="createClass(getClassName())">생성하기</v-btn>
-        </v-layout>
+            <v-btn bottom positive class="cyan lighten-1 white--text" large @click="enterClass(getClassCode())">입장하기</v-btn>
+          </v-layout>
+          <v-layout align-center justify-center v-if="this.$store.getters.getIdentity == 2" >
+              <v-flex xs6 sm6 md3 order-12 lg2>
+                <v-text-field
+                  v-model="className"
+                  placeholder="클래스이름을 입력하세요."
+                  outline
+                  solo
+                  flat
+                ></v-text-field>
+              </v-flex>
+              &nbsp;&nbsp;&nbsp;
+              <v-btn bottom class="cyan lighten-1 white--text" large @click="createClass(getClassName())">생성하기</v-btn>
+          </v-layout>
 
-      <v-sheet mobile-break-point="960">
-        <v-layout row wrap width="800" justify-center>
-          
-          <core-class-list  
-            v-for="(Class, i) in this.$store.state.classList"
-            :currentClass='Class'
-            :key="i"
-            avatar
-          />
-        </v-layout>
-      </v-sheet>
-    </v-content>
+        <v-sheet mobile-break-point="960">
+          <v-layout row wrap width="800" justify-center>
+            
+            <core-class-list  
+              v-for="(Class, i) in this.$store.state.classList"
+              :currentClass='Class'
+              :key="i"
+              avatar
+            />
+          </v-layout>
+        </v-sheet>
+      </v-content>
+    </v-container>
   </v-app>
 </template>
 
 <script>
 /* eslint-disable */
 import {Auth, Class, Prof, Stud} from "@/api"
-
 export default {
   created() {
     Auth.auth().then(res => {
@@ -132,7 +139,6 @@ export default {
     }
   }
 };
-
 </script>
 <style>
   div.layout.row.wrap{
@@ -143,5 +149,8 @@ export default {
   }
   .v-text-field--box input, .v-text-field--full-width input, .v-text-field--outline input {
     margin-top: 0px;
-}
+  }
+  .gradient {
+    background: linear-gradient(100deg, #9198e5, #26C6DA)
+  }  
 </style>

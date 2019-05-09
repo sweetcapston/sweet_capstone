@@ -45,7 +45,6 @@
 
 <script>
 import {Prof, Stud} from "@/api";
-
 export default {
   data(){
     return{
