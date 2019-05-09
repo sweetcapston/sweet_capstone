@@ -29,6 +29,10 @@ Vue.use(new VueSocketIO({
 );
 export default {
   created() {
+    this.$socket.emit('channelJoin', {
+      classCode: this.$store.state.currentClass.classCode,
+      userID: this.$store.state.userID
+    })
     if (!(Notification && Notification.permission === "granted")) {
       Notification.requestPermission(function (status) {
         // This allows to use Notification.permission with Chrome/Safari
@@ -41,10 +45,12 @@ export default {
   sockets: {
     connect: function () {
       console.log('socket connected')
+    },
+    joinSuccess: function(data){
+      console.log(data);
     }
   },
   methods: {
-    
   }
 }
 

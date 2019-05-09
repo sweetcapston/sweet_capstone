@@ -31,7 +31,7 @@
           <v-btn bottom positive class="cyan lighten-1 white--text" large @click="enterClass(getClassCode())">입장하기</v-btn>
         </v-layout>
         <v-layout align-center justify-center v-if="this.$store.getters.getIdentity == 2" >
-            <v-flex xs6 sm6 md3 order-12 lg2>
+            <v-flex xs6 sm6 md3 order-12>
               <v-text-field
                 v-model="className"
                 placeholder="클래스이름을 입력하세요."
@@ -101,6 +101,7 @@ export default {
           const checkApply = this.$store.state.classList.findIndex(function(item) { return item.classCode == classCode })
           this.$store.commit('setCheckApply', checkApply);
           this.$router.push({path: `/class/${this.classCode}/home`}) // 해당 클래스 페이지로 이동
+          this.classCode = "";
         }
       })
     },
@@ -116,6 +117,7 @@ export default {
             classCode: res.data.classCode,
             profName: this.$store.state.userName
           });
+          this.className = "";
         }
       });
     },

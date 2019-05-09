@@ -10,7 +10,7 @@
 export default {
   sockets:{
     MESSAGE: function(data){
-      if (Notification && Notification.permission === "granted" && data) 
+      if (Notification && Notification.permission === "granted" && data && this.$store.state.Identity==2) 
       {
         const options = {
           body: `${data._question}`,
@@ -20,10 +20,6 @@ export default {
           tag: 'example-notification'
         };
         var notify = new Notification("오픈클래스", options);
-        console.log("data")
-        // notify.onshow = function () { 
-        //   setTimeout(notify.close(), 5); 
-        // }
       }
     }
   },
