@@ -1,195 +1,195 @@
 <template>
-  <v-container style="max-width: 80%;">
+  <v-layout justify-center>
     <sui-button @click="test">Test</sui-button>
-    <v-timeline dense clipped>
-      <v-slide-x-transition
-        group
-      >
-        <v-timeline-item
-          v-for="event in timeline"
-          :key="event.id"
-          class="mb-3"
-          color="pink"
-          small
-        >
-          <v-layout justify-space-between>
-            <v-flex xs7 v-text="event.text"></v-flex>
-            <v-flex xs5 text-xs-right v-text="event.time"></v-flex>
-          </v-layout>
-        </v-timeline-item>
-      </v-slide-x-transition>
-
-      <v-timeline-item
-        class="mb-4"
-        hide-dot
-      >
-        <span>TODAY</span>
-      </v-timeline-item>
-
-      <v-timeline-item
-        class="mb-5"
-        large
-      >
-        <template v-slot:icon>
-          <v-avatar>
-            <img src="http://i.pravatar.cc/60">
-          </v-avatar>
-        </template>
-        <v-layout justify-space-between>
-          <v-flex xs7>This order was archived.</v-flex>
-          <v-flex xs5 text-xs-right>15:26</v-flex>
-        </v-layout>
-      </v-timeline-item>
-
-      <v-timeline-item
-        class="mb-5"
-        large
-      >
-        <template v-slot:icon>
-          <v-avatar>
-            <img src="http://i.pravatar.cc/61">
-          </v-avatar>
-        </template>
-        <v-layout justify-space-between>
-          <v-flex xs7>
-            <v-chip
-              class="white--text ml-0"
-              color="purple"
-              label
-              small
+    <v-container style="max-width: 80%">
+      <v-flex>
+        <v-list two-line> 
+          <v-timeline dense clipped>      
+            <v-timeline-item
+              class="mb-5"
+              hide-dot
             >
-              APP
-            </v-chip>
-            Digital Downloads fulfilled 1 item.
-          </v-flex>
-          <v-flex xs5 text-xs-right>15:25</v-flex>
-        </v-layout>
-      </v-timeline-item>
+              <template v-for="(item, index) in items">
+                <v-subheader
+                  v-if="item.header"
+                  :key="item.header"
+                  inset
+                >
+                  {{ item.header }}
+                </v-subheader>
 
-      <v-timeline-item
-        class="mb-5"
-        large
-      >
-        <template v-slot:icon>
-          <v-avatar>
-            <img src="http://i.pravatar.cc/62">
-          </v-avatar>
-        </template>
-        <v-layout justify-space-between>
-          <v-flex xs7>
-            Order confirmation email was sent to John Leider (john@vuetifyjs.com).
-          </v-flex>
-          <v-flex xs5 text-xs-right>15:25</v-flex>
-        </v-layout>
-      </v-timeline-item>
+                <v-divider
+                  v-else-if="item.divider"
+                  :key="index"
+                  inset
+                ></v-divider>
 
-      <v-timeline-item
-        class="mb-3"
-        hide-dot
-      >
-        <v-btn
-          class="mx-0"
-          color="white"
-        >
-          Resend Email
-        </v-btn>
-      </v-timeline-item>
+                <v-list-tile
+                  v-else
+                  :key="item.title"
+                  avatar
+                  ripple
+                > 
+                  <v-list-tile-avatar>
+                    <img :src="item.avatar">
+                  </v-list-tile-avatar>
 
-      <v-timeline-item
-        class="mb-5"
-        large
-      >
-        <template v-slot:icon>
-          <v-avatar>
-            <img src="http://i.pravatar.cc/63">
-          </v-avatar>
-        </template>
-        <v-layout justify-space-between>
-          <v-flex xs7>
-            A $15.00 USD payment was processed on PayPal Express Checkout
-          </v-flex>
-          <v-flex xs5 text-xs-right>15:25</v-flex>
-        </v-layout>
-      </v-timeline-item>
-
-      <v-timeline-item
-        class="mb-5"
-        large
-      >
-        <template v-slot:icon>
-          <v-avatar>
-            <img src="http://i.pravatar.cc/64">
-          </v-avatar>
-        </template>
-        <v-layout justify-space-between>
-          <v-flex xs7>
-            John Leider placed this order on Online Store.
-          </v-flex>
-          <v-flex xs5 text-xs-right>15:25</v-flex>
-        </v-layout>
-      </v-timeline-item>
-      
-      <v-timeline-item
-        fill-dot
-        class="white--text mb-5"
-        color="orange"
-        large
-      >
-        <template v-slot:icon>
-          <span>SA</span>
-        </template>
-        <v-text-field
-          v-model="input"
-          hide-details
-          flat
-          label="Ask a question..."
-          solo
-          @keydown.enter="comment"
-        >
-          <template v-slot:append>
-            <v-btn
-              class="mx-0"
-              depressed
-              @click="comment"
+                  <v-list-tile-content>
+                    <v-list-tile-title v-html="item.name"></v-list-tile-title>  
+                    <v-layout justify-space-between>
+                      <v-list-tile-sub-title v-html="item.text"></v-list-tile-sub-title>
+                      <v-flex xs5 text-xs-right v-html="item.time"></v-flex>
+                    </v-layout>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </template>
+            </v-timeline-item>
+          
+            <v-slide-x-transition
+              group
             >
-              Post
-            </v-btn>
-          </template>
-        </v-text-field>
-      </v-timeline-item>
-    </v-timeline>
-  </v-container>
+              <v-timeline-item
+                v-for="event in timeline"
+                :key="event.id"
+                class="mb-3"
+                color="pink"
+                small
+              >
+                <v-layout justify-space-between>
+                  <v-flex xs7 v-text="event.text"></v-flex>
+                  <v-flex xs5 text-xs-right v-text="event.time"></v-flex>
+                </v-layout>
+              </v-timeline-item>
+            </v-slide-x-transition>
+
+            <v-timeline-item
+              fill-dot
+              class="white--text mb-5"
+              color="cyan lighten-1"
+              large
+            >
+              <template v-slot:icon>
+                <span>SA</span>
+              </template>
+              <v-text-field
+                v-model="input"
+                hide-details
+                flat
+                label="Ask a question..."
+                solo
+                @keydown.enter="comment"
+              >
+                <template v-slot:append>
+                  <v-btn
+                    class="mx-0"
+                    depressed
+                    @click="comment"
+                  >
+                    Post
+                  </v-btn>
+                </template>
+              </v-text-field>
+            </v-timeline-item>
+          </v-timeline>
+        </v-list>
+      </v-flex>
+    </v-container>
+  </v-layout>
 </template>
 
 <script>
   export default {
-    data: () => ({
-      events: [],
-      input: null,
-      nonce: 0
-    }),
+    data () {
+      return {
+        events: [],
+        input: null,
+        nonce: 0,
+        items:[
+          {
+            header: 'Today'
+          },
+          { divider: true },
+          {
+            avatar: 'https://picsum.photos/250/300?image=660',
+            name: 'Spike Lee',
+            text:
+              "I'll be in your neighborhood",
+            time: '15:25'
 
+          },
+          {
+            avatar: 'https://picsum.photos/250/300?image=821',
+            name: 'Summer',
+            text: "Wish I could come.",
+            time: '15:25'
+          },
+          {
+            avatar: 'https://picsum.photos/250/300?image=783',
+            name: 'Bella',
+            text: "Do you have Paris recommendations",
+            time: '15:26'
+          },
+          {
+            header: 'Yesterday'
+          },
+          { divider: true },
+          {
+            avatar: 'https://picsum.photos/250/300?image=1006',
+            name: 'LaToya',
+            text: "Do you want to hang out?",
+            time: '15:26'
+          },
+          {
+            avatar: 'https://picsum.photos/250/300?image=146',
+            name: 'Nancy',
+            text: "Do you see what time it is?",
+            time: '15:26'
+          },
+          {
+            header: 'Last Week'
+          },
+          { divider: true },
+          {
+            avatar: 'https://picsum.photos/250/300?image=1008',
+            name: 'LaToya',
+            text: "Do you want to hang out?",
+            time: '15:27'
+          },
+          {
+            avatar: 'https://picsum.photos/250/300?image=839',
+            name: 'Winter Porridge',
+            text: "Tell me more...",
+            time: '15:27'
+          },
+          {
+            avatar: 'https://picsum.photos/250/300?image=145',
+            name: 'Oui oui',
+            text: "Do you see what time it is?",
+            time: '15:27'
+          }
+        ]
+      }
+    },
     computed: {
       timeline () {
         return this.events.slice().reverse()
       }
     },
     sockets:{
-    MESSAGE: function(data){
-      if (Notification && Notification.permission === "granted" && data && this.$store.state.Identity==2) 
-      {
-        const options = {
-          body: `${data._question}`,
-          icon: '@/assets/logo.png',
-          badge: '@/assets/logo.png',
-          image: '@/assets/logo.png',
-          tag: 'example-notification'
-        };
-        var notify = new Notification("오픈클래스", options);
+      MESSAGE: function(data){
+        if (Notification && Notification.permission === "granted" && data && this.$store.state.Identity==2) 
+        {
+          const options = {
+            body: `${data._question}`,
+            icon: '@/assets/logo.png',
+            badge: '@/assets/logo.png',
+            image: '@/assets/logo.png',
+            tag: 'example-notification'
+          };
+          var notify = new Notification("오픈클래스", options);
+        }
       }
-    }
-  },
-
+    },
     methods: {
       test(e){
       e.preventDefault();
@@ -201,18 +201,18 @@
         anonymous:false
       })
     },
-      comment () {
-        const time = (new Date()).toTimeString()
-        this.events.push({
-          id: this.nonce++,
-          text: this.input,
-          time: time.replace(/:\d{2}\s/, (match, contents, offset) => {
-            return ` ${contents.split(' ').map(v => v.charAt(0)).join('')}`
-          })
+    comment () {
+      const time = (new Date()).toTimeString()
+      this.events.push({
+        id: this.nonce++,
+        text: this.input,
+        time: time.replace(/:\d{2}\s/, (match, contents, offset) => {
+          return ` ${contents.split(' ').map(v => v.charAt(0)).join('')}`
         })
+      })
 
-        this.input = null
-      }
+      this.input = null
     }
   }
+}
 </script>
