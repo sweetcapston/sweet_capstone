@@ -9,7 +9,7 @@
               <label>이름</label>
               <sui-input
                 placeholder="이름을 입력해주세요"
-                v-model="name"
+                v-model="userName"
                 name="name"
                 v-validate="'required'"
                 data-vv-as="이름"
@@ -22,7 +22,7 @@
               <sui-input
                 type="text"
                 placeholder="이메일을 입력해주세요"
-                v-model="email"
+                v-model="userID"
                 name="email"
                 v-validate="'required|email'"
                 data-vv-as="이메일"
@@ -78,7 +78,7 @@
               type="text"
               class="ID"
               placeholder="학번을 입력해주세요"
-              v-model="StudentId"
+              v-model="studentId"
               name="studentId"
               v-validate="'required_if:check,false'"
               data-vv-as="학번"
@@ -120,33 +120,26 @@ ko.messages.required_if = (field, n) => `${field} 항목은 필수 정보입니�
 export default {
   data() {
     return {
-      email: "",
+      userID: "",
       password: "",
       password2: "",
-      name: "",
-      StudentId: "",
+      userName: "",
+      studentId: "",
       duplicate: true,
       errsign: false,
       checkbox: false,
-      RegisterSign: false
+      RegisterSign: true
     };
   },
   watch: {
     checkbox: data => {
       document.getElementsByClassName("ID")[0].classList.toggle("disabled");
-      if (data == true) {
+    },
+    RegisterSign (val) {
+      if(!val){
+        this.$router.replace({name:'login'});
       }
     }
-  },
-  created() {
-    this.$EventBus.$on("toggleSign", () => {
-      this.RegisterSign = !this.RegisterSign;
-    });
-    this.$EventBus.$on("RegisterSign", () => {
-      this.RegisterSign = !this.RegisterSign;
-      this.validate();
-      this.ClearData();
-    });
   },
   methods: {
     numCheck() {
@@ -159,20 +152,20 @@ export default {
       }
     },
     ClearData() {
-      this.email = "";
+      this.userID = "";
       this.password = "";
       this.password2 = "";
-      this.name = "";
-      this.StudentId = "";
+      this.userName = "";
+      this.studentId = "";
       this.errsign = false;
       this.checkbox = false;
       this.duplicate = false;
     },
     modalChange() {
-      this.RegisterSign = !this.RegisterSign;
       this.validate();
       this.ClearData();
-      this.$EventBus.$emit("toggleLogin");
+      this.$router.replace('login')
+      
     },
     email_signup() {
       if (this.errors.items.length != 0) {
@@ -185,18 +178,18 @@ export default {
         alert("아이디 중복확인을 해주세요");
         return false;
       }
-      if (this.checkbox == true) this.StudentId = "9999";
+      if (this.checkbox == true) this.studentId = "9999";
       let form = {
-        name: this.name,
-        email: this.email,
+        userName: this.userName,
+        userID: this.userID,
         password: this.password,
-        StudentId: this.StudentId
+        studentId: this.studentId
       };
       Auth.SignUp(form)
         .then(response => {
           if(response.data == true){
             this.ClearData();
-            this.Opensign = false;
+            // this.Opensign = false;
             alert("회원가입에 성공했습니다.")
           }
           else{
@@ -211,9 +204,8 @@ export default {
     IDcheck: function() {
       this.validate()
       if (!this.errors.has('email')) {
-        Auth.duplicate(this.email)
+        Auth.duplicate(this.userID)
           .then(res => {
-            console.log(res)
             if (res.data == true) {
               alert("중복된 아이디 입니다.");
             } else {

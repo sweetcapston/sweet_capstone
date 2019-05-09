@@ -1,6 +1,6 @@
 <template>
   <div>
-    <sui-modal v-model="LoginSign" id="modal" size="mini">
+    <sui-modal id="modal" v-model="LoginSign" size="mini">
       <sui-modal-header class="undraggable unselectable">로그인</sui-modal-header>
       <div class="grid-container login">
         <sui-modal-content>
@@ -10,7 +10,7 @@
               <sui-input
                 type="email"
                 placeholder="이메일을 입력해주세요"
-                v-model="email"
+                v-model="userID"
                 name="email"
                 v-validate="'required'"
                 data-vv-as="이메일"
@@ -55,71 +55,68 @@ import {Auth} from "@/api";
 export default {
   data() {
     return {
-      email: "",
+      userID: "",
       password: "",
-      LoginSign: false,
       errsign: false,
+      LoginSign:true
     };
   },
-  created() {
-    this.$EventBus.$on("toggleLogin", () => {
-      this.LoginSign = !this.LoginSign;
-    });
-    this.$EventBus.$on("LoginSign", () => {
-      this.LoginSign = !this.LoginSign;
-      this.validate();
-      this.ClearData();
-    });
+  watch: {
+    LoginSign (val) {
+      if(!val){
+        this.$router.replace({name:'login'});
+      }
+    }
   },
   methods: {
     ClearData() {
-      this.email = "";
+      this.userID = "";
       this.password = "";
     },
-    LogIn() {     
+    LogIn() {
+      console.log(this.userID)
+      console.log(this.password)
       if (this.errors.items.length != 0) {
         this.errsign = true;
         alert(this.errors)
         return false;
       }
       this.errsign = false;
-      let form = {
-        email: this.email,
+      Auth.login({
+        userID: this.userID,
         password: this.password
-      };
-      Auth.login(form)
-        .then(res => {
-          var { data } = res;
-          if(data){
-            this.ClearData();
-            this.Openlogin = false;
-            this.$store.commit("setClassList", data.classList);
-            this.$store.commit("setUserName", data.name);
-            this.$store.commit("setIdentity", data.Identity); //page refresh 시 초기화됨
-            switch(data.Identity){
-              case 1: //학생
-                this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
-                break;  
-              case 2: //교수
-                this.$router.push({name: 'main'})  // 로그인 성공후 메인페이지로 이동
-                break;
-              case 3: //관리자
-                // 로그인 성공후 관리자페이지로 이동
-                break;
-            }
-          }else{
-            alert("로그인 실패")
-          }
-        })
-        .catch(error => {
-          alert("error");
-        });
+      })
+      .then(res => {
+        const {data} = res;
+        if(data){
+          this.ClearData();
+          this.$store.commit("setLoginData", data);
+          this.routeChange(data.Identity);
+        } else{
+          alert("로그인 실패")
+        }
+      })
+      .catch(error => {
+        alert("error");
+      });
+    },
+    routeChange(Identity){
+      switch(Identity){
+        case 1: //학생
+          this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
+          break;  
+        case 2: //교수
+          this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
+          break;
+        case 3: //관리자
+          // 로그인 성공후 관리자페이지로 이동
+          break;
+      }
     },
     modalChange() {
-      this.LoginSign = !this.LoginSign;
       this.validate();
       this.ClearData();
-      this.$EventBus.$emit("toggleSign");
+      this.$router.replace("register");
     },
     validate: function() {
       this.$validator.validateAll();

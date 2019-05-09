@@ -7,6 +7,8 @@ import Survey from "./views/SurveyClass.vue";
 import Login from "./views/Login.vue";
 import Main from "./views/Main.vue";
 import Class from "./components/core/Class.vue";
+import LoginForm from "./components/modal/LoginForm.vue";
+import SignUpForm from "./components/modal/SignUpForm.vue";
 
 Vue.use(Router);
 
@@ -17,7 +19,17 @@ export default new Router({
     {
       path: "/",
       name: "login",
-      component: Login
+      component: Login,
+      children: [
+        {
+          path : 'login',
+          component : LoginForm
+        },
+        {
+          path : 'register',
+          component : SignUpForm
+        }
+      ]
     },
     {
       path: "/main",

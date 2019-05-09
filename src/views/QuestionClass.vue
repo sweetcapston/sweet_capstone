@@ -1,5 +1,6 @@
 <template>
   <v-container style="max-width: 80%;">
+    <sui-button @click="test">Test</sui-button>
     <v-timeline dense clipped>
       <v-slide-x-transition
         group
@@ -173,8 +174,37 @@
         return this.events.slice().reverse()
       }
     },
+    sockets:{
+    MESSAGE: function(data){
+      if (Notification && Notification.permission === "granted" && data) 
+      {
+        const options = {
+          body: `${data._question}`,
+          icon: '@/assets/logo.png',
+          badge: '@/assets/logo.png',
+          image: '@/assets/logo.png',
+          tag: 'example-notification'
+        };
+        var notify = new Notification("오픈클래스", options);
+        console.log("data")
+        // notify.onshow = function () { 
+        //   setTimeout(notify.close(), 5); 
+        // }
+      }
+    }
+  },
 
     methods: {
+      test(e){
+      e.preventDefault();
+      this.$socket.emit('chat', {
+        classCode:this.$store.state.currentClass.classCode,
+        userID:this.$store.state.userID,
+        userName:this.$store.state.userName,
+        _question:"messsssssage",
+        anonymous:false
+      })
+    },
       comment () {
         const time = (new Date()).toTimeString()
         this.events.push({

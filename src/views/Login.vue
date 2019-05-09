@@ -6,8 +6,7 @@
       <sui-button class="transparent" positive @click="OpenLogin">로그인</sui-button>
       <sui-button class="cyan lighten-1" positive @click.native="OpenRegister" id="signbtn">회원가입</sui-button>
     </v-toolbar>
-    <modal-login-form />
-    <modal-sign-up-form />
+    <router-view/>
     <v-content>
       <section>
         <v-parallax 
@@ -209,32 +208,19 @@ Vue.use(VueSession);
 export default {
   name: "app",
   created() {
+    console.log(this.$router)
     Auth.auth().then(res => {
       if(!res.data)
         return;
       this.$router.push({name: 'main'});
     });
   },
-  data() {
-    return {
-      username:'',
-      password:'',
-      RegisterSign:false,
-      LoginSing:false
-    };
-  },
   methods: {
-    login(){
-      this.$store.dispatch('retrieveToken',{
-        username: this.username,
-        password: this.password
-      })
-    },
     OpenLogin() {
-      this.$EventBus.$emit("LoginSign");
+      this.$router.push("login")
     },
     OpenRegister() {
-      this.$EventBus.$emit("RegisterSign");
+      this.$router.push("register")
     }
   }
 };
