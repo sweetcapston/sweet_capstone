@@ -152,10 +152,10 @@ export default {
       }
     },
     ClearData() {
-      this.email = "";
+      this.userID = "";
       this.password = "";
       this.password2 = "";
-      this.name = "";
+      this.userName = "";
       this.studentId = "";
       this.errsign = false;
       this.checkbox = false;
@@ -180,8 +180,8 @@ export default {
       }
       if (this.checkbox == true) this.studentId = "9999";
       let form = {
-        name: this.name,
-        email: this.email,
+        userName: this.userName,
+        userID: this.userID,
         password: this.password,
         studentId: this.studentId
       };
@@ -204,7 +204,7 @@ export default {
     IDcheck: function() {
       this.validate()
       if (!this.errors.has('email')) {
-        Auth.duplicate(this.email)
+        Auth.duplicate(this.userID)
           .then(res => {
             if (res.data == true) {
               alert("중복된 아이디 입니다.");

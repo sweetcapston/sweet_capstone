@@ -73,7 +73,9 @@ export default {
       this.userID = "";
       this.password = "";
     },
-    LogIn() {     
+    LogIn() {
+      console.log(this.userID)
+      console.log(this.password)
       if (this.errors.items.length != 0) {
         this.errsign = true;
         alert(this.errors)
