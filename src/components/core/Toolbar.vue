@@ -1,8 +1,7 @@
 <template>
   <v-toolbar
-    id="core-toolbar"
     flat
-    prominent
+    height="50px"
   >
   <v-toolbar-side-icon
       class="hidden-md-and-up"
@@ -25,7 +24,6 @@
         py-2
       >
         <v-icon color="tertiary">mdi-bell</v-icon>
-        <v-icon color="tertiary">mdi-menu</v-icon>
         <v-icon color="tertiary">mdi-account-circle</v-icon>
       </v-flex>
     </v-toolbar-items>

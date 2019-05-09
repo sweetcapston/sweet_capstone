@@ -21,6 +21,7 @@
       <v-list-tile avatar>
           <v-list-tile-avatar
             color="white"
+            @click="moveToMain()"
           >
             <v-img
               :src="require('@/assets/logo.svg')"
@@ -93,8 +94,12 @@
     methods: {
       ...mapMutations(['setDrawer']),
       moveToPage: function(link){
-        this.$router.push(link.to+this.$store.state.currentClass.classCode+link.to2)
-      }
+        this.$router.push(link.to+this.$store.state.currentClass.classCode+link.to2);
+      },
+      moveToMain: function(){
+        this.$router.push( {name: 'main'} );
+      },
+      //....
     }
   }
 </script>

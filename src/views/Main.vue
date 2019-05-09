@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-toolbar  app flat >
+    <v-toolbar  app flat height="50px">
       <v-toolbar-title class="headline text-uppercase">
         <span >OpenClass</span>
         <span class="font-weight-light"> {{this.$store.state.userName}} </span>
@@ -65,11 +65,11 @@ import {Auth, Class, Prof, Stud} from "@/api"
 
 export default {
   created() {
-    Auth.auth().then(res => {
-      if(!res.data){
-        this.$router.push({name: 'login'})
-      }
-    });
+    // Auth.auth().then(res => {
+    //   if(!res.data){
+    //     this.$router.push({name: 'login'})
+    //   }
+    // });
     this.$store.commit("setDrawer", true);
   },
   data(){ 

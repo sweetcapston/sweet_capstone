@@ -129,8 +129,8 @@ export default {
     z-index:1;
     font-size:18px;
     width:30px;
-    top:63px;
-    left:85px;
+    top:53px;
+    left:90px;
   }
   
 </style>
