@@ -16,7 +16,7 @@ import store from '@/store.js'
 import SocketIO from 'socket.io-client';
 import VueSocketIO from 'vue-socket.io'
 Vue.use(new VueSocketIO({
-    debug: true,
+    debug: true,  //배포시 삭제
     connection: SocketIO('http://localhost:3000'), //options object is Optional
     vuex: {
       store,
@@ -31,9 +31,8 @@ export default {
       classCode: this.$store.state.currentClass.classCode,
       userID: this.$store.state.userID
     })
-    if (!(Notification && Notification.permission === "granted")) {
+    if (Notification && Notification.permission != "granted") {
       Notification.requestPermission(function (status) {
-        // This allows to use Notification.permission with Chrome/Safari
         if (Notification.permission !== status) {
           Notification.permission = status;
         }

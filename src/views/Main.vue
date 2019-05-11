@@ -39,7 +39,7 @@
             <v-btn bottom positive class="cyan lighten-1 white--text" large @click="enterClass(getClassCode())">입장하기</v-btn>
           </v-layout>
           <v-layout align-center justify-center v-if="this.$store.getters.getIdentity == 2" >
-              <v-flex xs6 sm6 md3 order-12 lg2>
+              <v-flex xs6 sm6 md3 order-12>
                 <v-text-field
                   v-model="className"
                   placeholder="클래스이름을 입력하세요."

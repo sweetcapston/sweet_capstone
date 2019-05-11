@@ -39,6 +39,7 @@
 </template>
 
 <script>
+/*eslint-disable */
   // Utilities
   import {
     mapMutations
@@ -61,6 +62,7 @@
     methods: {
       ...mapMutations(['toggleDrawer']),
       logout(){
+<<<<<<< Updated upstream
         this.$session.destroy();
         Auth.logout().then(res => {
           if(res.data == "logout"){
@@ -71,6 +73,17 @@
       }
     },
     //...
+=======
+      this.$session.destroy();
+      Auth.logout().then(res => {
+        if(res.data == "logout"){
+          this.$store.commit('removeLoginData');
+          this.$router.push({name: 'login'});
+        }
+      })
+    }
+    }
+>>>>>>> Stashed changes
   }
 </script>
 

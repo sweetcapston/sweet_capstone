@@ -1,0 +1,20 @@
+{
+    "name": "frontend",
+    "short_name": "frontend",
+    "icons": [ {
+        "src": "/images/logo.png",
+        "sizes": "200x200",
+        "type": "image/png"
+      }, {
+        "src": "/images/cropped-choc-logo-512x512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      },{
+        "src": "/images/24283C3858F778CA2E.jpg",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+
+    ],
+    "start_url": "/"
+  }

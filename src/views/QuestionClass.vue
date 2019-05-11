@@ -98,7 +98,23 @@
 </template>
 
 <script>
+import store from '@/store.js'
+/*eslint-disable */
   export default {
+    created() {
+      if ('serviceWorker' in navigator && 'PushManager' in window) {
+        navigator.serviceWorker.register('../../service-worker.js')
+        .then(function(swReg) {
+          console.log('Service Worker is registered', swReg);
+        })
+        .catch(function(error) {
+          console.error('Service Worker Error', error);
+        });
+      } else {
+        console.warn('Push messaging is not supported');
+        pushButton.textContent = 'Push Not Supported';
+      }
+    },
     data () {
       return {
         events: [],
@@ -177,29 +193,60 @@
     },
     sockets:{
       MESSAGE: function(data){
-        if (Notification && Notification.permission === "granted" && data && this.$store.state.Identity==2) 
-        {
-          const options = {
-            body: `${data._question}`,
-            icon: '@/assets/logo.png',
-            badge: '@/assets/logo.png',
-            image: '@/assets/logo.png',
-            tag: 'example-notification'
-          };
-          var notify = new Notification("오픈클래스", options);
+        let cursor = this;
+        let getTime = Date.now().toString();
+        if (Notification && Notification.permission === "granted" && data && this.$store.state.Identity==2) {
+          if (Notification.permission == 'granted') {
+            navigator.serviceWorker.getRegistration()
+            .then(function(reg) {
+              const title = "OPEN CLASS❤️"
+              var options = {
+                body: `${data._question}`,
+                //1px = 0.02645833333333 cm
+                image: '/images/24283C3858F778CA2E.jpg', //720px (width) by 240px (height)
+                icon: '/images/logo.png',  //android는 192px   512 512
+                badge: '/images/logo-128x128.png', //72px
+                tag: getTime,
+                actions: [
+                  {
+                    action: 'off-action',
+                    title: '알림끄기 추가할 예정',
+                    icon: '/images/logo.png'
+                  },
+                  {
+                    action: 'new-action',
+                    title: '새 창에서 열기',
+                    icon: '/images/logo.png'
+                  }
+                ],
+                vibrate: [100, 50, 100],//movile에서만 가능
+                data: {
+                  classCode: cursor.$store.state.currentClass.classCode
+                }
+              };
+              reg.showNotification(title, options)
+              .then(() => reg.getNotifications())
+              .then(notifications => {
+                setTimeout(() => notifications.forEach(notification => {
+                  if(notification.tag == getTime) notification.close();
+                }), 2500);
+              });
+            });
+          }
         }
       }
     },
     methods: {
       test(e){
-      e.preventDefault();
-      this.$socket.emit('chat', {
-        classCode:this.$store.state.currentClass.classCode,
-        userID:this.$store.state.userID,
-        userName:this.$store.state.userName,
-        _question:"messsssssage",
-        anonymous:false
-      })
+        e.preventDefault();
+        this.$socket.emit('chat', {
+          classCode:this.$store.state.currentClass.classCode,
+          userID:this.$store.state.userID,
+          userName:this.$store.state.userName,
+          _question:"messsssssage",
+          anonymous:false
+        })
+      },
     },
     comment () {
       const time = (new Date()).toTimeString()
@@ -210,9 +257,7 @@
           return ` ${contents.split(' ').map(v => v.charAt(0)).join('')}`
         })
       })
-
       this.input = null
     }
   }
-}
 </script>

@@ -208,7 +208,6 @@ Vue.use(VueSession);
 export default {
   name: "app",
   created() {
-    console.log(this.$router)
     Auth.auth().then(res => {
       if(!res.data)
         return;
