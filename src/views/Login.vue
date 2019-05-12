@@ -204,8 +204,24 @@ Vue.use(VeeValidate, config);
 Vue.use(SuiVue)
 Vue.use(VueSession);
 
+
 /* eslint-disable */
 export default {
+  mounted() {
+    document.querySelector("body").addEventListener('scroll', function() {
+      var el = document.querySelector('.v-toolbar--fixed.white--text.elevation-0');
+      if(document.querySelector("body").scrollTop >= 63) {
+        el.classList.add('cyan');
+        el.classList.add('lighten-1');
+        el.classList.remove('transparent')
+      }
+      else {
+        el.classList.add('transparent')
+        el.classList.remove('cyan');
+        el.classList.remove('lighten-1');
+      }
+    });
+  },
   name: "app",
   created() {
     Auth.auth().then(res => {
@@ -230,5 +246,8 @@ export default {
   }
   body::-webkit-scrollbar { 
     display: none; 
-}
+  }
+  .signup.ui.positive.button {
+    background-color: #26c6da
+  }
 </style>

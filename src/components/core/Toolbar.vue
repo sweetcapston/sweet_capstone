@@ -62,7 +62,6 @@
     methods: {
       ...mapMutations(['toggleDrawer']),
       logout(){
-<<<<<<< Updated upstream
         this.$session.destroy();
         Auth.logout().then(res => {
           if(res.data == "logout"){
@@ -72,23 +71,11 @@
         })
       }
     },
-    //...
-=======
-      this.$session.destroy();
-      Auth.logout().then(res => {
-        if(res.data == "logout"){
-          this.$store.commit('removeLoginData');
-          this.$router.push({name: 'login'});
-        }
-      })
-    }
-    }
->>>>>>> Stashed changes
   }
 </script>
 
 <style>
 .gradient {
-    background: linear-gradient(100deg, #9198e5, #26C6DA)
+  background: linear-gradient(100deg, #9198e5, #26C6DA)
 } 
 </style>
