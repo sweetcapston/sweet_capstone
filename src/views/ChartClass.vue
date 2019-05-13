@@ -1,7 +1,35 @@
 <template>
   <v-layout row wrap fill-height>
-    <v-flex xs6 sm2 md2 lg3 xl12>
+    <v-flex xs6 sm2 md12 lg12 xl12>
         <div id="chat-container">
+            
+            <div id="chat-title">
+                <span> 질문 클래스</span>
+                
+            </div>
+            <div id="chat-message-list">
+                <div 
+                  class="message-row other-message"
+                  v-for="(ques, i) in  questionList"
+                  :key="i"
+                >
+                    <div class="message-text">{{ques.question}}</div>
+                    <div class="message-time">{{ques.date}}</div>
+                </div>
+            </div>
+            <div id="chat-form">
+                <img/>
+                <input v-on:keyup.enter="test()" v-model="question" type="text" placeholder="type a message" />
+            </div>
+
+
+
+
+
+            <div id="new-message-container">
+                <a herf="#">+</a>
+            </div>
+
             <div id="search-container">
                 <input type="text" placeholder="클래스 접속자"/>
             </div>
@@ -27,61 +55,46 @@
                 </div>
             </div>
 
-            <div id="new-message-container">
-                <a herf="#">+</a>
-            </div>
-            <div id="chat-title">
-                <span> 질문 클래스</span>
-                
-            </div>
-            <div id="chat-message-list">
-                <div 
-                  class="message-row other-message"
-                  v-for="(ques, i) in questionList"
-                  :key="i"
-                >
-                    <div class="message-text">{{ques.question}}</div>
-                    <div class="message-time">{{ques.date}}</div>
-                </div>
-            </div>
-            <div id="chat-form">
-                <img/>
-                <input v-on:keyup.enter="type" v-model="question" type="text" placeholder="type a message" />
-            </div>
         </div>
       </v-flex>
   </v-layout>
 </template>
 
 <script>
+import {Stud} from "@/api";
 export default {
+    created(){
+      Stud.loadQuestion(this.$store.state.currentClass.classCode).then(res => {
+        if(res.data === 'false') alert('질문 가져오기 실패');
+        else{
+          this.questionList = res.data.questionList;
+          alert(res.data.questionList);
+        }   
+      })
+    },
     data(){
     return{
-      
       question:'',
-      questionList: [
-        // {
-        //   anonymous: false,
-
-        //   classCode : 'test2',
-
-        //   userID : 'testID2',
-
-        //   userName: 'testName2',
-
-        //   question: '두 번째 질문입니다 교수님!',
-
-        //   date : '2019-5-12'
-        // },
-      ],
+      questionList: [],
       userList: [{userName:'윤대균', value:'교수', image:'professor'},{userName:'임총배', value:'학생', image:'student'}]
     }
   },
+  
   methods:{
-      type(){
-          this.questionList.push({question: this.question, date: new Date()});
-          this.question='';
-      }
+    type(){
+      this.questionList.push({question: this.question, date: new Date()});
+      this.question='';
+    },
+    test(e){
+      
+      this.$socket.emit('chat', {
+        classCode:this.$store.state.currentClass.classCode,
+        userID:this.$store.state.userID,
+        userName:this.$store.state.userName,
+        _question:this.question,
+        anonymous:false
+      })
+    }
   }
 }
 </script>

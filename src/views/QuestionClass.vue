@@ -83,7 +83,7 @@
                   <v-btn
                     class="mx-0"
                     depressed
-                    @click="comment"
+                    @click="test"
                   >
                     Post
                   </v-btn>
@@ -193,11 +193,12 @@
     methods: {
       test(e){
       e.preventDefault();
+      alert(this.input);
       this.$socket.emit('chat', {
         classCode:this.$store.state.currentClass.classCode,
         userID:this.$store.state.userID,
         userName:this.$store.state.userName,
-        _question:"messsssssage",
+        _question:this.input,
         anonymous:false
       })
     },
@@ -210,8 +211,6 @@
           return ` ${contents.split(' ').map(v => v.charAt(0)).join('')}`
         })
       })
-
-      this.input = null
     }
   }
 }

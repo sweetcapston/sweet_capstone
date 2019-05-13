@@ -14,5 +14,8 @@ export default {
     },
     classDelete(classCode){
       return axios.delete(`${BaseUrl}/${classCode}/delete`, config);
+    },
+    loadQuestion(classCode){
+      return axios.post(`${BaseUrl}/${classCode}/question`, config);
     }
 };

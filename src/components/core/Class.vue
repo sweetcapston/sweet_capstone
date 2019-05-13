@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <core-drawer/>
-    <v-layout>
+    <v-layout >
       <core-toolbar/> 
       <router-view />
     </v-layout>
