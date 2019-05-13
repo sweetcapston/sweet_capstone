@@ -15,9 +15,10 @@ import Vue from "vue";
 import store from '@/store.js'
 import SocketIO from 'socket.io-client';
 import VueSocketIO from 'vue-socket.io'
+import {URL} from '@/plugins/api.config.js'
 Vue.use(new VueSocketIO({
     debug: true,  //배포시 삭제
-    connection: SocketIO('http://localhost:3000'), //options object is Optional
+    connection: SocketIO(`http://${URL}:3000`), //options object is Optional
     vuex: {
       store,
       actionPrefix: "SOCKET_",

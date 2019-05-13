@@ -1,4 +1,6 @@
 /*eslint-disable */
+const BASEURL = "210.89.190.6"
+
 self.addEventListener('install', event => {
     console.log('V1 installing…');
   
@@ -15,7 +17,7 @@ self.addEventListener('notificationclick', function(event) {
     // Normal click
     if (!event.action) {
         event.notification.close();
-        var urlToOpen = new URL(`http://localhost:8080/class/${event.notification.data.classCode}/question`, self.location.origin).href;
+        var urlToOpen = new URL(`http://${BASEURL}:8080/class/${event.notification.data.classCode}/question`, self.location.origin).href;
 
         var promiseChain = clients.matchAll({ 
             type: 'window',
@@ -43,7 +45,7 @@ self.addEventListener('notificationclick', function(event) {
     }
     switch(event.action){
         case 'new-action':
-            let  promiseChain = clients.openWindow(`http://localhost:8080/class/${event.notification.data.classCode}/question`);
+            let  promiseChain = clients.openWindow(`http://${BASEURL}:8080/class/${event.notification.data.classCode}/question`);
             event.waitUntil(promiseChain);
             break;
         case 'off-action':

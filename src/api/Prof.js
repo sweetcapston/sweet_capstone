@@ -1,5 +1,6 @@
 import axios from "axios";
-const BaseUrl = "http://localhost:5000/prof";
+import {URL} from "../plugins/api.config.js"
+const BaseUrl = `http://${URL}:5000/prof`;
 const config = { 
                  headers: {'Content-Type' : 'application/json'},
                  withCredentials: true

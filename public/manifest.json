@@ -1,6 +1,6 @@
 {
-    "name": "frontend",
-    "short_name": "frontend",
+    "name": "sweet_capstone",
+    "short_name": "sweet_capstone",
     "icons": [ {
         "src": "/images/logo.png",
         "sizes": "200x200",
@@ -16,5 +16,5 @@
       }
 
     ],
-    "start_url": "/"
+    "start_url": "http://localhost:8080"
   }
