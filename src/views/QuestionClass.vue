@@ -1,96 +1,129 @@
 <template>
   <v-layout justify-center>
-    <sui-button @click="test">Test</sui-button>
+    <span>
+      <sui-button @click="test">Test</sui-button>
+    </span>
     <v-container style="max-width: 80%">
       <v-flex>
-        <v-list two-line> 
-          <v-timeline dense clipped>      
-            <v-timeline-item
-              class="mb-5"
-              hide-dot
+        <v-list two-line>
+          <template v-for="(item, index) in items">
+            <v-subheader
+              v-if="item.header"
+              :key="item.header"
+              inset
             >
-              <template v-for="(item, index) in items">
-                <v-subheader
-                  v-if="item.header"
-                  :key="item.header"
-                  inset
+              {{ item.header }}
+            </v-subheader>
+
+            <v-divider
+              v-else-if="item.divider"
+              :key="index"
+              inset
+            ></v-divider>
+
+            <v-list-tile
+              v-else
+              :key="item.title"
+              avatar
+              ripple
+            > 
+              <v-list-tile-avatar>
+                <img :src="item.avatar">
+              </v-list-tile-avatar>
+
+              <v-card
+                class="mx-auto grow"
+                color="#FEEA3D"
+                max-width="500"
+              >
+                <v-list-tile-content>
+                  <v-list-tile-title v-html="item.name"></v-list-tile-title>  
+                  <v-list-tile-sub-title v-html="item.text"></v-list-tile-sub-title>
+                </v-list-tile-content>
+                <v-layout
+                  align-center
+                  justify-end
                 >
-                  {{ item.header }}
-                </v-subheader>
-
-                <v-divider
-                  v-else-if="item.divider"
-                  :key="index"
-                  inset
-                ></v-divider>
-
-                <v-list-tile
-                  v-else
-                  :key="item.title"
-                  avatar
-                  ripple
-                > 
-                  <v-list-tile-avatar>
-                    <img :src="item.avatar">
-                  </v-list-tile-avatar>
-
-                  <v-list-tile-content>
-                    <v-list-tile-title v-html="item.name"></v-list-tile-title>  
-                    <v-layout justify-space-between>
-                      <v-list-tile-sub-title v-html="item.text"></v-list-tile-sub-title>
-                      <v-flex xs5 text-xs-right v-html="item.time"></v-flex>
-                    </v-layout>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </template>
-            </v-timeline-item>
-          
-            <v-slide-x-transition
-              group
-            >
-              <v-timeline-item
-                v-for="event in timeline"
-                :key="event.id"
-                class="mb-3"
-                color="pink"
-                small
+                  <v-icon class="mr-1">mdi-heart</v-icon>
+                  <span class="subheading mr-2">0</span>
+                </v-layout>                        
+              </v-card>
+              <v-layout
+                align-center
+                justify-end
               >
-                <v-layout justify-space-between>
-                  <v-flex xs7 v-text="event.text"></v-flex>
-                  <v-flex xs5 text-xs-right v-text="event.time"></v-flex>
+                <v-flex xs5 text-xs-right v-html="item.time"></v-flex>
+              </v-layout>
+            </v-list-tile>
+          </template>
+        
+          <v-slide-x-transition
+            group
+          >
+            <v-list-tile
+              v-for="event in timeline"
+              :key="event.id"
+              class="mb-4"
+              avatar
+            >
+              <v-list-tile-avatar>
+                <img :src="event.avatar">
+              </v-list-tile-avatar>
+
+              <v-card
+                class="mx-auto grow"
+                color="#FEEA3D"
+                max-width="500"
+              >
+                <v-list-tile-content>
+                  <v-list-tile-title v-html="event.name"></v-list-tile-title>  
+                  <v-list-tile-sub-title v-html="event.text"></v-list-tile-sub-title>
+                </v-list-tile-content>
+                <v-layout
+                  align-center
+                  justify-end
+                >
+                  <v-icon class="mr-1">mdi-heart</v-icon>
+                  <span class="subheading mr-2">0</span>
                 </v-layout>
-              </v-timeline-item>
-            </v-slide-x-transition>
-
-            <v-timeline-item
-              fill-dot
-              class="white--text mb-5"
-              color="cyan lighten-1"
-              large
-            >
-              <template v-slot:icon>
-                <span>SA</span>
-              </template>
-              <v-text-field
-                v-model="input"
-                hide-details
-                flat
-                label="Ask a question..."
-                solo
-                @keydown.enter="comment"
+              </v-card>
+              <v-layout
+                align-center
+                justify-end
               >
-                <template v-slot:append>
-                  <v-btn
-                    class="mx-0"
-                    depressed
-                    @click="comment"
-                  >
-                    Post
-                  </v-btn>
-                </template>
-              </v-text-field>
-            </v-timeline-item>
-          </v-timeline>
+                <v-flex xs5 text-xs-right v-html="event.time"></v-flex>
+              </v-layout>
+            </v-list-tile>
+          </v-slide-x-transition>
+
+          <v-list-tile
+            avatar
+          >
+            <v-list-tile-avatar
+              color="gradient white--text"
+              large
+              fill-dot
+            >
+              <span>SA</span>
+            </v-list-tile-avatar>
+            <v-text-field
+              v-model="input"
+              hide-details
+              label="Ask a question..."
+              solo
+              @keydown.enter="comment"
+            >
+              <template v-slot:append>
+                <v-btn
+                  class="mx-0"
+                  depressed
+                  @click="comment"
+                >
+                  Post
+                </v-btn>
+              </template>
+            </v-text-field>
+          </v-list-tile>
         </v-list>
       </v-flex>
     </v-container>
@@ -122,7 +155,7 @@ import store from '@/store.js'
         nonce: 0,
         items:[
           {
-            header: 'Today'
+            header: 'Last Week'
           },
           { divider: true },
           {
@@ -162,7 +195,7 @@ import store from '@/store.js'
             time: '15:26'
           },
           {
-            header: 'Last Week'
+            header: 'Today'
           },
           { divider: true },
           {
@@ -260,4 +293,11 @@ import store from '@/store.js'
       this.input = null
     }
   }
+}
 </script>
+
+<style>
+.gradient {
+  background: linear-gradient(100deg, #9198e5, #26C6DA)
+} 
+</style>
