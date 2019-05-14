@@ -1,11 +1,9 @@
 <template>
   <v-app>
     <core-drawer/>
-    <v-layout>
+    <v-layout >
       <core-toolbar/> 
-      <v-container fluid>
-        <router-view/>
-      </v-container>
+      <router-view />
     </v-layout>
   </v-app>
 </template>
