@@ -2,14 +2,18 @@
   <v-layout>
     <v-flex xs6 sm2 md6 lg9 xl9>
       <v-list two-line>
-        <template v-for="(ques, index) in questionList">
-          <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
+        <template v-for="(ques) in questionList">
+              <v-list-tile :key="ques.title" avatar ripple>
+            <v-list-tile-avatar>
+              <img :src="image">
+            </v-list-tile-avatar>
+          <!-- <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
           <v-divider v-else-if="ques.divider" :key="index" inset></v-divider>
 
           <v-list-tile v-else :key="ques.title" avatar ripple>
             <v-list-tile-avatar>
               <img :src="ques.avatar">
-            </v-list-tile-avatar>
+            </v-list-tile-avatar> -->
 
             <v-card class="mx-auto grow" color="#FEEA3D" max-width="500">
               <v-list-tile-content>
@@ -43,7 +47,6 @@
       </v-list>
     </v-flex>
 
-    
     <v-flex md3 lg3 xl3>
       <div id="search-container">
         <v-text-field type="text" label="클래스 접속자"/>
@@ -94,6 +97,8 @@ export default {
   data() {
     return {
       events: [],
+      image: 'https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg',
+      test: "https://picsum.photos/250/300?image=660",
       userList: [
         { userName: "윤대균", value: "교수", image: "professor" },
         { userName: "임총배", value: "학생", image: "student" },
