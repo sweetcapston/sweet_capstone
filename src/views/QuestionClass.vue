@@ -14,7 +14,9 @@
           <v-list-tile v-else :key="ques.title" avatar ripple>
             <v-list-tile-avatar>
               <img :src="ques.avatar">
+<<<<<<< Updated upstream
             </v-list-tile-avatar> -->
+
 
             <v-card class="mx-auto grow" color="#FEEA3D">
               <v-list-tile-content>

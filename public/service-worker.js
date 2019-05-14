@@ -1,6 +1,7 @@
 /*eslint-disable */
 
 const BASEURL = require('../src/plugins/api.config')
+
 self.addEventListener('install', event => {
     console.log('V1 installing…');
   
