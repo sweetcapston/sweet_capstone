@@ -79,8 +79,7 @@ export default {
 
       if(res.data === 'false') alert('질문 가져오기 실패');
       else{
-        this.questionList = res.data.questionList;
-        console.log(res.data.questionList);
+        this.questionList = res.data.questionList
       }
     })
     if ("serviceWorker" in navigator && "PushManager" in window) {
@@ -245,14 +244,17 @@ export default {
     enrollQuestion(event) {
       //alert("yes");
       event.preventDefault();
-      const time = new Date();
+      let time = new Date();
+      let T = time.getFullYear().toString()+'-'+(time.getMonth()+1).toString()
+      +'-'+time.getDate().toString()+" "+time.getHours().toString()+":"+time.getMinutes().toString();
+
       this.$socket.emit("chat", {
         classCode: this.$store.state.currentClass.classCode,
         userID: this.$store.state.userID,
         userName: this.$store.state.userName,
         _question: this.input,
         anonymous: false,
-        date: time
+        date: T
         //   date: time.replace(/:\d{2}\s/, (match, contents, offset) => {
         //   return ` ${contents
         //     .split(" ")

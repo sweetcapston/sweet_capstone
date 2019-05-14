@@ -18,5 +18,8 @@ export default {
     },
     loadQuestion(classCode){
       return axios.post(`${BaseUrl}/${classCode}/question`, config);
+    },
+    loadSurvey(classCode){
+        return axios.post(`${BaseUrl}/${classCode}/Survey`, config);
     }
 };
