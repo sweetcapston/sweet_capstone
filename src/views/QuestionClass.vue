@@ -1,128 +1,46 @@
 <template>
   <v-layout justify-center>
-    <span>
-      <sui-button @click="test">Test</sui-button>
-    </span>
     <v-container style="max-width: 80%">
       <v-flex>
         <v-list two-line>
           <template v-for="(item, index) in items">
-            <v-subheader
-              v-if="item.header"
-              :key="item.header"
-              inset
-            >
-              {{ item.header }}
-            </v-subheader>
+            <v-subheader v-if="item.header" :key="item.header" inset>{{ item.header }}</v-subheader>
 
-            <v-divider
-              v-else-if="item.divider"
-              :key="index"
-              inset
-            ></v-divider>
+            <v-divider v-else-if="item.divider" :key="index" inset></v-divider>
 
-            <v-list-tile
-              v-else
-              :key="item.title"
-              avatar
-              ripple
-            > 
+            <v-list-tile v-else :key="item.title" avatar ripple>
               <v-list-tile-avatar>
                 <img :src="item.avatar">
               </v-list-tile-avatar>
 
-              <v-card
-                class="mx-auto grow"
-                color="#FEEA3D"
-                max-width="500"
-              >
+              <v-card class="mx-auto grow" color="#FEEA3D" max-width="500">
                 <v-list-tile-content>
-                  <v-list-tile-title v-html="item.name"></v-list-tile-title>  
-                  <v-list-tile-sub-title v-html="item.text"></v-list-tile-sub-title>
+                  <v-list-tile-title>{{item.name}}</v-list-tile-title>
+                  <v-list-tile-sub-title>{{item.text}}</v-list-tile-sub-title>
                 </v-list-tile-content>
-                <v-layout
-                  align-center
-                  justify-end
-                >
-                  <v-icon class="mr-1">mdi-heart</v-icon>
-                  <span class="subheading mr-2">0</span>
-                </v-layout>                        
-              </v-card>
-              <v-layout
-                align-center
-                justify-end
-              >
-                <v-flex xs5 text-xs-right v-html="item.time"></v-flex>
-              </v-layout>
-            </v-list-tile>
-          </template>
-        
-          <v-slide-x-transition
-            group
-          >
-            <v-list-tile
-              v-for="event in timeline"
-              :key="event.id"
-              class="mb-4"
-              avatar
-            >
-              <v-list-tile-avatar>
-                <img :src="event.avatar">
-              </v-list-tile-avatar>
-
-              <v-card
-                class="mx-auto grow"
-                color="#FEEA3D"
-                max-width="500"
-              >
-                <v-list-tile-content>
-                  <v-list-tile-title v-html="event.name"></v-list-tile-title>  
-                  <v-list-tile-sub-title v-html="event.text"></v-list-tile-sub-title>
-                </v-list-tile-content>
-                <v-layout
-                  align-center
-                  justify-end
-                >
+                <v-layout align-center justify-end>
                   <v-icon class="mr-1">mdi-heart</v-icon>
                   <span class="subheading mr-2">0</span>
                 </v-layout>
               </v-card>
-              <v-layout
-                align-center
-                justify-end
-              >
-                <v-flex xs5 text-xs-right v-html="event.time"></v-flex>
+              <v-layout align-center justify-end>
+                <v-flex xs5 text-xs-right>{{item.time}}</v-flex>
               </v-layout>
             </v-list-tile>
-          </v-slide-x-transition>
+          </template>
 
-          <v-list-tile
-            avatar
-          >
-            <v-list-tile-avatar
-              color="gradient white--text"
-              large
-              fill-dot
-            >
+          <v-list-tile avatar>
+            <v-list-tile-avatar color="gradient white--text" large fill-dot>
               <span>SA</span>
             </v-list-tile-avatar>
             <v-text-field
               v-model="input"
               hide-details
-              label="Ask a question..."
+              placeholder="Ask a question..."
               solo
-              @keydown.enter="comment"
-            >
-              <template v-slot:append>
-                <v-btn
-                  class="mx-0"
-                  depressed
-                  @click="comment"
-                >
-                  Post
-                </v-btn>
-              </template>
-            </v-text-field>
+              @keydown.enter="enrollQuestion"
+            />
+            <v-btn class="mx-0" dark @click="enrollQuestion">질문등록</v-btn> 
           </v-list-tile>
         </v-list>
       </v-flex>
@@ -131,173 +49,175 @@
 </template>
 
 <script>
-import store from '@/store.js'
+import store from "@/store.js";
 /*eslint-disable */
-  export default {
-    created() {
-      if ('serviceWorker' in navigator && 'PushManager' in window) {
-        navigator.serviceWorker.register('../../service-worker.js')
+export default {
+  created() {
+    if ("serviceWorker" in navigator && "PushManager" in window) {
+      navigator.serviceWorker
+        .register("../../service-worker.js")
         .then(function(swReg) {
-          console.log('Service Worker is registered', swReg);
+          console.log("Service Worker is registered", swReg);
         })
         .catch(function(error) {
-          console.error('Service Worker Error', error);
+          console.error("Service Worker Error", error);
         });
-      } else {
-        console.warn('Push messaging is not supported');
-        pushButton.textContent = 'Push Not Supported';
-      }
-    },
-    data () {
-      return {
-        events: [],
-        input: null,
-        nonce: 0,
-        items:[
-          {
-            header: 'Last Week'
-          },
-          { divider: true },
-          {
-            avatar: 'https://picsum.photos/250/300?image=660',
-            name: 'Spike Lee',
-            text:
-              "I'll be in your neighborhood",
-            time: '15:25'
-
-          },
-          {
-            avatar: 'https://picsum.photos/250/300?image=821',
-            name: 'Summer',
-            text: "Wish I could come.",
-            time: '15:25'
-          },
-          {
-            avatar: 'https://picsum.photos/250/300?image=783',
-            name: 'Bella',
-            text: "Do you have Paris recommendations",
-            time: '15:26'
-          },
-          {
-            header: 'Yesterday'
-          },
-          { divider: true },
-          {
-            avatar: 'https://picsum.photos/250/300?image=1006',
-            name: 'LaToya',
-            text: "Do you want to hang out?",
-            time: '15:26'
-          },
-          {
-            avatar: 'https://picsum.photos/250/300?image=146',
-            name: 'Nancy',
-            text: "Do you see what time it is?",
-            time: '15:26'
-          },
-          {
-            header: 'Today'
-          },
-          { divider: true },
-          {
-            avatar: 'https://picsum.photos/250/300?image=1008',
-            name: 'LaToya',
-            text: "Do you want to hang out?",
-            time: '15:27'
-          },
-          {
-            avatar: 'https://picsum.photos/250/300?image=839',
-            name: 'Winter Porridge',
-            text: "Tell me more...",
-            time: '15:27'
-          },
-          {
-            avatar: 'https://picsum.photos/250/300?image=145',
-            name: 'Oui oui',
-            text: "Do you see what time it is?",
-            time: '15:27'
-          }
-        ]
-      }
-    },
-    computed: {
-      timeline () {
-        return this.events.slice().reverse()
-      }
-    },
-    sockets:{
-      MESSAGE: function(data){
-        let cursor = this;
-        let getTime = Date.now().toString();
-        if (Notification && Notification.permission === "granted" && data && this.$store.state.Identity==2) {
-          if (Notification.permission == 'granted') {
-            navigator.serviceWorker.getRegistration()
-            .then(function(reg) {
-              const title = "OPEN CLASS❤️"
-              var options = {
-                body: `${data._question}`,
-                //1px = 0.02645833333333 cm
-                image: '/images/24283C3858F778CA2E.jpg', //720px (width) by 240px (height)
-                icon: '/images/logo.png',  //android는 192px   512 512
-                badge: '/images/logo-128x128.png', //72px
-                tag: getTime,
-                actions: [
-                  {
-                    action: 'off-action',
-                    title: '알림끄기 추가할 예정',
-                    icon: '/images/logo.png'
-                  },
-                  {
-                    action: 'new-action',
-                    title: '새 창에서 열기',
-                    icon: '/images/logo.png'
-                  }
-                ],
-                vibrate: [100, 50, 100],//movile에서만 가능
-                data: {
-                  classCode: cursor.$store.state.currentClass.classCode
+    } else {
+      console.warn("Push messaging is not supported");
+      pushButton.textContent = "Push Not Supported";
+    }
+    
+  },
+  data() {
+    return {
+      events: [],
+      input: null,
+      nonce: 0,
+      questionList: [],
+      items: [
+        {
+          header: "Last Week"
+        },
+        { divider: true },
+        {
+          avatar: "https://picsum.photos/250/300?image=660",
+          name: "Spike Lee",
+          text: "I'll be in your neighborhood",
+          time: "15:25"
+        },
+        {
+          avatar: "https://picsum.photos/250/300?image=821",
+          name: "Summer",
+          text: "Wish I could come.",
+          time: "15:25"
+        },
+        {
+          avatar: "https://picsum.photos/250/300?image=783",
+          name: "Bella",
+          text: "Do you have Paris recommendations",
+          time: "15:26"
+        },
+        {
+          header: "Yesterday"
+        },
+        { divider: true },
+        {
+          avatar: "https://picsum.photos/250/300?image=1006",
+          name: "LaToya",
+          text: "Do you want to hang out?",
+          time: "15:26"
+        },
+        {
+          avatar: "https://picsum.photos/250/300?image=146",
+          name: "Nancy",
+          text: "Do you see what time it is?",
+          time: "15:26"
+        },
+        {
+          header: "Today"
+        },
+        { divider: true },
+        {
+          avatar: "https://picsum.photos/250/300?image=1008",
+          name: "LaToya",
+          text: "Do you want to hang out?",
+          time: "15:27"
+        },
+        {
+          avatar: "https://picsum.photos/250/300?image=839",
+          name: "Winter Porridge",
+          text: "Tell me more...",
+          time: "15:27"
+        },
+        {
+          avatar: "https://picsum.photos/250/300?image=145",
+          name: "Oui oui",
+          text: "Do you see what time it is?",
+          time: "15:27"
+        }
+      ]
+    };
+  },
+  sockets: {
+    MESSAGE: function(data) {
+      let cursor = this;
+      let getTime = Date.now().toString();
+      if (
+        Notification &&
+        Notification.permission === "granted" &&
+        data &&
+        this.$store.state.Identity == 2
+      ) {
+        if (Notification.permission == "granted") {
+          navigator.serviceWorker.getRegistration().then(function(reg) {
+            const title = "OPEN CLASS❤️";
+            var options = {
+              body: `${data._question}`,
+              //1px = 0.02645833333333 cm
+              image: "/images/24283C3858F778CA2E.jpg", //720px (width) by 240px (height)
+              icon: "/images/logo.png", //android는 192px   512 512
+              badge: "/images/logo-128x128.png", //72px
+              tag: getTime,
+              actions: [
+                {
+                  action: "off-action",
+                  title: "알림끄기 추가할 예정",
+                  icon: "/images/logo.png"
+                },
+                {
+                  action: "new-action",
+                  title: "새 창에서 열기",
+                  icon: "/images/logo.png"
                 }
-              };
-              reg.showNotification(title, options)
+              ],
+              vibrate: [100, 50, 100], //movile에서만 가능
+              data: {
+                classCode: cursor.$store.state.currentClass.classCode
+              }
+            };
+            reg
+              .showNotification(title, options)
               .then(() => reg.getNotifications())
               .then(notifications => {
-                setTimeout(() => notifications.forEach(notification => {
-                  if(notification.tag == getTime) notification.close();
-                }), 2500);
+                setTimeout(
+                  () =>
+                    notifications.forEach(notification => {
+                      if (notification.tag == getTime) notification.close();
+                    }),
+                  2500
+                );
               });
-            });
-          }
+          });
         }
       }
-    },
-    methods: {
-      test(e){
-        e.preventDefault();
-        this.$socket.emit('chat', {
-          classCode:this.$store.state.currentClass.classCode,
-          userID:this.$store.state.userID,
-          userName:this.$store.state.userName,
-          _question:"messsssssage",
-          anonymous:false
-        })
-      },
-    },
-    comment () {
-      const time = (new Date()).toTimeString()
-      this.events.push({
-        id: this.nonce++,
-        text: this.input,
-        time: time.replace(/:\d{2}\s/, (match, contents, offset) => {
-          return ` ${contents.split(' ').map(v => v.charAt(0)).join('')}`
-        })
-      })
-      this.input = null
+    }
+  },
+  methods: {
+    enrollQuestion(event) {
+      alert('yes')
+      event.preventDefault();
+      const time = new Date().toTimeString();
+      this.$socket.emit("chat", {
+        classCode: this.$store.state.currentClass.classCode,
+        userID: this.$store.state.userID,
+        userName: this.$store.state.userName,
+        _question: this.input,
+        anonymous: false,
+        data: time,
+      //   date: time.replace(/:\d{2}\s/, (match, contents, offset) => {
+      //   return ` ${contents
+      //     .split(" ")
+      //     .map(v => v.charAt(0))
+      //     .join("")}`;
+      // })
+      });
     }
   }
-}
+};
 </script>
 
 <style>
 .gradient {
-  background: linear-gradient(100deg, #9198e5, #26C6DA)
-} 
+  background: linear-gradient(100deg, #9198e5, #26c6da);
+}
 </style>

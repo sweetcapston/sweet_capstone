@@ -1,5 +1,5 @@
 /*eslint-disable */
-const BASEURL = "210.89.190.6"
+const BASEURL = "http://localhost:8080"
 
 self.addEventListener('install', event => {
     console.log('V1 installing…');
