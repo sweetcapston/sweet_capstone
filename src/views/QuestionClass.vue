@@ -92,13 +92,14 @@ export default {
       console.warn("Push messaging is not supported");
       pushButton.textContent = "Push Not Supported";
     }
+
     Stud.loadQuestion(this.$store.state.currentClass.classCode).then(res => {
       if (res.data === "false") alert("질문 가져오기 실패");
       else {
         this.questionList = res.data.questionList;
-    
       }
     });
+
   },
   data() {
     return {
@@ -182,15 +183,17 @@ export default {
   sockets: {
     MESSAGE: function(data) {
       let cursor = this;
+
       let getTime = Date.now().toString();
-      
+
+
       this.questionList.push({
-        anonymous:data.anonymous,
-        userID: data.userID,
-        userName: data.userName,
-        classCode: data.classCode,
+        anonymous: data.anonymous,
+        userID:data.userID,
+        userName:data.userName,
+        classCode:data.classCode,
         question: data._question,
-        date: data.data
+        date: data.date
       });
 
       if (
@@ -246,14 +249,14 @@ export default {
   methods: {
     enrollQuestion(event) {
       event.preventDefault();
-      const time = new Date().toTimeString();
+      const time = new Date();
       this.$socket.emit("chat", {
         classCode: this.$store.state.currentClass.classCode,
         userID: this.$store.state.userID,
         userName: this.$store.state.userName,
         _question: this.input,
         anonymous: false,
-        data: time
+        date: time
         //   date: time.replace(/:\d{2}\s/, (match, contents, offset) => {
         //   return ` ${contents
         //     .split(" ")
