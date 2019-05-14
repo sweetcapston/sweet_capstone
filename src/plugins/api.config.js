@@ -1,4 +1,2 @@
-const URL = "210.89.190.6";
+const URL = "https://www.openclass.cf";
 exports.URL=URL;
-
-// 210.89.190.6
