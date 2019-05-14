@@ -1,6 +1,6 @@
 /*eslint-disable */
-const BASEURL = "http://localhost:8080"
 
+const BASEURL = require('../src/plugins/api.config')
 self.addEventListener('install', event => {
     console.log('V1 installing…');
   
@@ -17,7 +17,7 @@ self.addEventListener('notificationclick', function(event) {
     // Normal click
     if (!event.action) {
         event.notification.close();
-        var urlToOpen = new URL(`http://${BASEURL}:8080/class/${event.notification.data.classCode}/question`, self.location.origin).href;
+        var urlToOpen = new URL(`http://${BASEURL.URL}:8080/class/${event.notification.data.classCode}/question`, self.location.origin).href;
 
         var promiseChain = clients.matchAll({ 
             type: 'window',

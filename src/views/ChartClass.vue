@@ -64,13 +64,7 @@
 import {Stud} from "@/api";
 export default {
     created(){
-      Stud.loadQuestion(this.$store.state.currentClass.classCode).then(res => {
-        if(res.data === 'false') alert('질문 가져오기 실패');
-        else{
-          this.questionList = res.data.questionList;
-          alert(res.data.questionList);
-        }   
-      })
+
     },
     data(){
     return{

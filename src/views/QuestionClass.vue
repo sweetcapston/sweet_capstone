@@ -13,7 +13,9 @@
           <v-list-tile v-else :key="ques.title" avatar ripple>
             <v-list-tile-avatar>
               <img :src="ques.avatar">
+<<<<<<< Updated upstream
             </v-list-tile-avatar> -->
+
 
             <v-card class="mx-auto grow" color="#FEEA3D" max-width="500">
               <v-list-tile-content>
@@ -73,6 +75,14 @@ import { Stud } from "@/api";
 /*eslint-disable */
 export default {
   created() {
+    Stud.loadQuestion(this.$store.state.currentClass.classCode).then(res => {
+
+      if(res.data === 'false') alert('질문 가져오기 실패');
+      else{
+        this.questionList = res.data.questionList;
+        console.log(res.data.questionList);
+      }
+    })
     if ("serviceWorker" in navigator && "PushManager" in window) {
       navigator.serviceWorker
         .register("../../service-worker.js")
@@ -86,13 +96,7 @@ export default {
       console.warn("Push messaging is not supported");
       pushButton.textContent = "Push Not Supported";
     }
-    Stud.loadQuestion(this.$store.state.currentClass.classCode).then(res => {
-      if (res.data === "false") alert("질문 가져오기 실패");
-      else {
-        this.questionList = res.data.questionList;
-        alert(res.data.questionList);
-      }
-    });
+
   },
   data() {
     return {
@@ -176,7 +180,17 @@ export default {
   sockets: {
     MESSAGE: function(data) {
       let cursor = this;
-      let getTime = Date.now().toString();
+      let getTime = new Date();
+
+      this.questionList.push({
+        anonymous: data.anonymous,
+        userID:data.userID,
+        userName:data.userName,
+        classCode:data.classCode,
+        question: data._question,
+        date: data.date
+      });
+
       if (
         Notification &&
         Notification.permission === "granted" &&
@@ -229,16 +243,16 @@ export default {
   },
   methods: {
     enrollQuestion(event) {
-      alert("yes");
+      //alert("yes");
       event.preventDefault();
-      const time = new Date().toTimeString();
+      const time = new Date();
       this.$socket.emit("chat", {
         classCode: this.$store.state.currentClass.classCode,
         userID: this.$store.state.userID,
         userName: this.$store.state.userName,
         _question: this.input,
         anonymous: false,
-        data: time
+        date: time
         //   date: time.replace(/:\d{2}\s/, (match, contents, offset) => {
         //   return ` ${contents
         //     .split(" ")
