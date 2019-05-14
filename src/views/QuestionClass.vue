@@ -13,7 +13,7 @@
           <v-list-tile :key="ques.title" avatar ripple>
             <v-list-tile-avatar>
               <img :src="ques.avatar">
-            </v-list-tile-avatar>
+            </v-list-tile-avatar> -->
 
             <v-card 
               flat
@@ -62,6 +62,7 @@
               </template>
             </v-text-field>
           </v-list-tile>
+          
         </template>
       </v-list>
     </v-flex>
@@ -71,6 +72,7 @@
       <div>
         <v-text-field type="text" label="클래스 접속자"/>
       </div>
+
       <div id="conversation-list">
         <div class="conversation" v-for="(user, i) in userList" :key="i">
           <img :src="require(`@/assets/${user.image}.png`)" height="100%">
@@ -103,6 +105,7 @@ export default {
       console.warn("Push messaging is not supported");
       pushButton.textContent = "Push Not Supported";
     }
+
     Stud.loadQuestion(this.$store.state.currentClass.classCode).then(res => {
       if (res.data === "false") alert("질문 가져오기 실패");
       else {
@@ -110,10 +113,13 @@ export default {
         //alert(res.data.questionList);
       }
     });
+
   },
   data() {
     return {
       events: [],
+      image: 'https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg',
+      test: "https://picsum.photos/250/300?image=660",
       userList: [
         { userName: "윤대균", value: "교수", image: "professor" },
         { userName: "임총배", value: "학생", image: "student" },
@@ -191,7 +197,19 @@ export default {
   sockets: {
     MESSAGE: function(data) {
       let cursor = this;
+
       let getTime = Date.now().toString();
+
+
+      this.questionList.push({
+        anonymous: data.anonymous,
+        userID:data.userID,
+        userName:data.userName,
+        classCode:data.classCode,
+        question: data._question,
+        date: data.date
+      });
+
       if (
         Notification &&
         Notification.permission === "granted" &&
@@ -246,7 +264,7 @@ export default {
     enrollQuestion(event) {
       //alert("yes");
       event.preventDefault();
-      const time = new Date().toTimeString();
+      const time = new Date();
       this.$socket.emit("chat", {
         classCode: this.$store.state.currentClass.classCode,
         userID: this.$store.state.userID,
@@ -261,11 +279,7 @@ export default {
         })
       });
       this.input = null;
-    }
+    },
   }
-};
+}
 </script>
-
-<style>
-
-</style>

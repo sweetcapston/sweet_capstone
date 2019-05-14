@@ -225,7 +225,7 @@ export default {
       this.input = null;
     }
   }
-};
+}
 </script>
 
 <style>
