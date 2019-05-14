@@ -46,7 +46,7 @@ self.addEventListener('notificationclick', function(event) {
     }
     switch(event.action){
         case 'new-action':
-            let  promiseChain = clients.openWindow(`http://${BASEURL}:8080/class/${event.notification.data.classCode}/question`);
+            let  promiseChain = clients.openWindow(`http://${BASEURL.URL}:8080/class/${event.notification.data.classCode}/question`);
             event.waitUntil(promiseChain);
             break;
         case 'off-action':

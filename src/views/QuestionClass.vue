@@ -8,16 +8,6 @@
             <v-list-tile-avatar>
               <img :src="image">
             </v-list-tile-avatar>
-          <!-- <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
-          <v-divider v-else-if="ques.divider" :key="index" inset></v-divider>
-
-          <v-list-tile v-else :key="ques.title" avatar ripple>
-            <v-list-tile-avatar>
-              <img :src="ques.avatar">
-<<<<<<< Updated upstream
-            </v-list-tile-avatar> -->
-
-
             <v-card class="mx-auto grow" color="#FEEA3D">
               <v-list-tile-content>
                 <v-list-tile-title>{{ques.userName}}</v-list-tile-title>
