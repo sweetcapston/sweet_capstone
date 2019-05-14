@@ -1,71 +1,91 @@
-<template>
-  <v-layout>
-    <v-flex xs12 sm12 md12 lg9 xl9>
-        <v-list class="v-list1" two-line>
-      
-        <template v-for="(ques) in questionList">
-              <v-list-tile :key="ques.title" avatar ripple >
-            <v-list-tile-avatar>
-              <img :src="image">
-            </v-list-tile-avatar>
-            <v-card class="mx-auto grow" color="#FEEA3D">
-              <v-list-tile-content>
-                <v-list-tile-title>{{ques.userName}}</v-list-tile-title>
-                <v-list-tile-sub-title>{{ques.question}}</v-list-tile-sub-title>
-              </v-list-tile-content>
-              <v-layout align-center justify-end>
-                <v-icon class="mr-1">mdi-heart</v-icon> 
-                <span class="subheading mr-2">0</span>
-              </v-layout>
-            </v-card>
-            <v-layout align-center justify-end>
-              <v-flex xs5 text-xs-right>{{ques.date}}</v-flex>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+    <v-layout>
+        <v-flex xs6 sm2 md6 lg9 xl9>
+            <v-layout id="chat-title">
+                <span> 질문 클래스 </span>
             </v-layout>
-            
-          </v-list-tile>
-          
-        </template>
-        
-</v-list>
-  <v-list-tile avatar >
-          <v-list-tile-avatar color="gradient white--text" large fill-dot>
-            <span>SA</span>
-          </v-list-tile-avatar>
-          <v-text-field
-            v-model="input"
-            hide-details
-            min-width="50px"
-            placeholder="Ask a question..."
-            solo
-            @keydown.enter="enrollQuestion"
-          />
-          <v-btn class="mx-0" dark @click="enrollQuestion">질문등록</v-btn>
-        </v-list-tile>
-      
-    </v-flex>
 
-    <v-flex md3 lg3 xl3 class="hidden-md-and-down">
-      <div id="search-container">
-        <span class="headline text-uppercase">참여자</span>
-      </div>
+            <v-list two-line>
+                <template v-for="(ques, index) in questionList">
+                    <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
+                    <v-divider v-else :key="index" inset></v-divider>
 
-      <div id="conversation-list">
-        <div class="conversation" v-for="(user, i) in userList" :key="i">
-          <img :src="require(`@/assets/${user.image}.png`)" height="100%">
-          <div class="title-text">{{user.userName}}</div>
-          <div class="created-date">{{user.value}}</div>
-          <!-- <div class="conversation-message">
-                        {{user.userName}}
-          </div>-->
-        </div>
-        <div id="new-message-container">
-          <a herf="#">+</a>
-        </div>
-      </div>
-    </v-flex>
-  </v-layout>
+                    <v-list-tile :key="ques.title" avatar ripple>
+                        <v-list-tile-avatar>
+                            <img :src="ques.avatar">
+                        </v-list-tile-avatar> -->
+
+                        <v-card
+                                flat
+                        >
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{ques.userName}}</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ques.question}}</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-card>
+                        <v-layout
+                                align-center
+                                justify-end
+                        >
+                            <v-flex xs5 text-xs-right>{{ques.date}}</v-flex>
+                            <v-icon class="mr-2">mdi-heart</v-icon>
+                            <span class="mr-2">0</span>
+                        </v-layout>
+
+                    </v-list-tile>
+                </template>
+
+                <template>
+                    <v-list-tile avatar>
+                        <v-list-tile-avatar
+                                color="gradient white--text"
+                                large
+                                fill-dot
+                        >
+                            <span>SA</span>
+                        </v-list-tile-avatar>
+                        <v-text-field
+                                v-model="input"
+                                hide-details
+                                placeholder="Ask a question..."
+                                solo
+                                @keydown.enter="enrollQuestion"
+                        >
+                            <template v-slot:append>
+                                <v-btn
+                                        class="mx-0"
+                                        depressed
+                                        @click="enrollQuestion"
+                                >
+                                    질문등록
+                                </v-btn>
+                            </template>
+                        </v-text-field>
+                    </v-list-tile>
+
+                </template>
+            </v-list>
+        </v-flex>
+
+
+        <v-flex md3 lg3 xl3>
+            <div>
+                <v-text-field type="text" label="클래스 접속자"/>
+            </div>
+
+            <div id="conversation-list">
+                <div class="conversation" v-for="(user, i) in userList" :key="i">
+                    <img :src="require(`@/assets/${user.image}.png`)" height="100%">
+                    <div class="title-text">{{user.userName}}</div>
+                    <div class="created-date">{{user.value}}</div>
+                    <!-- <div class="conversation-message">
+                                  {{user.userName}}
+                    </div>-->
+                </div>
+            </div>
+        </v-flex>
+    </v-layout>
 </template>
-
 <script>
 import { Stud } from "@/api";
 /*eslint-disable */
@@ -96,6 +116,7 @@ export default {
       if (res.data === "false") alert("질문 가져오기 실패");
       else {
         this.questionList = res.data.questionList;
+        //alert(res.data.questionList);
       }
     });
 
@@ -247,6 +268,7 @@ export default {
   },
   methods: {
     enrollQuestion(event) {
+      //alert("yes");
       event.preventDefault();
       let time = new Date();
       let T = time.getFullYear().toString()+'-'+(time.getMonth()+1).toString()
@@ -259,26 +281,9 @@ export default {
         _question: this.input,
         anonymous: false,
         date: T
-        //   date: time.replace(/:\d{2}\s/, (match, contents, offset) => {
-        //   return ` ${contents
-        //     .split(" ")
-        //     .map(v => v.charAt(0))
-        //     .join("")}`;
-        // })
       });
       this.input = null;
     },
   }
 }
 </script>
-
-<style>
-.gradient {
-  background: linear-gradient(100deg, #9198e5, #26c6da);
-}
-.v-list1 {
-  max-height: 650px;
-  overflow-y: scroll;
-  
-}
-</style>
