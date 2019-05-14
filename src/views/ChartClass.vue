@@ -64,7 +64,13 @@
 import {Stud} from "@/api";
 export default {
     created(){
-
+      Stud.loadQuestion(this.$store.state.currentClass.classCode).then(res => {
+        if(res.data === 'false') alert('질문 가져오기 실패');
+        else{
+          this.questionList = res.data.questionList;
+          alert(res.data.questionList);
+        }   
+      })
     },
     data(){
     return{
@@ -111,16 +117,18 @@ export default {
 #search-container,
 #conversation-list,
 #new-message-container {
-    background: darkcyan;
+    background: firebrick;
 }
-
+#conversation-list{
+    height: 590px;
+}
 #search-container {
     display: grid;
     align-items: center;
     justify-content: center;
     padding: 0 20px;
     grid-area: search-container;
-    border-radius: 10px 0 0 0;
+    border-radius: 0 0 0 0;
     box-shadow: 0 1px 3px -1px rgba(0,0,0,0.75);
     z-index: 1;
 }
