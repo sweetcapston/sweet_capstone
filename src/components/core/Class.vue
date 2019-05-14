@@ -1,12 +1,13 @@
 <template>
   <v-app>
     <core-drawer/>
-    <v-layout >
+    <v-container>
       <core-toolbar/> 
       <router-view />
-    </v-layout>
+    </v-container>
   </v-app>
 </template>
+
 <script>
 /* eslint-disable */
 import Vue from "vue";
