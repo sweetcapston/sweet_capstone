@@ -13,9 +13,6 @@ const isDev = process.env.NODE_ENV == 'development' || 'test';
 const resolve = (sub) => {
   return path.resolve(__dirname, sub)
 }
-const domains = [
-    'openclass.cf'
-];
 module.exports = {
   entry: {
     main: './src/main.js',
