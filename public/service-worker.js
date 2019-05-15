@@ -1,7 +1,8 @@
 /*eslint-disable */
 
-const BASEURL = require('../src/plugins/api.config').URL // local
+// const BASEURL = require('../src/plugins/api.config').URL // local
 //const BASEURL = "https://www.openclass.cf" //in server
+const BASEURL = "http://localhost:8080"
 self.addEventListener('install', event => {
     console.log('V1 installing…');
   

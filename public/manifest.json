@@ -15,11 +15,6 @@
         "type": "image/png"
       }
     ],
-<<<<<<< HEAD
     "start_url": "http://localhost:8080",
     "__willbeChange_in_server": "\"start_url\": \"https://openclass.cf\""
   }
-=======
-    "start_url": "http://localhost:8080"
-}
->>>>>>> 2046f82585c741a244d6a2a134e91cbc31088cfb

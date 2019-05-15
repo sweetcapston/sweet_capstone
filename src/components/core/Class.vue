@@ -11,6 +11,7 @@
 <script>
 /* eslint-disable */
 import Vue from "vue";
+import {Auth} from "@/api"
 import store from '@/store.js'
 import SocketIO from 'socket.io-client';
 import VueSocketIO from 'vue-socket.io'

@@ -123,8 +123,7 @@ export default {
   },
   sockets: {
     MESSAGE: function(data) {
-      let cursor = this;
-      let getTime = new Date();
+      console.log(data);
       this.questionList.push({
         anonymous: data.anonymous,
         userID: data.userID,
@@ -133,13 +132,19 @@ export default {
         question: data._question,
         date: data.date
       });
+      this.notification(data)
+    }
+  },
+  methods: {
+    notification(data){
+      const cursor = this;
+      let getTime = new Date();
       if (
         Notification &&
         Notification.permission === "granted" &&
         data &&
         this.$store.state.Identity == 2
       ) {
-        if (Notification.permission == "granted") {
           navigator.serviceWorker.getRegistration().then(function(reg) {
             const title = "OPEN CLASS❤️";
             var options = {
@@ -175,15 +180,12 @@ export default {
                     notifications.forEach(notification => {
                       if (notification.tag == getTime) notification.close();
                     }),
-                  2500
+                  3000
                 );
               });
           });
         }
-      }
-    }
-  },
-  methods: {
+    },
     enrollQuestion(event) {
       // alert("yes");
       event.preventDefault();
