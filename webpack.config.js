@@ -1,7 +1,8 @@
 const path = require('path')
 const fs = require('fs')
 const webpack = require('webpack')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const LiveReloadPlugin  = require('webpack-livereload-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
@@ -18,10 +19,9 @@ module.exports = {
     main: './src/main.js',
   },
   output:{
-    publicPath: '/',
     filename: 'js/[name].bundle.js',
     chunkFilename: 'js/[id].chunk.js',
-    path: resolve('./dist')
+    path: resolve('./dist'),
   },
   optimization:{
     minimizer: [
@@ -77,6 +77,12 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.(png|jpg)$/,
+        use: [
+            'file-loader'
+        ]
+      },
       {
         test: /\.(sa|sc|c)ss$/,
           use: [
@@ -185,6 +191,9 @@ else if(process.env.NODE_ENV === 'development') {
     }
   };
   module.exports.plugins = module.exports.plugins.concat([
+    new LiveReloadPlugin({
+      appendScriptTag: true
+    }),
     new HtmlWebPackPlugin({
       title: 'Development',
       showErrors: true, // 에러 발생시 메세지가 브라우저 화면에 노출 된다.
@@ -206,10 +215,12 @@ else if (process.env.NODE_ENV === 'production') {
     historyApiFallback: true,
     contentBase: path.join(__dirname, 'dist'),
     open: true,
+    disableHostCheck: true,
     overlay: true,
-    port: 8080,
+    port: 80,
     stats: {
-    normal: true
+    normal: true,
+    lazy: false
     }
   },
   module.exports.devtool = '#source-map'

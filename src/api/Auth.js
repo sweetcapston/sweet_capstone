@@ -1,25 +1,25 @@
 /* eslint-disable */
 import axios from "axios";
 import {URL} from "../plugins/api.config.js"
-const BaseUrl = `${URL}:5000`;
+const BaseUrl = `${URL}:5000/users`;
 const config = { 
                  headers: {'Content-Type' : 'application/json'},
                  withCredentials: true
                }
 export default {
   auth() {
-    return axios.get(`${BaseUrl}/users`, config);
+    return axios.get(`${BaseUrl}`, config);
   },
   login(params) {
-    return axios.post(`${BaseUrl}/users/login`, params, config);
+    return axios.post(`${BaseUrl}/login`, params, config);
   },
   logout(){
-    return axios.get(`${BaseUrl}/users/logout`, config)
+    return axios.get(`${BaseUrl}/logout`, config)
   },
   SignUp(params) {
-    return axios.post(`${BaseUrl}/users/signup`, params);
+    return axios.post(`${BaseUrl}/signup`, params);
   },
   duplicate(params) {
-    return axios.get(`${BaseUrl}/users/duplicate/${params}`);
+    return axios.get(`${BaseUrl}/duplicate/${params}`);
   }
 };

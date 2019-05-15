@@ -1,6 +1,5 @@
 /*eslint-disable */
 const BASEURL = "https://www.openclass.cf"
-
 self.addEventListener('install', event => {
     console.log('V1 installing…');
   
