@@ -17,7 +17,7 @@ import VueSocketIO from 'vue-socket.io'
 import {URL} from '@/plugins/api.config.js'
 Vue.use(new VueSocketIO({
     debug: true,  //배포시 삭제
-    connection: SocketIO(`http://${URL}:3000`), //options object is Optional
+    connection: SocketIO(`${URL}:3000`), //options object is Optional
     vuex: {
       store,
       actionPrefix: "SOCKET_",
@@ -27,6 +27,11 @@ Vue.use(new VueSocketIO({
 );
 export default {
   created() {
+    Auth.auth().then(res => {
+      if(!res.data)
+        return;
+      this.$router.push({name: 'main'});
+    }),
     this.$socket.emit('channelJoin', {
       classCode: this.$store.state.currentClass.classCode,
       userID: this.$store.state.userID

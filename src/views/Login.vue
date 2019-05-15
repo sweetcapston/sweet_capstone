@@ -224,6 +224,10 @@ export default {
   },
   name: "app",
   created() {
+    if (location.protocol != 'https:')
+    {
+       location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+    };
     Auth.auth().then(res => {
       if(!res.data)
         return;

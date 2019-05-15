@@ -1,6 +1,8 @@
 const path = require('path')
+const fs = require('fs')
 const webpack = require('webpack')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const LiveReloadPlugin  = require('webpack-livereload-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
@@ -12,16 +14,14 @@ const isDev = process.env.NODE_ENV == 'development' || 'test';
 const resolve = (sub) => {
   return path.resolve(__dirname, sub)
 }
-
 module.exports = {
   entry: {
     main: './src/main.js',
   },
   output:{
-    publicPath: '/',
     filename: 'js/[name].bundle.js',
     chunkFilename: 'js/[id].chunk.js',
-    path: resolve('./dist')
+    path: resolve('./dist'),
   },
   optimization:{
     minimizer: [
@@ -77,6 +77,12 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.(png|jpg)$/,
+        use: [
+            'file-loader'
+        ]
+      },
       {
         test: /\.(sa|sc|c)ss$/,
           use: [
@@ -174,16 +180,20 @@ if (process.env.NODE_ENV === 'test') {
 else if(process.env.NODE_ENV === 'development') {
   module.exports.devServer= {
     hot: true, // 서버에서 HMR을 켠다.
-    host: 'localhost', 
+    host: '0.0.0.0', 
     contentBase: path.join(__dirname, 'dist'),
     historyApiFallback: true,
+    disableHostCheck: true,
     compress: true,
-    port: 8080,
+    port: 80,
     stats: {
       color: true
     }
   };
   module.exports.plugins = module.exports.plugins.concat([
+    new LiveReloadPlugin({
+      appendScriptTag: true
+    }),
     new HtmlWebPackPlugin({
       title: 'Development',
       showErrors: true, // 에러 발생시 메세지가 브라우저 화면에 노출 된다.
@@ -192,7 +202,7 @@ else if(process.env.NODE_ENV === 'development') {
       favicon: "./public/favicon.ico"
     }),
     new webpack.NoEmitOnErrorsPlugin(),  //컴파일 도중 오류가 발생한 리소스들은 제외하고 작업을 진행
-    // new webpack.HotModuleReplacementPlugin(), //recompiling 없이 실행가능
+    new webpack.HotModuleReplacementPlugin(), //recompiling 없이 실행가능
   ]);
 
   module.exports.devtool = 'inline-source-map';
@@ -200,15 +210,17 @@ else if(process.env.NODE_ENV === 'development') {
 else if (process.env.NODE_ENV === 'production') {
   module.exports.devServer = {
     hot: true, 
-    host: '127.0.0.1', 
+    host: '0.0.0.0', 
     compress: true,
     historyApiFallback: true,
     contentBase: path.join(__dirname, 'dist'),
     open: true,
+    disableHostCheck: true,
     overlay: true,
-    port: 8080,
+    port: 80,
     stats: {
-    normal: true
+    normal: true,
+    lazy: false
     }
   },
   module.exports.devtool = '#source-map'
