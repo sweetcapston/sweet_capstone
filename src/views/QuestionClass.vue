@@ -1,5 +1,5 @@
 <template>
-  <v-layout row wrap fill-height>
+  <v-layout row fill-height>
     <v-flex xs12 sm12 md12 lg9 xl9>
       <div id="chat-container">
         <div id="chat-title">
@@ -55,7 +55,7 @@
         </div>
       </div>
     </v-flex>
-    <v-flex class="hidden-md-and-down">
+    <v-flex xs6 sm6 md6 lg3 xl3 class="hidden-md-and-down">
       <div id="search-container">
         <span>클래스 접속자</span>
       </div>
@@ -75,7 +75,7 @@
 import { Stud } from "@/api";
 /* eslint-disable */
 export default {
-  created() {
+  beforeCreate() {
     Stud.loadQuestion(this.$store.state.currentClass.classCode).then(res => {
       if (res.data === "false") alert("질문 가져오기 실패");
       else {
@@ -83,6 +83,8 @@ export default {
         console.log(res.data.questionList);
       }
     });
+  },
+  created() {
     if ("serviceWorker" in navigator && "PushManager" in window) {
       navigator.serviceWorker
         .register("../../service-worker.js")
@@ -93,9 +95,12 @@ export default {
           console.error("Service Worker Error", error);
         });
     } else {
-      console.warn("Push messaging is not supported");
-      pushButton.textContent = "Push Not Supported";
+      // console.warn("Push messaging is not supported");
+      // pushButton.textContent = "Push Not Supported";
     }
+  },
+  updated() {
+    document.querySelector("#chat-message-list").scrollTop = document.querySelector("#chat-message-list").scrollHeight
   },
   data() {
     return {
@@ -123,7 +128,7 @@ export default {
   },
   sockets: {
     MESSAGE: function(data) {
-      console.log(data);
+      console.log(data)
       this.questionList.push({
         anonymous: data.anonymous,
         userID: data.userID,
@@ -190,13 +195,15 @@ export default {
       // alert("yes");
       event.preventDefault();
       const time = new Date();
+      let T = time.getFullYear().toString()+'-'+(time.getMonth()+1).toString()
+            +'-'+time.getDate().toString()+" "+time.getHours().toString()+":"+time.getMinutes().toString();
       this.$socket.emit("chat", {
         classCode: this.$store.state.currentClass.classCode,
         userID: this.$store.state.userID,
         userName: this.$store.state.userName,
         _question: this.input,
         anonymous: false,
-        date: time
+        date: T
         //   date: time.replace(/:\d{2}\s/, (match, contents, offset) => {
         //   return ` ${contents
         //     .split(" ")
@@ -237,10 +244,10 @@ export default {
     "chat-form new-message-container" 2.62fr
     / 12fr 2px;
   min-width: 11fr;
-  height: 87vh;
+  height: 85vh;
   background: #fff;
   border-radius: 10px 0 0px 10px ;
-  border: 0.5px solid rgb(192, 189, 189);
+  border: 0.5px solid rgb(192, 189, 189); 
 }
 #chat-title {
   display: grid;
@@ -331,5 +338,22 @@ export default {
   border-radius: 0 0 10px 0;
   height: 67px;
   padding: 0 15px;
+}
+
+#chat-message-list::-webkit-scrollbar{
+  width:5px;
+}
+#chat-message-list::-webkit-scrollbar-track {
+  background:0;
+}
+
+#conversation-list::-webkit-scrollbar{
+  width:5px;
+}
+#conversation-list::-webkit-scrollbar-track {
+  background:0;
+}
+body{
+  height:95%;
 }
 </style>

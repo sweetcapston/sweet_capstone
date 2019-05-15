@@ -30,8 +30,7 @@ export default {
   created() {
     Auth.auth().then(res => {
       if(!res.data)
-        return;
-      this.$router.push({name: 'main'});
+        this.$router.push({name: 'main'});
     }),
     this.$socket.emit('channelJoin', {
       classCode: this.$store.state.currentClass.classCode,
@@ -60,7 +59,11 @@ export default {
 </script>
 
 <style>
+.v-content{
+  padding-top:0px !important;
+}
 .container {
+  margin-top:50px;
   max-width: 1275px;
 }
 </style>
