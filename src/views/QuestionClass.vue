@@ -8,30 +8,32 @@
 
         <div id="chat-message-list">
           <template v-for="(ques, index) in questionList">
-            <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
-            <v-divider v-else :key="index" inset></v-divider>
+            <div id="message" :key="ques.index">
+              <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
+              <v-divider v-else :key="index" inset></v-divider>
 
-            <v-list-tile :key="ques.title" avatar ripple>
-              <v-list-tile-avatar>
-                <img :src="image">
-              </v-list-tile-avatar>
+              <v-list-tile :key="ques.title" avatar ripple>
+                <v-list-tile-avatar>
+                  <img :src="image">
+                </v-list-tile-avatar>
 
-              <v-card flat>
-                <v-list-tile-content class="apply-size">
-                  <v-list-tile-title>{{ques.userName}}</v-list-tile-title>
-                  <v-list-tile-sub-title >
-                    {{ques.question}}
-                    &nbsp;
-                    <v-icon small>mdi-heart</v-icon>
-                    <span>0</span>
-                  </v-list-tile-sub-title>
-                  
-                </v-list-tile-content>
-              </v-card>
-              <v-layout align-center justify-end>
-              <v-flex text-xs-right>{{ques.date}}</v-flex>
-            </v-layout>
-            </v-list-tile>
+                <v-card flat>
+                  <v-list-tile-content class="apply-size">
+                    <v-list-tile-title>{{ques.userName}}</v-list-tile-title>
+                    <v-list-tile-sub-title >
+                      {{ques.question}}
+                      &nbsp;
+                      <v-icon small>mdi-heart</v-icon>
+                      <span>0</span>
+                    </v-list-tile-sub-title>
+                    
+                  </v-list-tile-content>
+                </v-card>
+                <v-layout align-center justify-end>
+                <v-flex text-xs-right>{{ques.date}}</v-flex>
+              </v-layout>
+              </v-list-tile>
+            </div>
           </template>
         </div>
 
@@ -55,7 +57,7 @@
         </div>
       </div>
     </v-flex>
-    <v-flex xs6 sm6 md6 lg3 xl3 class="hidden-md-and-down">
+    <v-flex xs6 sm6 md6 lg3 xl3 id="list-container" class="hidden-md-and-down">
       <div id="search-container">
         <span>클래스 접속자</span>
       </div>
@@ -244,10 +246,10 @@ export default {
     "chat-form new-message-container" 2.62fr
     / 12fr 2px;
   min-width: 11fr;
-  height: 85vh;
+  height: 87vh;
   background: #fff;
-  border-radius: 10px 0 0px 10px ;
-  border: 0.5px solid rgb(192, 189, 189); 
+  border-radius: 10px 0 0 10px ;
+  border: 0.5px solid rgb(192, 189, 189);
 }
 #chat-title {
   display: grid;
@@ -270,7 +272,6 @@ export default {
   margin-top: 3px;
   overflow-y: scroll;
 }
-
 #chat-form {
   display: grid;
   grid-area: chat-form;
@@ -280,13 +281,22 @@ export default {
   border-radius: 0 0 0 10px;
   border-top: 1px solid rgba(0, 0, 0, 0.25);
 }
+#list-container {
+  display: grid;
+  grid:
+    "search-container" 2fr
+    "conversation-list" 23fr
+    "new-message-container" 2.62fr
+    ;
+  height: 87vh;
+  border-radius: 0 10px 10px 0 ;
+}
 #search-container {
   display: grid;
   align-items: center;
   justify-content: center;
   background: rgb(42, 139, 83);
   padding: 0 20px;
-  height: 51px;
   border-radius: 0 10px 0 0;
   box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.75);
   z-index: 1;
@@ -301,7 +311,6 @@ export default {
   background-size: 20px 20px;
 }
 #conversation-list {
-  height: 70.1%;
   background: rgb(44, 156, 91);
   overflow-y: scroll;
 }
@@ -327,7 +336,6 @@ export default {
   width: 40px;
   border-radius: 100%;
 }
-
 #new-message-container {
   display: grid;
   grid: 40px / 40px;
@@ -336,10 +344,11 @@ export default {
   background: rgb(42, 139, 83);
   border-top: 1px solid #ddd;
   border-radius: 0 0 10px 0;
-  height: 67px;
   padding: 0 15px;
 }
-
+#message{
+  padding: 10px 10px 12px 15px;
+}
 #chat-message-list::-webkit-scrollbar{
   width:5px;
 }
