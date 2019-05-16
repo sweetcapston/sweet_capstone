@@ -1,5 +1,5 @@
 <template>
-  <v-layout row wrap fill-height>
+  <v-layout row fill-height>
     <v-flex xs12 sm12 md12 lg9 xl9>
       <div id="chat-container">
         <div id="chat-title">
@@ -8,13 +8,14 @@
 
         <div id="chat-message-list">
           <template v-for="(ques, index) in questionList">
-            <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
-            <v-divider v-else :key="index" inset></v-divider>
+            <div id="message" :key="ques.index">
+              <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
+              <v-divider v-else :key="index" inset></v-divider>
 
-            <v-list-tile :key="ques.title" avatar ripple>
-              <v-list-tile-avatar>
-                <img :src="image">
-              </v-list-tile-avatar>
+              <v-list-tile :key="ques.title" avatar ripple>
+                <v-list-tile-avatar>
+                  <img :src="image">
+                </v-list-tile-avatar>
 
               <v-card flat>
                 <v-list-tile-content class="apply-size">
@@ -31,6 +32,7 @@
                 <v-flex text-xs-right>{{ques.date}}</v-flex>
               </v-layout>
             </v-list-tile>
+          </div>
           </template>
         </div>
 
@@ -53,7 +55,7 @@
         </div>
       </div>
     </v-flex>
-    <v-flex class="hidden-md-and-down">
+    <v-flex xs6 sm6 md6 lg3 xl3 id="list-container" class="hidden-md-and-down">
       <div id="search-container">
         <span>클래스 접속자</span>
       </div>
@@ -74,7 +76,7 @@ import { Stud } from "@/api";
 import { continueStatement } from "@babel/types";
 /* eslint-disable */
 export default {
-  created() {
+  beforeCreate() {
     Stud.loadQuestion(this.$store.state.currentClass.classCode).then(res => {
       if (res.data === "false") alert("질문 가져오기 실패");
       else {
@@ -83,6 +85,8 @@ export default {
         console.log(res.data.questionList);
       }
     });
+  },
+  created() {
     if ("serviceWorker" in navigator && "PushManager" in window) {
       navigator.serviceWorker
         .register("../../service-worker.js")
@@ -93,15 +97,12 @@ export default {
           console.error("Service Worker Error", error);
         });
     } else {
-      console.warn("Push messaging is not supported");
-      pushButton.textContent = "Push Not Supported";
+      // console.warn("Push messaging is not supported");
+      // pushButton.textContent = "Push Not Supported";
     }
   },
-  // 채팅 스크롤 맨아래 유지.
   updated() {
-    document.getElementById(
-      "chat-message-list"
-    ).scrollTop = document.getElementById("chat-message-list").scrollHeight;
+    document.querySelector("#chat-message-list").scrollTop = document.querySelector("#chat-message-list").scrollHeight
   },
   data() {
     return {
@@ -134,8 +135,7 @@ export default {
     //   });
     // },
     MESSAGE: function(data) {
-      let cursor = this;
-      let getTime = new Date();
+      console.log(data)
       this.questionList.push({
         anonymous: data.anonymous,
         userID: data.userID,
@@ -144,13 +144,19 @@ export default {
         question: data._question,
         date: data.date
       });
+      this.notification(data)
+    }
+  },
+  methods: {
+    notification(data){
+      const cursor = this;
+      let getTime = new Date();
       if (
         Notification &&
         Notification.permission === "granted" &&
         data &&
         this.$store.state.Identity == 2
       ) {
-        if (Notification.permission == "granted") {
           navigator.serviceWorker.getRegistration().then(function(reg) {
             const title = "OPEN CLASS❤️";
             var options = {
@@ -186,38 +192,34 @@ export default {
                     notifications.forEach(notification => {
                       if (notification.tag == getTime) notification.close();
                     }),
-                  2500
+                  3000
                 );
               });
           });
         }
-      }
-    }
-  },
-  methods: {
+    },
     enrollQuestion(event) {
       // alert("yes");
       event.preventDefault();
       const time = new Date();
+      let T = time.getFullYear().toString()+'-'+(time.getMonth()+1).toString()
+            +'-'+time.getDate().toString()+" "+time.getHours().toString()+":"+time.getMinutes().toString();
+      let moment = require('moment');
+      moment.locale('ko');
       this.$socket.emit("chat", {
         classCode: this.$store.state.currentClass.classCode,
         userID: this.$store.state.userID,
         userName: this.$store.state.userName,
         _question: this.content,
         anonymous: false,
-        date: time
-        //   date: time.replace(/:\d{2}\s/, (match, contents, offset) => {
-        //   return ` ${contents
-        //     .split(" ")
-        //     .map(v => v.charAt(0))
-        //     .join("")}`;
-        // })
+        date: moment().format('LLL')
       });
       this.content = null;
     }
   }
 };
 </script>
+
 
 <style>
 .user-identity {

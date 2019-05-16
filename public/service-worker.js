@@ -1,7 +1,8 @@
 /*eslint-disable */
 
-const BASEURL = require('../src/plugins/api.config')
-
+// const BASEURL = require('../src/plugins/api.config').URL // local
+//const BASEURL = "https://www.openclass.cf" //in server
+const BASEURL = "http://localhost:8080"
 self.addEventListener('install', event => {
     console.log('V1 installing…');
   
@@ -18,7 +19,7 @@ self.addEventListener('notificationclick', function(event) {
     // Normal click
     if (!event.action) {
         event.notification.close();
-        var urlToOpen = new URL(`http://${BASEURL.URL}:8080/class/${event.notification.data.classCode}/question`, self.location.origin).href;
+        var urlToOpen = new URL(`${BASEURL}/class/${event.notification.data.classCode}/question`, self.location.origin).href;
 
         var promiseChain = clients.matchAll({ 
             type: 'window',
@@ -46,7 +47,7 @@ self.addEventListener('notificationclick', function(event) {
     }
     switch(event.action){
         case 'new-action':
-            let  promiseChain = clients.openWindow(`http://${BASEURL.URL}:8080/class/${event.notification.data.classCode}/question`);
+            let  promiseChain = clients.openWindow(`${BASEURL}/class/${event.notification.data.classCode}/question`);
             event.waitUntil(promiseChain);
             break;
         case 'off-action':

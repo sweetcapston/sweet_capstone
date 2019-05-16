@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "cross-env NODE_ENV=production webpack --progress --optimize-minimize",
     "lint": "vue-cli-service lint",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --open",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server",
     "test": "jest --verbose"
   },
   "dependencies": {
@@ -17,6 +17,7 @@
     "axios": "^0.18.0",
     "core-js": "^2.6.5",
     "mocha-webpack": "^2.0.0-beta.0",
+    "moment": "^2.24.0",
     "moxios": "^0.4.0",
     "semantic-ui-vue": "^0.8.1",
     "socket.io-client": "^2.2.0",
@@ -29,7 +30,8 @@
     "vuetify": "^1.5.7",
     "vuex": "^3.1.0",
     "vuex-persistedstate": "^2.5.4",
-    "vuex-router-sync": "^5.0.0"
+    "vuex-router-sync": "^5.0.0",
+    "webpack-livereload-plugin": "^2.2.0"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.4.4",

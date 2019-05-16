@@ -224,6 +224,11 @@ export default {
   },
   name: "app",
   created() {
+    //서버에서 활성화
+    // if (location.protocol != 'https:')
+    // {
+    //    location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+    // };
     Auth.auth().then(res => {
       if(!res.data)
         return;
