@@ -56,5 +56,6 @@ export default {
 <style>
 .container {
   max-width: inherit;
+  height: -webkit-fill-available;
 }
 </style>

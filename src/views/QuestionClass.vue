@@ -19,36 +19,34 @@
               <v-card flat>
                 <v-list-tile-content class="apply-size">
                   <v-list-tile-title>{{ques.userName}}</v-list-tile-title>
-                  <v-list-tile-sub-title >
+                  <v-list-tile-sub-title>
                     {{ques.question}}
                     &nbsp;
                     <v-icon small>mdi-heart</v-icon>
                     <span>0</span>
                   </v-list-tile-sub-title>
-                  
                 </v-list-tile-content>
               </v-card>
               <v-layout align-center justify-end>
-              <v-flex text-xs-right>{{ques.date}}</v-flex>
-            </v-layout>
+                <v-flex text-xs-right>{{ques.date}}</v-flex>
+              </v-layout>
             </v-list-tile>
           </template>
         </div>
 
         <div id="chat-form">
-          <template >
-            <v-list-tile avatar >
+          <template>
+            <v-list-tile avatar>
               <v-list-tile-avatar color="gradient white--text" large fill-dot>
                 <img :src="image">
               </v-list-tile-avatar>
-              <v-text-field 
+              <v-text-field
                 v-model="input"
                 hide-details
                 placeholder="Ask a question..."
                 solo
                 @keydown.enter="enrollQuestion"
-              />
-              &nbsp;&nbsp;&nbsp;
+              />&nbsp;&nbsp;&nbsp;
               <v-btn dark class="mx-0" depressed @click="enrollQuestion">질문등록</v-btn>
             </v-list-tile>
           </template>
@@ -73,6 +71,7 @@
 
 <script>
 import { Stud } from "@/api";
+import { continueStatement } from '@babel/types';
 /* eslint-disable */
 export default {
   created() {
@@ -104,7 +103,7 @@ export default {
         "https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg",
       test: "https://picsum.photos/250/300?image=660",
       userList: [
-        { userName: "윤대균", value: "교수", image: "professor"},
+        { userName: "윤대균", value: "교수", image: "professor" },
         { userName: "임총배", value: "학생", image: "student" },
         { userName: "박종환", value: "학생", image: "student" },
         { userName: "이동진", value: "학생", image: "student" },
@@ -114,7 +113,7 @@ export default {
         { userName: "박종환", value: "학생", image: "student" },
         { userName: "이동진", value: "학생", image: "student" },
         { userName: "박종환", value: "학생", image: "student" },
-        { userName: "이동진", value: "학생", image: "student" },
+        { userName: "이동진", value: "학생", image: "student" }
       ],
       input: null,
       nonce: 0,
@@ -235,9 +234,9 @@ export default {
     "chat-form new-message-container" 2.62fr
     / 12fr 2px;
   width: 100%;
-  height: 67.5%;
+  height: 88.5%;
   background: #fff;
-  border-radius: 10px 0 0px 10px ;
+  border-radius: 10px 0 0px 10px;
   border: 0.5px solid rgb(192, 189, 189);
 }
 #chat-title {
@@ -250,7 +249,7 @@ export default {
   font-weight: bold;
   font-size: 1.6rem;
   border-radius: 10px 0px 0px 0px;
-  box-shadow: 1px 1px 3px -1px  black;
+  box-shadow: 1px 1px 3px -1px black;
   padding: 0 30px;
 }
 #chat-message-list {
@@ -277,7 +276,7 @@ export default {
   justify-content: center;
   background: rgb(42, 139, 83);
   padding: 0 20px;
-  height: 5.2%;
+  height: 6.6%;
   border-radius: 0 10px 0 0;
   box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.75);
   z-index: 1;
@@ -292,7 +291,7 @@ export default {
   background-size: 20px 20px;
 }
 #conversation-list {
-  height: 56%;
+  height: 76.6%;
   background: rgb(44, 156, 91);
   overflow-y: scroll;
 }
@@ -327,7 +326,7 @@ export default {
   background: rgb(42, 139, 83);
   border-top: 1px solid #ddd;
   border-radius: 0 0 10px 0;
-  height: 6.5%;
+  height: 5.3%;
   padding: 0 15px;
 }
 </style>
