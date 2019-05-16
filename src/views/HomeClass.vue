@@ -7,7 +7,7 @@
     <span>
       <v-btn color="primary"
         @click="addClass()"
-        v-if="this.$store.getters.getIdentity == 1 && (this.$store.state.checkApply == -1)" >수광하기</v-btn> <!-- 수광하지않고있는 학생에게만 보여지도록.. 학생의 수광리스트에서 -->
+        v-if="this.$store.getters.getIdentity == 1 && (this.$store.state.checkApply == -1)" >수강하기</v-btn> <!-- 수강하지않고있는 학생에게만 보여지도록.. 학생의 수강리스트에서 -->
       <v-btn color="error" @click="outClass" >클래스 나가기</v-btn>
     </span>
   </v-app>
@@ -24,7 +24,7 @@ export default {
   methods: {
     addClass() {
       Stud.classAdd(this.$store.state.currentClass.classCode).then(res => {
-        if(res.data === 'false') alert('클래스 수광 실패');
+        if(res.data === 'false') alert('클래스 수강 실패');
         else{
           // currentClass객체로 하면 오류남.
           this.$store.commit("addClassList", {
