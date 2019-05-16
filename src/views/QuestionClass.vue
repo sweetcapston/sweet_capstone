@@ -199,19 +199,15 @@ export default {
       const time = new Date();
       let T = time.getFullYear().toString()+'-'+(time.getMonth()+1).toString()
             +'-'+time.getDate().toString()+" "+time.getHours().toString()+":"+time.getMinutes().toString();
+      let moment = require('moment');
+      moment.locale('ko');
       this.$socket.emit("chat", {
         classCode: this.$store.state.currentClass.classCode,
         userID: this.$store.state.userID,
         userName: this.$store.state.userName,
         _question: this.input,
         anonymous: false,
-        date: T
-        //   date: time.replace(/:\d{2}\s/, (match, contents, offset) => {
-        //   return ` ${contents
-        //     .split(" ")
-        //     .map(v => v.charAt(0))
-        //     .join("")}`;
-        // })
+        date: moment().format('LLL')
       });
       this.input = null;
     }
