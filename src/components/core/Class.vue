@@ -1,8 +1,8 @@
 <template>
   <v-app>
     <core-drawer/>
+    <core-toolbar/> 
     <v-container>
-      <core-toolbar/> 
       <router-view />
     </v-container>
   </v-app>
@@ -30,7 +30,7 @@ export default {
   created() {
     Auth.auth().then(res => {
       if(!res.data)
-        this.$router.push({name: 'main'});
+        this.$router.push({name: 'login'});
     }),
     this.$socket.emit('channelJoin', {
       classCode: this.$store.state.currentClass.classCode,
@@ -65,6 +65,6 @@ export default {
 .container {
   max-width: inherit;
   height: -webkit-fill-available;
-  margin-top:50px;
+  margin-top: 35px;
 }
 </style>

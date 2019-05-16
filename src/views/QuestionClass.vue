@@ -7,34 +7,36 @@
         </div>
 
         <div id="chat-message-list">
-          <template v-for="(ques, index) in questionList">
-            <div id="message" :key="ques.index">
+          <template v-for="(ques) in questionList">
+            <v-flex id="message" :key="ques.index" class="margin">
               <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
-              <v-divider v-else :key="index" inset></v-divider>
 
-              <v-list-tile :key="ques.title" avatar ripple>
+              <v-divider/>
+              <v-list-tile id="auto_height" :key="ques.title">
                 <v-list-tile-avatar>
                   <img :src="image">
                 </v-list-tile-avatar>
 
-              <v-card flat>
-                <v-list-tile-content class="apply-size">
-                  <v-list-tile-title>{{ques.userName}}</v-list-tile-title>
-                  <v-list-tile-sub-title>
+                <v-list-tile-content>
+                  <v-layout  class="hidden-sm-and-down">
+                    <v-flex row>{{ques.userName}}</v-flex> 
+                    <div>{{ques.date}}</div> 
+                  </v-layout>
+                  <span>
                     {{ques.question}}
-                    &nbsp;
-                    <v-icon small>mdi-heart</v-icon>
-                    <span>0</span>
-                  </v-list-tile-sub-title>
+                  </span>
+                  
                 </v-list-tile-content>
-              </v-card>
-              <v-layout align-center justify-end>
-                <v-flex text-xs-right>{{ques.date}}</v-flex>
-              </v-layout>
             </v-list-tile>
-          </div>
+            
+
+            </v-flex>
           </template>
         </div>
+
+
+
+
 
         <div id="chat-form">
           <template>
@@ -55,6 +57,12 @@
         </div>
       </div>
     </v-flex>
+
+
+
+
+
+
     <v-flex xs6 sm6 md6 lg3 xl3 id="list-container" class="hidden-md-and-down">
       <div id="search-container">
         <span>클래스 접속자</span>
@@ -222,6 +230,10 @@ export default {
 
 
 <style>
+#auto_height{
+  height: auto;
+}
+
 .user-identity {
   color: #ddd;
   font-size: 1rem;
@@ -239,6 +251,9 @@ export default {
 }
 .apply-size {
   min-width: 10px;
+  height: 120px;
+  background:lawngreen;
+  white-space: normal;
 }
 #chat-container {
   display: grid;
@@ -305,7 +320,7 @@ export default {
   background-size: 20px 20px;
 }
 #conversation-list {
-  height: 76.6%;
+  height: 74.6%;
   background: rgb(44, 156, 91);
   overflow-y: scroll;
 }
@@ -340,7 +355,7 @@ export default {
   background: rgb(42, 139, 83);
   border-top: 1px solid #ddd;
   border-radius: 0 0 10px 0;
-  height: 5.3%;
+  height: 7.3%;
   padding: 0 15px;
 }
 </style>
