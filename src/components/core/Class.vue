@@ -55,6 +55,6 @@ export default {
 
 <style>
 .container {
-  max-width: 1275px;
+  max-width: inherit;
 }
 </style>

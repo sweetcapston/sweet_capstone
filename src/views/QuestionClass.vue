@@ -234,8 +234,8 @@ export default {
     "chat-message-list conversation-list" 23fr
     "chat-form new-message-container" 2.62fr
     / 12fr 2px;
-  min-width: 11fr;
-  height: 87vh;
+  width: 100%;
+  height: 67.5%;
   background: #fff;
   border-radius: 10px 0 0px 10px ;
   border: 0.5px solid rgb(192, 189, 189);
@@ -277,7 +277,7 @@ export default {
   justify-content: center;
   background: rgb(42, 139, 83);
   padding: 0 20px;
-  height: 51px;
+  height: 5.2%;
   border-radius: 0 10px 0 0;
   box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.75);
   z-index: 1;
@@ -292,7 +292,7 @@ export default {
   background-size: 20px 20px;
 }
 #conversation-list {
-  height: 70.1%;
+  height: 56%;
   background: rgb(44, 156, 91);
   overflow-y: scroll;
 }
@@ -327,7 +327,7 @@ export default {
   background: rgb(42, 139, 83);
   border-top: 1px solid #ddd;
   border-radius: 0 0 10px 0;
-  height: 67px;
+  height: 6.5%;
   padding: 0 15px;
 }
 </style>

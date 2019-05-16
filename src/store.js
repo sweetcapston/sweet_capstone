@@ -18,32 +18,6 @@ export default new Vuex.Store({
       profName: '', 
     },
     classList: [], // 사용자의 클래스 리스트
-    links: [ // 메인페이지 관련
-      {
-        to: '/class/',
-        to2: '/home',
-        icon: 'mdi-home',
-        text: '홈'
-      },
-      {
-        to: '/class/',
-        to2: '/question',
-        icon: 'mdi-comment-question-outline',
-        text: '질문 클래스'
-      },
-      {
-        to: '/class/',
-        to2: '/survey',
-        icon: 'mdi-clipboard-text-outline',
-        text: '설문 클래스' 
-      },
-      {
-        to: '/class/',
-        to2: '/chart',
-        icon: 'mdi-chart-bar',
-        text: '통계'
-      }
-    ],
   },
   getters: { // 반복사용되는 값을 재사용하기 위해 사용. computed와 같은 기능
     getIdentity: function(state){
