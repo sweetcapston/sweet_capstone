@@ -41,7 +41,7 @@
                 <img :src="image">
               </v-list-tile-avatar>
               <v-text-field
-                v-model="input"
+                v-model="content"
                 hide-details
                 placeholder="Ask a question..."
                 solo
@@ -71,7 +71,7 @@
 
 <script>
 import { Stud } from "@/api";
-import { continueStatement } from '@babel/types';
+import { continueStatement } from "@babel/types";
 /* eslint-disable */
 export default {
   created() {
@@ -79,6 +79,7 @@ export default {
       if (res.data === "false") alert("질문 가져오기 실패");
       else {
         this.questionList = res.data.questionList;
+
         console.log(res.data.questionList);
       }
     });
@@ -96,12 +97,17 @@ export default {
       pushButton.textContent = "Push Not Supported";
     }
   },
+  // 채팅 스크롤 맨아래 유지.
+  updated() {
+    document.getElementById(
+      "chat-message-list"
+    ).scrollTop = document.getElementById("chat-message-list").scrollHeight;
+  },
   data() {
     return {
       events: [],
       image:
         "https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg",
-      test: "https://picsum.photos/250/300?image=660",
       userList: [
         { userName: "윤대균", value: "교수", image: "professor" },
         { userName: "임총배", value: "학생", image: "student" },
@@ -115,12 +121,18 @@ export default {
         { userName: "박종환", value: "학생", image: "student" },
         { userName: "이동진", value: "학생", image: "student" }
       ],
-      input: null,
-      nonce: 0,
+      content: null,
       questionList: []
     };
   },
   sockets: {
+    // USER: function(data) {
+    //   this.userList.push({
+    //     userID: data.userID,
+    //     userName: data.userName,
+    //     studentId: data.studentId
+    //   });
+    // },
     MESSAGE: function(data) {
       let cursor = this;
       let getTime = new Date();
@@ -191,7 +203,7 @@ export default {
         classCode: this.$store.state.currentClass.classCode,
         userID: this.$store.state.userID,
         userName: this.$store.state.userName,
-        _question: this.input,
+        _question: this.content,
         anonymous: false,
         date: time
         //   date: time.replace(/:\d{2}\s/, (match, contents, offset) => {
@@ -201,7 +213,7 @@ export default {
         //     .join("")}`;
         // })
       });
-      this.input = null;
+      this.content = null;
     }
   }
 };
