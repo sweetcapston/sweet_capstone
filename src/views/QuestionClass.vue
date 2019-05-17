@@ -20,7 +20,8 @@
                 <v-list-tile-content>
                   <v-layout id="full-width">
                     <v-flex xs9>
-                      <v-card flat>{{ques.userName}}</v-card>
+                      <v-card v-if="!ques.anonymous" flat>{{ques.userName}}</v-card>
+                      <v-card v-else flat>익명</v-card>
                     </v-flex>
                     <v-flex xs3 class="hidden-sm-and-down">
                       <v-card flat>{{ques.date}}</v-card>
@@ -39,6 +40,7 @@
               <v-list-tile-avatar color="gradient white--text" large fill-dot>
                 <img :src="image">
               </v-list-tile-avatar>
+              
               <v-text-field
                 v-model="content"
                 hide-details
@@ -46,6 +48,7 @@
                 solo
                 @keydown.enter="enrollQuestion"
               />&nbsp;&nbsp;&nbsp;
+              <input checked=false type="checkbox" v-model="anonymous"><label for="checkbox">익명</label>
               <v-btn dark class="mx-0" depressed @click="enrollQuestion">질문등록</v-btn>
             </v-list-tile>
           </template>
@@ -103,7 +106,8 @@ export default {
       nonce: 0,
       questionList: [],
       content:null,
-      socket: io(`${URL}:3000/question`)
+      socket: io(`${URL}:3000/question`),
+      anonymous:'false'
     };
   },
   created() {
@@ -231,7 +235,7 @@ export default {
         userID: this.$store.state.userID,
         userName: this.$store.state.userName,
         question: this.content,
-        anonymous: false,
+        anonymous: this.anonymous,
         date: moment().format("LLL")
       });
       this.content = null;
