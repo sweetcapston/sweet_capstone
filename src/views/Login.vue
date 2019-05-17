@@ -252,6 +252,9 @@ export default {
   body::-webkit-scrollbar { 
     display: none; 
   }
+  body {
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  } 
   .signup.ui.positive.button {
     background-color: #26c6da
   }

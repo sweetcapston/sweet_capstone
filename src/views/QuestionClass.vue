@@ -70,19 +70,41 @@
 </template>
 
 <script>
-import { Stud } from "@/api";
-import { continueStatement } from "@babel/types";
 /* eslint-disable */
+import { continueStatement } from "@babel/types";
+import { Stud } from "@/api";
+import Vue from "vue";
+import store from '@/store.js'
+import {URL} from '@/plugins/api.config.js'
+import io from 'socket.io-client';
+
 export default {
   beforeCreate() {
     Stud.loadQuestion(this.$store.state.currentClass.classCode).then(res => {
       if (res.data === "false") alert("질문 가져오기 실패");
       else {
         this.questionList = res.data.questionList;
-
-        console.log(res.data.questionList);
+        this.socket.emit('channelJoin', {
+          classCode: this.$store.state.currentClass.classCode,
+          Identity: this.$store.state.Identity,
+          userID: this.$store.state.userID,
+          userName: this.$store.state.userName
+        });
       }
     });
+  },
+  data() {
+    return {
+      events: [],
+      image:
+        "https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg",
+      userList: [
+      ],
+      nonce: 0,
+      questionList: [],
+      content:null,
+      socket: io(`${URL}:3000/question`)
+    };
   },
   created() {
     if ("serviceWorker" in navigator && "PushManager" in window) {
@@ -94,73 +116,82 @@ export default {
         .catch(function(error) {
           console.error("Service Worker Error", error);
         });
-    } else {
-      // console.warn("Push messaging is not supported");
-      // pushButton.textContent = "Push Not Supported";
     }
-  },
-  updated() {
-    document.querySelector(
-      "#chat-message-list"
-    ).scrollTop = document.querySelector("#chat-message-list").scrollHeight;
-  },
-  data() {
-    return {
-      events: [],
-      image:
-        "https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg",
-      userList: [
-        { userName: "윤대균", value: "교수", image: "professor" },
-        { userName: "임총배", value: "학생", image: "student" },
-        { userName: "박종환", value: "학생", image: "student" },
-        { userName: "이동진", value: "학생", image: "student" },
-        { userName: "이송아", value: "학생", image: "student" },
-        { userName: "박종환", value: "학생", image: "student" },
-        { userName: "이동진", value: "학생", image: "student" },
-        { userName: "박종환", value: "학생", image: "student" },
-        { userName: "이동진", value: "학생", image: "student" },
-        { userName: "박종환", value: "학생", image: "student" },
-        { userName: "이동진", value: "학생", image: "student" }
-      ],
-      content: null,
-      questionList: []
-    };
-  },
-  sockets: {
-    // USER: function(data) {
-    //   this.userList.push({
-    //     userID: data.userID,
-    //     userName: data.userName,
-    //     studentId: data.studentId
-    //   });
-    // },
-    MESSAGE: function(data) {
-      console.log(data);
-      this.questionList.push({
+    this.socket.on("connect", () => {
+      console.log('socket connected')
+    });
+    
+    this.socket.on("joinSuccess", (data)=>{
+      const {Identity, userName, userID} = data;
+      if(Identity == 1)
+        this.userList.push({userName: userName, value:"학생", ID:userID, image:"student"})
+      else
+        this.userList.unshift({userName: userName, value:"교수", ID:userID, image:"professor"})
+    });
+    this.socket.on("getUsers", (data) => {
+      const users = data;
+      for(var i = 0; i < users.length - 1; i++){
+        const user = users[i];
+        if(user.Identity == 1){
+          this.userList.push({userName: user.userName, value:"학생", ID:user.userID, image:"student"})
+        }else{
+          this.userList.unshift({userName: user.userName, value:"교수", ID:user.userID, image:"professor"})
+        }
+      }
+    });
+    this.socket.on("MESSAGE", (data)=>{
+        this.questionList.push({
         anonymous: data.anonymous,
         userID: data.userID,
         userName: data.userName,
         classCode: data.classCode,
-        question: data._question,
+        question: data.question,
         date: data.date
       });
-      this.notification(data);
-    }
+      this.notification(data)
+    });
+  },
+  updated() {
+    document.querySelector("#chat-message-list").scrollTop = document.querySelector("#chat-message-list").scrollHeight
+  },
+  
+  beforeRouteLeave (to, from, next) {
+    this.socket.emit("diconnect");
+    this.socket.disconnect();
+    next()
+  },
+  mounted() {
+    window.setTimeout(()=>{
+      this.socket.emit("getUsers", {
+        socketID: this.socket.id,
+        classCode: this.$store.state.currentClass.classCode
+      })
+    },900);
+    this.socket.on("disconnect", (data)=>{
+      const {Identity, userName, userID} = data;
+      let user;
+      for (let idx in this.userList){
+        if(this.userList[idx].ID == userID) {
+          this.userList.splice(idx, 1);
+          break;
+        }
+      }
+    })
   },
   methods: {
-    notification(data) {
-      const cursor = this;
-      let getTime = new Date();
-      if (
-        Notification &&
-        Notification.permission === "granted" &&
-        data &&
-        this.$store.state.Identity == 2
-      ) {
+  notification(data){
+    const cursor = this;
+    let getTime = new Date();
+    if (
+      Notification &&
+      Notification.permission === "granted" &&
+      data &&
+      this.$store.state.Identity == 2
+    ) {
         navigator.serviceWorker.getRegistration().then(function(reg) {
           const title = "OPEN CLASS❤️";
           var options = {
-            body: `${data._question}`,
+            body: `${data.question}`,
             //1px = 0.02645833333333 cm
             image: "/images/24283C3858F778CA2E.jpg", //720px (width) by 240px (height)
             icon: "/images/logo.png", //android는 192px   512 512
@@ -183,18 +214,9 @@ export default {
               classCode: cursor.$store.state.currentClass.classCode
             }
           };
-          reg
-            .showNotification(title, options)
-            .then(() => reg.getNotifications())
-            .then(notifications => {
-              setTimeout(
-                () =>
-                  notifications.forEach(notification => {
-                    if (notification.tag == getTime) notification.close();
-                  }),
-                3000
-              );
-            });
+          reg.showNotification(title, options)
+          .then(() => reg.getNotifications())
+          .then(notifications => {setTimeout(()=>notifications.forEach(notification => {if (notification.tag == getTime) notification.close();}), 3000);});
         });
       }
     },
@@ -202,29 +224,19 @@ export default {
       // alert("yes");
       event.preventDefault();
       const time = new Date();
-      let T =
-        time.getFullYear().toString() +
-        "-" +
-        (time.getMonth() + 1).toString() +
-        "-" +
-        time.getDate().toString() +
-        " " +
-        time.getHours().toString() +
-        ":" +
-        time.getMinutes().toString();
-      let moment = require("moment");
-      moment.locale("ko");
-      this.$socket.emit("chat", {
+      let moment = require('moment');
+      moment.locale('ko');
+      this.socket.emit("chat", {
         classCode: this.$store.state.currentClass.classCode,
         userID: this.$store.state.userID,
         userName: this.$store.state.userName,
-        _question: this.content,
+        question: this.content,
         anonymous: false,
         date: moment().format("LLL")
       });
       this.content = null;
     }
-  }
+  },
 };
 </script>
 

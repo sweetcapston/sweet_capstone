@@ -70,40 +70,45 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        e1: 1,
-        steps: 2
+import Vue from "vue";
+import store from '@/store.js'
+import {URL} from '@/plugins/api.config.js'
+import io from 'socket.io-client';
+export default {
+  data () {
+    return {
+      e1: 1,
+      steps: 2,
+      socket: io(`${URL}:3000/survey`)
+    }
+  },
+
+  watch: {
+    steps (val) {
+      if (this.e1 > val) {
+        this.e1 = val
+      }
+    }
+  },
+
+  methods: {
+    onInput (val) {
+      this.steps = parseInt(val)
+    },
+    nextStep (n) {
+      if (n === this.steps) {
+        this.e1 = 1
+      } else {
+        this.e1 = n + 1
       }
     },
-
-    watch: {
-      steps (val) {
-        if (this.e1 > val) {
-          this.e1 = val
-        }
-      }
-    },
-
-    methods: {
-      onInput (val) {
-        this.steps = parseInt(val)
-      },
-      nextStep (n) {
-        if (n === this.steps) {
-          this.e1 = 1
-        } else {
-          this.e1 = n + 1
-        }
-      },
-      preStep (n) {
-        if (1 === this.steps) {
-          this.e1 = 1
-        } else {
-          this.e1 = n - 1
-        }
+    preStep (n) {
+      if (1 === this.steps) {
+        this.e1 = 1
+      } else {
+        this.e1 = n - 1
       }
     }
   }
+}
 </script>
