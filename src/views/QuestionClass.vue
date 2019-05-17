@@ -283,7 +283,7 @@ export default {
   height: 90vh;
   max-height: 100vh;
   background: #fff;
-  border-radius: 10px 0 0px 10px;
+  border-radius: 10px 0 0 10px;
   border: 0.5px solid rgb(192, 189, 189);
 }
 #chat-title {

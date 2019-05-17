@@ -12,9 +12,9 @@
           <template v-slot:append>
             <v-btn 
               class="cyan lighten-1 white--text"
-              @click="addSurvey(n)"
+              @click="completeSurvey(n)"
             >
-              Add
+              Complete
             </v-btn>
           </template>
         </v-text-field>
@@ -53,9 +53,34 @@
           <v-card
             class="mb-5"
             color="grey lighten-3"
+            height="50px"            
+          >
+            <v-radio-group v-model="radios" :mandatory="false" row>
+              <v-radio label="객관식" value="radio-1" color="cyan ligten-1"></v-radio>
+              <v-radio label="객관식 (복수 응답 가능)" value="radio-2" color="cyan ligten-1"></v-radio>
+              <v-radio label="주관식" value="radio-3" color="cyan ligten-1"></v-radio>
+            </v-radio-group>
+          </v-card>
+
+          <v-card
+            class="mb-5"
+            color="grey lighten-3"
             height="270px"
           >
-            설문 내용
+            <v-container fluid>
+              <v-text-field                
+                label="질문을 입력하세요"
+                single-line
+                color="cyan ligten-1"
+              ></v-text-field>
+              <v-radio-group v-if="radios == 'radio-1'" v-model="column" column>
+                <v-radio label="답 1" value="ans-1" color="cyan ligten-1"></v-radio>
+                <v-radio label="답 2" value="ans-2" color="cyan ligten-1"></v-radio>
+                <v-radio label="답 3" value="ans-3" color="cyan ligten-1"></v-radio>
+                <v-radio label="답 4" value="ans-4" color="cyan ligten-1"></v-radio>
+                <v-radio label="답 5" value="ans-5" color="cyan ligten-1"></v-radio>
+              </v-radio-group>
+            </v-container>
           </v-card>
           <v-layout justify-space-between>
             <v-btn 
@@ -89,7 +114,8 @@ export default {
       e1: 1,
       steps: 3,
       icon: "mdi-plus-circle",
-      socket: io(`${URL}:3000/survey`)
+      socket: io(`${URL}:3000/survey`),
+      radios: 'radio-1'
     }
   },
 
@@ -101,7 +127,7 @@ export default {
     }
   },
   methods: {
-    addSurvey() {
+    completeSurvey() {
 
     },
     addStep(n) {

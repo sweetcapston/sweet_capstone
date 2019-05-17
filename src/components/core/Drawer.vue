@@ -68,6 +68,11 @@ export default {
         text: "질문 클래스"
       },
       {
+        to: '/class/'+this.$store.state.currentClass.classCode+'/quiz',
+        icon: 'mdi-quora',
+        text: '퀴즈 클래스' 
+      },
+      {
         to: '/class/'+this.$store.state.currentClass.classCode+'/survey',
         icon: 'mdi-clipboard-text-outline',
         text: '설문 클래스' 
