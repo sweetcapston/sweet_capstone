@@ -3,6 +3,7 @@ import Router from "vue-router";
 import Home from "./views/HomeClass.vue";
 import Chart from "./views/ChartClass.vue";
 import Question from "./views/QuestionClass.vue";
+import Quiz from "./views/QuizClass.vue";
 import Survey from "./views/SurveyClass.vue";
 import Login from "./views/Login.vue";
 import Main from "./views/Main.vue";
@@ -48,6 +49,10 @@ export default new Router({
         {
           path: 'question',
           component : Question
+        },
+        {
+          path: 'quiz',
+          component : Quiz
         },
         {
           path: 'survey',

@@ -270,9 +270,9 @@ export default {
     "chat-form new-message-container" 2.62fr
     / 12fr 2px;
   width: 100%;
-  height: 88.5%;
+  height: 87vh;
   background: #fff;
-  border-radius: 10px 0 0px 10px;
+  border-radius: 10px 0 0 10px;
   border: 0.5px solid rgb(192, 189, 189);
 }
 #chat-title {
