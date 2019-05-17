@@ -18,25 +18,20 @@
                 </v-list-tile-avatar>
 
                 <v-list-tile-content>
-                  <v-layout  class="hidden-sm-and-down">
-                    <v-flex row>{{ques.userName}}</v-flex> 
-                    <div>{{ques.date}}</div> 
+                  <v-layout id="full-width">
+                    <v-flex xs9>
+                      <v-card flat>{{ques.userName}}</v-card>
+                    </v-flex>
+                    <v-flex xs3 class="hidden-sm-and-down">
+                      <v-card flat>{{ques.date}}</v-card>
+                    </v-flex>
                   </v-layout>
-                  <span>
-                    {{ques.question}}
-                  </span>
-                  
+                  <span>{{ques.question}}</span>
                 </v-list-tile-content>
-            </v-list-tile>
-            
-
+              </v-list-tile>
             </v-flex>
           </template>
         </div>
-
-
-
-
 
         <div id="chat-form">
           <template>
@@ -57,11 +52,6 @@
         </div>
       </div>
     </v-flex>
-
-
-
-
-
 
     <v-flex xs6 sm6 md6 lg3 xl3 id="list-container" class="hidden-md-and-down">
       <div id="search-container">
@@ -110,7 +100,9 @@ export default {
     }
   },
   updated() {
-    document.querySelector("#chat-message-list").scrollTop = document.querySelector("#chat-message-list").scrollHeight
+    document.querySelector(
+      "#chat-message-list"
+    ).scrollTop = document.querySelector("#chat-message-list").scrollHeight;
   },
   data() {
     return {
@@ -143,7 +135,7 @@ export default {
     //   });
     // },
     MESSAGE: function(data) {
-      console.log(data)
+      console.log(data);
       this.questionList.push({
         anonymous: data.anonymous,
         userID: data.userID,
@@ -152,11 +144,11 @@ export default {
         question: data._question,
         date: data.date
       });
-      this.notification(data)
+      this.notification(data);
     }
   },
   methods: {
-    notification(data){
+    notification(data) {
       const cursor = this;
       let getTime = new Date();
       if (
@@ -165,62 +157,70 @@ export default {
         data &&
         this.$store.state.Identity == 2
       ) {
-          navigator.serviceWorker.getRegistration().then(function(reg) {
-            const title = "OPEN CLASS❤️";
-            var options = {
-              body: `${data._question}`,
-              //1px = 0.02645833333333 cm
-              image: "/images/24283C3858F778CA2E.jpg", //720px (width) by 240px (height)
-              icon: "/images/logo.png", //android는 192px   512 512
-              badge: "/images/logo-128x128.png", //72px
-              tag: getTime,
-              actions: [
-                {
-                  action: "off-action",
-                  title: "알림끄기 추가할 예정",
-                  icon: "/images/logo.png"
-                },
-                {
-                  action: "new-action",
-                  title: "새 창에서 열기",
-                  icon: "/images/logo.png"
-                }
-              ],
-              vibrate: [100, 50, 100], //movile에서만 가능
-              data: {
-                classCode: cursor.$store.state.currentClass.classCode
+        navigator.serviceWorker.getRegistration().then(function(reg) {
+          const title = "OPEN CLASS❤️";
+          var options = {
+            body: `${data._question}`,
+            //1px = 0.02645833333333 cm
+            image: "/images/24283C3858F778CA2E.jpg", //720px (width) by 240px (height)
+            icon: "/images/logo.png", //android는 192px   512 512
+            badge: "/images/logo-128x128.png", //72px
+            tag: getTime,
+            actions: [
+              {
+                action: "off-action",
+                title: "알림끄기 추가할 예정",
+                icon: "/images/logo.png"
+              },
+              {
+                action: "new-action",
+                title: "새 창에서 열기",
+                icon: "/images/logo.png"
               }
-            };
-            reg
-              .showNotification(title, options)
-              .then(() => reg.getNotifications())
-              .then(notifications => {
-                setTimeout(
-                  () =>
-                    notifications.forEach(notification => {
-                      if (notification.tag == getTime) notification.close();
-                    }),
-                  3000
-                );
-              });
-          });
-        }
+            ],
+            vibrate: [100, 50, 100], //movile에서만 가능
+            data: {
+              classCode: cursor.$store.state.currentClass.classCode
+            }
+          };
+          reg
+            .showNotification(title, options)
+            .then(() => reg.getNotifications())
+            .then(notifications => {
+              setTimeout(
+                () =>
+                  notifications.forEach(notification => {
+                    if (notification.tag == getTime) notification.close();
+                  }),
+                3000
+              );
+            });
+        });
+      }
     },
     enrollQuestion(event) {
       // alert("yes");
       event.preventDefault();
       const time = new Date();
-      let T = time.getFullYear().toString()+'-'+(time.getMonth()+1).toString()
-            +'-'+time.getDate().toString()+" "+time.getHours().toString()+":"+time.getMinutes().toString();
-      let moment = require('moment');
-      moment.locale('ko');
+      let T =
+        time.getFullYear().toString() +
+        "-" +
+        (time.getMonth() + 1).toString() +
+        "-" +
+        time.getDate().toString() +
+        " " +
+        time.getHours().toString() +
+        ":" +
+        time.getMinutes().toString();
+      let moment = require("moment");
+      moment.locale("ko");
       this.$socket.emit("chat", {
         classCode: this.$store.state.currentClass.classCode,
         userID: this.$store.state.userID,
         userName: this.$store.state.userName,
         _question: this.content,
         anonymous: false,
-        date: moment().format('LLL')
+        date: moment().format("LLL")
       });
       this.content = null;
     }
@@ -230,7 +230,11 @@ export default {
 
 
 <style>
-#auto_height{
+#full-width {
+  width: -webkit-fill-available;
+}
+
+#auto_height {
   height: auto;
 }
 
@@ -252,7 +256,7 @@ export default {
 .apply-size {
   min-width: 10px;
   height: 120px;
-  background:lawngreen;
+  background: lawngreen;
   white-space: normal;
 }
 #chat-container {
