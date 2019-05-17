@@ -19,16 +19,18 @@
 
                 <v-list-tile-content>
                   <v-layout id="full-width">
-                    <v-flex xs9>
+                    <v-flex xs3 sm9 md9 lg9>
                       <v-card v-if="!ques.anonymous" flat>{{ques.userName}}</v-card>
                       <v-card v-else flat>익명</v-card>
                     </v-flex>
-                    <v-flex xs3 class="hidden-sm-and-down">
+                    <v-flex xs9 sm3 md3 lg3 class="hidden-sm-and-down">
                       <v-card flat>{{ques.date}}</v-card>
                     </v-flex>
                   </v-layout>
                   <span>{{ques.question}}</span>
                 </v-list-tile-content>
+
+                
               </v-list-tile>
             </v-flex>
           </template>
@@ -247,7 +249,7 @@ export default {
 
 <style>
 #full-width {
-  width: -webkit-fill-available;
+  width: 100%;
 }
 
 #auto_height {
@@ -269,21 +271,17 @@ export default {
   overflow-x: hidden;
   text-overflow: ellipsis;
 }
-.apply-size {
-  min-width: 10px;
-  height: 120px;
-  background: lawngreen;
-  white-space: normal;
-}
+
 #chat-container {
   display: grid;
   grid:
-    "chat-title search-container" 2fr
-    "chat-message-list conversation-list" 23fr
-    "chat-form new-message-container" 2.62fr
-    / 12fr 2px;
+    "chat-title search-container" 60px
+    "chat-message-list conversation-list" 1fr
+    "chat-form new-message-container" 60px
+    / 1fr 2px;
   width: 100%;
-  height: 88.5%;
+  height: 90vh;
+  max-height: 100vh;
   background: #fff;
   border-radius: 10px 0 0px 10px;
   border: 0.5px solid rgb(192, 189, 189);
@@ -325,7 +323,7 @@ export default {
   justify-content: center;
   background: rgb(42, 139, 83);
   padding: 0 20px;
-  height: 6.6%;
+  height: 8%;
   border-radius: 0 10px 0 0;
   box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.75);
   z-index: 1;
@@ -340,7 +338,8 @@ export default {
   background-size: 20px 20px;
 }
 #conversation-list {
-  height: 74.6%;
+  height: 75vh;
+  max-height: 100vh;
   background: rgb(44, 156, 91);
   overflow-y: scroll;
 }
@@ -375,7 +374,19 @@ export default {
   background: rgb(42, 139, 83);
   border-top: 1px solid #ddd;
   border-radius: 0 0 10px 0;
-  height: 7.3%;
+  height: 8%;
   padding: 0 15px;
+}
+#chat-message-list::-webkit-scrollbar {
+  width: 5px;
+}
+#chat-message-list::-webkit-scrollbar-track {
+  background: 0px;
+}
+#conversation-list::-webkit-scrollbar {
+  width: 5px;
+}
+#conversation-list::-webkit-scrollbar-track {
+  background: 0;
 }
 </style>
