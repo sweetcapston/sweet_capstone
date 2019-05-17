@@ -1,21 +1,25 @@
 <template>
   <div>
-    <v-card class="mb-3">
-      <v-card-text>
-        <div> 문항수를 입력하세요 </div>
-
-        <v-text-field
-          :value="steps"
-          hint="This demo has a maximum of 6 steps"
-          label="# of steps"
-          persistent-hint
-          type="number"
-          @input="onInput"
-        ></v-text-field>
-      </v-card-text>
-    </v-card>
-
     <v-stepper v-model="e1">
+      <v-stepper-header>   
+        <v-text-field
+          solo
+          flat
+          label="제목을 입력하세요"
+          color="cyan ligten-1"
+          height="70px"
+        >
+          <template v-slot:append>
+            <v-btn 
+              class="cyan lighten-1 white--text"
+              @click="addSurvey(n)"
+            >
+              Add
+            </v-btn>
+          </template>
+        </v-text-field>
+        
+      </v-stepper-header>
       <v-stepper-header>
         <template v-for="n in steps">
           <v-stepper-step
@@ -25,14 +29,19 @@
             editable
             color="cyan lighten-1"
           >
-            Step {{ n }}
+            문항 {{ n }}
           </v-stepper-step>
-
           <v-divider
             v-if="n !== steps"
             :key="n"
-          ></v-divider>
+          ></v-divider>         
         </template>
+        <template>
+          <v-icon
+            class="cyan lighten-1 white--text"
+            @click="addStep()"
+          >mdi-plus-circle</v-icon>
+        </template>        
       </v-stepper-header>
 
       <v-stepper-items>
@@ -50,17 +59,17 @@
           </v-card>
           <v-layout justify-space-between>
             <v-btn 
-              flat
+              class="cyan lighten-1 white--text"
               @click="preStep(n)"
             >
-              Cancel
+              Pre
             </v-btn>
 
             <v-btn
               class="cyan lighten-1 white--text"
               @click="nextStep(n)"
             >
-              Continue
+              Next
             </v-btn>
           </v-layout>
         </v-stepper-content>
@@ -78,7 +87,8 @@ export default {
   data () {
     return {
       e1: 1,
-      steps: 2,
+      steps: 3,
+      icon: "mdi-plus-circle",
       socket: io(`${URL}:3000/survey`)
     }
   },
@@ -90,17 +100,15 @@ export default {
       }
     }
   },
-
   methods: {
-    onInput (val) {
-      this.steps = parseInt(val)
+    addSurvey() {
+
+    },
+    addStep(n) {
+      this.steps = this.steps + 1
     },
     nextStep (n) {
-      if (n === this.steps) {
-        this.e1 = 1
-      } else {
-        this.e1 = n + 1
-      }
+      this.e1 = n + 1
     },
     preStep (n) {
       if (1 === this.steps) {
