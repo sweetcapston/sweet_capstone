@@ -1,43 +1,42 @@
 <template>
   <v-app>
     <core-drawer/>
-    <core-toolbar/> 
+    <core-toolbar/>
     <v-container>
-      <router-view />
+      <router-view/>
     </v-container>
   </v-app>
 </template>
 
 <script>
 /* eslint-disable */
-import {Auth} from "@/api"
+import { Auth } from "@/api";
 export default {
   created() {
     Auth.auth().then(res => {
-      if(!res.data)
-        this.$router.push({name: 'login'});
-    })
+      if (!res.data) this.$router.push({ name: "login" });
+    });
   },
   mounted() {
     if (Notification && Notification.permission != "granted") {
-      Notification.requestPermission(function (status) {
+      Notification.requestPermission(function(status) {
         if (Notification.permission !== status) {
           Notification.permission = status;
         }
       });
     }
   }
-}
-
+};
 </script>
 
 <style>
-.v-content{
-  padding-top:0px !important;
+.v-content {
+  padding-top: 0px !important;
 }
 .container {
   max-width: inherit;
-  height: -webkit-fill-available;
+  height: inherit;
   margin-top: 35px;
+  padding-bottom: 0px;
 }
 </style>

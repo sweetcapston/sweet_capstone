@@ -8,7 +8,7 @@
 
         <div id="chat-message-list">
           <template v-for="(ques) in questionList">
-            <v-flex id="message" :key="ques.index" class="margin">
+            <v-flex id="message" :key="ques.index">
               <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
 
               <v-divider/>
@@ -18,16 +18,22 @@
                 </v-list-tile-avatar>
 
                 <v-list-tile-content>
-                  <v-layout id="full-width">
-                    <v-flex xs3 sm9 md9 lg9>
+                    <v-layout  id="full-width">
+                    <v-flex xs6 sm4 md5 lg5 xl5>
                       <v-card v-if="!ques.anonymous" flat>{{ques.userName}}</v-card>
                       <v-card v-else flat>익명</v-card>
+            
                     </v-flex>
-                    <v-flex xs9 sm3 md3 lg3 class="hidden-sm-and-down">
+                    
+                    <v-flex xs12 sm8 md7 lg7 xl7 style="text-align: end">
                       <v-card flat>{{ques.date}}</v-card>
                     </v-flex>
-                  </v-layout>
-                  <span>{{ques.question}}</span>
+                    </v-layout>
+                  <span>
+                    {{ques.question}}&nbsp;&nbsp;
+                    <v-icon small>mdi-heart</v-icon>
+                  </span> 
+                  
                 </v-list-tile-content>
 
                 
@@ -50,8 +56,8 @@
                 solo
                 @keydown.enter="enrollQuestion"
               />&nbsp;&nbsp;&nbsp;
-              <input checked=false type="checkbox" v-model="anonymous"><label for="checkbox">익명</label>
-              <v-btn dark class="mx-0" depressed @click="enrollQuestion">질문등록</v-btn>
+              <input value=false type="checkbox" v-model="anonymous"><label style="width:36px" >익명</label>
+              <v-btn dark class="hidden-sm-and-down" depressed @click="enrollQuestion" style="margin-left: 10px">질문등록</v-btn>
             </v-list-tile>
           </template>
         </div>
@@ -109,7 +115,7 @@ export default {
       questionList: [],
       content:null,
       socket: io(`${URL}:3000/question`),
-      anonymous:'false'
+      anonymous:false
     };
   },
   created() {
@@ -248,12 +254,17 @@ export default {
 
 
 <style>
+#message {
+  flex: 0 0;
+}
 #full-width {
   width: 100%;
 }
 
 #auto_height {
   height: auto;
+  padding-top: 12px;
+  padding-bottom:12px;
 }
 
 .user-identity {
@@ -374,7 +385,7 @@ export default {
   background: rgb(42, 139, 83);
   border-top: 1px solid #ddd;
   border-radius: 0 0 10px 0;
-  height: 8%;
+  height: 8.2%;
   padding: 0 15px;
 }
 #chat-message-list::-webkit-scrollbar {
