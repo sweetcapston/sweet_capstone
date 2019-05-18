@@ -1,20 +1,22 @@
 <template>
-  <v-expansion-panel-content>
+  <v-expansion-panel-content class="createSurvey">
     <template v-slot:actions>
       <v-icon color="cyan ligten-1">$vuetify.icons.expand</v-icon>
     </template>
     <template v-slot:header >
+      제목
       <v-text-field
         solo
         flat
         label="제목을 입력하세요"
         color="cyan ligten-1"
         height="70px"
+        class="surveyName"
         @click.stop
       />
       <v-btn 
         class="cyan lighten-1 white--text newSurvey"
-        @click="completeSurvey(n)"
+        @click="completeSurvey()"
       >
         SAVE
       </v-btn>
@@ -45,16 +47,17 @@
           v-for="n in steps"
           :key="`${n}-content`"
           :step="n"
+          class="listItem"
         >
           <v-card
             class="mb-5"
             color="grey lighten-3"
             height="50px"            
           >
-            <v-radio-group v-model="radios" :mandatory="false" row>
-              <v-radio label="객관식" value="radio-1" color="cyan ligten-1"></v-radio>
-              <v-radio label="객관식 (복수 응답 가능)" value="radio-2" color="cyan ligten-1"></v-radio>
-              <v-radio label="주관식" value="radio-3" color="cyan ligten-1"></v-radio>
+            <v-radio-group v-model="radios" :mandatory="false" class="surveyType" row>
+              <v-radio label="객관식" value="1" color="cyan ligten-1" select></v-radio>
+              <v-radio label="객관식 (복수 응답 가능)" value="2" color="cyan ligten-1"></v-radio>
+              <v-radio label="주관식" value="3" color="cyan ligten-1"></v-radio>
             </v-radio-group>
           </v-card>
 
@@ -68,8 +71,9 @@
                 label="질문을 입력하세요"
                 single-line
                 color="cyan ligten-1"
+                class="surveyQuestion"
               />
-              <v-radio-group v-if="radios == 'radio-1'">
+              <v-radio-group v-if="radios == '1'" class="type1">
                   <v-radio label="답 1" value="ans-1" color="cyan ligten-1"></v-radio>
                   <v-radio label="답 2" value="ans-2" color="cyan ligten-1"></v-radio>
                   <v-radio label="답 3" value="ans-3" color="cyan ligten-1"></v-radio>
@@ -100,13 +104,15 @@
 </template>
 <script>
 /*eslint-disable */
+import store from '@/store.js'
+import { Prof } from "@/api";
 export default {
   data () {
     return {
       e1: 1,
       steps: 3,
       icon: "mdi-plus-circle",
-      radios: 'radio-1'
+      radios: '1'
     }
   },
 
@@ -119,7 +125,47 @@ export default {
   },
   methods: {
     completeSurvey() {
-
+      let moment = require('moment');
+      moment.locale('ko');
+      const surveyName = document.querySelector('.surveyName input').value;
+      const classCode = this.$store.state.currentClass.classCode;
+      const date = moment().format("LLL");
+      const surveyList = []
+      
+      for(var __ = 0; __<this.steps; __++){
+        const surveyType = document.querySelector(".surveyType input[type='radio']:checked").value;
+        const surveyQuestion = document.querySelector(".listItem .surveyQuestion input[type='text']").value;
+        let content = [];
+        let doc;
+        switch(surveyType){
+          case "1": 
+            doc = document.querySelector('.type1 .v-input--radio-group__input').children;
+            for(var i = 0 ; i<doc.length; i++)              
+              content.push(doc[i].querySelector('.v-label').textContent);
+            break;
+          case "2": 
+            break;
+          case "3": 
+            break;
+        }
+        surveyList.push({
+          surveyType: parseInt(surveyType), 
+          surveyQuestion: surveyQuestion, 
+          content:content, 
+          count:new Array(doc.length).fill(0)
+        })
+      }
+      const newSurvey = {
+        surveyName:surveyName,
+        surveyList:surveyList,
+        classCode:classCode,
+        date:date,
+        public:true,
+        active:false,
+      }
+      console.log(newSurvey)
+      // Prof.surveyCreate(newSurvey)
+      // .then(result => console.log(result));
     },
     addStep(n) {
       this.steps = this.steps + 1
