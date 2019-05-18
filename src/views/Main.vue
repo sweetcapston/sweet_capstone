@@ -22,7 +22,8 @@
       <br>
       <v-layout justify-center>
         <img src="@/assets/logo.svg" alt="Vuetify.js" height="150">
-        </v-layout>
+      </v-layout>
+      <br/>
       <v-content>
           <v-layout align-center justify-center v-if="this.$store.getters.getIdentity == 1">
             <v-flex xs6 sm6 md3 order-12>

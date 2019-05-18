@@ -28,6 +28,22 @@
 
 
       </v-expansion-panel-content>
+      <v-expansion-panel-content>
+        <template v-slot:actions>
+          <v-icon color="cyan ligten-1">$vuetify.icons.expand</v-icon>
+        </template>
+        <template v-slot:header>
+          <div>설문제목 날짜</div>
+        </template>
+        <v-card>
+          <v-card-text>
+            
+          </v-card-text>
+        </v-card>
+
+
+
+      </v-expansion-panel-content>
     </v-expansion-panel>
   </v-app>
 </template>

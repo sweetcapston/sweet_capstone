@@ -36,8 +36,7 @@ export default {
   padding-top:0px !important;
 }
 .container {
-  max-width: inherit;
-  height: -webkit-fill-available;
+  max-width: 1275px;
   margin-top: 35px;
 }
 </style>

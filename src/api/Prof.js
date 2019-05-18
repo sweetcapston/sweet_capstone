@@ -13,4 +13,7 @@ export default {
     classDelete(classCode){
       return axios.delete(`${BaseUrl}/${classCode}/delete`, config);
     },
+    surveyActive(survey){
+      return axios.put(`${BaseUrl}/${survey.classCode}/survey/active`, {SID:survey.SID, active:survey.active}, config);
+    },
 };

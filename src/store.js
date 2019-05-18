@@ -61,8 +61,7 @@ export default new Vuex.Store({
     setCheckApply:(state, payload) => 
     (
       state.checkApply = payload
-    ),
-
+    )
   },
   actions:{
 

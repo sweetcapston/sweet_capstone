@@ -1,5 +1,5 @@
 <template>
-  <v-layout row fill-height>
+  <v-layout row wrap fill-height>
     <v-flex xs12 sm12 md12 lg9 xl9>
       <div id="chat-container">
         <div id="chat-title">
@@ -172,7 +172,7 @@ export default {
         socketID: this.socket.id,
         classCode: this.$store.state.currentClass.classCode
       })
-    },900);
+    }, 1500);
     this.socket.on("disconnect", (data)=>{
       const {Identity, userName, userID} = data;
       let user;
@@ -259,6 +259,7 @@ export default {
 .user-identity {
   color: #ddd;
   font-size: 1rem;
+  margin-top:10px;
 }
 .gradient {
   background: linear-gradient(100deg, #9198e5, #26c6da);
@@ -270,6 +271,7 @@ export default {
   white-space: nowrap;
   overflow-x: hidden;
   text-overflow: ellipsis;
+  margin-top:10px;
 }
 
 #chat-container {
@@ -360,7 +362,6 @@ export default {
   background: #111;
 }
 .conversation > img {
-  grid-row: span 2;
   height: 40px;
   width: 40px;
   border-radius: 100%;

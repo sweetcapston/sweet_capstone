@@ -25,18 +25,8 @@ Vue.use(VeeValidate, config);
 Vue.use(VueSession);
 Vue.use(ClassList);
 
-/* eslint-disable */
 
 export default {
-  created() {
-    Auth.auth(this.$session.get("token")).then(res => {
-      console.log(res);
-    });
-  },
-  data() {
-    return {};
-  },
-  methods: {}
 };
 
 </script>

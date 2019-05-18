@@ -1,20 +1,5 @@
 <template>
-  <v-layout column align-center justify-center class="xs12 sm5 md3 cardLayout" >
-    <v-icon 
-      id="delete"
-      color="white"
-      flat
-      @click="deleteClassList(currentClass.classCode)"
-      v-if="this.$store.getters.getIdentity === 1"
-    >mdi-close</v-icon>
-
-    <v-icon 
-      id="delete"
-      color="white"
-      flat
-      @click="deleteClass(currentClass.classCode)"
-      v-if="this.$store.getters.getIdentity === 2"
-    >mdi-close</v-icon>        
+  <v-layout column align-center justify-center class="xs12 sm5 md3 cardLayout" >     
     <v-btn 
       id = "CardButton"
       @click="enterClass(currentClass.classCode)"
@@ -30,6 +15,21 @@
           height="150px"
           src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
         >    
+        <v-icon 
+          id="delete"
+          color="white"
+          flat
+          @click.stop="deleteClassList(currentClass.classCode)"
+          v-if="this.$store.getters.getIdentity === 1"
+        >mdi-close</v-icon>
+
+        <v-icon 
+          id="delete"
+          color="white"
+          flat
+          @click.stop="deleteClass(currentClass.classCode)"
+          v-if="this.$store.getters.getIdentity === 2"
+        >mdi-close</v-icon>   
         </v-img>
         <v-card-title class="align-start">{{currentClass.className}}</v-card-title>
         <v-card-text>
@@ -124,12 +124,10 @@ export default {
     background:#CFD8DC;
   }
   .v-icon.mdi.mdi-close.theme--light.white--text{
-    position: relative;
+    position: absolute;
     z-index:1;
     font-size:18px;
-    width:30px;
-    top:53px;
-    left:90px;
+    right: 0;
   }
   
 </style>
