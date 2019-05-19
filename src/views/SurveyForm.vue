@@ -94,10 +94,10 @@
                     >mdi-close</v-icon>
                   </v-layout>
                 </template>
-                <v-layout v-if="type[n-1] === '1'">
-                  <v-icon
-                    @click="addType1(n)"
-                  >mdi-plus</v-icon>
+                <v-layout 
+                v-if="type[n-1] === '1'"
+                 @click="addType1(n)">
+                  <v-icon>mdi-plus</v-icon>
                   <v-input
                     label="보기 추가"
                     class="addSample"
@@ -120,10 +120,9 @@
                     >mdi-close</v-icon>  
                   </v-layout>
                 </template>
-                <v-layout v-if="type[n-1] === '2'">
-                  <v-icon
-                    @click="addType2(n)"
-                  >mdi-plus</v-icon>
+                <v-layout v-if="type[n-1] === '2'"
+                @click="addType2(n)">
+                  <v-icon>mdi-plus</v-icon>
                   <v-input
                     label="보기 추가"
                     class="addSample"
@@ -133,10 +132,10 @@
 
               <v-layout v-if="type[n-1] === '3'">
                 <v-textarea
+                  disabled
                   solo
                   flat
                   outline 
-                  label="답을 입력하세요"
                   color="cyan lighten-1"
                 ></v-textarea>
               </v-layout>

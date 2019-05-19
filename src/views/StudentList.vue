@@ -32,7 +32,7 @@
                   :value="`${c}`"
                   v-for="c in survey.surveyList[n-1].content.length"
                   :key="`${c}-radio`"
-                  :label="`${survey.surveyList[n-1].content[c-1]}`"
+                  :label="`${survey.surveyList[n-1].content[c-1]}  count:  ${survey.surveyList[n-1].count[c-1]}`"
                   color="cyan ligten-1"
                 />
               </v-radio-group>
@@ -41,7 +41,7 @@
                   :id="`${c}`"
                   v-for="c in survey.surveyList[n-1].content.length"
                   :key="`${c}-checkbox`"
-                  :label="`${survey.surveyList[n-1].content[c-1]}`"
+                  :label="`${survey.surveyList[n-1].content[c-1]}  count:  ${survey.surveyList[n-1].count[c-1]}`"
                   color="cyan ligten-1"
                 />
               </div>
@@ -130,14 +130,19 @@ export default {
         }
       }
       const answer_S = {
-        userID: userID,
-        classCode: classCode,
-        SID: SID,
-        surveyType: surveyType,
-        answer: answer
-      };
-      console.log(answer_S);
-      Stud.answerSurvey(classCode, answer_S).then(res => console.log(res));
+          userID: userID,
+          classCode: classCode,
+          SID: SID,
+          surveyType: surveyType,
+          answer: answer
+      }
+      console.log(answer_S)
+      Stud.answerSurvey(classCode, answer_S)
+      .then(
+        res => {
+          window.history.go(0);
+        }
+      )
     }
   }
 };
