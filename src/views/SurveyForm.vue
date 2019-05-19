@@ -65,7 +65,7 @@
               fab
               top
               right
-              color="pink"
+              class="crimson"
               @click="deleteStep()"
             >
               <v-icon>remove</v-icon>
@@ -100,6 +100,7 @@
                   >mdi-plus</v-icon>
                   <v-input
                     label="보기 추가"
+                    class="addSample"
                   ></v-input>               
                 </v-layout>
               </div>
@@ -312,5 +313,12 @@ export default {
 .typeCard > .v-input__control > .v-message {
   height: 0px;
   margin: 0px;
+}
+.surveyType > .v-input__control > .v-input__slot{
+  margin-top: 10px;
+  margin-left: 5px;
+}
+.addSample{
+  margin-top:20px;
 }
 </style>

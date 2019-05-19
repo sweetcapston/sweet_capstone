@@ -15,7 +15,7 @@
             </v-btn>
             <v-btn 
                 v-show="survey.active"
-                class="red darken-4 white--text surveyEnd"
+                class="crimson white--text surveyEnd"
                 @click.stop="surveyActive()"
             >
                 설문 종료
