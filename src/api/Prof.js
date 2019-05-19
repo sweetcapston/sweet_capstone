@@ -14,9 +14,9 @@ export default {
       return axios.delete(`${BaseUrl}/${classCode}/delete`, config);
     },
     surveyCreate(survey){
-      return axios.post(`${BaseUrl}/${survey.classCode}/surveyAdd`, {SID:survey.SID, active:survey.active}, config);
+      return axios.post(`${BaseUrl}/${survey.classCode}/surveyAdd`, {survey:survey}, config);
     },
     surveyActive(survey){
-      return axios.put(`${BaseUrl}/${survey.classCode}/survey/active`, {survey:survey}, config);
+      return axios.put(`${BaseUrl}/${survey.classCode}/survey/active`, {SID:survey.SID, active:survey.active}, config);
     },
 };

@@ -25,7 +25,7 @@ import SurveyForm from "./SurveyForm.vue";
 import SurveyList from './SurveyList.vue';
 import store from '@/store.js'
 import { Stud, Prof } from "@/api";
-import {URL} from '@/plugins/api.config.js'
+import { URL } from '@/plugins/api.config.js'
 import io from 'socket.io-client';
 
 Vue.component("SurveyForm", SurveyForm);
