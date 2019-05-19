@@ -17,7 +17,7 @@
       <SurveyForm v-show="formShow" @childs-event="parentsMethod"/>
       <SurveyList v-for="(survey, _id) in surveyList" v-bind:survey="survey" :key="_id"/>
     </v-expansion-panel>
-</div>
+  </div>
 </template>
 
 <script>
@@ -37,7 +37,6 @@ Vue.component("StudentList", StudentList);
 export default {
   beforeCreate() {
     if(this.$store.state.Identity==1){
-  
       Stud.loadSurvey(this.$store.state.currentClass.classCode, this.$store.state.userID).then(res => {
         if (res.data === "false") 
           alert("설문 가져오기 실패")

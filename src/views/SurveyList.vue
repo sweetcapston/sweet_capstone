@@ -50,13 +50,13 @@
                                 v-for="c in survey.surveyList[n-1].content.length"
                                 :key="`${c}-radio`"
                             >
-                                <v-radio disabled :id="`${c}`" :label="`${survey.surveyList[n-1].content[c-1]}`" color="cyan ligten-1" />
+                                <v-radio disabled :id="`${c}`" :label="`${survey.surveyList[n-1].content[c-1]}  count:  ${survey.surveyList[n-1].count[c-1]}`" color="cyan ligten-1" />
                             </v-radio-group>
                             <div v-show="survey.surveyList[n-1].surveyType == 2">
                                 <v-checkbox 
                                 disabled 
                                 :id="`${c}`" 
-                                :label="`${survey.surveyList[n-1].content[c-1]}`" 
+                                :label="`${survey.surveyList[n-1].content[c-1]}  count:  ${survey.surveyList[n-1].count[c-1]}`" 
                                 v-for="c in survey.surveyList[n-1].content.length"
                                 :key="`${c}-checkbox`"
                                 color="cyan ligten-1" />
