@@ -11,7 +11,7 @@
   />
     <v-toolbar-title class="headline text-uppercase">
       <span >OpenClass</span>
-      <span class="font-weight-light"> {{this.$store.state.userName}} </span>
+      <span  class="hidden-md-and-down font-weight-light"> {{this.$store.state.userName}} </span>
     </v-toolbar-title>
     <v-spacer/>
 
@@ -22,9 +22,9 @@
         py-2
         
       >
-        <v-icon color="tertiary" margin="2px">mdi-bell</v-icon>
-        <v-icon color="tertiary" margin="2px">mdi-account-circle</v-icon>
-        <v-icon color="tertiary" margin="2px">mdi-cogs</v-icon>
+        <v-icon class="hidden-md-and-down" color="tertiary" margin="2px">mdi-bell</v-icon>
+        <v-icon class="hidden-md-and-down" color="tertiary" margin="2px">mdi-account-circle</v-icon>
+        <v-icon class="hidden-md-and-down" color="tertiary" margin="2px">mdi-cogs</v-icon>
       </v-flex>
     </v-toolbar-items>
 
