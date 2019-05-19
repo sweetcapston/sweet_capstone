@@ -54,7 +54,7 @@
             color="grey lighten-3"
             height="50px"            
           >
-            <v-radio-group v-model="radios" :mandatory="false" class="surveyType" row>
+            <v-radio-group v-model="type" :mandatory="false" class="surveyType" row>
               <v-radio label="객관식" value="1" color="cyan ligten-1" select></v-radio>
               <v-radio label="객관식 (복수 응답 가능)" value="2" color="cyan ligten-1"></v-radio>
               <v-radio label="주관식" value="3" color="cyan ligten-1"></v-radio>
@@ -66,22 +66,88 @@
             color="grey lighten-3"
             height="270px"
           >
-            <v-container fluid>
+            <v-btn
+              absolute
+              dark
+              fab
+              top
+              right
+              color="pink"
+              @click="deleteStep()"
+            >
+              <v-icon>remove</v-icon>
+            </v-btn>
+
+            <v-container>
               <v-text-field                
                 label="질문을 입력하세요"
                 single-line
                 color="cyan ligten-1"
                 class="surveyQuestion"
               />
-              <v-radio-group v-if="radios == '1'" class="type1">
-                  <v-radio label="답 1" value="ans-1" color="cyan ligten-1"></v-radio>
-                  <v-radio label="답 2" value="ans-2" color="cyan ligten-1"></v-radio>
-                  <v-radio label="답 3" value="ans-3" color="cyan ligten-1"></v-radio>
-                  <v-radio label="답 4" value="ans-4" color="cyan ligten-1"></v-radio>
-                  <v-radio label="답 5" value="ans-5" color="cyan ligten-1"></v-radio>
-              </v-radio-group>
+              <template v-if="type === 1">
+                <template v-for="i in samples">
+                  <v-layout
+                    :key="i"
+                  >
+                    <v-text-field 
+                      num
+                      prepend-icon="mdi-checkbox-blank-circle-outline"
+                      label="보기를 입력하세요"
+                      single-line
+                      color="rgb(111, 111, 111)"
+                    ></v-text-field>
+                    <v-spacer />
+                    <v-icon
+                      @click="deleteSample()"
+                    >mdi-close</v-icon>
+                  </v-layout>
+                </template>
+              </template>
+
+              <v-layout v-if="type === '1'">
+                <v-icon
+                  @click="addType1(i)"
+                >mdi-plus</v-icon>
+                <v-input
+                  label="보기 추가"
+                ></v-input>               
+              </v-layout>
+              
+              <v-layout v-if="type === '2'">
+                <v-text-field
+                  prepend-icon="mdi-checkbox-blank-outline"
+                  label="보기를 입력하세요"
+                  single-line
+                  color="rgb(111, 111, 111)"
+                ></v-text-field>
+                <v-spacer />
+                <v-icon
+                  @click="deleteSample()"
+                >mdi-close</v-icon>  
+              </v-layout>
+
+              <v-layout v-if="type === '2'">
+                <v-icon
+                  @click="addType2(j)"
+                >mdi-plus</v-icon>
+                <v-input
+                  label="보기 추가"
+                ></v-input>               
+              </v-layout> 
+
+              <v-layout v-if="type === '3'">
+                <v-textarea
+                  solo
+                  flat
+                  outline 
+                  label="답을 입력하세요"
+                  color="cyan lighten-1"
+                ></v-textarea>
+              </v-layout>
             </v-container>
           </v-card>
+
           <v-layout justify-space-between>
             <v-btn 
               class="cyan lighten-1 white--text"
@@ -90,11 +156,21 @@
               Pre
             </v-btn>
 
-            <v-btn
+            <v-btn 
+              v-if="n !== steps" 
+              :key="n"
               class="cyan lighten-1 white--text"
               @click="nextStep(n)"
             >
               Next
+            </v-btn>
+            <v-btn
+              v-if="n === steps" 
+              :key="n"
+              class="cyan lighten-1 white--text"
+              @click="completeSurvey()"
+            >
+              Complete
             </v-btn>
           </v-layout>
         </v-stepper-content>
@@ -102,6 +178,7 @@
     </v-stepper>
   </v-expansion-panel-content>
 </template>
+
 <script>
 /*eslint-disable */
 import store from '@/store.js'
@@ -112,7 +189,9 @@ export default {
       e1: 1,
       steps: 3,
       icon: "mdi-plus-circle",
-      radios: '1'
+      type: '1',
+      s1: 1,
+      samples: 1
     }
   },
 
@@ -120,6 +199,11 @@ export default {
     steps (val) {
       if (this.e1 > val) {
         this.e1 = val
+      }
+    },
+    samples (val) {
+      if (this.s1 > val) {
+        this.s1 = val
       }
     }
   },
@@ -170,28 +254,40 @@ export default {
     addStep(n) {
       this.steps = this.steps + 1
     },
-    nextStep (n) {
+    deleteStep(n) {
+      this.steps = this.e1 - 1
+    },
+    nextStep(n) {
       this.e1 = n + 1
     },
-    preStep (n) {
+    preStep(n) {
         console.log(n)
       if (1 === this.steps) {
         this.e1 = 1
       } else {
         this.e1 = n - 1
       }
+    },
+    addType1(i) {
+      this.samples = this.samples + 1
+    },
+    addType2(i) {
+      
+    },
+    deleteSample() {
+
     }
   }
 }
 </script>
 <style>
-.mdi.mdi-plus-circle:hover{
+.mdi.mdi-plus-circle:hover {
   background:aqua !important;
 }
-.mdi.mdi-plus-circle:active{
+.mdi.mdi-plus-circle:active {
   box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12);
 }
-.newSurvey:hover{
+.newSurvey:hover {
   background: cyan;
 }
 </style>
