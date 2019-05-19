@@ -109,6 +109,7 @@ export default {
         surveyActive(){
             Prof.surveyActive(this.survey)
             .then(res =>{
+                console.log(res);
                 this.survey.active = res.data        
             })
         }
@@ -123,6 +124,9 @@ export default {
   display: -webkit-box;
 }
 .surveyStart{
+  margin-right:5px !important;
+}
+.surveyEnd{
   margin-right:5px !important;
 }
 .surveyStart:hover{

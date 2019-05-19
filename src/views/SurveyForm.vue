@@ -164,8 +164,8 @@ export default {
         active:false,
       }
       console.log(newSurvey)
-      // Prof.surveyCreate(newSurvey)
-      // .then(result => console.log(result));
+      Prof.surveyCreate(newSurvey)
+      .then(result => console.log(result));
     },
     addStep(n) {
       this.steps = this.steps + 1
