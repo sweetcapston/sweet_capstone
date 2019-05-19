@@ -3,23 +3,9 @@
         <template v-slot:actions>
             <v-icon color="cyan ligten-1">$vuetify.icons.expand</v-icon>
         </template>
-        <template v-slot:header>
+        <template v-slot:header >
             <div>{{survey.surveyName}}</div>
             <div>{{survey.date}}</div>
-            <v-btn 
-                v-show="!survey.active "
-                class="green accent-4 white--text surveyStart"
-                @click.stop="surveyActive()"
-            >
-                설문 시작
-            </v-btn>
-            <v-btn 
-                v-show="survey.active"
-                class="red darken-4 white--text surveyEnd"
-                @click.stop="surveyActive()"
-            >
-                설문 종료
-            </v-btn>
         </template>
         <v-stepper v-model="e1">
             <v-stepper-header>
@@ -41,25 +27,32 @@
                     <v-card
                         class="mb-5"
                         color="grey lighten-3"
-                        min-height="250px"
+                        min-height="250"
                     >
                         <v-container fluid>
                             {{survey.surveyList[n-1].surveyQuestion}}
-                            <v-radio-group v-show="survey.surveyList[n-1].surveyType == 1"  
+                            <v-radio-group v-show="survey.surveyList[n-1].surveyType == 1"  >
+                                <v-radio 
+                                :id="`${c}`" 
                                 column
+                                :value="`${c}`"
                                 v-for="c in survey.surveyList[n-1].content.length" 
                                 :key="`${c}-radio`"
-                            >
-                                <v-radio disabled :id="`${c}`" :label="`${survey.surveyList[n-1].content[c-1]}`" color="cyan ligten-1" />
+                                :label="`${survey.surveyList[n-1].content[c-1]}`" 
+                                color="cyan ligten-1" />
                             </v-radio-group>
                             <div v-show="survey.surveyList[n-1].surveyType == 2">
                                 <v-checkbox 
-                                disabled 
                                 :id="`${c}`" 
-                                :label="`${survey.surveyList[n-1].content[c-1]}`" 
                                 v-for="c in survey.surveyList[n-1].content.length"
-                                :key="`${c}-checkbox`"
+                                :key="`${c}-checkbox`" 
+                                :label="`${survey.surveyList[n-1].content[c-1]}`" 
                                 color="cyan ligten-1" />
+                            </div>
+                            <div
+                                v-show="survey.surveyList[n-1].surveyType == 3"
+                            >
+                                text창 
                             </div>
                         </v-container>
                     </v-card>
@@ -84,13 +77,13 @@
     </v-expansion-panel-content>
 </template>
 <script>
-import { Prof } from "@/api";
+import { Stud } from "@/api";
 /*eslint-disable */
 export default {
     data(){
         return {
             steps:this.survey.surveyList.length,
-            e1:1
+            e1:1,
         }
     },
     props:{
@@ -107,12 +100,8 @@ export default {
                 this.e1 = n - 1
             }
         },
-        surveyActive(){
-            Prof.surveyActive(this.survey)
-            .then(res =>{
-                console.log(res);
-                this.survey.active = res.data        
-            })
+        answerSurvey(){
+            
         }
     }
 }

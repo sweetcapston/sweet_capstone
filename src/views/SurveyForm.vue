@@ -257,9 +257,11 @@ export default {
         public:true,
         active:false,
       }
-      console.log(newSurvey)
-      Prof.surveyCreate(newSurvey)
-      .then(result => console.log(result));
+      // Prof.surveyCreate(newSurvey)
+      // .then(result => console.log(result));
+      console.log("Dddd")
+      // this.$router.push({path: `/`});
+      // this.$router.push({path: `class/${this.$store.state.currentClass.classCode}/survey`});
     },
     addStep(n) {
       this.steps = this.steps + 1
@@ -270,8 +272,7 @@ export default {
     nextStep(n) {
       this.e1 = n + 1
     },
-    preStep(n) {
-        console.log(n)
+    preStep (n) {
       if (1 === this.steps) {
         this.e1 = 1
       } else {
@@ -304,5 +305,4 @@ export default {
   height:0px;
   margin-bottom:0px;
 }
-
 </style>

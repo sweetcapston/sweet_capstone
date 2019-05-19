@@ -19,4 +19,7 @@ export default {
     surveyActive(survey){
       return axios.put(`${BaseUrl}/${survey.classCode}/survey/active`, {SID:survey.SID, active:survey.active}, config);
     },
+    loadSurvey(classCode){
+      return axios.post(`${BaseUrl}/${classCode}/survey`, config);
+    }
 };

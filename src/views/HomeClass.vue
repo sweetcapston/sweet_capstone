@@ -3,51 +3,12 @@
     <h1>클래스 이름 : {{this.$store.state.currentClass.className}}</h1>
     <h1>클래스 코드 : {{this.$store.state.currentClass.classCode}}</h1>
     <h1>교수 이름 : {{this.$store.state.currentClass.profName}}</h1>
-    <h2>{{this.$store.state.checkApply}}</h2>
     <span>
       <v-btn color="primary"
         @click="addClass()"
         v-if="this.$store.getters.getIdentity == 1 && (this.$store.state.checkApply == -1)" >수강하기</v-btn> <!-- 수강하지않고있는 학생에게만 보여지도록.. 학생의 수강리스트에서 -->
-      <v-btn color="error" @click="outClass" >클래스 나가기</v-btn>
     </span>
 
-    <v-expansion-panel>
-      
-      <v-expansion-panel-content>
-        
-        <template v-slot:actions>
-          <v-icon color="cyan ligten-1">$vuetify.icons.expand</v-icon>
-        </template>
-        <template v-slot:header>
-          <div>설문제목 날짜</div>
-          
-        </template>
-        <v-card>
-          <v-card-text>
-            
-          </v-card-text>
-        </v-card>
-
-
-
-      </v-expansion-panel-content>
-      <v-expansion-panel-content>
-        <template v-slot:actions>
-          <v-icon color="cyan ligten-1">$vuetify.icons.expand</v-icon>
-        </template>
-        <template v-slot:header>
-          <div>설문제목 날짜</div>
-        </template>
-        <v-card>
-          <v-card-text>
-            
-          </v-card-text>
-        </v-card>
-
-
-
-      </v-expansion-panel-content>
-    </v-expansion-panel>
   </v-app>
 </template>
 

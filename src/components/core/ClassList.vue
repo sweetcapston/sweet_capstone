@@ -60,15 +60,35 @@ export default {
   methods:{
     // 클래스 입장
     enterClass: function(classCode){
-      this.$store.commit("setCurrentClass", 
-      {
-        classCode: classCode,
-        className: this.currentClass.className,
-        profName: this.currentClass.profName
-      });
-      const checkApply = this.$store.state.classList.findIndex( function(item) { return item.classCode === classCode })
-      this.$store.commit('setCheckApply', checkApply);
-      this.$router.push({path: `class/${classCode}/home`});
+      if(this.$store.state.Identity == 1){
+        Stud.classEnter(classCode).then(res => {
+          if(!res.data) {
+            alert("삭제된 클래스 입니다!");
+            return 
+          }
+          else{
+            this.$store.commit("setCurrentClass", 
+            {
+              classCode: classCode,
+              className: this.currentClass.className,
+              profName: this.currentClass.profName
+            });
+            const checkApply = this.$store.state.classList.findIndex( function(item) { return item.classCode === classCode })
+            this.$store.commit('setCheckApply', checkApply);
+            this.$router.push({path: `class/${classCode}/home`});
+          }
+        })
+      } else {
+        this.$store.commit("setCurrentClass", 
+        {
+          classCode: classCode,
+          className: this.currentClass.className,
+          profName: this.currentClass.profName
+        });
+        const checkApply = this.$store.state.classList.findIndex( function(item) { return item.classCode === classCode })
+        this.$store.commit('setCheckApply', checkApply);
+        this.$router.push({path: `class/${classCode}/home`});
+      }
     },
     // 클래스 리스트에서 삭제(학생)
     deleteClassList: function(classCode){

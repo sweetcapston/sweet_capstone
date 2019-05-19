@@ -37,6 +37,18 @@
             </v-list-tile-action>
             <v-list-tile-title v-text="link.text"></v-list-tile-title>
           </v-list-tile>
+          <v-list-tile
+            :to="'/main'"
+            :active-class="color"
+            avatar
+            class="v-list-item"
+            @click="outClass"
+          >
+            <v-list-tile-action>
+              <v-icon medium>{{"mdi-exit-to-app"}}</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title v-text="'클래스 나가기'"></v-list-tile-title>
+          </v-list-tile>
         </v-list>
       </v-layout>
     </v-img>
@@ -68,14 +80,14 @@ export default {
         text: "질문 클래스"
       },
       {
-        to: '/class/'+this.$store.state.currentClass.classCode+'/quiz',
-        icon: 'mdi-quora',
-        text: '퀴즈 클래스' 
-      },
-      {
         to: '/class/'+this.$store.state.currentClass.classCode+'/survey',
         icon: 'mdi-clipboard-text-outline',
         text: '설문 클래스' 
+      },
+      {
+        to: '/class/'+this.$store.state.currentClass.classCode+'/quiz',
+        icon: 'mdi-quora',
+        text: '퀴즈 클래스' 
       },
       {
         to: '/class/'+this.$store.state.currentClass.classCode+'/chart',
@@ -108,6 +120,10 @@ export default {
     },
     moveToMain: function() {
       this.$router.push({ name: "main" });
+    },
+    outClass(){
+      this.$store.commit("removeCurrentClass");
+      this.$router.push({name: 'main'});
     }
     //....
   }
@@ -136,5 +152,6 @@ export default {
   div.v-responsive.v-image > div.v-responsive__content {
     overflow-y: auto;
   }
+
 }
 </style>

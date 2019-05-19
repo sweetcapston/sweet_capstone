@@ -100,7 +100,7 @@ export default {
     enterClass(classCode) {
       Stud.classEnter(classCode)
       .then(res => {
-        if(res.data == false) ;//alert('error');
+        if(res.data == false) alert('없는 클래스 입니다.');
         else{
           //클래스 입장시에 해당 클래스코드 vuex에 저장. 클래스 퇴장시 저장된 클래스코드 삭제
           this.$store.commit("setCurrentClass", {
@@ -111,9 +111,9 @@ export default {
           const checkApply = this.$store.state.classList.findIndex(function(item) { return item.classCode == classCode })
           this.$store.commit('setCheckApply', checkApply);
           this.$router.push({path: `/class/${this.classCode}/home`}) // 해당 클래스 페이지로 이동
-          this.classCode = "";
         }
       })
+      this.classCode = "";
     },
     createClass(className){
       Prof.classCreate(className)
@@ -127,9 +127,9 @@ export default {
             classCode: res.data.classCode,
             profName: this.$store.state.userName
           });
-          this.className = "";
         }
       });
+      this.className = "";
     },
     logout(){
       this.$session.destroy();
