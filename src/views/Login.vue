@@ -11,7 +11,7 @@
       <section>
         <v-parallax 
           height="700"
-          src="@/assets/material.png"
+          src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
         >
           <v-layout
             column

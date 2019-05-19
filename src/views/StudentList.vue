@@ -24,8 +24,8 @@
         <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n">
           <v-card class="mb-5" color="grey lighten-3" min-height="250">
             <v-container fluid>
-              {{survey.surveyList[n-1].surveyQuestion}}
-              <v-radio-group class="radio" v-if="survey.surveyList[n-1].surveyType == 1">
+              <span class="question-title">{{survey.surveyList[n-1].surveyQuestion}}</span>
+              <v-radio-group class="radio" style="padding-top:10px" v-if="survey.surveyList[n-1].surveyType == 1">
                 <v-radio
                   :id="`${c}`"
                   column
@@ -36,7 +36,7 @@
                   color="cyan ligten-1"
                 />
               </v-radio-group>
-              <div class="check" v-if="survey.surveyList[n-1].surveyType == 2">
+              <div class="check" style="padding-top:10px" v-if="survey.surveyList[n-1].surveyType == 2">
                 <v-checkbox
                   :id="`${c}`"
                   v-for="c in survey.surveyList[n-1].content.length"
@@ -50,7 +50,7 @@
                   :class="'text'+survey.SID"
                   solo
                   flat
-                  outline 
+                  outline
                   label="답을 입력하세요"
                   color="cyan lighten-1"
                 ></v-textarea>
@@ -59,7 +59,11 @@
           </v-card>
           <v-layout justify-space-between>
             <v-btn class="cyan lighten-1 white--text" @click="preStep(n)">Pre</v-btn>
-            <v-btn class="cyan lighten-1 white--text" v-show="steps==n" @click="answerSurvey()">complete</v-btn>
+            <v-btn
+              class="cyan lighten-1 white--text"
+              v-show="steps==n"
+              @click="answerSurvey()"
+            >complete</v-btn>
             <v-btn class="cyan lighten-1 white--text" v-show="steps!=n" @click="nextStep(n)">Next</v-btn>
           </v-layout>
         </v-stepper-content>
@@ -76,7 +80,7 @@ export default {
       steps: this.survey.surveyList.length,
       e1: 1,
       answer: [],
-      ans:'',
+      ans: "",
       surveyType: []
     };
   },
@@ -98,36 +102,42 @@ export default {
       const userID = this.$store.state.userID;
       const classCode = this.$store.state.currentClass.classCode;
       const SID = this.survey.SID;
-      let surveyType = []
+      let surveyType = [];
       let answer = [];
-      for(var n= 0; n< this.steps; n++) {
+      for (var n = 0; n < this.steps; n++) {
         surveyType.push(this.survey.surveyList[n].surveyType);
-        if(this.survey.surveyList[n].surveyType == 1){
-          answer.push(""+document.querySelector(`#survey${SID} .radio input[type='radio']:checked`).value);
-        }
-        else if(this.survey.surveyList[n].surveyType == 2){
-          let temp = ""
-          document.querySelectorAll(`#survey${SID} .check input[type='checkbox']:checked`).forEach(element => {
-            temp += element.id;
-          });
+        if (this.survey.surveyList[n].surveyType == 1) {
+          answer.push(
+            "" +
+              document.querySelector(
+                `#survey${SID} .radio input[type='radio']:checked`
+              ).value
+          );
+        } else if (this.survey.surveyList[n].surveyType == 2) {
+          let temp = "";
+          document
+            .querySelectorAll(
+              `#survey${SID} .check input[type='checkbox']:checked`
+            )
+            .forEach(element => {
+              temp += element.id;
+            });
           answer.push(temp);
-        }
-        else if(this.survey.surveyList[n].surveyType == 3){
-          answer.push(document.querySelector(`#survey${SID} .text${SID} textarea`).value);
+        } else if (this.survey.surveyList[n].surveyType == 3) {
+          answer.push(
+            document.querySelector(`#survey${SID} .text${SID} textarea`).value
+          );
         }
       }
       const answer_S = {
-          userID: userID,
-          classCode: classCode,
-          SID: SID,
-          surveyType: surveyType,
-          answer: answer
-      }
-      console.log(answer_S)
-      Stud.answerSurvey(classCode, answer_S)
-      .then(
-        res => console.log(res)
-      )
+        userID: userID,
+        classCode: classCode,
+        SID: SID,
+        surveyType: surveyType,
+        answer: answer
+      };
+      console.log(answer_S);
+      Stud.answerSurvey(classCode, answer_S).then(res => console.log(res));
     }
   }
 };
@@ -147,5 +157,9 @@ export default {
 }
 .surveyStart:hover {
   background: #00e676;
+}
+.question-title {
+  font-size: 2.3rem;
+  font-family: "Roboto", sans-serif;
 }
 </style>
