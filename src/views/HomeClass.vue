@@ -37,7 +37,7 @@ export default {
     outClass(){
       this.$store.commit("removeCurrentClass");
       this.$router.push({name: 'main'});
-    }
+    },
   }
 };
 </script>

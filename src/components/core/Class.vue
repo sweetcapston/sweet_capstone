@@ -12,11 +12,15 @@
 /* eslint-disable */
 import { Auth } from "@/api";
 export default {
+  props: ['test'],
+  beforeCreate() {
+    console.log(this.$route.params);
+    console.log(this.test);
+  },
   created() {
     Auth.auth().then(res => {
       if (!res.data) this.$router.push({ name: "login" });
     });
-    
   },
   mounted() {
     if (Notification && Notification.permission != "granted") {

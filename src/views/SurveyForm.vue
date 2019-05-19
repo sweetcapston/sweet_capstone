@@ -12,12 +12,6 @@
         class="surveyName"
         @click.stop
       />
-      <v-btn 
-        class="cyan lighten-1 white--text newSurvey"
-        @click="completeSurvey()"
-      >
-        SAVE
-      </v-btn>
     </template>
 
     <v-stepper v-model="e1">
@@ -54,7 +48,7 @@
             color="grey lighten-3"
             height="50px"            
           >
-            <v-radio-group v-model="type" :mandatory="false" class="surveyType" row>
+            <v-radio-group v-model="type[n-1]" :mandatory="false" class="surveyType" row>
               <v-radio label="객관식" value="1" color="cyan ligten-1" select></v-radio>
               <v-radio label="객관식 (복수 응답 가능)" value="2" color="cyan ligten-1"></v-radio>
               <v-radio label="주관식" value="3" color="cyan ligten-1"></v-radio>
@@ -78,69 +72,64 @@
             </v-btn>
 
             <v-container>
-              <v-text-field                
+              <v-text-field
                 label="질문을 입력하세요"
-                single-line
-                color="cyan ligten-1"
+                single-line	                
+                color="cyan ligten-1"	
                 class="surveyQuestion"
               />
-              <template v-if="type === '1'">
-                <template v-for="i in samplestype1">
-                  <v-layout
-                    :key="i"
-                  >
+              <div v-if="type[n-1] === '1'">
+                <template v-for="i in samplestype1[n-1].length" >
+                  <v-layout :key="i">
                     <v-text-field 
+                      class="type1"
                       prepend-icon="mdi-checkbox-blank-circle-outline"
                       label="보기를 입력하세요"
                       single-line
                       color="rgb(111, 111, 111)"
-                    ></v-text-field>
-                    <v-spacer />
+                    />
+                    <v-spacer/>
                     <v-icon
                       @click="deleteType1(i)"
                     >mdi-close</v-icon>
                   </v-layout>
                 </template>
-            
-                <v-layout>
+                <v-layout v-if="type[n-1] === '1'">
                   <v-icon
-                    @click="addType1(i)"
+                    @click="addType1(n)"
                   >mdi-plus</v-icon>
                   <v-input
                     label="보기 추가"
                   ></v-input>               
                 </v-layout>
-              </template>
-              
-              <template v-if="type === '2'">
-                <template v-for="j in samplestype2">
-                  <v-layout
-                    :key="j"
-                  >
-                    <v-text-field
+              </div>
+              <div  v-if="type[n-1] === '2'">
+                <template class="type2" v-for="j in samplestype2[n-1].length">
+                  <v-layout :key="1000+j">
+                    <v-text-field 
+                      class="type2"
                       prepend-icon="mdi-checkbox-blank-outline"
                       label="보기를 입력하세요"
                       single-line
                       color="rgb(111, 111, 111)"
-                    ></v-text-field>
+                    />
                     <v-spacer />
                     <v-icon
                       @click="deleteType2(j)"
                     >mdi-close</v-icon>  
                   </v-layout>
                 </template>
-              
-                <v-layout>
+                <v-layout v-if="type[n-1] === '2'">
                   <v-icon
-                    @click="addType2(j)"
+                    @click="addType2(n)"
                   >mdi-plus</v-icon>
                   <v-input
                     label="보기 추가"
                   ></v-input>               
-                </v-layout>
-              </template> 
+                </v-layout> 
+              </div>
 
-              <v-layout v-if="type === '3'">
+              <v-layout v-if="type[n-1] === '3'">
                 <v-textarea
                   solo
                   flat
@@ -193,26 +182,16 @@ export default {
       e1: 1,
       steps: 3,
       icon: "mdi-plus-circle",
-      type: '1',
-      s1: 1,
-      samplestype1: [1],
-      s2: 1,
-      samplestype2: [1]
+      type: new Array(3).fill('1'),
+      samplestype1:[[1], [1], [1]],
+      samplestype2:[[1], [1], [1]]
 
     }
-  },
-  mounted(){
-    document.querySelector("")
   },
   watch: {
     steps (val) {
       if (this.e1 > val) {
         this.e1 = val
-      }
-    },
-    samples (val) {
-      if (this.s1 > val) {
-        this.s1 = val
       }
     }
   },
@@ -225,27 +204,36 @@ export default {
       const date = moment().format("LLL");
       const surveyList = []
       
-      for(var __ = 0; __<this.steps; __++){
-        const surveyType = document.querySelector(".surveyType input[type='radio']:checked").value;
-        const surveyQuestion = document.querySelector(".listItem .surveyQuestion input[type='text']").value;
+      for(var j = 0; j<this.steps; j++){
+        const surveyType = document.querySelectorAll(".surveyType input[type='radio']:checked")[j].value;
+        const surveyQuestion = document.querySelectorAll(".listItem .surveyQuestion input[type='text']")[j].value;
         let content = [];
         let doc;
+        let count;
         switch(surveyType){
           case "1": 
-            doc = document.querySelector('.type1 .v-input--radio-group__input').children;
+            doc = document.querySelectorAll('.type1')
             for(var i = 0 ; i<doc.length; i++)              
-              content.push(doc[i].querySelector('.v-label').textContent);
+              content.push(doc[i].querySelector('input').value);
+            count = new Array(doc.length).fill(0)
             break;
           case "2": 
+            doc = document.querySelectorAll('.type2')
+            for(var i = 0 ; i<doc.length; i++)              
+              content.push(doc[i].querySelector('input').value);
+            count = new Array(doc.length).fill(0)
             break;
           case "3": 
+            doc = document.querySelector('textarea').value;
+            content.push(document.querySelector('textarea').value);
+            count = 1;
             break;
         }
         surveyList.push({
           surveyType: parseInt(surveyType), 
           surveyQuestion: surveyQuestion, 
           content:content, 
-          count:new Array(doc.length).fill(0)
+          count:count
         })
       }
       const newSurvey = {
@@ -256,17 +244,26 @@ export default {
         public:true,
         active:false,
       }
-      // Prof.surveyCreate(newSurvey)
-      // .then(result => console.log(result));
-      console.log("Dddd")
-      // this.$router.push({path: `/`});
-      // this.$router.push({path: `class/${this.$store.state.currentClass.classCode}/survey`});
+      
+      Prof.surveyCreate(newSurvey)
+      .then(res => {
+        if(res.data){
+          this.$emit("childs-event",true)
+          window.history.go(0);
+        }
+      });
     },
     addStep(n) {
       this.steps = this.steps + 1
+      this.type.push('1');
+      this.samplestype1.push([1])
+      this.samplestype2.push([1])
     },
     deleteStep(n) {
-      this.steps = this.steps - 1
+      this.steps = this.e1 - 1
+      this.type.pop()
+      this.samplestype1.pop()
+      this.samplestype2.pop()
     },
     nextStep(n) {
       this.e1 = n + 1
@@ -278,11 +275,11 @@ export default {
         this.e1 = n - 1
       }
     },
-    addType1(i) {
-      this.samplestype1 = this.samplestype1 + 1
+    addType1(n) {
+      this.samplestype1[n-1].push(1)
     },
-    addType2(j) {
-      this.samplestype2 = this.samplestype2 + 1
+    addType2(n) {
+      this.samplestype2[n-1].push(1)
     },
     deleteType1(i) {
       this.samplestype1 = this.samplestype1 - 1

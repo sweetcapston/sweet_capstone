@@ -47,7 +47,7 @@
                             {{survey.surveyList[n-1].surveyQuestion}}
                             <v-radio-group v-show="survey.surveyList[n-1].surveyType == 1"  
                                 column
-                                v-for="c in survey.surveyList[n-1].content.length" 
+                                v-for="c in survey.surveyList[n-1].content.length"
                                 :key="`${c}-radio`"
                             >
                                 <v-radio disabled :id="`${c}`" :label="`${survey.surveyList[n-1].content[c-1]}`" color="cyan ligten-1" />

@@ -17,8 +17,6 @@
       <SurveyForm v-show="formShow" @childs-event="parentsMethod"/>
       <SurveyList v-for="(survey, _id) in surveyList" v-bind:survey="survey" :key="_id"/>
     </v-expansion-panel>
-
-  <!-- <SurveyForm/> -->
 </div>
 </template>
 

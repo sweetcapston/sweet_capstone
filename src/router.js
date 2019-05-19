@@ -56,7 +56,7 @@ export default new Router({
         },
         {
           path: 'survey',
-          component : Survey
+          component : Survey,
         },
         {
           path: 'chart',
