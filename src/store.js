@@ -43,6 +43,7 @@ export default new Vuex.Store({
     },
 
     addClassList:(state, payload) => (state.classList.push(payload)),
+    removeClassList:(state) => (state.classList),
 
     // 현재 클래스 정보
     setCurrentClass:(state, payload) => 
