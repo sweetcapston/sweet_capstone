@@ -3,7 +3,7 @@
         <template v-slot:actions>
             <v-icon color="cyan ligten-1">$vuetify.icons.expand</v-icon>
         </template>
-        <template v-slot:header >
+        <template v-slot:header>
             <div>{{survey.surveyName}}</div>
             <div>{{survey.date}}</div>
             <v-btn 

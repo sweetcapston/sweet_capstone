@@ -3,14 +3,14 @@
     <template v-slot:actions>
       <v-icon color="cyan ligten-1">$vuetify.icons.expand</v-icon>
     </template>
-    <template v-slot:header >
+    <template class="surveyText"
+      v-slot:header>
       제목
       <v-text-field
         solo
         flat
         label="제목을 입력하세요"
         color="cyan ligten-1"
-        height="70px"
         class="surveyName"
         @click.stop
       />
@@ -21,6 +21,7 @@
         SAVE
       </v-btn>
     </template>
+
     <v-stepper v-model="e1">
       <v-stepper-header>
         <template v-for="n in steps">
@@ -64,7 +65,6 @@
           <v-card
             class="mb-5"
             color="grey lighten-3"
-            height="270px"
           >
             <v-btn
               absolute
@@ -85,13 +85,12 @@
                 color="cyan ligten-1"
                 class="surveyQuestion"
               />
-              <template v-if="type === 1">
-                <template v-for="i in samples">
+              <template v-if="type === '1'">
+                <template v-for="i in samplestype1">
                   <v-layout
                     :key="i"
                   >
                     <v-text-field 
-                      num
                       prepend-icon="mdi-checkbox-blank-circle-outline"
                       label="보기를 입력하세요"
                       single-line
@@ -114,18 +113,24 @@
                 ></v-input>               
               </v-layout>
               
-              <v-layout v-if="type === '2'">
-                <v-text-field
-                  prepend-icon="mdi-checkbox-blank-outline"
-                  label="보기를 입력하세요"
-                  single-line
-                  color="rgb(111, 111, 111)"
-                ></v-text-field>
-                <v-spacer />
-                <v-icon
-                  @click="deleteSample()"
-                >mdi-close</v-icon>  
-              </v-layout>
+              <template v-if="type === '2'">
+                <template v-for="j in samplestype2">
+                  <v-layout
+                    :key="j"
+                  >
+                    <v-text-field
+                      prepend-icon="mdi-checkbox-blank-outline"
+                      label="보기를 입력하세요"
+                      single-line
+                      color="rgb(111, 111, 111)"
+                    ></v-text-field>
+                    <v-spacer />
+                    <v-icon
+                      @click="deleteSample()"
+                    >mdi-close</v-icon>  
+                  </v-layout>
+                </template>
+              </template>
 
               <v-layout v-if="type === '2'">
                 <v-icon
@@ -191,10 +196,15 @@ export default {
       icon: "mdi-plus-circle",
       type: '1',
       s1: 1,
-      samples: 1
+      samplestype1: [1],
+      s2: 1,
+      sapmlestype2:[1]
+
     }
   },
-
+  mounted(){
+    document.querySelector("")
+  },
   watch: {
     steps (val) {
       if (this.e1 > val) {
@@ -269,10 +279,10 @@ export default {
       }
     },
     addType1(i) {
-      this.samples = this.samples + 1
+      this.samplestype1 = this.samplestype1 + 1
     },
-    addType2(i) {
-      
+    addType2(j) {
+      this.sapmlestype2 = this.samplestype2 + 1
     },
     deleteSample() {
 
@@ -290,4 +300,9 @@ export default {
 .newSurvey:hover {
   background: cyan;
 }
+.surveyName > .v-input__control > .v-text-field__details{
+  height:0px;
+  margin-bottom:0px;
+}
+
 </style>
