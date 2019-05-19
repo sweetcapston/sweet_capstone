@@ -19,53 +19,88 @@
           >문항 {{ n }}</v-stepper-step>
           <v-divider v-if="n !== steps" :key="n"/>
         </template>
-      </v-stepper-header>
-      <v-stepper-items>
-        <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n">
-          <v-card class="mb-5" color="grey lighten-3" min-height="250">
-            <v-container fluid>
-              {{survey.surveyList[n-1].surveyQuestion}}
-              <v-radio-group class="radio" v-if="survey.surveyList[n-1].surveyType == 1">
-                <v-radio
-                  :id="`${c}`"
-                  column
-                  :value="`${c}`"
-                  v-for="c in survey.surveyList[n-1].content.length"
-                  :key="`${c}-radio`"
-                  :label="`${survey.surveyList[n-1].content[c-1]}`"
-                  color="cyan ligten-1"
-                />
-              </v-radio-group>
-              <div class="check" v-if="survey.surveyList[n-1].surveyType == 2">
-                <v-checkbox
-                  :id="`${c}`"
-                  v-for="c in survey.surveyList[n-1].content.length"
-                  :key="`${c}-checkbox`"
-                  :label="`${survey.surveyList[n-1].content[c-1]}`"
-                  color="cyan ligten-1"
-                />
-              </div>
-              <div v-if="survey.surveyList[n-1].surveyType == 3">
-                <v-textarea
-                  :class="'text'+survey.SID"
-                  solo
-                  flat
-                  outline 
-                  label="답을 입력하세요"
-                  color="cyan lighten-1"
-                ></v-textarea>
-              </div>
-            </v-container>
-          </v-card>
-          <v-layout justify-space-between>
-            <v-btn class="cyan lighten-1 white--text" @click="preStep(n)">Pre</v-btn>
-            <v-btn class="cyan lighten-1 white--text" v-show="steps==n" @click="answerSurvey()">complete</v-btn>
-            <v-btn class="cyan lighten-1 white--text" v-show="steps!=n" @click="nextStep(n)">Next</v-btn>
-          </v-layout>
-        </v-stepper-content>
-      </v-stepper-items>
-    </v-stepper>
-  </v-expansion-panel-content>
+        <template v-slot:header >
+            <div>{{survey.surveyName}}</div>
+            <div>{{survey.date}}</div>
+        </template>
+        <v-stepper v-model="e1">
+            <v-stepper-header>
+                <template class="step" v-for="n in steps">
+                    <v-stepper-step
+                        :key="`${n}-step`"
+                        :complete="e1 > n"
+                        :step="n"
+                        editable
+                        color="cyan lighten-1"
+                    >
+                        문항 {{ n }}
+                    </v-stepper-step>
+                    <v-divider v-if="n !== steps" :key="n"/>
+                </template>
+            </v-stepper-header>
+            <v-stepper-items>
+                <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n">
+                    <v-card
+                        class="mb-5"
+                        color="grey lighten-3"
+                        min-height="250"
+                    >
+                        <v-container fluid>
+                            {{survey.surveyList[n-1].surveyQuestion}}
+                            <v-radio-group v-show="survey.surveyList[n-1].surveyType == 1"  >
+                                <v-radio 
+                                :id="`${c}`" 
+                                column
+                                :value="`${c}`"
+                                v-for="c in survey.surveyList[n-1].content.length" 
+                                :key="`${c}-radio`"
+                                :label="`${survey.surveyList[n-1].content[c-1]}`" 
+                                color="cyan ligten-1" />
+                            </v-radio-group>
+                            <div v-show="survey.surveyList[n-1].surveyType == 2">
+                                <v-checkbox 
+                                :id="`${c}`" 
+                                v-for="c in survey.surveyList[n-1].content.length"
+                                :key="`${c}-checkbox`" 
+                                :label="`${survey.surveyList[n-1].content[c-1]}`" 
+                                color="cyan ligten-1" />
+                            </div>
+                            <div
+                                v-show="survey.surveyList[n-1].surveyType == 3"
+                            >
+                                text창 
+                            </div>
+                        </v-container>
+                    </v-card>
+                    <v-layout justify-space-between>
+                        <v-btn 
+                            class="cyan lighten-1 white--text"
+                            @click="preStep(n)"
+                        >
+                        Pre
+                        </v-btn>
+
+                        <v-btn
+                            v-if="n !== steps" 
+                            :key="n"
+                            class="cyan lighten-1 white--text"
+                            @click="nextStep(n)"
+                        >
+                        Next
+                        </v-btn>
+                        <v-btn
+                            v-if="n === steps" 
+                            :key="n"
+                            class="cyan lighten-1 white--text"
+                            @click="submitSurvey()"
+                        >
+                        Submit
+                        </v-btn>
+                    </v-layout>
+                </v-stepper-content>
+            </v-stepper-items>
+        </v-stepper>
+    </v-expansion-panel-content>
 </template>
 <script>
 import { Stud } from "@/api";

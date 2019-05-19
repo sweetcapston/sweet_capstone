@@ -3,7 +3,7 @@
     <template v-slot:actions>
       <v-icon color="cyan ligten-1">$vuetify.icons.expand</v-icon>
     </template>
-    <template class="surveyText"
+    <template
       v-slot:header>
       <v-text-field
         single-line
@@ -50,9 +50,8 @@
           class="listItem"
         >
           <v-card
-            class="mb-5"
-            color="grey lighten-3"
-            height="50px"            
+            class="typeCard"
+            color="grey lighten-3"            
           >
             <v-radio-group v-model="type" :mandatory="false" class="surveyType" row>
               <v-radio label="객관식" value="1" color="cyan ligten-1" select></v-radio>
@@ -136,7 +135,8 @@
                   >mdi-plus</v-icon>
                   <v-input
                     label="보기 추가"
-                  ></v-input>               
+                    class="addSample"
+                  ></v-input>             
                 </v-layout>
               </template> 
 
@@ -303,8 +303,16 @@ export default {
 .newSurvey:hover {
   background: cyan;
 }
-.surveyName > .v-input__control > .v-text-field__details{
-  height:0px;
-  margin-bottom:0px;
+.surveyName > .v-input__control > .v-text-field__details {
+  height: 0px;
+  margin-bottom: 0px;
+}
+.addSample > .v-input__control > .v-messages {
+  height: 0px;
+  margin: 0px;
+}
+.typeCard > .v-input__control > .v-messages {
+  height: 0px;
+  margin: 0px;
 }
 </style>
