@@ -197,11 +197,7 @@ export default {
       s1: 1,
       samplestype1: [1],
       s2: 1,
-<<<<<<< HEAD
-      samplestype2:[1]
-=======
       samplestype2: [1]
->>>>>>> ef1dda5950f7f05107a85236675b6432d9f1424f
 
     }
   },
