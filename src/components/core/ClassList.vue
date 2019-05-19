@@ -31,8 +31,8 @@
           v-if="this.$store.getters.getIdentity === 2"
         >mdi-close</v-icon>   
         </v-img>
-        <v-card-title class="align-start">{{currentClass.className}}</v-card-title>
-        <v-card-text>
+        <v-card-title id="CardTitle" class="align-start">{{currentClass.className}}</v-card-title>
+        <v-card-text id="CardPadding" >
           <span class="text--primary">
             <span>교수명: {{ currentClass.profName }}</span><br>
             <span>클래스코드: {{ currentClass.classCode }}</span><br>
@@ -67,6 +67,7 @@ export default {
             return 
           }
           else{
+            
             this.$store.commit("setCurrentClass", 
             {
               classCode: classCode,
@@ -75,6 +76,7 @@ export default {
             });
             const checkApply = this.$store.state.classList.findIndex( function(item) { return item.classCode === classCode })
             this.$store.commit('setCheckApply', checkApply);
+            
             this.$router.push({path: `class/${classCode}/home`});
           }
         })
@@ -140,6 +142,16 @@ export default {
   #CardButton:hover{
     background:#EDEDED;
   }
+  #CardTitle{
+    justify-content:center;
+    font-size:1.5rem;
+    padding-bottom: 6px;
+  }
+
+  #CardPadding {
+    padding:6px;
+  }
+
   .v-icon.mdi.mdi-close.theme--light.white--text:hover{
     background:#CFD8DC;
   }

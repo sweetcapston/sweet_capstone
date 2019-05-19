@@ -20,6 +20,9 @@ export default {
       return axios.post(`${BaseUrl}/${classCode}/question`, config);
     },
     loadSurvey(classCode, userID){
-        return axios.post(`${BaseUrl}/${classCode}/survey`, {userID:userID}, config);
+      return axios.post(`${BaseUrl}/${classCode}/survey`, {userID:userID}, config);
+    },
+    answerSurvey(classCode, answer_S){
+      return axios.post(`${BaseUrl}/${classCode}/surveyAnswer_S`, {answer_S: answer_S}, config)
     }
 };

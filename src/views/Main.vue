@@ -110,7 +110,7 @@ export default {
           });
           const checkApply = this.$store.state.classList.findIndex(function(item) { return item.classCode == classCode })
           this.$store.commit('setCheckApply', checkApply);
-          this.$router.push({path: `/class/${this.classCode}/home`}) // 해당 클래스 페이지로 이동
+          this.$router.push({path: `/class/${classCode}/home`}) // 해당 클래스 페이지로 이동
         }
       })
       this.classCode = "";

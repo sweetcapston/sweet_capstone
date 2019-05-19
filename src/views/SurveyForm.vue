@@ -198,7 +198,7 @@ export default {
       s1: 1,
       samplestype1: [1],
       s2: 1,
-      sapmlestype2:[1]
+      samplestype2:[1]
 
     }
   },
