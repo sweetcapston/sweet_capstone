@@ -8,7 +8,6 @@
         @click="addClass()"
         v-if="this.$store.getters.getIdentity == 1 && (this.$store.state.checkApply == -1)" >수강하기</v-btn> <!-- 수강하지않고있는 학생에게만 보여지도록.. 학생의 수강리스트에서 -->
     </span>
-
   </v-app>
 </template>
 
