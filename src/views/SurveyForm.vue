@@ -5,10 +5,8 @@
     </template>
     <template class="surveyText"
       v-slot:header>
-      제목
       <v-text-field
-        solo
-        flat
+        single-line
         label="제목을 입력하세요"
         color="cyan ligten-1"
         class="surveyName"
@@ -43,6 +41,7 @@
           >mdi-plus-circle</v-icon>
         </template>        
       </v-stepper-header>
+
       <v-stepper-items>
         <v-stepper-content
           v-for="n in steps"
@@ -98,20 +97,20 @@
                     ></v-text-field>
                     <v-spacer />
                     <v-icon
-                      @click="deleteSample()"
+                      @click="deleteType1(i)"
                     >mdi-close</v-icon>
                   </v-layout>
                 </template>
+            
+                <v-layout>
+                  <v-icon
+                    @click="addType1(i)"
+                  >mdi-plus</v-icon>
+                  <v-input
+                    label="보기 추가"
+                  ></v-input>               
+                </v-layout>
               </template>
-
-              <v-layout v-if="type === '1'">
-                <v-icon
-                  @click="addType1(i)"
-                >mdi-plus</v-icon>
-                <v-input
-                  label="보기 추가"
-                ></v-input>               
-              </v-layout>
               
               <template v-if="type === '2'">
                 <template v-for="j in samplestype2">
@@ -126,20 +125,20 @@
                     ></v-text-field>
                     <v-spacer />
                     <v-icon
-                      @click="deleteSample()"
+                      @click="deleteType2(j)"
                     >mdi-close</v-icon>  
                   </v-layout>
                 </template>
-              </template>
-
-              <v-layout v-if="type === '2'">
-                <v-icon
-                  @click="addType2(j)"
-                >mdi-plus</v-icon>
-                <v-input
-                  label="보기 추가"
-                ></v-input>               
-              </v-layout> 
+              
+                <v-layout>
+                  <v-icon
+                    @click="addType2(j)"
+                  >mdi-plus</v-icon>
+                  <v-input
+                    label="보기 추가"
+                  ></v-input>               
+                </v-layout>
+              </template> 
 
               <v-layout v-if="type === '3'">
                 <v-textarea
@@ -198,7 +197,11 @@ export default {
       s1: 1,
       samplestype1: [1],
       s2: 1,
+<<<<<<< HEAD
       samplestype2:[1]
+=======
+      samplestype2: [1]
+>>>>>>> ef1dda5950f7f05107a85236675b6432d9f1424f
 
     }
   },
@@ -267,12 +270,12 @@ export default {
       this.steps = this.steps + 1
     },
     deleteStep(n) {
-      this.steps = this.e1 - 1
+      this.steps = this.steps - 1
     },
     nextStep(n) {
       this.e1 = n + 1
     },
-    preStep (n) {
+    preStep(n) {
       if (1 === this.steps) {
         this.e1 = 1
       } else {
@@ -283,15 +286,18 @@ export default {
       this.samplestype1 = this.samplestype1 + 1
     },
     addType2(j) {
-      this.sapmlestype2 = this.samplestype2 + 1
+      this.samplestype2 = this.samplestype2 + 1
     },
-    deleteSample() {
-
+    deleteType1(i) {
+      this.samplestype1 = this.samplestype1 - 1
+    },
+    deleteType2(j) {
+      this.samplestype2 = this.samplestype2 - 1
     }
   }
 }
 </script>
-<style>
+<style>d
 .mdi.mdi-plus-circle:hover {
   background:aqua !important;
 }
