@@ -4,22 +4,26 @@
             <v-icon color="cyan ligten-1">$vuetify.icons.expand</v-icon>
         </template>
         <template v-slot:header>
-            <div>{{survey.surveyName}}</div>
-            <div>{{survey.date}}</div>
-            <v-btn 
-                v-show="!survey.active"
-                class="green accent-4 white--text surveyStart"
-                @click.stop="surveyActive()"
-            >
-                설문 시작
-            </v-btn>
-            <v-btn 
-                v-show="survey.active"
-                class="crimson white--text surveyEnd"
-                @click.stop="surveyActive()"
-            >
-                설문 종료
-            </v-btn>
+            <v-layout>
+                <v-flex lg5 xs3>{{survey.surveyName}}</v-flex>
+                <v-flex lg5 xs4>{{survey.date}}</v-flex>
+                <v-flex lg2 xs2>
+                    <v-btn 
+                        v-show="!survey.active"
+                        class="green accent-4 white--text surveyStart"
+                        @click.stop="surveyActive()"
+                    >
+                        설문 시작
+                    </v-btn>
+                    <v-btn 
+                        v-show="survey.active"
+                        class="crimson white--text surveyEnd"
+                        @click.stop="surveyActive()"
+                    >
+                        설문 종료
+                    </v-btn>
+                </v-flex>
+            </v-layout>
         </template>
         <v-stepper v-model="e1">
             <v-stepper-header>

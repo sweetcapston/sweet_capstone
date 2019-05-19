@@ -1,11 +1,13 @@
 <template>
   <v-expansion-panel-content :id="'survey'+survey.SID">
+    <template v-slot:header>
+      <v-layout>
+        <v-flex lg5 xs5>{{survey.surveyName}}</v-flex>
+        <v-flex lg4 xs6>{{survey.date}}</v-flex>
+      </v-layout>
+    </template>
     <template v-slot:actions>
       <v-icon color="cyan ligten-1">$vuetify.icons.expand</v-icon>
-    </template>
-    <template v-slot:header>
-      <div>{{survey.surveyName}}</div>
-      <div>{{survey.date}}</div>
     </template>
     <v-stepper v-model="e1">
       <v-stepper-header>
