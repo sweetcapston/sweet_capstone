@@ -47,7 +47,7 @@
                   outline
                   solo
                   flat
-                  v-on:keyup.enter='enterClass(getClassCode())'
+                  v-on:keyup.enter='createClass(getClassName())'
                 ></v-text-field>
               </v-flex>
               &nbsp;&nbsp;&nbsp;
