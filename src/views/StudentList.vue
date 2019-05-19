@@ -1,4 +1,4 @@
- <template>
+<template>
   <v-expansion-panel-content :id="'survey'+survey.SID">
     <template v-slot:actions>
       <v-icon color="cyan ligten-1">$vuetify.icons.expand</v-icon>

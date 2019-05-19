@@ -7,7 +7,7 @@
             <div>{{survey.surveyName}}</div>
             <div>{{survey.date}}</div>
             <v-btn 
-                v-show="!survey.active "
+                v-show="!survey.active"
                 class="green accent-4 white--text surveyStart"
                 @click.stop="surveyActive()"
             >
@@ -83,6 +83,7 @@
         </v-stepper>
     </v-expansion-panel-content>
 </template>
+
 <script>
 import { Prof } from "@/api";
 /*eslint-disable */
@@ -97,17 +98,17 @@ export default {
         survey:Object,
     },
     methods:{
-        nextStep (n) {
+        nextStep(n) {
             this.e1 = n + 1
         },
-        preStep (n) {
+        preStep(n) {
             if (1 === this.steps) {
                 this.e1 = 1
             } else {
                 this.e1 = n - 1
             }
         },
-        surveyActive(){
+        surveyActive() {
             Prof.surveyActive(this.survey)
             .then(res =>{
                 console.log(res);
@@ -117,20 +118,21 @@ export default {
     }
 }
 </script>
+
 <style>
-.classStat{
+.classStat {
   width:120px !important;
 }
-.v-expansion-panel__header{
+.v-expansion-panel__header {
   display: -webkit-box;
 }
-.surveyStart{
+.surveyStart {
   margin-right:5px !important;
 }
-.surveyEnd{
+.surveyEnd {
   margin-right:5px !important;
 }
-.surveyStart:hover{
+.surveyStart:hover {
   background: #00E676;
 }
 
