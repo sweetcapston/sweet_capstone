@@ -4,7 +4,7 @@
             <v-icon color="cyan ligten-1">$vuetify.icons.expand</v-icon>
         </template>
         <template v-slot:header>
-            <v-layout>
+            <v-layout align-center>
                 <v-flex lg5 xs3>{{survey.surveyName}}</v-flex>
                 <v-flex lg5 xs4>{{survey.date}}</v-flex>
                 <v-flex lg2 xs2>
