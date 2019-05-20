@@ -24,5 +24,11 @@ export default {
     },
     answerSurvey(classCode, answer_S){
       return axios.post(`${BaseUrl}/${classCode}/surveyAnswer_S`, {answer_S: answer_S}, config)
+    },
+    loadQuiz(classCode, userID){
+      return axios.post(`${BaseUrl}/${classCode}/quiz`, {userID:userID}, config);
+    },
+    answerQuiz(classCode, answer_S){
+      return axios.post(`${BaseUrl}/${classCode}/quizAnswer_S`, {answer_S: answer_S}, config)
     }
 };

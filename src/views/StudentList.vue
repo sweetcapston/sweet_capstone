@@ -66,7 +66,7 @@
               class="cyan lighten-1 white--text"
               v-show="steps==n"
               @click="answerSurvey()"
-            >complete</v-btn>
+            >submit</v-btn>
             <v-btn class="cyan lighten-1 white--text" v-show="steps!=n" @click="nextStep(n)">Next</v-btn>
           </v-layout>
         </v-stepper-content>
