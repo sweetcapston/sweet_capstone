@@ -23,13 +23,14 @@
         </template>
       </v-stepper-header>
       <v-stepper-items>
-        <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n">
+        <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n" :id="`step${n}`">
           <v-card class="mb-5" color="grey lighten-3" min-height="250">
             <v-container fluid>
               <span class="question-title">{{survey.surveyList[n-1].surveyQuestion}}</span>
               <v-radio-group class="radio" style="padding-top:10px" v-if="survey.surveyList[n-1].surveyType == 1">
                 <v-radio
                   :id="`${c}`"
+                  :class="`radioChennel ${c}`"
                   column
                   :value="`${c}`"
                   v-for="c in survey.surveyList[n-1].content.length"
@@ -112,14 +113,14 @@ export default {
           answer.push(
             "" +
               document.querySelector(
-                `#survey${SID} .radio input[type='radio']:checked`
+                `#survey${SID} #step${n+1} input[type='radio']:checked`
               ).value
           );
         } else if (this.survey.surveyList[n].surveyType == 2) {
           let temp = "";
           document
             .querySelectorAll(
-              `#survey${SID} .check input[type='checkbox']:checked`
+              `#survey${SID} #step${n+1} input[type='checkbox']:checked`
             )
             .forEach(element => {
               temp += element.id;
@@ -127,7 +128,7 @@ export default {
           answer.push(temp);
         } else if (this.survey.surveyList[n].surveyType == 3) {
           answer.push(
-            document.querySelector(`#survey${SID} .text${SID} textarea`).value
+            document.querySelector(`#survey${SID} #step${n+1} .text${SID} textarea`).value
           );
         }
       }
@@ -139,12 +140,12 @@ export default {
           answer: answer
       }
       console.log(answer_S)
-      Stud.answerSurvey(classCode, answer_S)
-      .then(
-        res => {
-          window.history.go(0);
-        }
-      )
+      // Stud.answerSurvey(classCode, answer_S)
+      // .then(
+      //   res => {
+      //     window.history.go(0);
+      //   }
+      // )
     }
   }
 };
