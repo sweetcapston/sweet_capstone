@@ -100,6 +100,7 @@ export default {
     },
     props:{
         survey:Object,
+        socket:Object
     },
     methods:{
         nextStep(n) {

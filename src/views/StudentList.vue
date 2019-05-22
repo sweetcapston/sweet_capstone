@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panel-content :id="'survey'+survey.SID">
     <template v-slot:header>
-      <v-layout>
+      <v-layout align-center>
         <v-flex lg5 xs5>{{survey.surveyName}}</v-flex>
         <v-flex lg4 xs6>{{survey.date}}</v-flex>
       </v-layout>
@@ -63,7 +63,7 @@
           <v-layout justify-space-between>
             <v-btn class="cyan lighten-1 white--text" @click="preStep(n)">Pre</v-btn>
             <v-btn
-              class="cyan lighten-1 white--text"
+              class="cyan lighten-1 white--text submit-btn"
               v-show="steps==n"
               @click="answerSurvey()"
             >submit</v-btn>
@@ -88,7 +88,9 @@ export default {
     };
   },
   props: {
-    survey: Object
+    survey: Object,
+    socket: Object,
+    answer_S: Object
   },
   methods: {
     nextStep(n) {
@@ -103,51 +105,59 @@ export default {
     },
     answerSurvey() {
       const userID = this.$store.state.userID;
+      const userName = this.$store.state.userName;
       const classCode = this.$store.state.currentClass.classCode;
       const SID = this.survey.SID;
       let surveyType = [];
       let answer = [];
       for (var n = 0; n < this.steps; n++) {
         surveyType.push(this.survey.surveyList[n].surveyType);
-        if (this.survey.surveyList[n].surveyType == 1) {
-          answer.push(
-            "" +
-              document.querySelector(
-                `#survey${SID} #step${n+1} input[type='radio']:checked`
-              ).value
-          );
-        } else if (this.survey.surveyList[n].surveyType == 2) {
-          let temp = "";
-          document
-            .querySelectorAll(
-              `#survey${SID} #step${n+1} input[type='checkbox']:checked`
-            )
-            .forEach(element => {
-              temp += element.id;
-            });
-          answer.push(temp);
-        } else if (this.survey.surveyList[n].surveyType == 3) {
-          answer.push(
-            document.querySelector(`#survey${SID} #step${n+1} .text${SID} textarea`).value
-          );
+        switch(this.survey.surveyList[n].surveyType) {
+          case 1 :
+            answer.push(document.querySelector(`#survey${SID} #step${n+1} input[type='radio']:checked`).value);
+            break;
+          case 2:  
+            let temp = "";
+            document.querySelectorAll(`#survey${SID} #step${n+1} input[type='checkbox']:checked`).forEach(element => { temp += element.id });
+            answer.push(temp);
+            break;
+          case 3: 
+            answer.push(document.querySelector(`#survey${SID} #step${n+1} .text${SID} textarea`).value);
+            break;
         }
       }
       const answer_S = {
           userID: userID,
+          userName: userName,
           classCode: classCode,
           SID: SID,
           surveyType: surveyType,
           answer: answer
       }
-      console.log(answer_S)
-      // Stud.answerSurvey(classCode, answer_S)
-      // .then(
-      //   res => {
-      //     window.history.go(0);
-      //   }
-      // )
+      this.socket.emit("survey", {answer_S:answer_S});
     }
-  }
+  },mounted() {
+    if(this.answer_S.None == 0){
+      document.querySelector(`#survey${this.survey.SID}`).classList.add("incomplete")
+    }else{
+      const el = document.querySelector(`#survey${this.survey.SID}`)
+      el.querySelectorAll('input').forEach(doc => {
+        doc.disabled = true;
+      })
+      el.querySelectorAll('.v-input').forEach(doc => {
+        doc.classList.add('v-input--is-disabled');
+      })
+      el.querySelectorAll('textarea').forEach(doc => {
+        doc.disabled = true;
+      })
+      el.querySelectorAll('.v-radio').forEach(doc => {
+        doc.classList.add("v-radio--is-disabled");
+      })
+      el.querySelectorAll('.submit-btn').forEach(element => {
+        element.remove(self)
+      });
+    }
+  },
 };
 </script>
 <style>
@@ -169,5 +179,8 @@ export default {
 .question-title {
   font-size: 2.3rem;
   font-family: "Roboto", sans-serif;
+}
+.v-expansion-panel__container.incomplete{
+  background: aliceblue !important;
 }
 </style>

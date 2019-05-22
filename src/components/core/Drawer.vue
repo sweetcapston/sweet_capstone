@@ -152,6 +152,9 @@ export default {
   div.v-responsive.v-image > div.v-responsive__content {
     overflow-y: auto;
   }
-
+  .v-navigation-drawer .v-list .v-list-item .v-list__tile.v-list__tile--active{
+    -webkit-box-shadow:0 !important;
+    box-shadow:0 !important;
+  }
 }
 </style>

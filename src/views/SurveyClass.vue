@@ -11,11 +11,11 @@
       >remove_circle</v-icon>
     </v-layout>
     <v-expansion-panel v-if="Identity==1" v-model="panel" expand>
-      <StudentList v-for="(survey, _id) in surveyList" v-bind:survey="survey" :key="_id"/>
+      <StudentList v-for="n in surveyList.length" v-bind:survey="surveyList[n-1]" v-bind:answer_S="myAnswer_S[n-1]" v-bind:socket="socket" :key="n"/>
     </v-expansion-panel>
     <v-expansion-panel v-else v-model="panel" expand>
       <SurveyForm v-show="formShow" @childs-event="parentsMethod"/>
-      <SurveyList v-for="(survey, _id) in surveyList" v-bind:survey="survey" :key="_id"/>
+      <SurveyList v-for="(survey, _id) in surveyList" v-bind:survey="survey"  v-bind:socket="socket" :key="_id"/>
     </v-expansion-panel>
   </div>
 </template>
@@ -41,31 +41,47 @@ export default {
         if (res.data === "false") 
           alert("설문 가져오기 실패")
         else {
-          this.surveyList = res.data.surveyList;
-          this.panel = new Array(res.data.surveyList.length).fill(false);
-          this.elem = new Array(res.data.surveyList.length).fill(1);
+          const {surveyList, myAnswer_S} = res.data;
+          this.surveyList = surveyList;
+          this.myAnswer_S = myAnswer_S;
+          this.panel = new Array(surveyList.length).fill(false);
+          this.elem = new Array(surveyList.length).fill(1);
           this.steps = []
-          res.data.surveyList.forEach(element => {
+          surveyList.forEach(element => {
             this.steps.push(element.surveyList.length);
           });
         }
       });
-    } 
-    else {
+    } else {
       Prof.loadSurvey(this.$store.state.currentClass.classCode).then(res => {
         if (res.data === "false") 
           alert("설문 가져오기 실패")
         else {
-          this.surveyList = res.data.surveyList;
-          this.panel = new Array(res.data.surveyList.length).fill(false);
-          this.elem = new Array(res.data.surveyList.length).fill(1);
+          const {surveyList} = res.data;
+          this.surveyList = surveyList;
+          this.panel = new Array(surveyList.length).fill(false);
+          this.elem = new Array(surveyList.length).fill(1);
           this.steps = []
-          res.data.surveyList.forEach(element => {
+          surveyList.forEach(element => {
             this.steps.push(element.surveyList.length);
           });
         }
       });
     }
+  },
+  created() {
+    this.socket.emit("channelJoin", {
+      classCode: this.$store.state.currentClass.classCode, 
+      Identity: this.$store.state.Identity, 
+      userName: this.$store.state.userName, 
+      userID: this.$store.state.userID
+    })
+    this.socket.on("joinSuccess", data=>{
+      console.log("socket connect")
+    })
+    this.socket.on("survey", (data) => {
+      console.log(data);
+    })
   },
   data () {
     return {
@@ -77,6 +93,7 @@ export default {
       elem:[],
       steps:[],
       surveyList:[],
+      completeList:[],
       formShow:false
     }
   },
@@ -90,8 +107,13 @@ export default {
     },
     parentsMethod: function(active) {
       this.formShow = false;
-    }
-  }
+    },
+  },
+  beforeRouteLeave (to, from, next) {
+    this.socket.emit("diconnect");
+    this.socket.disconnect();
+    next()
+  },
 }
 </script>
 <style>
