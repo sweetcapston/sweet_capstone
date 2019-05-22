@@ -1,8 +1,9 @@
 <template>
   <v-expansion-panel-content class="createQuiz">
     <template v-slot:actions>
-      <v-icon color="cyan ligten-1">$vuetify.icons.expand</v-icon>
+      <v-icon color="teal">done</v-icon>
     </template>
+    
     <template
       v-slot:header
     >
@@ -11,6 +12,7 @@
         label="제목을 입력하세요"
         color="cyan ligten-1"
         class="quizName"
+        @click.stop
       ></v-text-field>
     </template>
 
@@ -26,15 +28,17 @@
           >
             문항 {{ n }}
           </v-stepper-step>
-          <v-divider
-            v-if="n !== steps"
+          
+          <v-divider 
+            v-if="n !== steps" 
             :key="n"
-          ></v-divider>         
+          ></v-divider>        
         </template>
+
         <template>
           <v-icon
-            class="cyan lighten-1 white--text"
-            @click="addStep()"
+          class="cyan lighten-1 white--text"
+          @click="addStep()"
           >mdi-plus-circle</v-icon>
         </template>        
       </v-stepper-header>
@@ -44,14 +48,15 @@
           v-for="n in steps"
           :key="`${n}-content`"
           :step="n"
+          class="listItem"
         >
           <v-card
-            class="typeCard"
             color="grey lighten-3"
-            height="50px"            
+            height="50px"
+            class="typeCard"      
           >
             <v-radio-group v-model="type[n-1]" :mandatory="false" class="quizType" row>
-              <v-radio label="객관식" value="1" color="cyan ligten-1"></v-radio>
+              <v-radio label="객관식" value="1" color="cyan ligten-1" select></v-radio>
               <v-radio label="객관식 (복수 응답 가능)" value="2" color="cyan ligten-1"></v-radio>
               <v-radio label="주관식" value="3" color="cyan ligten-1"></v-radio>
             </v-radio-group>
@@ -74,29 +79,30 @@
             </v-btn>
 
             <v-container>
-              <v-text-field                
+              <v-text-field
                 label="질문을 입력하세요"
-                single-line
-                color="cyan ligten-1"
+                single-line	                
+                color="cyan ligten-1"	
+                class="quizQuestion"
               ></v-text-field>
-              <div v-if="tyoe[n-1] === '1'">
-                <template v-for="i in samplestype1[n-1].length">
+              <div v-if="type[n-1] === '1'">
+                <template v-for="i in samplestype1[n-1].length" >
                   <v-layout :key="i">
-                    <v-text-field
+                    <v-text-field 
                       class="type1"
-                      prepend-icon="mdi-checkbox-blan-circle-outline"
+                      prepend-icon="mdi-checkbox-blank-circle-outline"
                       label="보기를 입력하세요"
                       single-line
                       color="rgb(111, 111, 111)"
                     ></v-text-field>
-                    <v-spacer />
+                    <v-spacer/>
                     <v-icon
                       @click="deleteType1(i)"
                     >mdi-close</v-icon>
                   </v-layout>
                 </template>
-
-                <v-layout
+                
+                <v-layout 
                   v-if="type[n-1] === '1'"
                   @click="addType1(n)"
                 >
@@ -104,14 +110,14 @@
                   <v-input
                     label="보기 추가"
                     class="addSample"
-                  ></v-input>
+                  ></v-input>               
                 </v-layout>
               </div>
 
-              <div v-if="type[n-1] === '2'">
+              <div  v-if="type[n-1] === '2'">
                 <template class="type2" v-for="j in samplestype2[n-1].length">
                   <v-layout :key="1000+j">
-                    <v-text-field
+                    <v-text-field 
                       class="type2"
                       prepend-icon="mdi-checkbox-blank-outline"
                       label="보기를 입력하세요"
@@ -124,6 +130,7 @@
                     >mdi-close</v-icon>  
                   </v-layout>
                 </template>
+
                 <v-layout 
                   v-if="type[n-1] === '2'"
                   @click="addType2(n)"
@@ -132,8 +139,8 @@
                   <v-input
                     label="보기 추가"
                     class="addSample"
-                  ></v-input>
-                </v-layout>
+                  ></v-input>               
+                </v-layout> 
               </div>
 
               <v-layout v-if="type[n-1] === '3'">
@@ -141,7 +148,6 @@
                   solo
                   flat
                   outline 
-                  label="답을 입력하세요"
                   color="cyan lighten-1"
                 ></v-textarea>
               </v-layout>
@@ -156,22 +162,21 @@
               Pre
             </v-btn>
 
-            <v-btn
-              v-if="n !== steps"
+            <v-btn 
+              v-if="n !== steps" 
               :key="n"
               class="cyan lighten-1 white--text"
               @click="nextStep(n)"
             >
               Next
             </v-btn>
-
             <v-btn
-              v-if="n === steps"
+              v-if="n === steps" 
               :key="n"
               class="cyan lighten-1 white--text"
               @click="completeQuiz()"
             >
-              complete
+              Complete
             </v-btn>
           </v-layout>
         </v-stepper-content>
@@ -181,6 +186,7 @@
 </template>
 
 <script>
+/*eslint-disable */
 import store from '@/store.js'
 import { Prof } from "@/api";
 export default {
@@ -190,10 +196,9 @@ export default {
       steps: 3,
       icon: "mdi-plus-circle",
       type: new Array(3).fill('1'),
-      samplestype1: [[1], [1], [1]],
-      samplestype2: [[1], [1], [1]],
-      answer: [],
-      selected: []
+      samplestype1:[[1], [1], [1]],
+      samplestype2:[[1], [1], [1]]
+
     }
   },
   watch: {
@@ -205,11 +210,65 @@ export default {
   },
   methods: {
     completeQuiz() {
-
+      let moment = require('moment');
+      moment.locale('ko');
+      const quizName = document.querySelector('.quizName input').value;
+      const classCode = this.$store.state.currentClass.classCode;
+      const date = moment().format("LLL");
+      const quizList = []
+      
+      for(var j = 0; j<this.steps; j++){
+        const quizType = document.querySelectorAll(".quizType input[type='radio']:checked")[j].value;
+        const quizQuestion = document.querySelectorAll(".listItem .quizQuestion input[type='text']")[j].value;
+        let content = [];
+        let doc;
+        let count;
+        switch(quizType){
+          case "1": 
+            doc = document.querySelectorAll('.type1')
+            for(let i = 0 ; i<doc.length; i++)              
+              content.push(doc[i].querySelector('input').value);
+            count = new Array(doc.length).fill(0)
+            break;
+          case "2": 
+            doc = document.querySelectorAll('.type2')
+            for(let i = 0 ; i<doc.length; i++)              
+              content.push(doc[i].querySelector('input').value);
+            count = new Array(doc.length).fill(0)
+            break;
+          case "3": 
+            doc = document.querySelector('textarea').value;
+            content.push(document.querySelector('textarea').value);
+            count = 1;
+            break;
+        }
+        quizList.push({
+          quizType: parseInt(quizType), 
+          quizQuestion: quizQuestion, 
+          content:content, 
+          count:count
+        })
+      }
+      const newQuiz = {
+        quizName:quizName,
+        quizList:quizList,
+        classCode:classCode,
+        date:date,
+        public:true,
+        active:false,
+      }
+      
+      Prof.quizCreate(newQuiz)
+      .then(res => {
+        if(res.data){
+          this.$emit("childs-event",true)
+          window.history.go(0);
+        }
+      });
     },
     addStep(n) {
       this.steps = this.steps + 1
-      this.type.push('1')
+      this.type.push('1');
       this.samplestype1.push([1])
       this.samplestype2.push([1])
     },
@@ -219,10 +278,10 @@ export default {
       this.samplestype1.pop()
       this.samplestype2.pop()
     },
-    nextStep (n) {
+    nextStep(n) {
       this.e1 = n + 1
     },
-    preStep (n) {
+    preStep(n) {
       if (1 === this.steps) {
         this.e1 = 1
       } else {
@@ -244,3 +303,33 @@ export default {
   }
 }
 </script>
+<style>
+.mdi.mdi-plus-circle:hover {
+  background:aqua !important;
+}
+.mdi.mdi-plus-circle:active {
+  box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12);
+}
+.newQuiz:hover {
+  background: cyan;
+}
+.quizName > .v-input__control > .v-text-field__details{
+  height:0px;
+  margin-bottom:0px;
+}
+.addSample > .v-input__control > .v-message {
+  height: 0px;
+  margin: 0px;
+}
+.typeCard > .v-input__control > .v-message {
+  height: 0px;
+  margin: 0px;
+}
+.quizType > .v-input__control > .v-input__slot{
+  margin-top: 10px;
+  margin-left: 5px;
+}
+.addSample{
+  margin-top:20px;
+}
+</style>

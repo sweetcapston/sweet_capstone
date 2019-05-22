@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panel-content :id="'quiz'+quiz.SID">
+  <v-expansion-panel-content :id="'quiz'+quiz.QID">
     <template v-slot:header>
       <v-layout>
         <v-flex lg5 xs5> {{ quiz.quizName }} </v-flex>
@@ -97,7 +97,7 @@ export default {
     answerQuiz() {
       const userID = this.$store.state.userID;
       const classCode = this.$store.state.currentClass.classCode;
-      const SID = this.quiz.SID;
+      const QID = this.quiz.QID;
       let quizType = [];
       let answer = [];
       for (var n = 0; n < this.steps; n++) {
@@ -106,14 +106,14 @@ export default {
           answer.push (
             "" +
               document.querySelector(
-                `#quiz${SID} #step${n+1} input[type='radio']:checked`
+                `#quiz${QID} #step${n+1} input[type='radio']:checked`
               ).value
           );
         } else if (this.quiz.quizList[n].quizType == 2) {
           let temp = "";
           document
             .querySelectorAll (
-              `#quiz${SID} #step${n+1} input[type='checkbox']:chcked`
+              `#quiz${QID} #step${n+1} input[type='checkbox']:chcked`
             )
             .forEach (element => {
               temp += element.id;
@@ -121,18 +121,18 @@ export default {
           answer.push(temp);
         } else if (this.quiz.quizList[n].quizType == 3) {
           answer.push(
-            document.querySelector(`#quiz${SID} #step${n+1} .text${SID} textarea`).value
+            document.querySelector(`#quiz${QID} #step${n+1} .text${QID} textarea`).value
           );
         }
       }
-      const answer_S = {
+      const answer_Q = {
         userID: userID,
         classCode: classCode,
-        SID: SID,
+        QID: QID,
         quizType: quizType,
         answer: answer
       }
-      // console.log(answer_S)
+      // console.log(answer_Q)
     }
   }
 };

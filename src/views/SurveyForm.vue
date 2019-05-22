@@ -214,13 +214,13 @@ export default {
         switch(surveyType){
           case "1": 
             doc = document.querySelectorAll('.type1')
-            for(var i = 0 ; i<doc.length; i++)              
+            for(let i = 0 ; i<doc.length; i++)              
               content.push(doc[i].querySelector('input').value);
             count = new Array(doc.length).fill(0)
             break;
           case "2": 
             doc = document.querySelectorAll('.type2')
-            for(var i = 0 ; i<doc.length; i++)              
+            for(let i = 0 ; i<doc.length; i++)              
               content.push(doc[i].querySelector('input').value);
             count = new Array(doc.length).fill(0)
             break;
