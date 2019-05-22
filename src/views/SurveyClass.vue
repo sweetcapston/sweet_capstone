@@ -79,9 +79,6 @@ export default {
     this.socket.on("joinSuccess", data=>{
       console.log("socket connect")
     })
-    this.socket.on("survey", (data) => {
-      console.log(data);
-    })
   },
   data () {
     return {

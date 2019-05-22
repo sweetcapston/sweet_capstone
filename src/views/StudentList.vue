@@ -78,6 +78,23 @@
 import { Stud } from "@/api";
 /*eslint-disable */
 export default {
+  created() {
+    this.socket.on("survey", (data) => {
+      if(this.survey.SID == data.SID){
+        for (let i = 0; i < data.surveyType.length; i++) {
+          if (parseInt(data.surveyType[i]) < 3) {
+            let check = parseInt(data.answer[i]);
+            while (check >= 1) {
+                this.survey.surveyList[i].count[check % 10 - 1]++;
+                check = parseInt(check / 10)
+            }
+          } else{
+            this.survey.surveyList[i].content.push(data.answer[i]);
+          }
+        }
+      }
+    })
+  },
   data() {
     return {
       steps: this.survey.surveyList.length,
