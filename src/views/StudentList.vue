@@ -25,29 +25,66 @@
       <v-stepper-items>
         <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n" :id="`step${n}`">
           <v-card class="mb-5" color="grey lighten-3" min-height="250">
-            <v-container fluid>
+            <v-container fluid style="padding-bottom:20px">
               <span class="question-title">{{survey.surveyList[n-1].surveyQuestion}}</span>
-              <v-radio-group class="radio" style="padding-top:10px" v-if="survey.surveyList[n-1].surveyType == 1">
-                <v-radio
-                  :id="`${c}`"
-                  :class="`radioChennel ${c}`"
-                  column
-                  :value="`${c}`"
-                  v-for="c in survey.surveyList[n-1].content.length"
-                  :key="`${c}-radio`"
-                  :label="`${survey.surveyList[n-1].content[c-1]}  count:  ${survey.surveyList[n-1].count[c-1]}`"
-                  color="cyan ligten-1"
-                />
+              <!-- 라디오버튼 -->
+              <v-radio-group
+                class="radio"
+                style="padding-top:10px"
+                v-if="survey.surveyList[n-1].surveyType == 1"
+              >
+                <div v-for="c in survey.surveyList[n-1].content.length" :key="`${c}-radio`">
+                  <v-radio
+                    :id="`${c}`"
+                    column
+                    :value="`${c}`"
+                    color="cyan ligten-1"
+                    class="full-width"
+                  >
+                    <template v-slot:label>
+                      <v-flex>
+                        {{survey.surveyList[n-1].content[c-1]}} {{survey.surveyList[n-1].count[c-1]}}
+                        <!-- TODO:막대그래프 참 조건FIXME: -->
+                        <v-progress-linear
+                          v-if="false" 
+                          color="cyan"
+                          width="50px"
+                          height="20"
+                          v-bind:value="survey.surveyList[n-1].count[c-1] * getPercent(survey.surveyList[n-1].count)"
+                        />
+                      </v-flex>
+                    </template>
+                  </v-radio>
+                </div>
               </v-radio-group>
-              <div class="check" style="padding-top:10px" v-if="survey.surveyList[n-1].surveyType == 2">
+              <!-- 체크박스 -->
+              <div
+                class="check"
+                style="padding-top:10px"
+                v-if="survey.surveyList[n-1].surveyType == 2"
+              >
                 <v-checkbox
                   :id="`${c}`"
                   v-for="c in survey.surveyList[n-1].content.length"
                   :key="`${c}-checkbox`"
-                  :label="`${survey.surveyList[n-1].content[c-1]}  count:  ${survey.surveyList[n-1].count[c-1]}`"
                   color="cyan ligten-1"
-                />
+                >
+                  <template v-slot:label>
+                    <v-flex>
+                      {{survey.surveyList[n-1].content[c-1]}} {{survey.surveyList[n-1].count[c-1]}}
+                      <!-- TODO:막대그래프 참 조건FIXME: -->
+                      <v-progress-linear
+                        v-if="true"
+                        color="cyan"
+                        width="50px"
+                        height="20"
+                        v-bind:value="survey.surveyList[n-1].count[c-1] * getPercent(survey.surveyList[n-1].count)"
+                      />
+                    </v-flex>
+                  </template>
+                </v-checkbox>
               </div>
+              <!--  주관식 -->
               <div v-if="survey.surveyList[n-1].surveyType == 3">
                 <v-textarea
                   :class="'text'+survey.SID"
@@ -57,6 +94,20 @@
                   label="답을 입력하세요"
                   color="cyan lighten-1"
                 ></v-textarea>
+                <!-- TODO:리스트 참 조건FIXME: -->
+                <v-expansion-panel v-if="true">
+                  <v-expansion-panel-content>
+                    <template v-slot:header>
+                      <div>응답 리스트</div>
+                    </template>
+                    <div v-for="i in survey.surveyList[n-1].content.length" :key="i">
+                      <v-card>
+                        <v-card-text>{{survey.surveyList[n-1].content[i-1]}}</v-card-text>
+                        <v-divider/>
+                      </v-card>
+                    </div>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
               </div>
             </v-container>
           </v-card>
@@ -93,6 +144,11 @@ export default {
     answer_S: Object
   },
   methods: {
+    getPercent(array) {
+      var sum = 0;
+      for (var i = 0; i < array.length; i++) sum = sum + array[i];
+      return 100 / sum;
+    },
     nextStep(n) {
       this.e1 = n + 1;
     },
@@ -112,54 +168,70 @@ export default {
       let answer = [];
       for (var n = 0; n < this.steps; n++) {
         surveyType.push(this.survey.surveyList[n].surveyType);
-        switch(this.survey.surveyList[n].surveyType) {
-          case 1 :
-            answer.push(document.querySelector(`#survey${SID} #step${n+1} input[type='radio']:checked`).value);
+        switch (this.survey.surveyList[n].surveyType) {
+          case 1:
+            answer.push(
+              document.querySelector(
+                `#survey${SID} #step${n + 1} input[type='radio']:checked`
+              ).value
+            );
             break;
-          case 2:  
+          case 2:
             let temp = "";
-            document.querySelectorAll(`#survey${SID} #step${n+1} input[type='checkbox']:checked`).forEach(element => { temp += element.id });
+            document
+              .querySelectorAll(
+                `#survey${SID} #step${n + 1} input[type='checkbox']:checked`
+              )
+              .forEach(element => {
+                temp += element.id;
+              });
             answer.push(temp);
             break;
-          case 3: 
-            answer.push(document.querySelector(`#survey${SID} #step${n+1} .text${SID} textarea`).value);
+          case 3:
+            answer.push(
+              document.querySelector(
+                `#survey${SID} #step${n + 1} .text${SID} textarea`
+              ).value
+            );
             break;
         }
       }
       const answer_S = {
-          userID: userID,
-          userName: userName,
-          classCode: classCode,
-          SID: SID,
-          surveyType: surveyType,
-          answer: answer
-      }
-      this.socket.emit("survey", {answer_S:answer_S});
+        userID: userID,
+        userName: userName,
+        classCode: classCode,
+        SID: SID,
+        surveyType: surveyType,
+        answer: answer
+      };
+      this.socket.emit("survey", { answer_S: answer_S });
       window.history.go(0);
     }
   },
   mounted() {
-    if(this.answer_S.None == 0){
-      document.querySelector(`#survey${this.survey.SID}`).classList.add("incomplete")
-    }else{
-      const el = document.querySelector(`#survey${this.survey.SID}`)
-      el.querySelectorAll('input').forEach(doc => {
+    if (this.answer_S.None == 0) {
+      document
+        .querySelector(`#survey${this.survey.SID}`)
+        .classList.add("incomplete");
+    } else {
+      const el = document.querySelector(`#survey${this.survey.SID}`);
+      el.querySelectorAll("input").forEach(doc => {
         doc.disabled = true;
-      })
-      el.querySelectorAll('.v-input').forEach(doc => {
-        doc.classList.add('v-input--is-disabled');
-      })
-      el.querySelectorAll('textarea').forEach(doc => {
+      });
+      el.querySelectorAll(".v-input").forEach(doc => {
+        doc.classList.add("v-input--is-disabled");
+      });
+      el.querySelectorAll("textarea").forEach(doc => {
         doc.disabled = true;
-      })
-      el.querySelectorAll('.v-radio').forEach(doc => {
+      });
+      el.querySelectorAll(".v-radio").forEach(doc => {
         doc.classList.add("v-radio--is-disabled");
-      })
-      el.querySelectorAll('.submit-btn').forEach(element => {
-        element.remove(self)
+      });
+      el.querySelectorAll(".submit-btn").forEach(element => {
+        element.remove(self);
       });
     }
-  },
+  }
 };
 </script>
 <style>
@@ -182,7 +254,19 @@ export default {
   font-size: 2.3rem;
   font-family: "Roboto", sans-serif;
 }
-.v-expansion-panel__container.incomplete{
+.v-expansion-panel__container.incomplete {
   background: aliceblue !important;
+}
+.v-input--selection-controls .v-input__control {
+  width: 100%;
+}
+.full-width {
+  width: 100%;
+}
+.v-input .v-progress-linear {
+  position: relative;
+}
+.v-input--selection-controls.v-input .v-label {
+  width: 50%;
 }
 </style>
