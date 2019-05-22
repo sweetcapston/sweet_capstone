@@ -135,8 +135,10 @@ export default {
           answer: answer
       }
       this.socket.emit("survey", {answer_S:answer_S});
+      window.history.go(0);
     }
-  },mounted() {
+  },
+  mounted() {
     if(this.answer_S.None == 0){
       document.querySelector(`#survey${this.survey.SID}`).classList.add("incomplete")
     }else{
