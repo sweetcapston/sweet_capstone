@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panel-content>
     <template v-slot:actions>
-      <v-icon color="cyan lighten-1">$vuetify.icons.expand</v-icon>
+      <v-icon color="teal">done</v-icon>
     </template>
     <template v-slot:header>
       <v-layout align-center>
@@ -64,7 +64,7 @@
                 <v-radio 
                   disabled
                   :id="`${c}`"
-                  :label="`${survey.surveyList[n-1].content[c-1]} count:  ${survey.surveyList[n-1].count[c-1]}`" 
+                  :label="`${quiz.quizList[n-1].content[c-1]} count:  ${quiz.quizList[n-1].count[c-1]}`" 
                   color="cyan ligten-1"
                 ></v-radio>
               </v-radio-group>
@@ -126,7 +126,7 @@ export default {
         this.e1 = n - 1
       }
     },
-    surveyActive() {
+    quizActive() {
       Prof.quizActive(this.quiz)
       .then(res => {
         // console.log(res);
