@@ -44,9 +44,8 @@
                     <template v-slot:label>
                       <v-flex>
                         {{survey.surveyList[n-1].content[c-1]}} {{survey.surveyList[n-1].count[c-1]}}
-                        <!-- TODO:막대그래프 참 조건FIXME: -->
                         <v-progress-linear
-                          v-if="false" 
+                          v-if="answer_S.None != 0"  
                           color="cyan"
                           width="50px"
                           height="20"
@@ -72,9 +71,8 @@
                   <template v-slot:label>
                     <v-flex>
                       {{survey.surveyList[n-1].content[c-1]}} {{survey.surveyList[n-1].count[c-1]}}
-                      <!-- TODO:막대그래프 참 조건FIXME: -->
                       <v-progress-linear
-                        v-if="true"
+                        v-if="answer_S.None != 0" 
                         color="cyan"
                         width="50px"
                         height="20"
@@ -94,8 +92,7 @@
                   label="답을 입력하세요"
                   color="cyan lighten-1"
                 ></v-textarea>
-                <!-- TODO:리스트 참 조건FIXME: -->
-                <v-expansion-panel v-if="true">
+                <v-expansion-panel v-if="answer_S.None != 0" >
                   <v-expansion-panel-content>
                     <template v-slot:header>
                       <div>응답 리스트</div>
@@ -129,6 +126,23 @@
 import { Stud } from "@/api";
 /*eslint-disable */
 export default {
+  created() {
+    this.socket.on("survey", (data) => {
+      if(this.survey.SID == data.SID){
+        for (let i = 0; i < data.surveyType.length; i++) {
+          if (parseInt(data.surveyType[i]) < 3) {
+            let check = parseInt(data.answer[i]);
+            while (check >= 1) {
+                this.survey.surveyList[i].count[check % 10 - 1]++;
+                check = parseInt(check / 10)
+            }
+          } else{
+            this.survey.surveyList[i].content.push(data.answer[i]);
+          }
+        }
+      }
+    })
+  },
   data() {
     return {
       steps: this.survey.surveyList.length,
