@@ -287,9 +287,9 @@ export default {
 #chat-container {
   display: grid;
   grid:
-    "chat-title search-container" 60px
+    "chat-title search-container" 8%
     "chat-message-list conversation-list" 1fr
-    "chat-form new-message-container" 60px
+    "chat-form new-message-container" 8%
     / 1fr 2px;
   width: 100%;
   height: 90vh;
@@ -399,5 +399,8 @@ export default {
 }
 #conversation-list::-webkit-scrollbar-track {
   background: 0;
+}
+.v-text-field.v-text-field--solo .v-input__control {
+  min-height: 36px;
 }
 </style>
