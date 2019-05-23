@@ -1,49 +1,81 @@
 <template>
   <v-toolbar
-    app
-    flat
-    dark color="secendary"
+    class="gradient white--text"
+    height="50px"
+    app 
+    flat   
   >
-    <v-toolbar-side-icon
+  <v-toolbar-side-icon
       class="hidden-md-and-up"
       @click="toggleDrawer"
-    />
-    <v-container
-      mx-auto
-      py-0
+  />
+    <v-toolbar-title class="headline text-uppercase">
+      <span >OpenClass</span>
+      <span  class="hidden-md-and-down font-weight-light"> {{this.$store.state.userName}} </span>
+    </v-toolbar-title>
+    <v-spacer/>
+
+    <v-toolbar-items>
+      <v-flex
+        align-center
+        layout
+        py-2
+        
+      >
+        <v-icon class="hidden-md-and-down" color="tertiary" margin="2px">mdi-bell</v-icon>
+        <v-icon class="hidden-md-and-down" color="tertiary" margin="2px">mdi-account-circle</v-icon>
+        <v-icon class="hidden-md-and-down" color="tertiary" margin="2px">mdi-cogs</v-icon>
+      </v-flex>
+    </v-toolbar-items>
+
+
+    <v-btn
+      flat
+      @click="logout"
     >
-      <v-layout>
-        <v-img
-          :src="require('../../assets/logo.svg')"
-          class="mr-4"
-          contain
-          height="48"
-          width="48"
-          max-width="48"
-        />
-        <v-btn
-          v-for="(link, i) in $store.state.links"
-          :key="i"
-          :to="link.to"
-          class="ml-0 hidden-sm-and-down"
-          flat
-        >
-          {{ link.text }}
-        </v-btn>
-      </v-layout>
-    </v-container>
+      <span class="mr-2 white--text" >logout</span>
+    </v-btn>
   </v-toolbar>
 </template>
 
 <script>
+/*eslint-disable */
   // Utilities
   import {
     mapMutations
   } from 'vuex'
+  import {
+    Auth
+  } from "@/api"
 
   export default {
+    data: () => ({
+      title: null
+    }),
+
+    watch: {
+      '$route' (val) {
+        this.title = val.name
+      }
+    },
+
     methods: {
-      ...mapMutations(['toggleDrawer'])
-    }
+      ...mapMutations(['toggleDrawer']),
+      logout(){
+        this.$session.destroy();
+        Auth.logout().then(res => {
+          if(res.data == "logout"){
+            this.$store.commit('removeLoginData');
+            this.$router.push({name: 'login'});
+          }
+        })
+      }
+    },
   }
 </script>
+
+<style>
+.gradient {
+  background: linear-gradient(100deg, #9198e5, #26C6DA)
+} 
+</style>

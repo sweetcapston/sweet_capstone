@@ -1,6 +1,406 @@
 <template>
-  <v-app>
-    <h1> 질문 페이지 </h1>
-    <h1> 클래스 코드 : {{this.$store.state.classCode}} </h1>
-  </v-app>
+  <v-layout row wrap fill-height>
+    <v-flex xs12 sm12 md12 lg9 xl9>
+      <div id="chat-container">
+        <div id="chat-title">
+          <span>질문 클래스</span>
+        </div>
+
+        <div id="chat-message-list">
+          <template v-for="(ques) in questionList">
+            <v-flex id="message" :key="ques.index">
+              <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
+
+              <v-divider/>
+              <v-list-tile id="auto_height" :key="ques.title">
+                <v-list-tile-avatar>
+                  <img :src="image">
+                </v-list-tile-avatar>
+
+                <v-list-tile-content>
+                    <v-layout  id="full-width">
+                    <v-flex xs6 sm4 md5 lg5 xl5>
+                      <v-card v-if="!ques.anonymous" flat>{{ques.userName}}</v-card>
+                      <v-card v-else flat>익명</v-card>
+            
+                    </v-flex>
+                    
+                    <v-flex xs12 sm8 md7 lg7 xl7 style="text-align: end">
+                      <v-card flat>{{ques.date}}</v-card>
+                    </v-flex>
+                    </v-layout>
+                  <span>
+                    {{ques.question}}&nbsp;&nbsp;
+                    <v-icon small>mdi-heart</v-icon>
+                  </span> 
+                  
+                </v-list-tile-content>
+
+                
+              </v-list-tile>
+            </v-flex>
+          </template>
+        </div>
+
+        <div id="chat-form">
+          <template>
+            <v-list-tile avatar>
+              <v-list-tile-avatar color="gradient white--text" large fill-dot>
+                <img :src="image">
+              </v-list-tile-avatar>
+              
+              <v-text-field
+                v-model="content"
+                hide-details
+                placeholder="Ask a question..."
+                solo
+                @keydown.enter="enrollQuestion"
+              />&nbsp;&nbsp;&nbsp;
+              <input value=false type="checkbox" v-model="anonymous"><label style="width:36px" >익명</label>
+              <v-btn dark class="hidden-sm-and-down" depressed @click="enrollQuestion" style="margin-left: 10px">질문등록</v-btn>
+            </v-list-tile>
+          </template>
+        </div>
+      </div>
+    </v-flex>
+
+    <v-flex xs6 sm6 md6 lg3 xl3 id="list-container" class="hidden-md-and-down">
+      <div id="search-container">
+        <span>클래스 접속자</span>
+      </div>
+      <div class="scroll" id="conversation-list">
+        <div class="conversation" v-for="(user, i) in userList" :key="i">
+          <img :src="require(`@/assets/${user.image}.png`)" height="100%">
+          <div class="user-name">{{user.userName}}</div>
+          <div class="user-identity">{{user.value}}</div>
+        </div>
+      </div>
+      <div id="new-message-container"></div>
+    </v-flex>
+  </v-layout>
 </template>
+
+<script>
+/* eslint-disable */
+import { continueStatement } from "@babel/types";
+import { Stud } from "@/api";
+import Vue from "vue";
+import store from '@/store.js'
+import {URL} from '@/plugins/api.config.js'
+import io from 'socket.io-client';
+
+export default {
+  beforeCreate() {
+    Stud.loadQuestion(this.$store.state.currentClass.classCode).then(res => {
+      if (res.data === "false") alert("질문 가져오기 실패");
+      else {
+        this.questionList = res.data.questionList;
+        this.socket.emit('channelJoin', {
+          classCode: this.$store.state.currentClass.classCode,
+          Identity: this.$store.state.Identity,
+          userID: this.$store.state.userID,
+          userName: this.$store.state.userName
+        });
+      }
+    });
+  },
+  data() {
+    return {
+      events: [],
+      image:
+        "https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg",
+      userList: [
+      ],
+      nonce: 0,
+      questionList: [],
+      content:null,
+      socket: io(`${URL}:3000/question`),
+      anonymous:false
+    };
+  },
+  created() {
+    if ("serviceWorker" in navigator && "PushManager" in window) {
+      navigator.serviceWorker
+        .register("../../service-worker.js")
+        .then(function(swReg) {
+          console.log("Service Worker is registered", swReg);
+        })
+        .catch(function(error) {
+          console.error("Service Worker Error", error);
+        });
+    }
+    this.socket.on("connect", () => {
+      console.log('socket connected')
+    });
+    
+    this.socket.on("joinSuccess", (data)=>{
+      const {Identity, userName, userID} = data;
+      if(Identity == 1)
+        this.userList.push({userName: userName, value:"학생", ID:userID, image:"student"})
+      else
+        this.userList.unshift({userName: userName, value:"교수", ID:userID, image:"professor"})
+    });
+    this.socket.on("getUsers", (data) => {
+      const users = data;
+      for(var i = 0; i < users.length - 1; i++){
+        const user = users[i];
+        if(user.Identity == 1){
+          this.userList.push({userName: user.userName, value:"학생", ID:user.userID, image:"student"})
+        }else{
+          this.userList.unshift({userName: user.userName, value:"교수", ID:user.userID, image:"professor"})
+        }
+      }
+    });
+    this.socket.on("MESSAGE", (data)=>{
+        this.questionList.push({
+        anonymous: data.anonymous,
+        userID: data.userID,
+        userName: data.userName,
+        classCode: data.classCode,
+        question: data.question,
+        date: data.date
+      });
+      this.notification(data)
+    });
+  },
+  updated() {
+    document.querySelector("#chat-message-list").scrollTop = document.querySelector("#chat-message-list").scrollHeight
+  },
+  
+  beforeRouteLeave (to, from, next) {
+    this.socket.emit("diconnect");
+    this.socket.disconnect();
+    next()
+  },
+  mounted() {
+    window.setTimeout(()=>{
+      this.socket.emit("getUsers", {
+        socketID: this.socket.id,
+        classCode: this.$store.state.currentClass.classCode
+      })
+    }, 1500);
+    this.socket.on("disconnect", (data)=>{
+      const {Identity, userName, userID} = data;
+      let user;
+      for (let idx in this.userList){
+        if(this.userList[idx].ID == userID) {
+          this.userList.splice(idx, 1);
+          break;
+        }
+      }
+    })
+  },
+  methods: {
+  notification(data){
+    const cursor = this;
+    let getTime = new Date();
+    if (
+      Notification &&
+      Notification.permission === "granted" &&
+      data &&
+      this.$store.state.Identity == 2
+    ) {
+        navigator.serviceWorker.getRegistration().then(function(reg) {
+          const title = "OPEN CLASS❤️";
+          var options = {
+            body: `${data.question}`,
+            //1px = 0.02645833333333 cm
+            image: "/images/24283C3858F778CA2E.jpg", //720px (width) by 240px (height)
+            icon: "/images/logo.png", //android는 192px   512 512
+            badge: "/images/logo-128x128.png", //72px
+            tag: getTime,
+            actions: [
+              {
+                action: "off-action",
+                title: "알림끄기 추가할 예정",
+                icon: "/images/logo.png"
+              },
+              {
+                action: "new-action",
+                title: "새 창에서 열기",
+                icon: "/images/logo.png"
+              }
+            ],
+            vibrate: [100, 50, 100], //movile에서만 가능
+            data: {
+              classCode: cursor.$store.state.currentClass.classCode
+            }
+          };
+          reg.showNotification(title, options)
+          .then(() => reg.getNotifications())
+          .then(notifications => {setTimeout(()=>notifications.forEach(notification => {if (notification.tag == getTime) notification.close();}), 3000);});
+        });
+      }
+    },
+    enrollQuestion(event) {
+      // alert("yes");
+      event.preventDefault();
+      let moment = require('moment');
+      moment.locale('ko');
+      this.socket.emit("chat", {
+        classCode: this.$store.state.currentClass.classCode,
+        userID: this.$store.state.userID,
+        userName: this.$store.state.userName,
+        question: this.content,
+        anonymous: this.anonymous,
+        date: moment().format("LLL")
+      });
+      this.content = null;
+    }
+  },
+};
+</script>
+
+
+<style>
+#message {
+  flex: 0 0;
+}
+#full-width {
+  width: 100%;
+}
+
+#auto_height {
+  height: auto;
+  padding-top: 12px;
+  padding-bottom:12px;
+}
+
+.user-identity {
+  color: #ddd;
+  font-size: 1rem;
+  margin-top:10px;
+}
+.gradient {
+  background: linear-gradient(100deg, #9198e5, #26c6da);
+}
+.user-name {
+  font-weight: bold;
+  color: #eee;
+  padding-left: 5px;
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  margin-top:10px;
+}
+
+#chat-container {
+  display: grid;
+  grid:
+    "chat-title search-container" 8%
+    "chat-message-list conversation-list" 1fr
+    "chat-form new-message-container" 8%
+    / 1fr 2px;
+  width: 100%;
+  height: 90vh;
+  max-height: 100vh;
+  background: #fff;
+  border-radius: 10px 0 0 10px;
+  border: 0.5px solid rgb(192, 189, 189);
+}
+#chat-title {
+  display: grid;
+  grid: 36px /1fr 36px;
+  align-content: center;
+  align-items: center;
+  grid-area: chat-title;
+  color: #0048aa(34, 63, 63);
+  font-weight: bold;
+  font-size: 1.6rem;
+  border-radius: 10px 0px 0px 0px;
+  box-shadow: 1px 1px 3px -1px black;
+  padding: 0 30px;
+}
+#chat-message-list {
+  grid-area: chat-message-list;
+  display: flex;
+  flex-direction: column;
+  padding: 0 3px;
+  margin-top: 3px;
+  overflow-y: scroll;
+}
+
+#chat-form {
+  display: grid;
+  grid-area: chat-form;
+  align-content: center;
+  align-items: center;
+  grid-gap: 15px;
+  border-radius: 0 0 0 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+}
+#search-container {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  background: rgb(42, 139, 83);
+  padding: 0 20px;
+  height: 8%;
+  border-radius: 0 10px 0 0;
+  box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.75);
+  z-index: 1;
+  border-bottom: 1px solid #ddd;
+}
+#search-container span {
+  color: #eee;
+  font-weight: bold;
+  border: 0;
+  font-size: 1.25rem;
+  background-position: 15px center;
+  background-size: 20px 20px;
+}
+#conversation-list {
+  height: 75vh;
+  max-height: 100vh;
+  background: rgb(44, 156, 91);
+  overflow-y: scroll;
+}
+.conversation {
+  display: grid;
+  grid-template-columns: 40px 1fr max-content;
+  color: #ddd;
+  grid-gap: 10px;
+  font-size: 1.3rem;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 10px 12px 15px;
+}
+.conversation.active {
+  background: #111;
+}
+.conversation:hover {
+  cursor: pointer;
+  background: #111;
+}
+.conversation > img {
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+}
+
+#new-message-container {
+  display: grid;
+  grid: 40px / 40px;
+  align-content: center;
+  grid-area: new-message-container;
+  background: rgb(42, 139, 83);
+  border-top: 1px solid #ddd;
+  border-radius: 0 0 10px 0;
+  height: 8.2%;
+  padding: 0 15px;
+}
+#chat-message-list::-webkit-scrollbar {
+  width: 5px;
+}
+#chat-message-list::-webkit-scrollbar-track {
+  background: 0px;
+}
+#conversation-list::-webkit-scrollbar {
+  width: 5px;
+}
+#conversation-list::-webkit-scrollbar-track {
+  background: 0;
+}
+.v-text-field.v-text-field--solo .v-input__control {
+  min-height: 36px;
+}
+</style>

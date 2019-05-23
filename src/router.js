@@ -3,10 +3,13 @@ import Router from "vue-router";
 import Home from "./views/HomeClass.vue";
 import Chart from "./views/ChartClass.vue";
 import Question from "./views/QuestionClass.vue";
+import Quiz from "./views/QuizClass.vue";
 import Survey from "./views/SurveyClass.vue";
 import Login from "./views/Login.vue";
 import Main from "./views/Main.vue";
 import Class from "./components/core/Class.vue";
+import LoginForm from "./components/modal/LoginForm.vue";
+import SignUpForm from "./components/modal/SignUpForm.vue";
 
 Vue.use(Router);
 
@@ -17,12 +20,22 @@ export default new Router({
     {
       path: "/",
       name: "login",
-      component: Login
+      component: Login,
+      children: [
+        {
+          path : 'login',
+          component : LoginForm
+        },
+        {
+          path : 'register',
+          component : SignUpForm
+        }
+      ]
     },
     {
       path: "/main",
       name: "main",
-      component: Main
+      component: Main,
     },
     {
       path: "/class/:classCode",
@@ -38,8 +51,12 @@ export default new Router({
           component : Question
         },
         {
+          path: 'quiz',
+          component : Quiz
+        },
+        {
           path: 'survey',
-          component : Survey
+          component : Survey,
         },
         {
           path: 'chart',

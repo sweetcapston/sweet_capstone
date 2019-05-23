@@ -1,96 +1,158 @@
 <template>
   <v-app>
-    <v-toolbar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>OpenClass</span>
-        <span class="font-weight-light"> username </span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn
-        flat
-        @click="logout"
+    <v-container >
+      <v-toolbar
+        class="gradient white--text"
+        app 
+        flat   
       >
-        <span class="mr-2">logout</span>
-      </v-btn>
-    </v-toolbar>
+        <v-toolbar-title class="headline text-uppercase">
+          <span >OpenClass</span>
+          <span class="font-weight-light"> {{this.$store.state.userName}} </span>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn
+          flat
+          @click="logout"
+        >
+          <span class="mr-2 white--text" >logout</span>
+        </v-btn>
+      </v-toolbar>     
+      <br>
+      <br>
+      <v-layout justify-center>
+        <img src="@/assets/logo.svg" alt="Vuetify.js" height="150">
+      </v-layout>
+      <br/>
+      <v-content>
+        <v-layout align-center justify-center v-if="this.$store.getters.getIdentity == 1">
+          <v-flex xs6 sm6 md3 order-12>
+          <v-text-field
+            v-model="classCode"
+            placeholder="클래스코드를 입력하세요."
+            solo
+            outline
+            flat
+            v-on:keyup.enter='enterClass(getClassCode())'
+          ></v-text-field>
+          </v-flex>
+          &nbsp;&nbsp;&nbsp;
+          <v-btn bottom positive class="cyan lighten-1 white--text" large @click="enterClass(getClassCode())">입장하기</v-btn>
+        </v-layout>
+        <v-layout align-center justify-center v-if="this.$store.getters.getIdentity == 2" >
+          <v-flex xs6 sm6 md3 order-12>
+            <v-text-field
+              v-model="className"
+              placeholder="클래스이름을 입력하세요."
+              outline
+              solo
+              flat
+              v-on:keyup.enter='createClass(getClassName())'
+            ></v-text-field>
+          </v-flex>
+          &nbsp;&nbsp;&nbsp;
+          <v-btn bottom class="cyan lighten-1 white--text" large @click="createClass(getClassName())">생성하기</v-btn>
+        </v-layout>
 
-    <v-content>
-      <v-container>
-        <v-layout v-if="this.$session.get('Identity')==1">
-            <input v-model="classCode" placeholder="클래스코드를 입력하세요.">
-            <v-btn dark @click="enterClass">입장하기</v-btn>
-        </v-layout>
-         <v-layout v-if="this.$session.get('Identity')==2">
-            <input v-model="className" placeholder="클래스이름을 입력하세요.">
-            <v-btn dark @click="createClass">생성하기</v-btn>
-        </v-layout>
-      </v-container>
-      <v-sheet
-        class="d-flex"
-      >
-        <core-class-list id="Class1" :classname="'SW캡스톤디자인'" :professorname="'윤대균교수님'" :classtime="'월F목F'"/>
-        <core-class-list id="Class2" :classname="'인공지능'" :professorname="'김민구교수님'" :classtime="'월F목F'"/>
-        <core-class-list id="Class3" :classname="'웹시설'" :professorname="'A교수님'" :classtime="'월F목F'"/>
-        <core-class-list id="Class4" :classname="'임베디드'" :professorname="'B교수님'" :classtime="'월F목F'"/>
-      </v-sheet>
-    </v-content>
+        <v-sheet mobile-break-point="960">
+          <v-layout row wrap width="800" justify-center>          
+            <core-class-list  
+              v-for="(Class, i) in this.$store.state.classList"
+              :currentClass='Class'
+              :key="i"
+              avatar
+            />
+          </v-layout>
+        </v-sheet>
+      </v-content>
+    </v-container>
   </v-app>
 </template>
 
 <script>
 /* eslint-disable */
-import Auth from "../api/Auth.js"
-import ClassList from "../components/core/ClassList.vue";
-
+import {Auth, Class, Prof, Stud} from "@/api"
 export default {
   created() {
     Auth.auth().then(res => {
       if(!res.data){
         this.$router.push({name: 'login'})
       }
-      switch(this.$session.get("Identity")){
-        case 2: 
-          break;
-            this.$session.set('token', res.data.token)
-            this.$store.commit("setIdentity", res.data.Identity);
-            switch(res.data.Identity){
-              case 1: //학생
-                this.$router.push({name: 'main'}); // 로그인 성공후 메인페이지로 이동
-        case 3: 
-          break;
-      }
-    }
-  })
+    });
+    this.$store.commit("setDrawer", true);
   },
-  updated() {
-    this.$store.commit('setClassCode',this.classCode) // 클래스 코드 입력받기 
-  },
-  data(){
+  data(){ 
     return {
-      classCode:'',
-      className:'',
+      classCode: '',
+      className: '',
+      classList: [],
     }
   },
   methods: {
-    enterClass() {
-      alert(this.classCode);
-      this.$router.push({name: 'class', params: { classCode: this.classCode }})
+    // v-model의 코드와 이름을 얻기 위한 임시 비동기 처리
+    getClassCode(){
+      return this.classCode;
     },
-    createClass(){
-      alert(this.className + " 클래스 생성이 완료 되었습니다.");
+    getClassName(){
+      return this.className;
+    },
+    enterClass(classCode) {
+      Stud.classEnter(classCode)
+      .then(res => {
+        if(res.data == false) alert('없는 클래스 입니다.');
+        else{
+          //클래스 입장시에 해당 클래스코드 vuex에 저장. 클래스 퇴장시 저장된 클래스코드 삭제
+          this.$store.commit("setCurrentClass", {
+            classCode: classCode,
+            className: res.data.className,
+            profName: res.data.profName
+          });
+          const checkApply = this.$store.state.classList.findIndex(function(item) { return item.classCode == classCode })
+          this.$store.commit('setCheckApply', checkApply);
+          this.$router.push({path: `/class/${classCode}/home`}) // 해당 클래스 페이지로 이동
+        }
+      })
+      this.classCode = "";
+    },
+    createClass(className){
+      Prof.classCreate(className)
+      .then(res => {
+        if (res.data == undefined ) alert('error');
+        else{
+          // currentClass객체로 하면 오류남.
+          if(res.data.errors) return false;
+          this.$store.commit("addClassList", {
+            className: className,
+            classCode: res.data.classCode,
+            profName: this.$store.state.userName
+          });
+        }
+      });
+      this.className = "";
     },
     logout(){
       this.$session.destroy();
       Auth.logout().then(res => {
         if(res.data == "logout"){
-          this.$router.push({name: 'login'})
+          this.$store.commit('removeLoginData');
+          this.$router.push({name: 'login'});
         }
       })
     }
   }
 };
 </script>
-
 <style>
-
+  div.layout.row.wrap{
+    background:#FAFAFA
+  }
+  .v-text-field--box.v-text-field--single-line input, .v-text-field--full-width.v-text-field--single-line input, .v-text-field--outline.v-text-field--single-line input{
+    margin-top:0px;
+  }
+  .v-text-field--box input, .v-text-field--full-width input, .v-text-field--outline input {
+    margin-top: 0px;
+  }
+  .gradient {
+    background: linear-gradient(100deg, #9198e5, #26C6DA)
+  }  
 </style>

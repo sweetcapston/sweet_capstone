@@ -1,7 +1,6 @@
 <template>
   <div>
-    <sui-button @click="OpenLoginModal" v-show="!logined">로그인</sui-button>
-    <sui-modal v-model="Openlogin" id="modal" size="mini">
+    <sui-modal id="modal" v-model="LoginSign" size="mini">
       <sui-modal-header class="undraggable unselectable">로그인</sui-modal-header>
       <div class="grid-container login">
         <sui-modal-content>
@@ -11,11 +10,12 @@
               <sui-input
                 type="email"
                 placeholder="이메일을 입력해주세요"
-                v-model="email"
+                v-model="userID"
                 name="email"
                 v-validate="'required'"
                 data-vv-as="이메일"
                 @input="validate"
+                v-on:keyup.enter="LogIn"
               />
             </div>
             <p class="e-error" v-show="errors.has('email') && errsign">{{errors.first('email')}}</p>
@@ -29,6 +29,7 @@
                 v-validate="'required'"
                 data-vv-as="비밀번호"
                 @input="validate"
+                v-on:keyup.enter="LogIn"
               />
             </div>
             <p
@@ -38,7 +39,7 @@
           </div>
         </sui-modal-content>
         <div class="login_end">
-          <sui-button class="Login btn-Login" positive @click="LogIn" id="Login">로그인</sui-button>
+          <sui-button class="Login btn-Login cyan lighten-1" positive @click="LogIn" id="Login">로그인</sui-button>
           <p class="modalChange undraggable unselectable">
             아직 회원이 아니세요?
             <a href="javascript:;" @click="modalChange">회원가입</a>
@@ -48,81 +49,77 @@
     </sui-modal>
   </div>
 </template>
+
 <script>
-import Auth from "../../api/Auth";
+import {Auth} from "@/api";
 
 /* eslint-disable */
 export default {
   data() {
     return {
-      email: "",
+      userID: "",
       password: "",
-      Openlogin: false,
       errsign: false,
-      logined: false
+      LoginSign:true
     };
   },
-  created() {
-    this.$EventBus.$on("toggleLogin", () => {
-      this.Openlogin = !this.Openlogin;
-    });
+  watch: {
+    LoginSign (val) {
+      if(!val){
+        this.$router.replace({name:'login'});
+      }
+    }
   },
   methods: {
     ClearData() {
-      this.email = "";
+      this.userID = "";
       this.password = "";
     },
-    OpenLoginModal() {
-      this.Openlogin = !this.Openlogin;
-      this.validate();
-      this.ClearData();
+    test1() {
+      alert('11');
     },
     LogIn() {
-      
       if (this.errors.items.length != 0) {
         this.errsign = true;
+        alert(this.errors)
         return false;
       }
       this.errsign = false;
-      let form = {
-        email: this.email,
+      Auth.login({
+        userID: this.userID,
         password: this.password
-      };
-      Auth.login(form)
-        .then(res => {
-          var { data } = res;
-          if(data){
-            this.ClearData();
-            this.Openlogin = false;
-            alert("로그인 성공")
-            this.$session.set('Identity', data.Identity) //추후 수정 가능
-            // this.$store.commit("setIdentity", res.data.Identity); //page refresh 시 초기화됨
-            switch(data.Identity){
-              case 1: //학생
-                this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
-                break;  
-              case 2: //교수
-                this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
-                break;
-              case 3: //관리자
-                break;
-            }
-          }else{
-            alert("로그인 실패")
-          }
-        })
-        .catch(error => {
-          alert("error");
-        });
+      })
+      .then(res => {
+        const {data} = res;
+        if(data){
+          this.ClearData();
+          this.$store.commit("setLoginData", data);
+          this.routeChange(data.Identity);
+        } else{
+          alert("로그인 실패")
+        }
+      })
+      .catch(error => {
+        alert("error");
+      });
+    },
+    routeChange(Identity){
+      switch(Identity){
+        case 1: //학생
+          this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
+          break;  
+        case 2: //교수
+          this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
+          break;
+        case 3: //관리자
+          // 로그인 성공후 관리자페이지로 이동
+          break;
+      }
     },
     modalChange() {
-      this.Openlogin = !this.Openlogin;
       this.validate();
       this.ClearData();
-      this.$EventBus.$emit("toggleSign");
-    },
-    change() {
-      this.Openlogin = !this.Openlogin;
+      this.$router.replace("register");
     },
     validate: function() {
       this.$validator.validateAll();

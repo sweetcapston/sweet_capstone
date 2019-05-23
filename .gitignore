@@ -1,7 +1,9 @@
 .DS_Store
 node_modules
+coverage
 /dist
 .nyc_output
+.editorconfig
 # local env files
 .env.local
 .env.*.local

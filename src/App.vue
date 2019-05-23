@@ -8,13 +8,14 @@
 
 <script>
 import Vue from "vue";
-import "semantic-ui-css/semantic.min.css";
-import SuiVue from "semantic-ui-vue";
 import VeeValidate from "vee-validate";
 import ko from "vee-validate/dist/locale/ko.js";
 import Auth from "./api/Auth";
 import VueSession from "vue-session";
 import ClassList from "./components/core/Class.vue";
+import VueApexCharts from 'vue-apexcharts'
+Vue.use(VueApexCharts)
+Vue.component('apexchart', VueApexCharts)
 
 const config = {
   locale: "ko",
@@ -24,64 +25,20 @@ const config = {
 };
 
 Vue.use(VeeValidate, config);
-Vue.use(SuiVue);
 Vue.use(VueSession);
 Vue.use(ClassList);
 
-/* eslint-disable */
 
 export default {
-  created() {
-    Auth.auth(this.$session.get("token")).then(res => {
-      console.log(res);
-    });
-  },
-  data() {
-    return {};
-  },
-  methods: {}
 };
+
 </script>
 
 <style lang="scss">
 @import '@/styles/index.scss';
 
-
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-}
-button.ui.positive.button {
-  background: black;
-}
-button.ui.positive.button:active {
-  background: black;
-}
-button.ui.positive.button:focus {
-  background: rgb(63, 62, 62);
-}
-button.ui.positive.button:hover {
-  background: rgb(63, 62, 62);
-}
-.unselectable {
-  -webkit-user-select: none; /* Safari, Chrome */
-  -khtml-user-select: none; /* Konqueror */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE */
-  user-select: none; /* CSS3 */
-}
-.undraggable {
-  -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
-}
-label {
-  font-size: 90%;
-  font-weight: bold;
-  color: rgb(33, 74, 74);
-  padding-left: 1%;
+/* Remove in 1.2 */
+.v-datatable thead th.column.sortable i {
+  vertical-align: unset;
 }
 </style>

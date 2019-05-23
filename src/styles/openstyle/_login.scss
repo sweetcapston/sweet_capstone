@@ -1,16 +1,3 @@
-
-button.ui.positive.button {
-  background: black;
-}
-button.ui.positive.button:active {
-  background: black;
-}
-button.ui.positive.button:focus {
-  background: rgb(63, 62, 62);
-}
-button.ui.positive.button:hover {
-  background: rgb(63, 62, 62);
-}
 .unselectable {
   -webkit-user-select: none; /* Safari, Chrome */
   -khtml-user-select: none; /* Konqueror */
@@ -200,4 +187,8 @@ button.Create {
 button.Login {
   width: 100%;
   font-size: 80%;
+}
+.grid-container.sign {
+  overflow-y:scroll;
+  height:470px;
 }
