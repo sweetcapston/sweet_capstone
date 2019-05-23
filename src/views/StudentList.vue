@@ -24,7 +24,7 @@
       </v-stepper-header>
       <v-stepper-items>
         <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n" :id="`step${n}`">
-          <v-card class="mb-5" color="grey lighten-3" min-height="250">
+          <v-card class="mb-5" color="grey lighten-3">
             <v-container fluid style="padding-bottom:20px">
               <span class="question-title">{{survey.surveyList[n-1].surveyQuestion}}</span>
               <!-- 라디오버튼 -->
@@ -43,7 +43,7 @@
                   >
                     <template v-slot:label>
                       <v-flex>
-                        {{survey.surveyList[n-1].content[c-1]}} {{survey.surveyList[n-1].count[c-1]}}
+                        <span>{{survey.surveyList[n-1].content[c-1]}} </span> <span v-if="answer_S.None != 0"> ({{survey.surveyList[n-1].count[c-1]}}명)</span>
                         <v-progress-linear
                           v-if="answer_S.None != 0"  
                           color="cyan"
@@ -70,7 +70,7 @@
                 >
                   <template v-slot:label>
                     <v-flex>
-                      {{survey.surveyList[n-1].content[c-1]}} {{survey.surveyList[n-1].count[c-1]}}
+                      <span>{{survey.surveyList[n-1].content[c-1]}} </span> <span v-if="answer_S.None != 0"> ({{survey.surveyList[n-1].count[c-1]}}명)</span>
                       <v-progress-linear
                         v-if="answer_S.None != 0" 
                         color="cyan"
@@ -91,17 +91,17 @@
                   outline
                   label="답을 입력하세요"
                   color="cyan lighten-1"
+                  v-if="answer_S.None == 0" 
                 ></v-textarea>
-                <v-expansion-panel v-if="answer_S.None != 0" id="scroll-target" style="max-height: 400px " class="scroll-y">
+                <v-expansion-panel v-if="answer_S.None != 0" id="scroll-target" style="max-height: 400px" class="scroll-y">
                   <v-expansion-panel-content style="padding:3px 2px 2px 3px">
                     <template v-slot:header>
                       <div>응답 리스트</div>
                     </template>
+                    <v-divider/>
                     <div v-for="i in survey.surveyList[n-1].content.length" :key="i">
-                      <v-card>
                         <v-card-text>{{survey.surveyList[n-1].content[i-1]}}</v-card-text>
                         <v-divider/>
-                      </v-card>
                     </div>
                   </v-expansion-panel-content>
                 </v-expansion-panel>

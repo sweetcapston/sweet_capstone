@@ -1,10 +1,8 @@
 <template>
   <div>
     <v-layout class="addButton" v-show="Identity==2 && !formShow">
-
       <v-icon class="add" @click="addSurvey()"
       >add_circle</v-icon>
-        
     </v-layout>
     <v-layout class="addButton" v-show="Identity==2 && formShow">
       <v-icon class="remove" @click="addSurvey()"
