@@ -10,10 +10,10 @@
       <v-icon class="remove" @click="addSurvey()"
       >remove_circle</v-icon>
     </v-layout>
-    <v-expansion-panel v-if="Identity==1" v-model="panel" expand>
+    <v-expansion-panel v-if="Identity==1" v-model="panel">
       <StudentList v-for="n in surveyList.length" v-bind:survey="surveyList[n-1]" v-bind:answer_S="myAnswer_S[n-1]" v-bind:socket="socket" :key="n"/>
     </v-expansion-panel>
-    <v-expansion-panel v-else v-model="panel" expand>
+    <v-expansion-panel v-else v-model="panel">
       <SurveyForm v-show="formShow" @childs-event="parentsMethod"/>
       <SurveyList v-for="(survey, _id) in surveyList" v-bind:survey="survey"  v-bind:socket="socket" :key="_id"/>
     </v-expansion-panel>

@@ -149,6 +149,7 @@ export default {
       e1: 1,
       answer: [],
       ans: "",
+      survey: this.survey,
       surveyType: []
     };
   },
@@ -223,6 +224,12 @@ export default {
     }
   },
   mounted() {
+    if(!this.survey.active){
+      const el = document.querySelector(`#survey${this.survey.SID}`);
+      el.classList.add("v-expansion-panel__container--disabled")
+      el.querySelector('.v-expansion-panel__header__icon').children[0].classList.add("inactive")
+      el.querySelector('v-expansion-panel__body').style="none";
+    }
     if (this.answer_S.None == 0) {
       document
         .querySelector(`#survey${this.survey.SID}`)
@@ -283,5 +290,8 @@ export default {
 }
 .v-input--selection-controls.v-input .v-label {
   width: 100%;
+}
+.inactive{
+  color:transparent !important;
 }
 </style>
