@@ -44,7 +44,7 @@
                   <v-radio disabled :id="`${c}`" color="cyan ligten-1">
                     <template v-slot:label>
                       <v-flex>
-                        {{survey.surveyList[n-1].content[c-1]}} {{survey.surveyList[n-1].count[c-1]}}
+                        {{survey.surveyList[n-1].content[c-1]}} ({{survey.surveyList[n-1].count[c-1]}}명)
                         <v-progress-linear
                           color="cyan"
                           width="50px"
@@ -67,7 +67,7 @@
                 >
                   <template v-slot:label>
                     <v-flex>
-                      {{survey.surveyList[n-1].content[c-1]}} {{survey.surveyList[n-1].count[c-1]}}
+                      {{survey.surveyList[n-1].content[c-1]}} ({{survey.surveyList[n-1].count[c-1]}}명)
                       <v-progress-linear
                         color="cyan"
                         width="50px"
@@ -85,8 +85,8 @@
                       <template v-slot:header>
                         <div>응답 리스트</div>
                       </template>
+                      <v-divider/>
                       <div v-for="i in survey.surveyList[n-1].content.length" :key="i">
-                    
                           <v-card-text>{{survey.surveyList[n-1].content[i-1]}}</v-card-text>
                           <v-divider/>
                       </div>
