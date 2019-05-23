@@ -13,6 +13,9 @@ import ko from "vee-validate/dist/locale/ko.js";
 import Auth from "./api/Auth";
 import VueSession from "vue-session";
 import ClassList from "./components/core/Class.vue";
+import VueApexCharts from 'vue-apexcharts'
+Vue.use(VueApexCharts)
+Vue.component('apexchart', VueApexCharts)
 
 const config = {
   locale: "ko",

@@ -92,8 +92,8 @@
                   label="답을 입력하세요"
                   color="cyan lighten-1"
                 ></v-textarea>
-                <v-expansion-panel v-if="answer_S.None != 0" >
-                  <v-expansion-panel-content>
+                <v-expansion-panel v-if="answer_S.None != 0" id="scroll-target" style="max-height: 400px " class="scroll-y">
+                  <v-expansion-panel-content style="padding:3px 2px 2px 3px">
                     <template v-slot:header>
                       <div>응답 리스트</div>
                     </template>
@@ -279,8 +279,9 @@ export default {
 }
 .v-input .v-progress-linear {
   position: relative;
+  width:50%;
 }
 .v-input--selection-controls.v-input .v-label {
-  width: 50%;
+  width: 100%;
 }
 </style>
