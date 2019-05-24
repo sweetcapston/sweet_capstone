@@ -2,10 +2,9 @@ import axios from "axios";
 import {URL} from "../plugins/api.config.js"
 const BaseUrl = `${URL}:5000/stud`;
 const config = { 
-                 headers: {'Content-Type' : 'application/json'},
-                 withCredentials: true
-               }
-               
+                headers: {'Content-Type' : 'application/json'},
+                withCredentials: true
+              }
 export default {
     classEnter(classCode){
       return axios.post(`${BaseUrl}/enter`,{classCode: classCode}, config);
@@ -28,7 +27,7 @@ export default {
     loadQuiz(classCode, userID){
       return axios.post(`${BaseUrl}/${classCode}/quiz`, {userID:userID}, config);
     },
-    answerQuiz(classCode, answer_S){
-      return axios.post(`${BaseUrl}/${classCode}/quizAnswer_S`, {answer_S: answer_S}, config)
+    answerQuiz(classCode, answer_Q){
+      return axios.post(`${BaseUrl}/${classCode}/quizAnswer_Q`, {answer_Q: answer_Q}, config)
     }
 };

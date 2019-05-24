@@ -7,7 +7,7 @@
         </div>
 
         <div id="chat-message-list">
-          <template v-for="(ques) in questionList">
+          <template v-for="(ques,index) in questionList">
             <v-flex id="message" :key="ques.index">
               <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
 
@@ -18,25 +18,21 @@
                 </v-list-tile-avatar>
 
                 <v-list-tile-content>
-                    <v-layout  id="full-width">
+                  <v-layout id="full-width">
                     <v-flex xs6 sm4 md5 lg5 xl5>
                       <v-card v-if="!ques.anonymous" flat>{{ques.userName}}</v-card>
                       <v-card v-else flat>익명</v-card>
-            
                     </v-flex>
-                    
+
                     <v-flex xs12 sm8 md7 lg7 xl7 style="text-align: end">
                       <v-card flat>{{ques.date}}</v-card>
                     </v-flex>
-                    </v-layout>
+                  </v-layout>
                   <span>
-                    {{ques.question}}&nbsp;&nbsp;
-                    <v-icon small>mdi-heart</v-icon>
-                  </span> 
-                  
+                    {{ques.question}}
+                    <v-icon @click="like(index)" small :id="`i-${index}`">mdi-heart</v-icon>
+                  </span>
                 </v-list-tile-content>
-
-                
               </v-list-tile>
             </v-flex>
           </template>
@@ -48,7 +44,7 @@
               <v-list-tile-avatar color="gradient white--text" large fill-dot>
                 <img :src="image">
               </v-list-tile-avatar>
-              
+
               <v-text-field
                 v-model="content"
                 hide-details
@@ -56,8 +52,14 @@
                 solo
                 @keydown.enter="enrollQuestion"
               />&nbsp;&nbsp;&nbsp;
-              <input value=false type="checkbox" v-model="anonymous"><label style="width:36px" >익명</label>
-              <v-btn dark class="hidden-sm-and-down" depressed @click="enrollQuestion" style="margin-left: 10px">질문등록</v-btn>
+              <input value="false" type="checkbox" v-model="anonymous">
+              <label style="width:36px">익명</label>
+              <v-btn
+                class="hidden-sm-and-down cyan lighten-1 white--text"
+                depressed
+                @click="enrollQuestion"
+                style="margin-left: 10px"
+              >질문등록</v-btn>
             </v-list-tile>
           </template>
         </div>
@@ -85,9 +87,9 @@
 import { continueStatement } from "@babel/types";
 import { Stud } from "@/api";
 import Vue from "vue";
-import store from '@/store.js'
-import {URL} from '@/plugins/api.config.js'
-import io from 'socket.io-client';
+import store from "@/store.js";
+import { URL } from "@/plugins/api.config.js";
+import io from "socket.io-client";
 
 export default {
   beforeCreate() {
@@ -95,7 +97,7 @@ export default {
       if (res.data === "false") alert("질문 가져오기 실패");
       else {
         this.questionList = res.data.questionList;
-        this.socket.emit('channelJoin', {
+        this.socket.emit("channelJoin", {
           classCode: this.$store.state.currentClass.classCode,
           Identity: this.$store.state.Identity,
           userID: this.$store.state.userID,
@@ -109,13 +111,13 @@ export default {
       events: [],
       image:
         "https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg",
-      userList: [
-      ],
+      userList: [],
       nonce: 0,
       questionList: [],
-      content:null,
+      content: null,
       socket: io(`${URL}:3000/question`),
-      anonymous:false
+      anonymous: false,
+      iconColor: ""
     };
   },
   created() {
@@ -130,29 +132,49 @@ export default {
         });
     }
     this.socket.on("connect", () => {
-      console.log('socket connected')
+      console.log("socket connected");
     });
-    
-    this.socket.on("joinSuccess", (data)=>{
-      const {Identity, userName, userID} = data;
-      if(Identity == 1)
-        this.userList.push({userName: userName, value:"학생", ID:userID, image:"student"})
+
+    this.socket.on("joinSuccess", data => {
+      const { Identity, userName, userID } = data;
+      if (Identity == 1)
+        this.userList.push({
+          userName: userName,
+          value: "학생",
+          ID: userID,
+          image: "student"
+        });
       else
-        this.userList.unshift({userName: userName, value:"교수", ID:userID, image:"professor"})
+        this.userList.unshift({
+          userName: userName,
+          value: "교수",
+          ID: userID,
+          image: "professor"
+        });
     });
-    this.socket.on("getUsers", (data) => {
+    this.socket.on("getUsers", data => {
       const users = data;
-      for(var i = 0; i < users.length - 1; i++){
+      for (var i = 0; i < users.length - 1; i++) {
         const user = users[i];
-        if(user.Identity == 1){
-          this.userList.push({userName: user.userName, value:"학생", ID:user.userID, image:"student"})
-        }else{
-          this.userList.unshift({userName: user.userName, value:"교수", ID:user.userID, image:"professor"})
+        if (user.Identity == 1) {
+          this.userList.push({
+            userName: user.userName,
+            value: "학생",
+            ID: user.userID,
+            image: "student"
+          });
+        } else {
+          this.userList.unshift({
+            userName: user.userName,
+            value: "교수",
+            ID: user.userID,
+            image: "professor"
+          });
         }
       }
     });
-    this.socket.on("MESSAGE", (data)=>{
-        this.questionList.push({
+    this.socket.on("MESSAGE", data => {
+      this.questionList.push({
         anonymous: data.anonymous,
         userID: data.userID,
         userName: data.userName,
@@ -160,46 +182,52 @@ export default {
         question: data.question,
         date: data.date
       });
-      this.notification(data)
+      this.notification(data);
     });
   },
   updated() {
-    document.querySelector("#chat-message-list").scrollTop = document.querySelector("#chat-message-list").scrollHeight
+    document.querySelector(
+      "#chat-message-list"
+    ).scrollTop = document.querySelector("#chat-message-list").scrollHeight;
   },
-  
-  beforeRouteLeave (to, from, next) {
+
+  beforeRouteLeave(to, from, next) {
     this.socket.emit("diconnect");
     this.socket.disconnect();
-    next()
+    next();
   },
   mounted() {
-    window.setTimeout(()=>{
+    window.setTimeout(() => {
       this.socket.emit("getUsers", {
         socketID: this.socket.id,
         classCode: this.$store.state.currentClass.classCode
-      })
+      });
     }, 1500);
-    this.socket.on("disconnect", (data)=>{
-      const {Identity, userName, userID} = data;
+    this.socket.on("disconnect", data => {
+      const { Identity, userName, userID } = data;
       let user;
-      for (let idx in this.userList){
-        if(this.userList[idx].ID == userID) {
+      for (let idx in this.userList) {
+        if (this.userList[idx].ID == userID) {
           this.userList.splice(idx, 1);
           break;
         }
       }
-    })
+    });
   },
   methods: {
-  notification(data){
-    const cursor = this;
-    let getTime = new Date();
-    if (
-      Notification &&
-      Notification.permission === "granted" &&
-      data &&
-      this.$store.state.Identity == 2
-    ) {
+    like(idx) {
+      if (document.querySelector(`#i-${idx}`).style.color == "red") document.querySelector(`#i-${idx}`).style.color = "";
+      else document.querySelector(`#i-${idx}`).style.color = "red";
+    },
+    notification(data) {
+      const cursor = this;
+      let getTime = new Date();
+      if (
+        Notification &&
+        Notification.permission === "granted" &&
+        data &&
+        this.$store.state.Identity == 2
+      ) {
         navigator.serviceWorker.getRegistration().then(function(reg) {
           const title = "OPEN CLASS❤️";
           var options = {
@@ -226,17 +254,26 @@ export default {
               classCode: cursor.$store.state.currentClass.classCode
             }
           };
-          reg.showNotification(title, options)
-          .then(() => reg.getNotifications())
-          .then(notifications => {setTimeout(()=>notifications.forEach(notification => {if (notification.tag == getTime) notification.close();}), 3000);});
+          reg
+            .showNotification(title, options)
+            .then(() => reg.getNotifications())
+            .then(notifications => {
+              setTimeout(
+                () =>
+                  notifications.forEach(notification => {
+                    if (notification.tag == getTime) notification.close();
+                  }),
+                3000
+              );
+            });
         });
       }
     },
     enrollQuestion(event) {
       // alert("yes");
       event.preventDefault();
-      let moment = require('moment');
-      moment.locale('ko');
+      let moment = require("moment");
+      moment.locale("ko");
       this.socket.emit("chat", {
         classCode: this.$store.state.currentClass.classCode,
         userID: this.$store.state.userID,
@@ -247,7 +284,7 @@ export default {
       });
       this.content = null;
     }
-  },
+  }
 };
 </script>
 
@@ -263,13 +300,13 @@ export default {
 #auto_height {
   height: auto;
   padding-top: 12px;
-  padding-bottom:12px;
+  padding-bottom: 12px;
 }
 
 .user-identity {
   color: #ddd;
   font-size: 1rem;
-  margin-top:10px;
+  margin-top: 10px;
 }
 .gradient {
   background: linear-gradient(100deg, #9198e5, #26c6da);
@@ -281,7 +318,7 @@ export default {
   white-space: nowrap;
   overflow-x: hidden;
   text-overflow: ellipsis;
-  margin-top:10px;
+  margin-top: 10px;
 }
 
 #chat-container {
@@ -333,7 +370,7 @@ export default {
   display: grid;
   align-items: center;
   justify-content: center;
-  background: rgb(42, 139, 83);
+  background: rgb(5, 161, 161);
   padding: 0 20px;
   height: 8%;
   border-radius: 0 10px 0 0;
@@ -352,7 +389,7 @@ export default {
 #conversation-list {
   height: 75vh;
   max-height: 100vh;
-  background: rgb(44, 156, 91);
+  background: rgb(23, 179, 179);
   overflow-y: scroll;
 }
 .conversation {
@@ -382,7 +419,7 @@ export default {
   grid: 40px / 40px;
   align-content: center;
   grid-area: new-message-container;
-  background: rgb(42, 139, 83);
+  background: rgb(5, 161, 161);
   border-top: 1px solid #ddd;
   border-radius: 0 0 10px 0;
   height: 8.2%;

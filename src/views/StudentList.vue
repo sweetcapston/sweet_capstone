@@ -27,7 +27,7 @@
           <v-card class="mb-5" color="grey lighten-3">
             <v-container fluid style="padding-bottom:20px">
               <span class="question-title">{{survey.surveyList[n-1].surveyQuestion}}</span>
-              <!-- 라디오버튼 -->
+              <!--TODO: 라디오버튼 -->
               <v-radio-group
                 class="radio"
                 style="padding-top:10px"
@@ -56,7 +56,7 @@
                   </v-radio>
                 </div>
               </v-radio-group>
-              <!-- 체크박스 -->
+              <!--TODO: 체크박스 -->
               <div
                 class="check"
                 style="padding-top:10px"
@@ -82,7 +82,7 @@
                   </template>
                 </v-checkbox>
               </div>
-              <!--  주관식 -->
+              <!--TODO:  주관식 -->
               <div v-if="survey.surveyList[n-1].surveyType == 3">
                 <v-textarea
                   :class="'text'+survey.SID"
@@ -96,7 +96,7 @@
                 <v-expansion-panel v-if="answer_S.None != 0" id="scroll-target" style="max-height: 400px" class="scroll-y">
                   <v-expansion-panel-content style="padding:3px 2px 2px 3px">
                     <template v-slot:header>
-                      <div>응답 리스트</div>
+                      <div><h4>응답 결과</h4></div>
                     </template>
                     <v-divider/>
                     <div v-for="i in survey.surveyList[n-1].content.length" :key="i">

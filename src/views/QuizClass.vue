@@ -1,17 +1,15 @@
 <template>
   <div>
     <v-layout class="addButton" v-show="Identity==2 && !formShow">
-
       <v-icon class="add" @click="addQuiz()"
       >add_circle</v-icon>
-        
     </v-layout>
     <v-layout class="addButton" v-show="Identity==2 && formShow">
       <v-icon class="remove" @click="addQuiz()"
       >remove_circle</v-icon>
     </v-layout>
     <v-expansion-panel v-if="Identity==1" v-model="panel" expand>
-      <StudentList v-for="(quiz, _id) in quizList" v-bind:quiz="quiz" :key="_id"/>
+      <StudentQuizList v-for="(quiz, _id) in quizList" v-bind:quiz="quiz" :key="_id"/>
     </v-expansion-panel>
     <v-expansion-panel v-else v-model="panel" expand>
       <QuizForm v-show="formShow" @childs-event="parentsMethod"/>
@@ -25,7 +23,7 @@
 import Vue from "vue";
 import QuizForm from "./QuizForm.vue";
 import QuizList from './QuizList.vue';
-import StudentList from "./StudentList.vue";
+import StudentQuizList from "./StudentQuizList.vue";
 import store from '@/store.js'
 import { Stud, Prof } from "@/api";
 import { URL } from '@/plugins/api.config.js'
@@ -33,7 +31,7 @@ import io from 'socket.io-client';
 
 Vue.component("QuizForm", QuizForm);
 Vue.component("QuizList", QuizList);
-Vue.component("StudentList", StudentList);
+Vue.component("StudentQuizList", StudentQuizList);
 export default {
   beforeCreate() {
     if(this.$store.state.Identity==1){
@@ -41,11 +39,12 @@ export default {
         if (res.data === "false") 
           alert("설문 가져오기 실패")
         else {
-          this.quizList = res.data.quizList;
-          this.panel = new Array(res.data.quizList.length).fill(false);
-          this.elem = new Array(res.data.quizList.length).fill(1);
+          const {quizList, myAnswer_Q} = res.data;
+          this.quizList = quizList;
+          this.panel = new Array(quizList.length).fill(false);
+          this.elem = new Array(quizList.length).fill(1);
           this.steps = []
-          res.data.quizList.forEach(element => {
+          quizList.forEach(element => {
             this.steps.push(element.quizList.length);
           });
         }
@@ -56,9 +55,10 @@ export default {
         if (res.data === "false") 
           alert("설문 가져오기 실패")
         else {
-          this.quizList = res.data.quizList;
-          this.panel = new Array(res.data.quizList.length).fill(false);
-          this.elem = new Array(res.data.quizList.length).fill(1);
+          const {quizList} = res.data;
+          this.quizList = quizList;
+          this.panel = new Array(quizList.length).fill(false);
+          this.elem = new Array(quizList.length).fill(1);
           this.steps = []
           res.data.quizList.forEach(element => {
             this.steps.push(element.quizList.length);
@@ -76,6 +76,7 @@ export default {
       elem:[],
       steps:[],
       quizList:[],
+      completeList:[],
       formShow:false
     }
   },
