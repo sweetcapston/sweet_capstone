@@ -38,7 +38,7 @@
         <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n">
           <v-card class="mb-5" color="grey lighten-3" style="padding-bottom:3%">
             <v-container fluid>
-              {{survey.surveyList[n-1].surveyQuestion}}
+              <span class="question-title">{{survey.surveyList[n-1].surveyQuestion}}</span>
               <!-- FIXME: 라디오버튼 -->
               <v-radio-group v-show="survey.surveyList[n-1].surveyType == 1" column>
                 <div v-for="c in survey.surveyList[n-1].content.length" :key="`${c}-radio`">
