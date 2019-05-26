@@ -41,6 +41,7 @@ export default {
         else {
           const {quizList, myAnswer_Q} = res.data;
           this.quizList = quizList;
+          this.myAnswer_Q = myAnswer_Q;
           this.panel = new Array(quizList.length).fill(false);
           this.elem = new Array(quizList.length).fill(1);
           this.steps = []

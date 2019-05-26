@@ -19,7 +19,7 @@
             :step="n"
             editable
             color="cyan lighten-1"
-          >문항 {{n}}</v-stepper-step>
+          >문항 {{ n }} ({{quiz.quizList[n-1].point[0]}}점)</v-stepper-step>
           <v-divider v-if="n !== steps" :key="n"/>
         </template>
       </v-stepper-header>
@@ -28,7 +28,7 @@
         <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n" :id="`step${n}`">
           <v-card class="mb-5" color="grey lighten-3" min-height="250">
             <v-container fluid>
-              <span class="question-title">{{ quiz.quizList[n-1].quizQuestion }}</span>
+              <span class="question-title">{{n}}. {{ quiz.quizList[n-1].quizQuestion }} ({{quiz.quizList[n-1].point[0]}}점)</span>
               <!-- FIXME: 라디오버튼 -->
               <v-radio-group
                 class="radio"
@@ -66,7 +66,7 @@
                   label="답을 입력하세요"
                   color="cyan lighten-1"
                 ></v-textarea>
-                <v-expansion-panel id="scroll-target" style="max-height: 400px" class="scroll-y">
+                <v-expansion-panel  id="scroll-target" style="max-height: 400px" class="scroll-y">
                   <v-expansion-panel-content style="padding:3px 2px 2px 3px">
                     <template v-slot:header>
                       <div>
@@ -98,6 +98,7 @@
 import { Stud } from "@/api";
 export default {
   mounted() {
+    alert(this.answer_Q.None);
     if (this.answer_Q.None == 0) {
       document
         .querySelector(`#quiz${this.quiz.QID}`)

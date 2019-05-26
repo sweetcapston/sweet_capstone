@@ -96,7 +96,7 @@
                 </template>
                 <v-layout 
                 v-if="type[n-1] === '1'"
-                 @click="addType1(n)">
+                @click="addType1(n)">
                   <v-icon>mdi-plus</v-icon>
                   <v-input
                     label="보기 추가"

@@ -32,7 +32,7 @@
             :step="n"
             editable
             color="cyan lighten-1"
-          >문항 {{ n }}</v-stepper-step>
+          >문항 {{ n }} ({{quiz.quizList[n-1].point[0]}}점)</v-stepper-step>
           <v-divider v-if="n !== steps" :key="n"></v-divider>
         </template>
       </v-stepper-header>
@@ -41,7 +41,7 @@
         <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n">
           <v-card class="mb-5" color="grey lighten-3" min-height="250px">
             <v-container fluid>
-              <span class="question-title">{{quiz.quizList[n-1].quizQuestion}}</span>
+              <span class="question-title">{{quiz.quizList[n-1].quizQuestion}} ({{quiz.quizList[n-1].point[0]}}점)</span>
               <v-radio-group
                 v-show="quiz.quizList[n-1].quizType == 1"
                 column
@@ -108,7 +108,7 @@ export default {
   data() {
     return {
       steps: this.quiz.quizList.length,
-      el: 1
+      e1: 1
     };
   },
   props: {
@@ -137,5 +137,3 @@ export default {
 
 <style>
 </style>
-    
-    

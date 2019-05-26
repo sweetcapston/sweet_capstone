@@ -57,10 +57,10 @@
               ></v-text-field>
               <v-layout>
                 <v-flex md3 style="padding:2px">
-                  <v-text-field class="correct" color="cyan ligten-1" label="정답"/>
+                  <v-text-field :id="'correct'+ `${n-1}`" color="cyan ligten-1" label="정답"/>
                 </v-flex>
                 <v-flex md3 style="padding:2px">
-                  <v-text-field class="point" color="cyan ligten-1" label="배점"/>
+                  <v-text-field :id="'point'+ `${n-1}`" color="cyan ligten-1" label="배점"/>
                 </v-flex>
               </v-layout>
               <div v-if="type[n-1] === '1'">
@@ -172,19 +172,25 @@ export default {
           ".listItem .quizQuestion input[type='text']"
         )[j].value;
         let content = [];
+        let point =[];
+        let correct;
         let doc;
         let count;
+        point.push(document.querySelector(`#point${j}`).value);
+        correct = document.querySelector(`#correct${j}`).value;
         switch (quizType) {
           case "1":
             doc = document.querySelectorAll(".type1");
-            for (let i = 0; i < doc.length; i++)
+            for (let i = 0; i < doc.length; i++){
               content.push(doc[i].querySelector("input").value);
+            }
             count = new Array(doc.length).fill(0);
             break;
           case "2":
             doc = document.querySelectorAll(".type2");
-            for (let i = 0; i < doc.length; i++)
+            for (let i = 0; i < doc.length; i++) {
               content.push(doc[i].querySelector("input").value);
+            }
             count = new Array(doc.length).fill(0);
             break;
           case "3":
@@ -197,7 +203,10 @@ export default {
           quizType: parseInt(quizType),
           quizQuestion: quizQuestion,
           content: content,
-          count: count
+          count: count,
+          point: point,
+          correct : correct
+          // TODO: 정답이랑 배점도 추가해야함.
         });
       }
       const newQuiz = {
@@ -207,7 +216,6 @@ export default {
         date: date,
         public: true,
         active: false
-        // 정답이랑 배점도 추가해야함.
       };
 
       Prof.quizCreate(newQuiz).then(res => {
