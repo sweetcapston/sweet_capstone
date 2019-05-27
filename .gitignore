@@ -4,6 +4,7 @@ coverage
 /dist
 .nyc_output
 .editorconfig
+/src/utils/imageStorage.js
 # local env files
 .env.local
 .env.*.local
