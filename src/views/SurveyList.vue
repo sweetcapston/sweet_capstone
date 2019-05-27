@@ -38,7 +38,8 @@
         <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n">
           <v-card class="mb-5" color="grey lighten-3" style="padding-bottom:3%">
             <v-container fluid>
-              {{survey.surveyList[n-1].surveyQuestion}}
+              <span class="question-title">{{survey.surveyList[n-1].surveyQuestion}}</span>
+              <!-- FIXME: 라디오버튼 -->
               <v-radio-group v-show="survey.surveyList[n-1].surveyType == 1" column>
                 <div v-for="c in survey.surveyList[n-1].content.length" :key="`${c}-radio`">
                   <v-radio disabled :id="`${c}`" color="cyan ligten-1">
@@ -56,7 +57,7 @@
                   </v-radio>
                 </div>
               </v-radio-group>
-
+              <!-- FIXME: 체크박스 -->
               <div v-show="survey.surveyList[n-1].surveyType == 2">
                 <v-checkbox
                   disabled
@@ -79,19 +80,26 @@
                 </v-checkbox>
               </div>
               <!-- FIXME: 주관식 -->
-              <div v-if="survey.surveyList[n-1].surveyType == 3" id="scroll-target" style="max-height: 400px " class="scroll-y">
-                  <v-expansion-panel>
-                    <v-expansion-panel-content style="padding:3px 2px 2px 3px">
-                      <template v-slot:header>
-                        <div>응답 리스트</div>
-                      </template>
-                      <v-divider/>
-                      <div v-for="i in survey.surveyList[n-1].content.length" :key="i">
-                          <v-card-text>{{survey.surveyList[n-1].content[i-1]}}</v-card-text>
-                          <v-divider/>
+              <div
+                v-if="survey.surveyList[n-1].surveyType == 3"
+                id="scroll-target"
+                style="max-height: 400px "
+                class="scroll-y"
+              >
+                <v-expansion-panel>
+                  <v-expansion-panel-content style="padding:3px 2px 2px 3px">
+                    <template v-slot:header>
+                      <div>
+                        <h4>응답 결과</h4>
                       </div>
-                    </v-expansion-panel-content>
-                  </v-expansion-panel>
+                    </template>
+                    <v-divider/>
+                    <div v-for="i in survey.surveyList[n-1].content.length" :key="i">
+                      <v-card-text>{{survey.surveyList[n-1].content[i-1]}}</v-card-text>
+                      <v-divider/>
+                    </div>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
               </div>
             </v-container>
           </v-card>

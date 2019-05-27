@@ -59,13 +59,7 @@
             class="mb-5"
             color="grey lighten-3"
           >
-            <v-btn
-              absolute
-              dark
-              fab
-              top
-              right
-              class="crimson"
+            <v-btn absolute dark fab top right class="crimson"
               @click="deleteStep()"
             >
               <v-icon>remove</v-icon>
@@ -96,7 +90,7 @@
                 </template>
                 <v-layout 
                 v-if="type[n-1] === '1'"
-                 @click="addType1(n)">
+                @click="addType1(n)">
                   <v-icon>mdi-plus</v-icon>
                   <v-input
                     label="보기 추가"
@@ -186,8 +180,7 @@ export default {
       type: new Array(3).fill('1'),
       samplestype1:[[1], [1], [1]],
       samplestype2:[[1], [1], [1]]
-
-    }
+    };
   },
   watch: {
     steps (val) {
