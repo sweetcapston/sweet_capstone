@@ -98,7 +98,6 @@ export default {
       steps: [],
       surveyList: [],
       completeList: [],
-      block:true,
       formShow: false
     };
   },
@@ -106,7 +105,6 @@ export default {
     addSurvey() {
       this.formShow = !this.formShow;
       document.querySelector(".createSurvey .v-expansion-panel__header").click();
-      this.block = false;
     },
     parentsMethod: function(active) {
       this.formShow = false;
