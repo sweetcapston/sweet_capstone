@@ -41,30 +41,53 @@
         <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n">
           <v-card class="mb-5" color="grey lighten-3" min-height="250px">
             <v-container fluid>
-              <span class="question-title">{{quiz.quizList[n-1].quizQuestion}} ({{quiz.quizList[n-1].point[0]}}점)</span>
-              <v-radio-group
-                v-show="quiz.quizList[n-1].quizType == 1"
-                column
-                v-for="c in quiz.quizList[n-1].content.length"
-                :key="`${c}-radio`"
-              >
-                <v-radio
-                  disabled
-                  :id="`${c}`"
-                  :label="`${quiz.quizList[n-1].content[c-1]} count:  ${quiz.quizList[n-1].count[c-1]}`"
-                  color="cyan ligten-1"
-                ></v-radio>
+              <span
+                class="question-title"
+              >{{quiz.quizList[n-1].quizQuestion}} ({{quiz.quizList[n-1].point[0]}}점)</span>
+              <!-- FIXME: 라디오버튼 -->
+              <v-radio-group v-show="quiz.quizList[n-1].quizType == 1" column>
+                <div v-for="c in quiz.quizList[n-1].content.length" :key="`${c}-radio`">
+                  <v-radio
+                    disabled
+                    :id="`${c}`"
+                    :label="`${quiz.quizList[n-1].content[c-1]} count:  ${quiz.quizList[n-1].count[c-1]}`"
+                    color="cyan ligten-1"
+                  >
+                    <template v-slot:label>
+                      <v-flex>
+                        {{quiz.quizList[n-1].content[c-1]}} ({{quiz.quizList[n-1].count[c-1]}}명)
+                        <v-progress-linear
+                          color="cyan"
+                          width="50px"
+                          height="20"
+                          v-bind:value="quiz.quizList[n-1].count[c-1] * getPercent(quiz.quizList[n-1].count)"
+                        />
+                      </v-flex>
+                    </template>
+                  </v-radio>
+                </div>
               </v-radio-group>
-
+              <!-- FIXME: 체크박스 -->
               <div v-show="quiz.quizList[n-1].quizType == 2">
                 <v-checkbox
                   disabled
                   :id="`${c}`"
-                  :label="`${quiz.quizList[n-1].content[c-1]} count: ${quiz.quizList[n-1].count[c-1]}`"
                   v-for="c in quiz.quizList[n-1].content.length"
                   :key="`${c}-checkbot`"
                   color="cyan lighten-1"
-                ></v-checkbox>
+                >
+                  <template v-slot:label>
+                    <v-flex>
+                      {{quiz.quizList[n-1].content[c-1]}} ({{quiz.quizList[n-1].count[c-1]}}명)
+                      <v-progress-linear
+                        color="cyan"
+                        width="50px"
+                        height="20"
+                        v-bind:value="quiz.quizList[n-1].count[c-1] * getPercent(quiz.quizList[n-1].count)"
+                      />
+                    </v-flex>
+                  </template>
+                </v-checkbox>
               </div>
               <!-- FIXME:주관식 -->
               <div
@@ -112,9 +135,15 @@ export default {
     };
   },
   props: {
-    quiz: Object
+    quiz: Object,
+    socket: Object
   },
   methods: {
+    getPercent(array) {
+      var sum = 0;
+      for (var i = 0; i < array.length; i++) sum = sum + array[i];
+      return 100 / sum;
+    },
     nextStep(n) {
       this.e1 = n + 1;
     },
@@ -127,7 +156,7 @@ export default {
     },
     quizActive() {
       Prof.quizActive(this.quiz).then(res => {
-        // console.log(res);
+        console.log(res);
         this.quiz.active = res.data;
       });
     }
@@ -136,4 +165,19 @@ export default {
 </script>
 
 <style>
+.classStat {
+  width: 120px !important;
+}
+.v-expansion-panel__header {
+  display: -webkit-box;
+}
+.surveyStart {
+  margin-right: 5px !important;
+}
+.surveyEnd {
+  margin-right: 5px !important;
+}
+.surveyStart:hover {
+  background: #00e676;
+}
 </style>

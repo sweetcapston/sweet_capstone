@@ -59,13 +59,7 @@
             class="mb-5"
             color="grey lighten-3"
           >
-            <v-btn
-              absolute
-              dark
-              fab
-              top
-              right
-              class="crimson"
+            <v-btn absolute dark fab top right class="crimson"
               @click="deleteStep()"
             >
               <v-icon>remove</v-icon>
@@ -186,8 +180,7 @@ export default {
       type: new Array(3).fill('1'),
       samplestype1:[[1], [1], [1]],
       samplestype2:[[1], [1], [1]]
-
-    }
+    };
   },
   watch: {
     steps (val) {
