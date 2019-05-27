@@ -9,7 +9,6 @@
     <template v-slot:actions>
       <v-icon color="cyan ligten-1">$vuetify.icons.expand</v-icon>
     </template>
-
     <v-stepper v-model="e1">
       <v-stepper-header>
         <template class="step" v-for="n in steps">
@@ -23,28 +22,43 @@
           <v-divider v-if="n !== steps" :key="n"/>
         </template>
       </v-stepper-header>
-
       <v-stepper-items>
         <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n" :id="`step${n}`">
           <v-card class="mb-5" color="grey lighten-3" min-height="250">
-            <v-container fluid>
-              <span class="question-title">{{n}}. {{ quiz.quizList[n-1].quizQuestion }} ({{quiz.quizList[n-1].point[0]}}점)</span>
+            <v-container fluid style="padding-bottom:20px">
+              <span
+                class="question-title"
+              >{{n}}. {{ quiz.quizList[n-1].quizQuestion }} ({{quiz.quizList[n-1].point[0]}}점)</span>
               <!-- FIXME: 라디오버튼 -->
               <v-radio-group
                 class="radio"
                 style="padding-top:10px"
                 v-if="quiz.quizList[n-1].quizType == 1"
               >
-                <v-radio
-                  :id="`${c}`"
-                  :class="`radioChennel ${c}`"
-                  column
-                  :value="`${c}`"
-                  v-for="c in quiz.quizList[n-1].content.length"
-                  :key="`${c}-radio`"
-                  :label="`${quiz.quizList[n-1].content[c-1]} count: ${quiz.quizList[n-1].count[c-1]}`"
-                  color="cyan lighten-1"
-                ></v-radio>
+                <div v-for="c in quiz.quizList[n-1].content.length" :key="`${c}-radio`">
+                  <v-radio
+                    :id="`${c}`"
+                    :class="`radioChennel ${c}`"
+                    column
+                    :value="`${c}`"
+                    :key="`${c}-radio`"
+                    color="cyan lighten-1"
+                  >
+                    <template v-slot:label>
+                      <v-flex>
+                        <span>{{quiz.quizList[n-1].content[c-1]}}</span>
+                        <span v-if="answer_Q.None != 0">({{quiz.quizList[n-1].count[c-1]}}명)</span>
+                        <v-progress-linear
+                          v-if="answer_Q.None != 0"
+                          color="cyan"
+                          width="50px"
+                          height="20"
+                          v-bind:value="quiz.quizList[n-1].count[c-1] * getPercent(quiz.quizList[n-1].count)"
+                        />
+                      </v-flex>
+                    </template>
+                  </v-radio>
+                </div>
               </v-radio-group>
               <!-- FIXME: 체크박스 -->
               <div class="check" style="padding-top:10px" v-if="quiz.quizList[n-1].quizType == 2">
@@ -52,9 +66,21 @@
                   :id="`${c}`"
                   v-for="c in quiz.quizList[n-1].content.length"
                   :key="`${c}-checkbox`"
-                  :label="`${quiz.quizList[n-1].content[c-1]} count: ${quiz.quizList[n-1].count[c-1]}`"
                   color="cyan lighten-1"
-                ></v-checkbox>
+                >
+                <template v-slot:label>
+                    <v-flex>
+                      <span>{{quiz.quizList[n-1].content[c-1]}} </span> <span v-if="answer_Q.None != 0"> ({{quiz.quizList[n-1].count[c-1]}}명)</span>
+                      <v-progress-linear
+                        v-if="answer_Q.None != 0" 
+                        color="cyan"
+                        width="50px"
+                        height="20"
+                        v-bind:value="quiz.quizList[n-1].count[c-1] * getPercent(quiz.quizList[n-1].count)"
+                      />
+                    </v-flex>
+                  </template>
+                </v-checkbox>
               </div>
               <!--TODO:  주관식 -->
               <div v-if="quiz.quizList[n-1].quizType == 3">
@@ -65,13 +91,12 @@
                   outline
                   label="답을 입력하세요"
                   color="cyan lighten-1"
+                  v-if="answer_Q.None == 0" 
                 ></v-textarea>
-                <v-expansion-panel  id="scroll-target" style="max-height: 400px" class="scroll-y">
+                <v-expansion-panel v-if="answer_Q.None != 0" id="scroll-target" style="max-height: 400px" class="scroll-y">
                   <v-expansion-panel-content style="padding:3px 2px 2px 3px">
                     <template v-slot:header>
-                      <div>
-                        <h4>응답 결과</h4>
-                      </div>
+                      <div><h4>응답 결과</h4></div>
                     </template>
                     <v-divider/>
                     <div v-for="i in quiz.quizList[n-1].content.length" :key="i">
@@ -96,9 +121,27 @@
 
 <script>
 import { Stud } from "@/api";
+/*eslint-disable */
 export default {
+  created() {
+    this.socket.on("quiz", (data) => {
+      alert('socket check: ' + data.QID);
+      if (this.quiz.QID == data.QID) {
+        for (let i = 0; i < data.quizType.length; i++) {
+          if (parseInt(data.quizType[i]) < 3) {
+            let check = parseInt(data.answer[i]);
+            while (check >= 1) {
+              this.quiz.quizList[i].count[(check % 10) - 1]++;
+              check = parseInt(check / 10);
+            }
+          } else {
+            this.quiz.quizList[i].content.push(data.answer[i]);
+          }
+        }
+      }
+    });
+  },
   mounted() {
-    alert(this.answer_Q.None);
     if (this.answer_Q.None == 0) {
       document
         .querySelector(`#quiz${this.quiz.QID}`)
@@ -133,9 +176,15 @@ export default {
   },
   props: {
     quiz: Object,
+    socket: Object,
     answer_Q: Object
   },
   methods: {
+    getPercent(array) {
+      var sum = 0;
+      for (var i = 0; i < array.length; i++) sum = sum + array[i];
+      return 100 / sum;
+    },
     nextStep(n) {
       this.e1 = n + 1;
     },
@@ -147,7 +196,6 @@ export default {
       }
     },
     answerQuiz() {
-      alert("haha");
       const userID = this.$store.state.userID;
       const userName = this.$store.state.userName;
       const classCode = this.$store.state.currentClass.classCode;
@@ -191,11 +239,51 @@ export default {
         QID: QID,
         quizType: quizType,
         answer: answer
-      }
-      Stud.answerQuiz(classCode, answer_Q).then(res => {
-        window.history.go(0);
-      });
+      };
+      // Stud.answerQuiz(classCode, answer_Q).then(res => {
+      //   window.history.go(0);
+      // });
+      this.socket.emit("quiz", { answer_Q: answer_Q });
+      window.history.go(0);
     }
   }
 };
 </script>
+
+<style>
+.classStat {
+  width: 120px !important;
+}
+.v-expansion-panel__header {
+  display: -webkit-box;
+}
+.surveyStart {
+  margin-right: 5px !important;
+}
+.surveyEnd {
+  margin-right: 5px !important;
+}
+.surveyStart:hover {
+  background: #00e676;
+}
+.question-title {
+  font-size: 2.3rem;
+  font-family: "Roboto", sans-serif;
+}
+.v-expansion-panel__container.incomplete {
+  background: aliceblue !important;
+}
+.v-input--selection-controls .v-input__control {
+  width: 100%;
+}
+.full-width {
+  width: 100%;
+}
+.v-input .v-progress-linear {
+  position: relative;
+  width:50%;
+}
+.v-input--selection-controls.v-input .v-label {
+  width: 100%;
+}
+</style>

@@ -3,9 +3,10 @@ import axios from "axios";
 import {URL} from "../plugins/api.config.js"
 const BaseUrl = `${URL}:5000/users`;
 const config = { 
-                 headers: {'Content-Type' : 'application/json'},
-                 withCredentials: true
-               }
+                  headers: {'Content-Type' : 'application/json'},
+                  withCredentials: true
+                }
+
 export default {
   auth() {
     return axios.get(`${BaseUrl}`, config);

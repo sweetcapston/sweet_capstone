@@ -80,19 +80,26 @@
                 </v-checkbox>
               </div>
               <!-- FIXME: 주관식 -->
-              <div v-if="survey.surveyList[n-1].surveyType == 3" id="scroll-target" style="max-height: 400px " class="scroll-y">
-                  <v-expansion-panel>
-                    <v-expansion-panel-content style="padding:3px 2px 2px 3px">
-                      <template v-slot:header>
-                        <div><h4>응답 결과</h4></div>
-                      </template>
-                      <v-divider/>
-                      <div v-for="i in survey.surveyList[n-1].content.length" :key="i">
-                          <v-card-text>{{survey.surveyList[n-1].content[i-1]}}</v-card-text>
-                          <v-divider/>
+              <div
+                v-if="survey.surveyList[n-1].surveyType == 3"
+                id="scroll-target"
+                style="max-height: 400px "
+                class="scroll-y"
+              >
+                <v-expansion-panel>
+                  <v-expansion-panel-content style="padding:3px 2px 2px 3px">
+                    <template v-slot:header>
+                      <div>
+                        <h4>응답 결과</h4>
                       </div>
-                    </v-expansion-panel-content>
-                  </v-expansion-panel>
+                    </template>
+                    <v-divider/>
+                    <div v-for="i in survey.surveyList[n-1].content.length" :key="i">
+                      <v-card-text>{{survey.surveyList[n-1].content[i-1]}}</v-card-text>
+                      <v-divider/>
+                    </div>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
               </div>
             </v-container>
           </v-card>
