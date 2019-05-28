@@ -35,6 +35,10 @@
 
       <v-stepper-items>
         <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n" class="listItem">
+          <v-card color="grey lighten-3" height="250px" style="height:100%">
+            <v-textarea box label="Image" value="이미지가 들어갈 공간.">
+            </v-textarea>
+          </v-card>
           <v-card color="grey lighten-3" height="50px" class="typeCard">
             <v-radio-group v-model="type[n-1]" :mandatory="false" class="quizType" row>
               <v-radio label="객관식" value="1" color="cyan ligten-1" select></v-radio>
@@ -172,7 +176,7 @@ export default {
           ".listItem .quizQuestion input[type='text']"
         )[j].value;
         let content = [];
-        let point =[];
+        let point = [];
         let correct;
         let doc;
         let count;
@@ -181,7 +185,7 @@ export default {
         switch (quizType) {
           case "1":
             doc = document.querySelectorAll(".type1");
-            for (let i = 0; i < doc.length; i++){
+            for (let i = 0; i < doc.length; i++) {
               content.push(doc[i].querySelector("input").value);
             }
             count = new Array(doc.length).fill(0);
@@ -205,7 +209,7 @@ export default {
           content: content,
           count: count,
           point: point,
-          correct : correct
+          correct: correct
           // TODO: 정답이랑 배점도 추가해야함.
         });
       }
