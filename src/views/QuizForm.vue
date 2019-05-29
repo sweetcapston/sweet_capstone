@@ -53,20 +53,45 @@
             </v-btn>
 
             <v-container>
-              <v-text-field
-                label="질문을 입력하세요"
-                single-line
-                color="cyan ligten-1"
-                class="quizQuestion"
-              ></v-text-field>
               <v-layout>
-                <v-flex md3 style="padding:2px">
-                  <v-text-field :id="'correct'+ `${n-1}`" color="cyan ligten-1" label="정답"/>
-                </v-flex>
-                <v-flex md3 style="padding:2px">
-                  <v-text-field :id="'point'+ `${n-1}`" color="cyan ligten-1" label="배점"/>
-                </v-flex>
-              </v-layout>
+                <v-text-field
+                  single-line
+                  label="질문을 입력하세요"
+                  color="cyan ligten-1"
+                  class="quizQuestion"
+                ></v-text-field>
+
+                <div class="page">
+                  <v-btn 
+                    @click.native="selectFiles()"
+                  >
+                    Upload a image
+                    <v-icon 
+                      right
+                      aria-hidden="true"
+                    >
+                      add_a_photo
+                    </v-icon>
+                  </v-btn>
+                  <input 
+                    id="files"
+                    type="file"
+                    name="file"
+                    accept="image/*"
+                    :multiple="false"
+                    @change="uploadFiles($event)" />
+                  <v-progress-circular
+                    v-if="uploading && !uploadEnd"
+                    :size="100"
+                    :width="15"
+                    :rotate="360"
+                    :value="progressUpload"
+                    color="primary">
+                    {{ progressUpload }}%
+                  </v-progress-circular>                 
+                </div>
+              </v-layout> 
+                                         
               <div v-if="type[n-1] === '1'">
                 <template v-for="i in samplestype1[n-1].length">
                   <v-layout :key="i">
@@ -112,6 +137,22 @@
               <v-layout v-if="type[n-1] === '3'">
                 <v-textarea solo flat outline color="cyan lighten-1"></v-textarea>
               </v-layout>
+
+              <v-divider />
+
+              <v-layout>
+                <v-radio-group v-model="type[n-1]" :mandatory="false" class="quizType" row>
+                  <v-radio label="객관식" value="1" color="cyan ligten-1" select></v-radio>
+                  <v-radio label="객관식 (복수 응답 가능)" value="2" color="cyan ligten-1"></v-radio>
+                  <v-radio label="주관식" value="3" color="cyan ligten-1"></v-radio>
+                </v-radio-group>
+                <v-flex md3 style="padding:2px">
+                  <v-text-field :id="'correct'+ `${n-1}`" color="cyan ligten-1" label="정답"/>
+                </v-flex>
+                <v-flex md3 style="padding:2px">
+                  <v-text-field :id="'point'+ `${n-1}`" color="cyan ligten-1" label="배점"/>
+                </v-flex>
+              </v-layout>
             </v-container>
           </v-card>
 
@@ -139,8 +180,15 @@
 
 <script>
 /*eslint-disable */
+import Vue from 'vue'
 import store from "@/store.js";
 import { Prof } from "@/api";
+import { maxHeaderSize } from 'http';
+import VueDragResize from 'vue-drag-resize'
+import { imageStorage } from '@/utils/imageStorage';
+
+Vue.component('vue-drag-resize', VueDragResize)
+
 export default {
   data() {
     return {
@@ -149,7 +197,17 @@ export default {
       icon: "mdi-plus-circle",
       type: new Array(3).fill("1"),
       samplestype1: [[1], [1], [1]],
-      samplestype2: [[1], [1], [1]]
+      samplestype2: [[1], [1], [1]],
+      progressUpload: 0,
+      fileName: '',
+      uploadTask: '',
+      uploading: false,
+      uploadEnd: false,
+      downloadURL: '',
+      width: 0,
+      height: 0,
+      top: 0,
+      right: 0
     };
   },
   watch: {
@@ -157,6 +215,22 @@ export default {
       if (this.e1 > val) {
         this.e1 = val;
       }
+    },
+    uploadTask: function () {
+      this.uploadTask.on('state_changed', sp => {
+        this.progressUpload = Math.floor(sp.bytesTransferred / sp.totalBytes * 100)
+      },
+      null,
+      () => {
+        this.uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+          this.uploadEnd = true
+          this.downloadURL = downloadURL
+          let imgHtml = document.createElement('img');
+          imgHtml.src = downloadURL;
+          imgHtml.classList.add("resize-image")
+          document.querySelector('.page').appendChild(imgHtml)
+        })
+      })
     }
   },
   methods: {
@@ -262,6 +336,26 @@ export default {
     },
     deleteType2(j) {
       this.samplestype2 = this.samplestype2 - 1;
+    },
+    selectFiles () {
+      document.querySelector("#files").click()
+    },
+    uploadFiles (e) {
+      let files = e.target.files || e.dataTransfer.files
+      Array.from(Array(files.length).keys()).map(x => {
+        this.upload(files[x])
+      })
+    },
+    upload (file) {
+      this.fileName = file.name
+      this.uploading = true
+      this.uploadTask = imageStorage.child(`${this.fileName}`).put(file)
+    },
+    resize(newRect) {
+      this.width = newRect.width;
+      this.height = newRect.height;
+      this.top = newRect.top;
+      this.right = newRect.right;
     }
   }
 };
@@ -295,5 +389,25 @@ export default {
 }
 .addSample {
   margin-top: 20px;
+}
+.progress-bar {
+  margin: 10px 0;
+}
+input[type="file"] {
+  position: absolute;
+  clip: rect(0,0,0,0);
+}
+.resize-container {
+    position: relative;
+    display: inline-block;
+    cursor: move;
+    margin: 0 auto;
+}
+.resize-container img {
+    display: block
+}
+.resize-container:hover img,
+.resize-container:active img {
+    outline: 2px dashed rgba(222,60,80,.9);
 }
 </style>
