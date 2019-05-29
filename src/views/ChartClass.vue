@@ -2,6 +2,10 @@
   
   <v-container fluid grid-list-md>
     <div class="page">
+      <div contentEditable="true"> type here
+        <img src="https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2F512x512bb.jpg?alt=media&amp;token=8ea95608-1f14-4c2c-b900-87d9ff47294a" />
+      </div>
+
     <v-btn 
       @click.native="selectFiles"
     >
@@ -34,8 +38,9 @@
     <div class="testDiv" style="align-text:center; width:550px;height:550px;">
     
       <vue-drag-resize  :w="200" :h="200" @dragstop="resize" :parentLimitation="true" >
-        <img src="https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2F512x512bb.jpg?alt=media&amp;token=8ea95608-1f14-4c2c-b900-87d9ff47294a" class="resize-image" style="
-      width: inherit;height: inherit;"/>
+        
+        <img src="https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2F512x512bb.jpg?alt=media&amp;token=8ea95608-1f14-4c2c-b900-87d9ff47294a" 
+        class="resize-image" style="width: inherit;height: inherit;"/>
       </vue-drag-resize>
     </div>
   </div>
