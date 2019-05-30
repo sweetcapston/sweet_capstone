@@ -240,11 +240,9 @@ export default {
         quizType: quizType,
         answer: answer
       };
-      // Stud.answerQuiz(classCode, answer_Q).then(res => {
-      //   window.history.go(0);
-      // });
-      this.socket.emit("quiz", { answer_Q: answer_Q });
-      window.history.go(0);
+      Stud.answerQuiz(classCode, answer_Q).then(res => {
+        window.history.go(0);
+      });
     }
   }
 };

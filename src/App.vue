@@ -27,8 +27,6 @@ const config = {
 Vue.use(VeeValidate, config);
 Vue.use(VueSession);
 
-
-
 export default {
 };
 
