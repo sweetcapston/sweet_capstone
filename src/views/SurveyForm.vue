@@ -32,40 +32,19 @@
         </template>
       </v-stepper-header>
       <v-stepper-items>
-        <v-stepper-content
+        <card-item
           v-for="(card_data, n) in card_datas"
           :key="card_data.id"
           :step="n+1" 
           class="listItem"
-        >
-          <card-item 
-            v-bind:card_data="card_data" 
-            @remove="deleteStep(n)"
-          />
-          <v-layout justify-space-between>
-            <v-btn 
-              class="cyan lighten-1 white--text"
-              @click="preStep(n+1)"
-            >
-              Pre
-            </v-btn>
-
-            <v-btn 
-              v-if="n+1 !== card_datas.length" 
-              class="cyan lighten-1 white--text"
-              @click="nextStep(n+1)"
-            >
-              Next
-            </v-btn>
-            <v-btn
-              v-if="n+1 === card_datas.length" 
-              class="cyan lighten-1 white--text"
-              @click="completeSurvey()"
-            >
-              Complete
-            </v-btn>
-          </v-layout>
-        </v-stepper-content>
+          v-bind:n="n"
+          v-bind:steps="card_datas.length"
+          v-bind:card_data="card_data" 
+          @remove="deleteStep(n)"
+          @preStep="preStep(n+1)"
+          @nextStep="nextStep(n+1)"
+          @complete="complete()"
+        />
       </v-stepper-items>
     </v-stepper>
   </v-expansion-panel-content>
@@ -85,21 +64,33 @@ export default {
       card_datas: [
         {
           id:1,
-          type:1,
-          samplestype1:1,
-          samplestype2:1
+          type:'1',
+          samplestype1:[{
+            id:1
+          }],
+          samplestype2:[{
+            id:1001
+          }]
         },
         {
           id:2,
-          type:1,
-          samplestype1:1,
-          samplestype2:1
+          type:'1',
+          samplestype1:[{
+            id:1
+          }],
+          samplestype2:[{
+            id:1001
+          }]
         },
         {
           id:3,
-          type:1,
-          samplestype1:1,
-          samplestype2:1
+          type:'1',
+          samplestype1:[{
+            id:1
+          }],
+          samplestype2:[{
+            id:1001
+          }]
         }
       ],
       icon: "mdi-plus-circle",
