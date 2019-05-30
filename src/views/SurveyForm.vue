@@ -32,7 +32,7 @@
         </template>
       </v-stepper-header>
       <v-stepper-items>
-        <card-item
+        <core-survey-steps
           v-for="(card_data, n) in card_datas"
           :key="card_data.id"
           :step="n+1" 
@@ -43,7 +43,7 @@
           @remove="deleteStep(n)"
           @preStep="preStep(n+1)"
           @nextStep="nextStep(n+1)"
-          @complete="complete()"
+          @complete="completeSurvey()"
         />
       </v-stepper-items>
     </v-stepper>
@@ -52,11 +52,7 @@
 
 <script>
 /*eslint-disable */
-import Vue from 'vue'
-import store from '@/store.js'
-import CardItem from './CardItem';
 import { Prof } from "@/api";
-Vue.component("card-item", CardItem)
 export default {
   data () {
     return {
@@ -106,7 +102,7 @@ export default {
       const date = moment().format("LLL");
       const surveyList = []
       
-      for(var j = 0; j<this.steps; j++){
+      for(var j = 0; j<this.card_datas.length; j++){
         const surveyType = document.querySelectorAll(".surveyType input[type='radio']:checked")[j].value;
         const surveyQuestion = document.querySelectorAll(".listItem .surveyQuestion input[type='text']")[j].value;
         let content = [];
@@ -158,7 +154,7 @@ export default {
     addStep(n) {
       this.card_datas.push({
         id:this.newID++,
-        type:1,
+        type:'1',
         samplestype1:1,
         samplestype2:1
       })
