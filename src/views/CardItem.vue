@@ -4,7 +4,7 @@
         color="grey lighten-3"
     >
         <v-btn absolute dark fab top right class="crimson"
-        @click="$emit('remove')">
+        @click="deleteData">
             <v-icon>remove</v-icon>
         </v-btn>
 
@@ -88,6 +88,23 @@ export default {
     },
     props:{
         card_data:Object
-    }
+    },
+    methods: {
+        deleteData(){
+            this.$emit("remove");
+        },
+        // addType1(n) {
+        //     this.samplestype1[n-1].push(1)
+        // },
+        // addType2(n) {
+        //     this.samplestype2[n-1].push(1)
+        // },
+        // deleteType1(i) {
+        //     this.samplestype1 = this.samplestype1 - 1
+        // },
+        // deleteType2(j) {
+        //     this.samplestype2 = this.samplestype2 - 1
+        // }
+    },
 }
 </script>

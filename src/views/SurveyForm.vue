@@ -13,43 +13,61 @@
         @click.stop
       />
     </template>
+    <v-stepper v-model="e1">
+      <v-stepper-header>
+        <template v-for="n in card_datas.length">
+          <v-stepper-step
+            :key="`${n}-step`"
+            :complete="e1 > n"
+            :step="n"
+            editable
+            color="cyan lighten-1"
+          >문항 {{ n }}</v-stepper-step>
 
+          <v-divider v-if="n !== card_datas.length" :key="n"></v-divider>
+        </template>
 
-    <div
-      v-for="n in card_datas.length"
-      :key="`${n}-content`"
-      :remove="card_datas.splice(n - 1, 1)"
-      v-show="e1==n"
-      class="listItem"
-    >
-      <card-item v-bind:card_data="card_datas[n-1]"/>
-
-      <v-layout justify-space-between>
-        <v-btn 
-          class="cyan lighten-1 white--text"
-          @click="preStep(n)"
+        <template>
+          <v-icon class="cyan lighten-1 white--text" @click="addStep()">mdi-plus-circle</v-icon>
+        </template>
+      </v-stepper-header>
+      <v-stepper-items>
+        <v-stepper-content
+          v-for="(card_data, n) in card_datas"
+          :key="card_data.id"
+          :step="n+1" 
+          class="listItem"
         >
-          Pre
-        </v-btn>
+          <card-item 
+            v-bind:card_data="card_data" 
+            @remove="deleteStep(n)"
+          />
+          <v-layout justify-space-between>
+            <v-btn 
+              class="cyan lighten-1 white--text"
+              @click="preStep(n+1)"
+            >
+              Pre
+            </v-btn>
 
-        <v-btn 
-          v-if="n !== card_datas.length" 
-          :key="n"
-          class="cyan lighten-1 white--text"
-          @click="nextStep(n)"
-        >
-          Next
-        </v-btn>
-        <v-btn
-          v-if="n === card_datas.length" 
-          :key="n"
-          class="cyan lighten-1 white--text"
-          @click="completeSurvey()"
-        >
-          Complete
-        </v-btn>
-      </v-layout>
-    </div>
+            <v-btn 
+              v-if="n+1 !== card_datas.length" 
+              class="cyan lighten-1 white--text"
+              @click="nextStep(n+1)"
+            >
+              Next
+            </v-btn>
+            <v-btn
+              v-if="n+1 === card_datas.length" 
+              class="cyan lighten-1 white--text"
+              @click="completeSurvey()"
+            >
+              Complete
+            </v-btn>
+          </v-layout>
+        </v-stepper-content>
+      </v-stepper-items>
+    </v-stepper>
   </v-expansion-panel-content>
 </template>
 
@@ -64,84 +82,99 @@ export default {
   data () {
     return {
       e1: 1,
-      card_datas:[{
-        type:1,
-        samplestype1:1,
-        samplestype2:1
-      }],
-      icon: "mdi-plus-circle"
+      card_datas: [
+        {
+          id:1,
+          type:1,
+          samplestype1:1,
+          samplestype2:1
+        },
+        {
+          id:2,
+          type:1,
+          samplestype1:1,
+          samplestype2:1
+        },
+        {
+          id:3,
+          type:1,
+          samplestype1:1,
+          samplestype2:1
+        }
+      ],
+      icon: "mdi-plus-circle",
+      newID: 4
     };
   },
   methods: {
     completeSurvey() {
-      // let moment = require('moment');
-      // moment.locale('ko');
-      // const surveyName = document.querySelector('.surveyName input').value;
-      // const classCode = this.$store.state.currentClass.classCode;
-      // const date = moment().format("LLL");
-      // const surveyList = []
+      let moment = require('moment');
+      moment.locale('ko');
+      const surveyName = document.querySelector('.surveyName input').value;
+      const classCode = this.$store.state.currentClass.classCode;
+      const date = moment().format("LLL");
+      const surveyList = []
       
-      // for(var j = 0; j<this.steps; j++){
-      //   const surveyType = document.querySelectorAll(".surveyType input[type='radio']:checked")[j].value;
-      //   const surveyQuestion = document.querySelectorAll(".listItem .surveyQuestion input[type='text']")[j].value;
-      //   let content = [];
-      //   let doc;
-      //   let count;
-      //   switch(surveyType){
-      //     case "1": 
-      //       doc = document.querySelectorAll('.type1')
-      //       for(let i = 0 ; i<doc.length; i++)              
-      //         content.push(doc[i].querySelector('input').value);
-      //       count = new Array(doc.length).fill(0)
-      //       break;
-      //     case "2": 
-      //       doc = document.querySelectorAll('.type2')
-      //       for(let i = 0 ; i<doc.length; i++)              
-      //         content.push(doc[i].querySelector('input').value);
-      //       count = new Array(doc.length).fill(0)
-      //       break;
-      //     case "3": 
-      //       doc = document.querySelector('textarea').value;
-      //       content.push(document.querySelector('textarea').value);
-      //       count = 1;
-      //       break;
-      //   }
-      //   surveyList.push({
-      //     surveyType: parseInt(surveyType), 
-      //     surveyQuestion: surveyQuestion, 
-      //     content:content, 
-      //     count:count
-      //   })
-      // }
-      // const newSurvey = {
-      //   surveyName:surveyName,
-      //   surveyList:surveyList,
-      //   classCode:classCode,
-      //   date:date,
-      //   public:true,
-      //   active:false,
-      // }
+      for(var j = 0; j<this.steps; j++){
+        const surveyType = document.querySelectorAll(".surveyType input[type='radio']:checked")[j].value;
+        const surveyQuestion = document.querySelectorAll(".listItem .surveyQuestion input[type='text']")[j].value;
+        let content = [];
+        let doc;
+        let count;
+        switch(surveyType){
+          case "1": 
+            doc = document.querySelectorAll('.type1')
+            for(let i = 0 ; i<doc.length; i++)              
+              content.push(doc[i].querySelector('input').value);
+            count = new Array(doc.length).fill(0)
+            break;
+          case "2": 
+            doc = document.querySelectorAll('.type2')
+            for(let i = 0 ; i<doc.length; i++)              
+              content.push(doc[i].querySelector('input').value);
+            count = new Array(doc.length).fill(0)
+            break;
+          case "3": 
+            doc = document.querySelector('textarea').value;
+            content.push(document.querySelector('textarea').value);
+            count = 1;
+            break;
+        }
+        surveyList.push({
+          surveyType: parseInt(surveyType), 
+          surveyQuestion: surveyQuestion, 
+          content:content, 
+          count:count
+        })
+      }
+      const newSurvey = {
+        surveyName:surveyName,
+        surveyList:surveyList,
+        classCode:classCode,
+        date:date,
+        public:true,
+        active:false,
+      }
       
-      // Prof.surveyCreate(newSurvey)
-      // .then(res => {
-      //   if(res.data){
-      //     this.$emit("childs-event",true)
-      //     window.history.go(0);
-      //   }
-      // });
+      Prof.surveyCreate(newSurvey)
+      .then(res => {
+        if(res.data){
+          this.$emit("childs-event",true)
+          window.history.go(0);
+        }
+      });
     },
     addStep(n) {
-      this.steps = this.steps + 1
-      this.type.push('1');
-      this.samplestype1.push([1])
-      this.samplestype2.push([1])
-    },
-    deleteStep(e) {
-      console.log(e)
-      this.steps -= 1
-      this.e1 -= 1
-      this.samplestype1.splice(index, 1)
-      this.samplestype2.splice(index, 1)
+      this.card_datas.push({
+        id:this.newID++,
+        type:1,
+        samplestype1:1,
+        samplestype2:1
+      })
+    },    
+    deleteStep(n) {
+      this.card_datas.splice(n, 1);
+      this.e1 -= 1;
     },
     nextStep(n) {
       this.e1 = n + 1
@@ -153,18 +186,6 @@ export default {
         this.e1 = n - 1
       }
     },
-    // addType1(n) {
-    //   this.samplestype1[n-1].push(1)
-    // },
-    // addType2(n) {
-    //   this.samplestype2[n-1].push(1)
-    // },
-    // deleteType1(i) {
-    //   this.samplestype1 = this.samplestype1 - 1
-    // },
-    // deleteType2(j) {
-    //   this.samplestype2 = this.samplestype2 - 1
-    // }
   }
 }
 </script>

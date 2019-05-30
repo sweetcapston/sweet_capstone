@@ -16,7 +16,7 @@
       />
     </v-expansion-panel>
     <v-expansion-panel v-else>
-      <SurveyForm v-show="formShow" @childs-event="parentsMethod"/>
+      <SurveyForm v-show="formShow"/>
       <SurveyList
         v-for="(survey, _id) in surveyList"
         v-bind:survey="survey"
@@ -105,9 +105,6 @@ export default {
     addSurvey() {
       this.formShow = !this.formShow;
       document.querySelector(".createSurvey .v-expansion-panel__header").click();
-    },
-    parentsMethod: function(active) {
-      this.formShow = false;
     }
   },
   beforeRouteLeave(to, from, next) {
