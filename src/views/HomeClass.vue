@@ -97,77 +97,13 @@
           <v-flex
             md6
             sm12>
-            <v-card
-              class="mx-auto"
-              width="500"
-              hegith="500"
-            > 
-              <v-card-title>
-                <v-flex
-                  sm4
-                  xs12
-                  class="text-sm-left text-xs-center"
-                >
-                  <v-btn @click="$refs.calendar.prev()">
-                    <v-icon
-                      dark
-                      left
-                    >
-                      keyboard_arrow_left
-                    </v-icon>
-                    Prev
-                  </v-btn>
-                </v-flex>
-
-                <v-flex
-                  sm4
-                  xs12
-                  class="text-xs-center"
-                >
-                  <v-select
-                    v-model="type"
-                    :items="typeOptions"
-                    label="Type"
-                  ></v-select>
-                </v-flex>
-
-                <v-flex
-                  sm4
-                  xs12
-                  class="text-sm-right text-xs-center"
-                >
-                  <v-btn @click="$refs.calendar.next()">
-                    Next
-                    <v-icon
-                      right
-                      dark
-                    >
-                      keyboard_arrow_right
-                    </v-icon>
-                  </v-btn>
-                </v-flex>
-              </v-card-title>
-              
-              <v-card-actions>
-                <v-flex
-                  xs12
-                  class="mb-3"
-                >
-                  <v-sheet 
-                    height="400"
-                  >
-                    <v-calendar
-                      ref="calendar"
-                      v-model="start"
-                      :type="type"
-                      :end="end"
-                      color="cyan lighten-1"
-                    > 
-                    </v-calendar>
-                  </v-sheet>
-                </v-flex>  
-              </v-card-actions>
-            </v-card>
+            <vue-cal 
+              weight="530"
+              height="600"
+              :time="false" 
+              class="vuecal--blue-theme"
+              default-view='month'
+              :disable-views="['day', 'week']"/>
           </v-flex>
         </v-layout>            
       </v-flex>
@@ -177,8 +113,11 @@
 
 <script>
 import {Stud} from "@/api";
+import VueCal from 'vue-cal'
+import 'vue-cal/dist/vuecal.css'
 
 export default {
+  components: { VueCal },
   data() {
     return {
       color: null,
@@ -194,15 +133,6 @@ export default {
       left: false,
       right: false,
       snackbar: false,
-      type: 'month',
-      typeOptions: [
-        { text: 'Day', value: 'day' },
-        { text: '4 Day', value: '4day' },
-        { text: 'Week', value: 'week' },
-        { text: 'Month', value: 'month' },
-        { text: 'Custom Daily', value: 'custom-daily' },
-        { text: 'Custom Weekly', value: 'custom-weekly' }
-      ]
     }
   },
   methods: {

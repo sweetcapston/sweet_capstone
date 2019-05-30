@@ -53,7 +53,6 @@ export default {
           const { surveyList, myAnswer_S } = res.data;
           this.surveyList = surveyList;
           this.myAnswer_S = myAnswer_S;
-          this.panel = new Array(surveyList.length).fill(false);
           this.elem = new Array(surveyList.length).fill(1);
           this.steps = [];
           surveyList.forEach(element => {
@@ -67,7 +66,6 @@ export default {
         else {
           const { surveyList } = res.data;
           this.surveyList = surveyList;
-          this.panel = new Array(surveyList.length).fill(false);
           this.elem = new Array(surveyList.length).fill(1);
           this.steps = [];
           surveyList.forEach(element => {
@@ -159,5 +157,11 @@ label {
 }
 .crimson {
   background: crimson !important;
+}
+.addSample{
+  flex:none;
+}
+.addSample > .v-input__control > .v-input__slot > label{
+  cursor: pointer;
 }
 </style>

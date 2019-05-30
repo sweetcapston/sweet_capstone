@@ -26,7 +26,7 @@
     "vue": "^2.6.6",
     "vue-analytics": "^5.16.4",
     "vue-apexcharts": "^1.3.5",
-    "vue-drag-resize": "^1.3.2",
+    "vue-cal": "^1.59.0",
     "vue-meta": "^1.5.8",
     "vue-resize-directive": "^1.2.0",
     "vue-router": "^3.0.2",

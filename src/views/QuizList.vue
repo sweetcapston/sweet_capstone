@@ -156,7 +156,6 @@ export default {
     },
     quizActive() {
       Prof.quizActive(this.quiz).then(res => {
-        console.log(res);
         this.quiz.active = res.data;
       });
     }

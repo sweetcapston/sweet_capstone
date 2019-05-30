@@ -2,9 +2,6 @@
   
   <v-container fluid grid-list-md>
     <div class="page">
-      <div contentEditable="true"> type here
-        <img src="https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2F512x512bb.jpg?alt=media&amp;token=8ea95608-1f14-4c2c-b900-87d9ff47294a" />
-      </div>
 
     <v-btn 
       @click.native="selectFiles"
@@ -18,13 +15,13 @@
       </v-icon>
     </v-btn>
     <input 
-    id="files"
-    type="file"
-    name="file"
-    ref="uploadInput"
-    accept="image/*"
-    :multiple="false"
-    @change="uploadFiles($event)" />
+      id="files"
+      type="file"
+      name="file"
+      ref="uploadInput"
+      accept="image/*"
+      :multiple="false"
+      @change="uploadFiles($event)" />
     <v-progress-circular
       v-if="uploading && !uploadEnd"
       :size="100"
@@ -35,14 +32,6 @@
       {{ progressUpload }}%
     </v-progress-circular>
     <!-- https://github.com/kirillmurashov/vue-drag-resize -->
-    <div class="testDiv" style="align-text:center; width:550px;height:550px;">
-    
-      <vue-drag-resize  :w="200" :h="200" @dragstop="resize" :parentLimitation="true" >
-        
-        <img src="https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2F512x512bb.jpg?alt=media&amp;token=8ea95608-1f14-4c2c-b900-87d9ff47294a" 
-        class="resize-image" style="width: inherit;height: inherit;"/>
-      </vue-drag-resize>
-    </div>
   </div>
     <v-layout row wrap>
       <v-flex d-flex xs12 sm6 md4 style="border:1px solid" align-center justify-center>
@@ -60,11 +49,7 @@
 
 <script>
 /*eslint-disable */
-import Vue from 'vue'
-import VueDragResize from 'vue-drag-resize'
 import {imageStorage} from '@/utils/imageStorage';
-
-Vue.component('vue-drag-resize', VueDragResize)
 
 export default {
   data() {
@@ -79,8 +64,6 @@ export default {
       height: 0,
       top: 0,
       right: 0,
-
-      //////////chart
       lorem: "Lorem ipsum dolor sit amet, mel at cu",
       option1: { labels: ["SWEET", "임승배", "치킨집"] },
       list1: [60, 10, 20],
@@ -125,7 +108,7 @@ export default {
           ]
         }
       }
-    };
+    }
     // series: [{
     //   name: 'series-1',
     //   data: [30, 40, 35, 50, 49, 60, 70, 91]
@@ -146,11 +129,12 @@ export default {
       this.uploading = true
       this.uploadTask = imageStorage.child(`${this.fileName}`).put(file)
     },
-    resize(newRect) {
-      this.width = newRect.width;
-      this.height = newRect.height;
-      this.top = newRect.top;
-      this.right = newRect.right;
+    getMeta(url){   
+      var img = new Image();
+      img.onload = function(){
+          alert( this.width+' '+ this.height );
+      };
+      img.src = url;
     }
   },
    watch: {
@@ -163,6 +147,7 @@ export default {
         this.uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
           this.uploadEnd = true
           this.downloadURL = downloadURL
+          this.getMeta(downloadURL)
           let imgHtml = document.createElement('img');
           imgHtml.src = downloadURL;
           imgHtml.classList.add("resize-image")

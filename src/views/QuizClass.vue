@@ -6,7 +6,7 @@
     <v-layout class="addButton" v-show="Identity==2 && formShow">
       <v-icon class="remove" @click="addQuiz()">remove_circle</v-icon>
     </v-layout>
-    <v-expansion-panel v-if="Identity==1" v-model="panel" expand>
+    <v-expansion-panel v-if="Identity==1" >
       <StudentQuizList
         v-for="n in quizList.length"
         v-bind:quiz="quizList[n-1]"
@@ -15,7 +15,7 @@
         :key="n"
       />
     </v-expansion-panel>
-    <v-expansion-panel v-else v-model="panel" expand>
+    <v-expansion-panel v-else >
       <QuizForm v-show="formShow" @childs-event="parentsMethod"/>
       <QuizList
         v-for="(quiz, _id) in quizList"
@@ -53,7 +53,6 @@ export default {
           const { quizList, myAnswer_Q } = res.data;
           this.quizList = quizList;
           this.myAnswer_Q = myAnswer_Q;
-          this.panel = new Array(quizList.length).fill(false);
           this.elem = new Array(quizList.length).fill(1);
           this.steps = [];
           quizList.forEach(element => {
@@ -67,7 +66,6 @@ export default {
         else {
           const { quizList } = res.data;
           this.quizList = quizList;
-          this.panel = new Array(quizList.length).fill(false);
           this.elem = new Array(quizList.length).fill(1);
           this.steps = [];
           quizList.forEach(element => {
@@ -93,7 +91,6 @@ export default {
       socket: io(`${URL}:3000/quiz`),
       icon: "mdi-plus-circle",
       radios: "radio-1",
-      panel: [],
       Identity: this.$store.state.Identity,
       elem: [],
       steps: [],
@@ -105,10 +102,7 @@ export default {
   methods: {
     addQuiz() {
       this.formShow = !this.formShow;
-      if (this.formShow) {
-        this.panel = new Array(this.panel.length + 1).fill(false);
-        this.panel[0] = true;
-      }
+      document.querySelector(".createQuiz .v-expansion-panel__header").click();
     },
     parentsMethod: function(active) {
       this.formShow = false;
@@ -160,5 +154,11 @@ label {
 }
 .crimson {
   background: crimson !important;
+}
+.addSample{
+  flex:none;
+}
+.addSample > .v-input__control > .v-input__slot > label{
+  cursor: pointer;
 }
 </style>

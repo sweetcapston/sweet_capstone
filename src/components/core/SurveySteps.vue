@@ -2,15 +2,12 @@
     <v-stepper-content :step="n+1">
         <v-card color="grey lighten-3" height="50px" class="typeCard">
         <v-radio-group v-model="type" :mandatory="false" class="surveyType" row>
-            <v-radio label="객관식" value="1" color="cyan ligten-1" select></v-radio>
-            <v-radio label="객관식 (복수 응답 가능)" value="2" color="cyan ligten-1"></v-radio>
-            <v-radio label="주관식" value="3" color="cyan ligten-1"></v-radio>
+            <v-radio label="객관식" value="1" color="cyan ligten-1" select/>
+            <v-radio label="객관식 (복수 응답 가능)" value="2" color="cyan ligten-1"/>
+            <v-radio label="주관식" value="3" color="cyan ligten-1"/>
         </v-radio-group>
         </v-card>
-        <v-card
-            class="mb-5"
-            color="grey lighten-3"
-        >
+        <v-card class="mb-5" color="grey lighten-3">
             <v-btn absolute dark fab top right class="crimson"
             @click="deleteData">
                 <v-icon>remove</v-icon>
@@ -21,63 +18,60 @@
                     label="질문을 입력하세요"
                     single-line	                
                     color="cyan ligten-1"	
-                    class="surveyQuestion"
-                />
+                    class="surveyQuestion"/>
+
                 <div v-if="type === '1'">
                     <div 
-                        v-for="(type1, index) in samplestype1" 
-                        :key="type1.id"
-                    >
+                    v-for="(type1, index) in samplestype1" 
+                    :key="type1.id">
                         <v-layout>
                             <v-text-field 
-                                class="type1"
-                                prepend-icon="mdi-checkbox-blank-circle-outline"
-                                label="보기를 입력하세요"
-                                single-line
-                                color="rgb(111, 111, 111)"
-                            />
+                            class="type1"
+                            prepend-icon="mdi-checkbox-blank-circle-outline"
+                            label="보기를 입력하세요"
+                            single-line
+                            color="rgb(111, 111, 111)"/>
                         <v-spacer/>
-                        <v-icon
-                            @click="deleteType1(index)">mdi-close</v-icon>
+                        <v-icon @click="deleteType1(index)">mdi-close</v-icon>
                         </v-layout>
                     </div>
-                    <v-layout 
-                        v-if="type === '1'"
+                    <v-layout v-if="type === '1'">
+                        <v-icon
                         @click="addType1()"
-                    >
-                        <v-icon>mdi-plus</v-icon>
+                        >mdi-plus</v-icon>
                         <v-input
+                        @click="addType1()"
                         label="보기 추가"
-                        class="addSample"
-                        />
+                        class="addSample"/>
                     </v-layout>
                 </div>
-                <div  v-if="type === '2'">
+                <div v-if="type === '2'">
                     <div 
                         class="type2" 
                         v-for="(type2, index) in samplestype2"
                         :key="type2.id"
                     >
                         <v-layout>
-                        <v-text-field 
-                            class="type2"
-                            prepend-icon="mdi-checkbox-blank-outline"
-                            label="보기를 입력하세요"
-                            single-line
-                            color="rgb(111, 111, 111)"
-                        />
-                        <v-spacer />
-                            <v-icon
-                            @click="deleteType2(index)">mdi-close</v-icon>  
+                            <v-text-field 
+                                class="type2"
+                                prepend-icon="mdi-checkbox-blank-outline"
+                                label="보기를 입력하세요"
+                                single-line
+                                color="rgb(111, 111, 111)"
+                            />
+                            <v-spacer />
+                            <v-icon @click="deleteType2(index)">mdi-close</v-icon>  
                         </v-layout>
                     </div>
-                    <v-layout v-if="type === '2'"
-                        @click="addType2()">
-                        <v-icon>mdi-plus</v-icon>
+                    <v-layout v-if="type === '2'">
+                        <v-icon
+                        @click="addType2()"
+                        >mdi-plus</v-icon>
                         <v-input
+                        @click="addType2()"
                         label="보기 추가"
                         class="addSample"
-                        ></v-input>               
+                        />             
                     </v-layout> 
                 </div>
 
@@ -88,7 +82,7 @@
                         flat
                         outline 
                         color="cyan lighten-1"
-                    ></v-textarea>
+                    />
                 </v-layout>
             </v-container>
         </v-card>

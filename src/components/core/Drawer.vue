@@ -155,5 +155,8 @@ export default {
     -webkit-box-shadow:0 !important;
     box-shadow:0 !important;
   }
+  .cyan.v-list__tile--active.v-list__tile.v-list__tile--link.v-list__tile--avatar.theme--dark{
+    box-shadow: none !important; 
+  }
 }
 </style>
