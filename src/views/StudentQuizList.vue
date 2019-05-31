@@ -2,8 +2,9 @@
   <v-expansion-panel-content :id="'quiz'+quiz.QID">
     <template v-slot:header>
       <v-layout align-center>
-        <v-flex lg5 xs5>{{ quiz.quizName }}</v-flex>
-        <v-flex lg4 xs6>{{ quiz.date }}</v-flex>
+        <v-flex md5 lg5 xs5>{{ quiz.quizName }}</v-flex>
+        <v-flex md5 lg5 xs5>{{ quiz.date }}</v-flex>
+        <v-flex v-if="answer_Q.None != 0" md2 lg2 xs2>{{ answer_Q.score }}점</v-flex>
       </v-layout>
     </template>
     <template v-slot:actions>

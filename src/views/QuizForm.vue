@@ -124,14 +124,14 @@ export default {
         correct = document.querySelector(`#correct${j}`).value;
         switch (quizType) {
           case "1":
-            doc = document.querySelectorAll(".type1");
+            doc = document.querySelectorAll(`.type1_${j+1}`);
             for (let i = 0; i < doc.length; i++) {
               content.push(doc[i].querySelector("input").value);
             }
             count = new Array(doc.length).fill(0);
             break;
           case "2":
-            doc = document.querySelectorAll(".type2");
+            doc = document.querySelectorAll(`.type2_${j+1}`);
             for (let i = 0; i < doc.length; i++) {
               content.push(doc[i].querySelector("input").value);
             }

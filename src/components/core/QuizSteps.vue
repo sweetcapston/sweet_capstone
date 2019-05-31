@@ -1,16 +1,5 @@
 <template>
     <v-stepper-content  :step="n+1">
-        <v-card color="grey lighten-3" height="250px" style="height:100%">
-            <v-textarea box label="Image" value="이미지가 들어갈 공간.">
-            </v-textarea>
-        </v-card>
-        <v-card color="grey lighten-3" height="50px" class="typeCard">
-            <v-radio-group v-model="type" :mandatory="false" class="quizType" row>
-                <v-radio label="객관식" value="1" color="cyan ligten-1" select/>
-                <v-radio label="객관식 (복수 응답 가능)" value="2" color="cyan ligten-1"/>
-                <v-radio label="주관식" value="3" color="cyan ligten-1"/>
-            </v-radio-group>
-        </v-card>
 
         <v-card class="mb-5" color="grey lighten-3">
             <v-btn absolute dark fab top right class="crimson" @click="deleteStep">
@@ -62,7 +51,7 @@
                     :key="type1.id">
                         <v-layout >
                             <v-text-field
-                            class="type1"
+                            :class="'type1_'+`${n+1}`"
                             prepend-icon="mdi-checkbox-blank-circle-outline"
                             label="보기를 입력하세요"
                             single-line
@@ -84,13 +73,12 @@
 
                 <div v-if="type === '2'">
                     <div 
-                    class="type2" 
+                    :class="'type2_'+`${n+1}`"
                     v-for="(type2, index) in samplestype2"
                     :key="type2.id"
                     >
                         <v-layout>
                             <v-text-field
-                            class="type2"
                             prepend-icon="mdi-checkbox-blank-outline"
                             label="보기를 입력하세요"
                             single-line
