@@ -107,14 +107,11 @@ export default {
       const classCode = this.$store.state.currentClass.classCode;
       const date = moment().format("LLL");
       const quizList = [];
-
       for (var j = 0; j < this.card_datas.length; j++) {
         const quizType = document.querySelectorAll(
           ".quizType input[type='radio']:checked"
         )[j].value;
-        const quizQuestion = document.querySelectorAll(
-          ".listItem .quizQuestion input[type='text']"
-        )[j].value;
+        const quizQuestion = document.querySelector(`.quizQuestion_${j+1}`).innerHTML;
         let content = [];
         let point = [];
         let correct;

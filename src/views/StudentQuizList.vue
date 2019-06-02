@@ -4,7 +4,7 @@
       <v-layout align-center>
         <v-flex md5 lg5 xs5>{{ quiz.quizName }}</v-flex>
         <v-flex md5 lg5 xs5>{{ quiz.date }}</v-flex>
-        <v-flex v-if="answer_Q.None != 0" md2 lg2 xs2>{{ answer_Q.score }}점</v-flex>
+        <v-flex v-if="answer_Q.None != 0" md2 lg2 xs2>{{ answer_Q.score }}점 </v-flex>
       </v-layout>
     </template>
     <template v-slot:actions>
@@ -27,9 +27,8 @@
         <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n" :id="`step${n}`">
           <v-card class="mb-5" color="grey lighten-3" min-height="250">
             <v-container fluid style="padding-bottom:20px">
-              <span
-                class="question-title"
-              >{{n}}. {{ quiz.quizList[n-1].quizQuestion }} ({{quiz.quizList[n-1].point[0]}}점)</span>
+              <!-- TODO: 그림 받는 div -->
+              <div :class="'imgQues_'+`${quiz.QID}_`+`${n-1}`">{{n}}.</div>
               <!-- FIXME: 라디오버튼 -->
               <v-radio-group
                 class="radio"
@@ -165,6 +164,10 @@ export default {
         element.remove(self);
       });
     }
+    for(let i=0; i<this.steps; i++){
+      document.querySelector(`.imgQues_${this.quiz.QID}_${i}`).insertAdjacentHTML( 'beforeend', `${this.quiz.quizList[i].quizQuestion}` );
+    }
+  
   },
   data() {
     return {
@@ -178,7 +181,8 @@ export default {
   props: {
     quiz: Object,
     socket: Object,
-    answer_Q: Object
+    answer_Q: Object,
+    num: Number
   },
   methods: {
     getPercent(array) {
@@ -284,5 +288,9 @@ export default {
 }
 .v-input--selection-controls.v-input .v-label {
   width: 100%;
+}
+.my-img {
+  width: 300px;
+  height: 200px;
 }
 </style>
