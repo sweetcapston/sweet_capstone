@@ -1,27 +1,123 @@
 <template>
   <v-layout row wrap fill-height>
-    <v-flex xs12 sm12 md6 align-center justify-center >
-      <v-flex row md12 style=" height:50%; border:1px solid;">
-        <h3>질문 클래스 통계</h3>
-        <apexchart type="bar" height="300" :options="chartOptions" :series="series"/>
+    <v-flex xs12 sm12 md6 lg6 xl6 align-center justify-center>
+      <!-- TODO: 질문 -->
+      <v-flex row md12 lg12 xl12 style=" height:50%; padding:5px 8px 0px 5px">
+        <material-card color="cyan" title="질문 클래스 통계" text="Question Data">
+          <apexchart type="bar" height="300" :options="chartOptions" :series="series"/>
+        </material-card>
       </v-flex>
-      <v-flex row md12 style="border:1px solid; height:50%">
-        <h3>설문 클래스 통계</h3>
-        <apexchart width="330" type="donut" :options="option1" :series="list1"/>
+      <!-- TODO: 퀴즈 -->
+      <v-flex row wrap md12 style="height:50%; padding:0px 8px 5px 5px;">
+        <material-card color="cyan" title="퀴즈 클래스 통계" text="Quiz Data">
+          <v-layout  fill-height>
+          <v-flex lg6 style="background:beige;">
+            <h4>퀴즈 리스트</h4>
+          </v-flex>
+          <v-flex lg6>
+            <apexchart width="330" type="donut" :options="option1" :series="list1"/>
+          </v-flex>
+          </v-layout>
+        </material-card>
       </v-flex>
     </v-flex>
-    <v-flex d-flex xs12 sm12 md6 child-flex style="border:1px solid">
-      <apexchart type="bar" height="350" :options="chartOptions2" :series="series2"/>
+    <!-- TODO: 설문 -->
+    <v-flex wrap xs12 sm12 md6 lg6 xl6 child-flex style="padding:5px 5px 5px 8px;">
+      <material-card color="cyan" title="설문 클래스 통계" text="Survey Data">
+        <v-expansion-panel v-if="Identity==1">
+          <StudentList
+            v-for="n in surveyList.length"
+            v-bind:survey="surveyList[n-1]"
+            v-bind:answer_S="myAnswer_S[n-1]"
+            v-bind:socket="socket"
+            :key="n"
+          />
+        </v-expansion-panel>
+        <v-expansion-panel v-else>
+          <SurveyForm v-show="formShow"/>
+          <SurveyList
+            v-for="(survey, _id) in surveyList"
+            v-bind:survey="survey"
+            v-bind:socket="socket"
+            :key="_id"
+          />
+        </v-expansion-panel>
+      </material-card>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
+import Vue from "vue";
+import SurveyForm from "./SurveyForm.vue";
+import SurveyList from "./SurveyList.vue";
+import StudentList from "./StudentList.vue";
+import { Stud, Prof } from "@/api";
+import { URL } from "@/plugins/api.config.js";
+import io from "socket.io-client";
+
+Vue.component("SurveyForm", SurveyForm);
+Vue.component("SurveyList", SurveyList);
+Vue.component("StudentList", StudentList);
+
 /*eslint-disable */
 
 export default {
+  beforeCreate() {
+    if (this.$store.state.Identity == 1) {
+      Stud.loadSurvey(
+        this.$store.state.currentClass.classCode,
+        this.$store.state.userID
+      ).then(res => {
+        if (res.data === "false") alert("설문 가져오기 실패");
+        else {
+          const { surveyList, myAnswer_S } = res.data;
+          this.surveyList = surveyList;
+          this.myAnswer_S = myAnswer_S;
+          this.elem = new Array(surveyList.length).fill(1);
+          this.steps = [];
+          surveyList.forEach(element => {
+            this.steps.push(element.surveyList.length);
+          });
+        }
+      });
+    } else {
+      Prof.loadSurvey(this.$store.state.currentClass.classCode).then(res => {
+        if (res.data === "false") alert("설문 가져오기 실패");
+        else {
+          const { surveyList } = res.data;
+          this.surveyList = surveyList;
+          this.elem = new Array(surveyList.length).fill(1);
+          this.steps = [];
+          surveyList.forEach(element => {
+            this.steps.push(element.surveyList.length);
+          });
+        }
+      });
+    }
+  },
+  created() {
+    this.socket.emit("channelJoin", {
+      classCode: this.$store.state.currentClass.classCode,
+      Identity: this.$store.state.Identity,
+      userName: this.$store.state.userName,
+      userID: this.$store.state.userID
+    });
+    this.socket.on("joinSuccess", data => {
+      console.log("socket connect");
+    });
+  },
   data() {
     return {
+      socket: io(`${URL}:3000/survey`),
+      icon: "mdi-plus-circle",
+      radios: "radio-1",
+      Identity: this.$store.state.Identity,
+      elem: [],
+      steps: [],
+      surveyList: [],
+      completeList: [],
+      formShow: false,
       series: [
         {
           name: "Servings",
@@ -29,7 +125,8 @@ export default {
         }
       ],
       chartOptions: {
-        annotations: {  // TODO: 어노테이션.
+        annotations: {
+          // TODO: 어노테이션.
           points: [
             {
               x: "나",
@@ -72,16 +169,7 @@ export default {
           labels: {
             rotate: -45
           },
-          categories: [
-            "나",
-            "평균",
-            "TOP 5 평균",
-            "Min",
-            "Max",
-            "Mid",
-        
-       
-          ]
+          categories: ["나", "평균", "TOP 5 평균", "Min", "Max", "Mid"]
         },
         yaxis: {
           title: {
@@ -103,59 +191,27 @@ export default {
         }
       },
       option1: { labels: ["SWEET", "임승배", "치킨집"] },
-      list1: [60, 10, 20],
+      list1: [60, 10, 20]
     };
-    //   series: [
-    //     {
-    //       name: "Series 1",
-    //       data: [80, 50, 30, 40, 100, 20]
-    //     }
-    //   ],
-    //   chartOptions: {
-    //     labels: ["January", "February", "March", "April", "May", "June"],
-    //     title: {
-    //       text: "Basic Radar Chart"
-    //     }
-    //   },
-    //   series2: [
-    //     {
-    //       data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
-    //     }
-    //   ],
-    //   chartOptions2: {
-    //     plotOptions: {
-    //       bar: {
-    //         horizontal: true
-    //       }
-    //     },
-    //     dataLabels: {
-    //       enabled: false
-    //     },
-    //     xaxis: {
-    //       categories: [
-    //         "South Korea",
-    //         "Canada",
-    //         "United Kingdom",
-    //         "Netherlands",
-    //         "Italy",
-    //         "France",
-    //         "Japan",
-    //         "United States",
-    //         "China",
-    //         "Germany"
-    //       ]
-    //     }
-    //   }
-    // };
-    // series: [{
-    //   name: 'series-1',
-    //   data: [30, 40, 35, 50, 49, 60, 70, 91]
-    // }]
   },
-  methods: {}
+  methods: {
+    addSurvey() {
+      this.formShow = !this.formShow;
+      document
+        .querySelector(".createSurvey .v-expansion-panel__header")
+        .click();
+    }
+  },
+  beforeRouteLeave(to, from, next) {
+    this.socket.emit("diconnect");
+    this.socket.disconnect();
+    next();
+  }
 };
 </script>
 
 <style>
-
+.v-card .v-offset .v-card--material__header.v-card {
+  padding: 10px;
+}
 </style>
