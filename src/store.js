@@ -11,6 +11,7 @@ export default new Vuex.Store({
     Identity: 0, // 1: 학생, 2: 교수, 3: 관리자
     userName:'', // 사용자 이름
     userID:'',
+    studentID:'',
     checkApply: '', // 수광중인 클래스여부
     currentClass: { // 현재 클래스 정보
       classCode: '', 
@@ -32,12 +33,14 @@ export default new Vuex.Store({
     setLoginData:(state, payload) => {
       state.userName = payload.userName;
       state.userID = payload.userID;
+      state.studentID = payload.studentId;
       state.classList = payload.classList;
       state.Identity = payload.Identity;
     },
     removeLoginData:(state) => {
       state.userName = '';
       state.userID = '';
+      state.studentID = '';
       state.classList = '';
       state.Identity = '';
     },

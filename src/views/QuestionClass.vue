@@ -178,6 +178,7 @@ export default {
         anonymous: data.anonymous,
         userID: data.userID,
         userName: data.userName,
+        studentID: data.studentID,
         classCode: data.classCode,
         question: data.question,
         date: data.date
@@ -278,6 +279,7 @@ export default {
         classCode: this.$store.state.currentClass.classCode,
         userID: this.$store.state.userID,
         userName: this.$store.state.userName,
+        studentID: this.$store.state.studentID,
         question: this.content,
         anonymous: this.anonymous,
         date: moment().format("LLL")
