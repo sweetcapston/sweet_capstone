@@ -178,7 +178,7 @@ export default {
         anonymous: data.anonymous,
         userID: data.userID,
         userName: data.userName,
-        studentID: date.studentID,
+        studentID: data.studentID,
         classCode: data.classCode,
         question: data.question,
         date: data.date
