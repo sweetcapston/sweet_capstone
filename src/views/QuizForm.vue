@@ -170,8 +170,12 @@ export default {
       this.card_datas.push({
         id:this.newID++,
         type:'1',
-        samplestype1:1,
-        samplestype2:1
+        samplestype1:[{
+          id:1
+        }],
+        samplestype2:[{
+          id:1001
+        }]
       })
     },
     deleteStep(n) {
