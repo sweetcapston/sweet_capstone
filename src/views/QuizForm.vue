@@ -50,18 +50,105 @@
         </core-quiz-steps>
       </v-stepper-items>
     </v-stepper>
+    <v-tour name="quizForm" :steps="guide"></v-tour>
   </v-expansion-panel-content>
 </template>
 
 <script>
 /*eslint-disable */
+import Vue from 'vue'
+import VueTour from 'vue-tour'
 import { Prof } from "@/api";
 import { maxHeaderSize } from 'http';
-
+require('vue-tour/dist/vue-tour.css')
+Vue.use(VueTour)
 
 export default {
+  name: "quizForm",
   data() {
     return {
+      guide: [
+        {
+          target: '.addButton',  
+          content: `퀴즈를 생성할 수 있습니다!`,
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.quizName', 
+          content: `<strong>제목을 입력하세요</strong>!`,
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.v-stepper__step__step.cyan.lighten-1', 
+          content: `문항 번호`,
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.mdi-plus-circle',
+          content: '더 많은 문제를 작성하세요.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.v-btn--floating',
+          content: '문제를 삭제할 수 있습니다.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '#imageUpload',
+          content: '퀴즈에 이미지를 추가할 수 있습니다.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },  
+        {
+          target: 'input[type=radio]',
+          content: `<strong>정답을 체크해 주세요</strong>`,
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '[role=radiogroup] .v-radio.theme--light.cyan--text.text--ligten-1',
+          content: '타입을 선택할 수 있습니다.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '#point0',
+          content: '문제의 점수는?',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '#next',
+          content: '버튼을 눌러 다음 문제를 작성하세요.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        }
+      ],
       e1: 1,
       card_datas: [
         {
@@ -115,19 +202,25 @@ export default {
         let content = [];
         let point = [];
         let correct;
-        let doc;
+        let doc, checkedbox;
         let count;
         point.push(document.querySelector(`#point${j}`).value);
-        correct = document.querySelector(`#correct${j}`).value;
+        // correct = document.querySelector(`#correct${j}`).value;
         switch (quizType) {
           case "1":
             doc = document.querySelectorAll(`.type1_${j+1}`);
             for (let i = 0; i < doc.length; i++) {
+              correct = String(parseInt(document.querySelector(`input[type=radio]:checked#correct${j}`).value)+1)
               content.push(doc[i].querySelector("input").value);
             }
             count = new Array(doc.length).fill(0);
             break;
           case "2":
+            correct = ""
+            checkedbox = document.querySelectorAll(`input[type=checkbox]:checked#correct${j}`)
+            checkedbox.forEach(checked => {
+              correct += String(parseInt(checked.value)+1)
+            })
             doc = document.querySelectorAll(`.type2_${j+1}`);
             for (let i = 0; i < doc.length; i++) {
               content.push(doc[i].querySelector("input").value);
@@ -158,7 +251,6 @@ export default {
         public: true,
         active: false
       };
-
       Prof.quizCreate(newQuiz).then(res => {
         if (res.data) {
           this.$emit("childs-event", true);
@@ -192,6 +284,9 @@ export default {
         this.e1 = n - 1;
       }
     }
+  },
+  mounted: function () {
+    this.$tours['quizForm'].start()
   }
 }
 </script>

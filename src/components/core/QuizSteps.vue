@@ -13,7 +13,7 @@
             style="font-size: 1.5rem; background:beige; width:750px; "
           ></div>
           <div class="page">
-            <v-btn @click.native="selectFiles()">
+            <v-btn @click.native="selectFiles()" id="imageUpload">
               Upload a image
               <v-icon right aria-hidden="true">add_a_photo</v-icon>
             </v-btn>
@@ -35,53 +35,59 @@
             >{{ progressUpload }}%</v-progress-circular>
           </div>
         </v-layout>
+        <v-radio-group v-model="radioGroup" >
+          <div v-if="type === '1'">
+              <div v-for="(type1, index) in samplestype1" :key="type1.id">
+                <v-layout class="type">
+                    <!-- prepend-icon="mdi-checkbox-blank-circle-outline" -->
+                  <!-- <input type="radio" > -->
+                  <v-radio 
+                    :value="`${index}`" 
+                    color="cyan ligten-1" 
+                    :id="`correct${n}`"
+                  />
+                  <v-text-field
+                    :class="'type1_'+`${n+1}`"
+                    label="보기를 입력하세요"
+                    single-line
+                    color="rgb(111, 111, 111)"
+                  />
+                  <v-spacer/>
+                  <v-icon @click="deleteType1(index)">mdi-close</v-icon>
+                </v-layout>
+              </div>
+            <v-layout v-if="type === '1'">
+              <v-icon @click="addType1()">mdi-plus</v-icon>
+              <v-input @click="addType1()" label="보기 추가" class="addSample"/>
+            </v-layout>
+          </div>
 
-        <div v-if="type === '1'">
-          <v-radio-group v-model="radioGroup" >
-            <div v-for="(type1, index) in samplestype1" :key="type1.id">
+          <div v-if="type === '2'">
+            <div v-for="(type2, index) in samplestype2" :key="type2.id">
               <v-layout class="type">
-                  <!-- prepend-icon="mdi-checkbox-blank-circle-outline" -->
-                <!-- <input type="radio" > -->
-                <v-radio :value="`${index}`" color="cyan ligten-1"/>
+                  <!-- prepend-icon="mdi-checkbox-blank-outline" -->
+                <v-checkbox 
+                  :value="`${index}`" 
+                  color="cyan ligten-1" 
+                  hide-details class="shrink mr-2"
+                  :id="`correct${n}`"
+                />
                 <v-text-field
-                  :class="'type1_'+`${n+1}`"
+                  :class="'type2_'+`${n+1}`" 
                   label="보기를 입력하세요"
                   single-line
                   color="rgb(111, 111, 111)"
                 />
                 <v-spacer/>
-                <v-icon @click="deleteType1(index)">mdi-close</v-icon>
+                <v-icon @click="deleteType2(index)">mdi-close</v-icon>
               </v-layout>
             </div>
-          </v-radio-group>
-          <v-layout v-if="type === '1'">
-            <v-icon @click="addType1()">mdi-plus</v-icon>
-            <v-input @click="addType1()" label="보기 추가" class="addSample"/>
-          </v-layout>
-        </div>
-
-        <div v-if="type === '2'">
-          <v-radio-group  >
-          <div v-for="(type2, index) in samplestype2" :key="type2.id">
-            <v-layout class="type">
-                <!-- prepend-icon="mdi-checkbox-blank-outline" -->
-              <v-checkbox :value="`${index}`" color="cyan ligten-1" hide-details class="shrink mr-2"/>
-              <v-text-field
-                :class="'type2_'+`${n+1}`" 
-                label="보기를 입력하세요"
-                single-line
-                color="rgb(111, 111, 111)"
-              />
-              <v-spacer/>
-              <v-icon @click="deleteType2(index)">mdi-close</v-icon>
+            <v-layout v-if="type=== '2'">
+              <v-icon @click="addType2()">mdi-plus</v-icon>
+              <v-input label="보기 추가" class="addSample" @click="addType2()"/>
             </v-layout>
           </div>
-          </v-radio-group  >
-          <v-layout v-if="type=== '2'">
-            <v-icon @click="addType2()">mdi-plus</v-icon>
-            <v-input label="보기 추가" class="addSample" @click="addType2()"/>
-          </v-layout>
-        </div>
+        </v-radio-group>
         <v-layout v-if="type === '3'">
           <v-textarea solo flat outline color="cyan lighten-1"/>
         </v-layout>
@@ -94,7 +100,7 @@
           </v-radio-group>
 
           <v-flex md3 style="padding:2px">
-            <v-text-field :id="'point'+ `${n}`" color="cyan ligten-1" label="배점"/>
+            <v-text-field :id="`point${n}`" color="cyan ligten-1" label="배점"/>
           </v-flex>
         </v-layout>
       </v-container>
@@ -107,6 +113,7 @@
         v-if="n+1 !== steps"
         :key="n"
         class="cyan lighten-1 white--text"
+        id="next"
         @click="nextStep(n)"
       >Next</v-btn>
       <v-btn
@@ -249,6 +256,9 @@ export default {
 input[type="file"] {
   position: absolute;
   clip: rect(0, 0, 0, 0);
+}
+.crimson.v-btn--floating{
+  z-index: 0;
 }
 div.layout.type div.v-radio.theme--light{
   margin-right: 0px !important;
