@@ -103,27 +103,48 @@ export default {
       const surveyList = []
       
       for(var j = 0; j<this.card_datas.length; j++){
-        const surveyType = document.querySelectorAll(".surveyType input[type='radio']:checked")[j].value;
-        const surveyQuestion = document.querySelectorAll(".listItem .surveyQuestion input[type='text']")[j].value;
+        let surveyType = document.querySelectorAll(".surveyType input[type='radio']:checked")[j].value;
+        let surveyQuestion = document.querySelectorAll(".listItem .surveyQuestion input[type='text']")[j];
+        if(surveyQuestion.value == ""){
+          this.e1 = j+1;
+          alert("질문이 입력되지 않았습니다.")
+          setTimeout(()=>surveyQuestion.focus(),50)
+          return
+        }
+        surveyQuestion = surveyQuestion.value
         let content = [];
         let doc;
         let count;
         switch(surveyType){
           case "1": 
-            doc = document.querySelectorAll('.type1')
-            for(let i = 0 ; i<doc.length; i++)              
+            doc = document.querySelectorAll(".listItem .surveyQuestion")[j].nextElementSibling.querySelectorAll('.type1')
+            for(let i = 0 ; i<doc.length; i++){ 
+              if(doc[i].querySelector('input').value==""){
+                this.e1 = j+1;
+                alert("입력되지 않은 항목이 있습니다.")
+                setTimeout(()=>doc[i].querySelector('input').focus(),50)
+                return;
+              }
               content.push(doc[i].querySelector('input').value);
+            }
             count = new Array(doc.length).fill(0)
             break;
           case "2": 
-            doc = document.querySelectorAll('.type2')
-            for(let i = 0 ; i<doc.length; i++)              
+            doc = document.querySelectorAll(".listItem .surveyQuestion")[j].nextElementSibling.querySelectorAll('.type2')
+            for(let i = 0 ; i<doc.length; i++){       
+              if(doc[i].querySelector('input').value==""){
+                this.e1 = j+1;
+                alert("입력되지 않은 항목이 있습니다.")
+                setTimeout(()=>doc[i].querySelector('input').focus(),50)
+                return;
+              }
               content.push(doc[i].querySelector('input').value);
+            }
             count = new Array(doc.length).fill(0)
             break;
           case "3": 
             doc = document.querySelector('textarea').value;
-            content.push(document.querySelector('textarea').value);
+            content.push(doc);
             count = 1;
             break;
         }

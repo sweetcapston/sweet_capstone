@@ -191,6 +191,10 @@ export default {
       let moment = require("moment");
       moment.locale("ko");
       const quizName = document.querySelector(".quizName input").value;
+      // if(quizName=="") {
+      //   alert("퀴즈의 제목을 입력하세요")
+      //   return;
+      // }
       const classCode = this.$store.state.currentClass.classCode;
       const date = moment().format("LLL");
       const quizList = [];
@@ -199,18 +203,43 @@ export default {
           ".quizType input[type='radio']:checked"
         )[j].value;
         const quizQuestion = document.querySelector(`.quizQuestion_${j+1}`).innerHTML;
+        if(quizQuestion==""){
+          alert("질문이 입력되지 않았습니다.")
+          this.e1 = j+1
+          setTimeout(()=> document.querySelector(`.quizQuestion_${j+1}`).focus(), 50)
+          return 
+        }
         let content = [];
         let point = [];
         let correct;
         let doc, checkedbox;
         let count;
-        point.push(document.querySelector(`#point${j}`).value);
-        // correct = document.querySelector(`#correct${j}`).value;
+        let pointDoc = document.querySelector(`#point${j}`);
+        if(pointDoc.value==""){
+          alert("점수를 입력해주세요.")
+          this.e1 = j+1
+          setTimeout(()=> pointDoc.focus(), 50) 
+          return;
+        }
+        point.push(pointDoc.value);
         switch (quizType) {
           case "1":
             doc = document.querySelectorAll(`.type1_${j+1}`);
             for (let i = 0; i < doc.length; i++) {
-              correct = String(parseInt(document.querySelector(`input[type=radio]:checked#correct${j}`).value)+1)
+              let elem = document.querySelector(`input[type=radio]:checked#correct${j}`);
+              if(elem == null){
+                alert("정답을 체크해주세요")
+                this.e1 = j+1
+                setTimeout(()=> document.querySelector(`input[type=radio]#correct${j}`).focus(), 50)
+                return
+              }
+              correct = String(parseInt(elem.value)+1)
+              if(doc[i].querySelector("input").value == ""){
+                alert("입력되지 않은 항목이 있습니다.")
+                this.e1 = j+1
+                setTimeout(()=> doc[i].querySelector("input").focus(), 50)
+                return
+              }
               content.push(doc[i].querySelector("input").value);
             }
             count = new Array(doc.length).fill(0);
@@ -218,18 +247,36 @@ export default {
           case "2":
             correct = ""
             checkedbox = document.querySelectorAll(`input[type=checkbox]:checked#correct${j}`)
+            if(checkedbox.length == 0){
+              alert("정답을 체크해주세요")
+              this.e1 = j+1
+              setTimeout(()=> document.querySelector(`input[type=checkbox]#correct${j}`).focus(), 50)
+              return
+            }
             checkedbox.forEach(checked => {
               correct += String(parseInt(checked.value)+1)
             })
             doc = document.querySelectorAll(`.type2_${j+1}`);
             for (let i = 0; i < doc.length; i++) {
+              if(doc[i].querySelector("input").value == ""){
+                alert("입력되지 않은 항목이 있습니다.")
+                this.e1 = j+1
+                setTimeout(()=> doc[i].querySelector("input").focus(), 50)
+                return
+              }
               content.push(doc[i].querySelector("input").value);
             }
             count = new Array(doc.length).fill(0);
             break;
           case "3":
-            doc = document.querySelector("textarea").value;
-            content.push(document.querySelector("textarea").value);
+            doc = document.querySelector("textarea");
+            if(doc.value==""){
+              alert("정답을 입력해주세요")
+              this.e1 = j+1
+              setTimeout(()=> doc.focus(), 50)
+              return
+            }
+            content.push(doc.value);
             count = 1;
             break;
         }
@@ -339,5 +386,8 @@ input[type="file"] {
 .resize-container:hover img,
 .resize-container:active img {
     outline: 2px dashed rgba(222,60,80,.9);
+}
+div[data-v-aa0cbe42]{
+ z-index: 10;
 }
 </style>

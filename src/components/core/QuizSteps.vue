@@ -4,7 +4,12 @@
       <v-btn absolute dark fab top right class="crimson" @click="deleteStep">
         <v-icon>remove</v-icon>
       </v-btn>
+      
       <v-container>
+        <v-btn @click.native="selectFiles()" id="imageUpload">
+          Upload a image
+          <v-icon right aria-hidden="true">add_a_photo</v-icon>
+        </v-btn>
         <v-layout style="align-items:center">
           <div
             :class="`quizQuestion_${n+1}`"
@@ -13,10 +18,6 @@
             style="font-size: 1.5rem; background:beige; width:750px; "
           ></div>
           <div class="page">
-            <v-btn @click.native="selectFiles()" id="imageUpload">
-              Upload a image
-              <v-icon right aria-hidden="true">add_a_photo</v-icon>
-            </v-btn>
             <input
               :id="`files${n}`"
               type="file"
@@ -100,7 +101,7 @@
           </v-radio-group>
 
           <v-flex md3 style="padding:2px">
-            <v-text-field :id="`point${n}`" color="cyan ligten-1" label="배점"/>
+            <v-text-field :id="`point${n}`" color="cyan ligten-1" label="배점" type="number"/>
           </v-flex>
         </v-layout>
       </v-container>
