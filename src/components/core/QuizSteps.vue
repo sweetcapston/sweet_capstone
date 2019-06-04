@@ -197,12 +197,12 @@ export default {
         var width, height;
         img.addEventListener("load", function() {
           if(this.naturalWidth > this.naturalHeight) {
-            width = 700;
-            height = this.naturalHeight * (700 / this.naturalWidth);
+            width = 100;
+            height = this.naturalHeight * (100 / this.naturalWidth);
           }
           else {
-            width = this.naturalWidth * (500 / this.naturalHeight);
-            height = 500;
+            width = this.naturalWidth * (100 / this.naturalHeight);
+            height = 100;
           }
           resolve([width, height]);
         });
@@ -228,8 +228,8 @@ export default {
             this.changeSize(downloadURL).then(function(size) {
               let imgHtml = document.createElement("img");
               imgHtml.src = downloadURL;
-              imgHtml.width = size[0];
-              imgHtml.height = size[1];
+              imgHtml.style.width = `${size[0]}%`;
+              imgHtml.style.height = `${size[1]}%`;
               document
                 .querySelector(`.quizQuestion_${idx}`)
                 .appendChild(imgHtml);

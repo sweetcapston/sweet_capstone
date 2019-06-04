@@ -41,9 +41,8 @@
         <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n">
           <v-card class="mb-5" color="grey lighten-3" min-height="250px">
             <v-container fluid>
-              <span
-                class="question-title"
-              >{{quiz.quizList[n-1].quizQuestion}} ({{quiz.quizList[n-1].point[0]}}점)</span>
+              <!-- TODO: 그림 받는 div -->
+              <v-flex xs12 sm12 md6 lg6 xl6 :class="'imgQues_'+`${quiz.QID}_`+`${n-1}`">{{n}}.</v-flex>
               <!-- FIXME: 라디오버튼 -->
               <v-radio-group v-show="quiz.quizList[n-1].quizType == 1" column>
                 <div v-for="c in quiz.quizList[n-1].content.length" :key="`${c}-radio`">
@@ -128,6 +127,16 @@
 <script>
 import { Prof } from "@/api";
 export default {
+  mounted() {
+    for (let i = 0; i < this.steps; i++) {
+      document
+        .querySelector(`.imgQues_${this.quiz.QID}_${i}`)
+        .insertAdjacentHTML(
+          "beforeend",
+          `${this.quiz.quizList[i].quizQuestion}`
+        );
+    }
+  },
   data() {
     return {
       steps: this.quiz.quizList.length,

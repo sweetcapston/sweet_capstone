@@ -28,7 +28,7 @@
           <v-card class="mb-5" color="grey lighten-3" min-height="250">
             <v-container fluid style="padding-bottom:20px">
               <!-- TODO: 그림 받는 div -->
-              <div :class="'imgQues_'+`${quiz.QID}_`+`${n-1}`">{{n}}.</div>
+              <v-flex xs12 sm12 md6 lg6 xl6 style="background:white;" :class="'imgQues_'+`${quiz.QID}_`+`${n-1}`">{{n}}.</v-flex>
               <!-- FIXME: 라디오버튼 -->
               <v-radio-group
                 class="radio"
