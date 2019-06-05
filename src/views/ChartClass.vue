@@ -25,7 +25,7 @@
                 </v-list>
               </v-card>
             </v-flex>
-            <v-flex lg6>
+            <v-flex row xs12 sm12 md12 lg12 xl12>
               <core-quiz-list v-bind:series2="series2"></core-quiz-list>
             </v-flex>
           </v-layout>
