@@ -4,7 +4,7 @@
       <v-layout align-center>
         <v-flex md5 lg5 xs5>{{ quiz.quizName }}</v-flex>
         <v-flex md5 lg5 xs5>{{ quiz.date }}</v-flex>
-        <v-flex v-if="answer_Q.None != 0" md2 lg2 xs2>{{ answer_Q.score }}점 </v-flex>
+        <v-flex v-if="answer_Q.None != 0" md2 lg2 xs2>{{ answer_Q.score }}점</v-flex>
       </v-layout>
     </template>
     <template v-slot:actions>
@@ -28,7 +28,15 @@
           <v-card class="mb-5" color="grey lighten-3" min-height="250">
             <v-container fluid style="padding-bottom:20px">
               <!-- TODO: 그림 받는 div -->
-              <v-flex xs12 sm12 md6 lg6 xl6 style="background:white;" :class="'imgQues_'+`${quiz.QID}_`+`${n-1}`">{{n}}.</v-flex>
+              <v-flex
+                xs12
+                sm12
+                md6
+                lg6
+                xl6
+                style="background:white;"
+                :class="'imgQues_'+`${quiz.QID}_`+`${n-1}`"
+              >{{n}}.</v-flex>
               <!-- FIXME: 라디오버튼 -->
               <v-radio-group
                 class="radio"
@@ -68,11 +76,12 @@
                   :key="`${c}-checkbox`"
                   color="cyan lighten-1"
                 >
-                <template v-slot:label>
+                  <template v-slot:label>
                     <v-flex>
-                      <span>{{quiz.quizList[n-1].content[c-1]}} </span> <span v-if="answer_Q.None != 0"> ({{quiz.quizList[n-1].count[c-1]}}명)</span>
+                      <span>{{quiz.quizList[n-1].content[c-1]}}</span>
+                      <span v-if="answer_Q.None != 0">({{quiz.quizList[n-1].count[c-1]}}명)</span>
                       <v-progress-linear
-                        v-if="answer_Q.None != 0" 
+                        v-if="answer_Q.None != 0"
                         color="cyan"
                         width="50px"
                         height="20"
@@ -91,12 +100,19 @@
                   outline
                   label="답을 입력하세요"
                   color="cyan lighten-1"
-                  v-if="answer_Q.None == 0" 
+                  v-if="answer_Q.None == 0"
                 ></v-textarea>
-                <v-expansion-panel v-if="answer_Q.None != 0" id="scroll-target" style="max-height: 400px" class="scroll-y">
+                <v-expansion-panel
+                  v-if="answer_Q.None != 0"
+                  id="scroll-target"
+                  style="max-height: 400px"
+                  class="scroll-y"
+                >
                   <v-expansion-panel-content style="padding:3px 2px 2px 3px">
                     <template v-slot:header>
-                      <div><h4>응답 결과</h4></div>
+                      <div>
+                        <h4>응답 결과</h4>
+                      </div>
                     </template>
                     <v-divider/>
                     <div v-for="i in quiz.quizList[n-1].content.length" :key="i">
@@ -124,8 +140,8 @@ import { Stud } from "@/api";
 /*eslint-disable */
 export default {
   created() {
-    this.socket.on("quiz", (data) => {
-      alert('socket check: ' + data.QID);
+    this.socket.on("quiz", data => {
+      alert("socket check: " + data.QID);
       if (this.quiz.QID == data.QID) {
         for (let i = 0; i < data.quizType.length; i++) {
           if (parseInt(data.quizType[i]) < 3) {
@@ -164,10 +180,14 @@ export default {
         element.remove(self);
       });
     }
-    for(let i=0; i<this.steps; i++){
-      document.querySelector(`.imgQues_${this.quiz.QID}_${i}`).insertAdjacentHTML( 'beforeend', `${this.quiz.quizList[i].quizQuestion}` );
+    for (let i = 0; i < this.steps; i++) {
+      document
+        .querySelector(`.imgQues_${this.quiz.QID}_${i}`)
+        .insertAdjacentHTML(
+          "beforeend",
+          `${this.quiz.quizList[i].quizQuestion}`
+        );
     }
-  
   },
   data() {
     return {
@@ -239,6 +259,7 @@ export default {
       }
       const answer_Q = {
         userID: userID,
+        studentID: this.$store.state.studentID,
         userName: userName,
         classCode: classCode,
         QID: QID,
@@ -284,7 +305,7 @@ export default {
 }
 .v-input .v-progress-linear {
   position: relative;
-  width:50%;
+  width: 50%;
 }
 .v-input--selection-controls.v-input .v-label {
   width: 100%;

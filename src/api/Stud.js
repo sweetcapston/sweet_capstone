@@ -46,10 +46,17 @@ export default {
       config
     );
   },
-  loadStatistics(classCode, userID) {
+  loadStatistics(classCode, studentID) {
     return axios.post(
       `${BaseUrl}/${classCode}/statistics`,
-      { userID: userID },
+      { studentID: studentID },
+      config
+    );
+  },
+  loadStatisticsQuiz(classCode, QID) {
+    return axios.post(
+      `${BaseUrl}/${classCode}/statistics/quiz`,
+      { QID: QID },
       config
     );
   }

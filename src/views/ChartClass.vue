@@ -11,22 +11,29 @@
       <v-flex row wrap md12 style="padding:0px 8px 5px 5px;">
         <material-card color="crimson" title="퀴즈 클래스 통계" text="Quiz Data">
           <v-layout fill-height>
-            <v-flex lg6>
+            <v-flex xs12 sm12 md6 lg6 xl6>
               <v-card>
                 <v-card-title>
                   <h4>퀴즈결과</h4>
                 </v-card-title>
                 <v-divider></v-divider>
                 <v-list dense v-for="(item,index) in quizList" :key="index">
-                  <v-list-tile @click="test(index + 1)">
-                    <v-list-tile-content>{{item.quizName}}</v-list-tile-content>
-                    <v-list-tile-content class="align-end"></v-list-tile-content>
-                  </v-list-tile>
+                  <div v-if="myAnswer_Q[index].None !=0">
+                    <v-list-tile
+                      @click="selectQuiz(myAnswer_Q[index].QID, myAnswer_Q[index].score)"
+                    >
+                      <v-list-tile-content>{{item.quizName}}</v-list-tile-content>
+                      <v-list-tile-content
+                        v-if="myAnswer_Q[index].None !=0"
+                        class="align-end"
+                      >{{myAnswer_Q[index].score}}</v-list-tile-content>
+                    </v-list-tile>
+                  </div>
                 </v-list>
               </v-card>
             </v-flex>
-            <v-flex row xs12 sm12 md12 lg12 xl12>
-              <core-quiz-list v-bind:series2="series2"></core-quiz-list>
+            <v-flex row xs12 sm12 md6 lg6 xl6>
+              <QuizResult v-bind:quizResult="quizResult"></QuizResult>
             </v-flex>
           </v-layout>
         </material-card>
@@ -34,7 +41,9 @@
     </v-flex>
     <!-- TODO: 설문 -->
     <v-flex wrap xs12 sm12 md6 lg6 xl6 child-flex style="padding:5px 5px 5px 8px;">
-      <material-card color="crimson" title="설문 클래스 통계" text="Survey Data"></material-card>
+      <material-card color="crimson" title="설문 클래스 통계" text="Survey Data">
+        <SurveyResult v-bind:surveyList="surveyList"/>
+      </material-card>
     </v-flex>
   </v-layout>
 </template>
@@ -44,27 +53,38 @@ import Vue from "vue";
 import SurveyForm from "./SurveyForm.vue";
 import SurveyList from "./SurveyList.vue";
 import StudentList from "./StudentList.vue";
+import QuizResult from "./QuizResult.vue";
+import SurveyResult from "./SurveyResult.vue";
 import { Stud, Prof } from "@/api";
 import { URL } from "@/plugins/api.config.js";
 
 Vue.component("SurveyForm", SurveyForm);
 Vue.component("SurveyList", SurveyList);
 Vue.component("StudentList", StudentList);
-
+Vue.component("QuizResult", QuizResult);
+Vue.component("SurveyResult", SurveyResult);
 /*eslint-disable */
 
 export default {
   created() {
+    //퀴즈 통계
+    //질문 통계
     Stud.loadStatistics(
       this.$store.state.currentClass.classCode,
       this.$store.state.studentID
     ).then(res => {
-      if (res.data === "false") alert("차트 가져오기 실패");
+      if (res.data === "false") alert("질문차트 가져오기 실패");
       else {
+        this.series[0].data = [
+          res.data.data.user,
+          res.data.data.avg,
+          res.data.data.top5,
+          res.data.data.max,
+          res.data.data.mid
+        ];
       }
     });
-    this.series[0].data = [10, 20, 30, 40, 50, 60];
-
+    //퀴즈리스트
     Stud.loadQuiz(
       this.$store.state.currentClass.classCode,
       this.$store.state.userID
@@ -72,22 +92,30 @@ export default {
       if (res.data === "false") alert("퀴즈 가져오기 실패");
       else {
         const { quizList, myAnswer_Q } = res.data;
-        this.quizList = quizList;
         this.myAnswer_Q = myAnswer_Q;
-        this.elem = new Array(quizList.length).fill(1);
-        this.steps = [];
-        quizList.forEach(element => {
-          this.steps.push(element.quizList.length);
-        });
+        this.quizList = quizList;
+      }
+    });
+    //설문
+    Stud.loadSurvey(
+      this.$store.state.currentClass.classCode,
+      this.$store.state.userID
+    ).then(res => {
+      if (res.data === "false") alert("설문 가져오기 실패");
+      else {
+        const { surveyList, myAnswer_S } = res.data;
+        this.surveyList = surveyList;
+        this.myAnswer_S = myAnswer_S;
       }
     });
   },
   data() {
     return {
+      surveyList: [],
+      myAnswer_S: "",
       quizList: [],
-      series2: [{ data: "" }],
-      items: [10, 20, 30, 40, 50, 60, 70],
-      questionData: "",
+      myAnswer_Q: "",
+      quizResult: [{ data: "" }],
       Identity: this.$store.state.Identity,
       series: [
         {
@@ -140,7 +168,7 @@ export default {
           labels: {
             rotate: -45
           },
-          categories: ["나", "평균", "TOP 5 평균", "Min", "Max", "Mid"]
+          categories: ["나", "평균", "TOP5 평균", "Max", "Mid"]
         },
         yaxis: {
           title: {
@@ -160,14 +188,27 @@ export default {
             stops: [50, 0, 100]
           }
         }
-      },
-      option1: { labels: ["SWEET", "임승배", "치킨집"] },
-      list1: [60, 10, 20]
+      }
     };
   },
   methods: {
-    test(n) {
-      this.series2[0].data = [n * 5, n * 7, n * 10, n * 13, n * 16, n * 20];
+    selectQuiz(QID, score) {
+      Stud.loadStatisticsQuiz(
+        this.$store.state.currentClass.classCode,
+        QID
+      ).then(res => {
+        if (res.data === "false") alert("퀴즈통계 가져오기 실패");
+        else {
+          this.quizResult[0].data = [
+            score,
+            res.data.data.max,
+            res.data.data.min,
+            res.data.data.mid,
+            res.data.data.avg,
+            res.data.data.top5
+          ];
+        }
+      });
     }
   }
 };

@@ -102,7 +102,9 @@ export default {
   methods: {
     addSurvey() {
       this.formShow = !this.formShow;
-      document.querySelector(".createSurvey .v-expansion-panel__header").click();
+      document
+        .querySelector(".createSurvey .v-expansion-panel__header")
+        .click();
     }
   },
   beforeRouteLeave(to, from, next) {
@@ -119,7 +121,7 @@ export default {
   align-content: center;
   text-align: center;
 }
-.deleteButton{
+.deleteButton {
   display: block;
   width: 100%;
   align-content: center;
@@ -158,10 +160,10 @@ label {
 .crimson {
   background: crimson !important;
 }
-.addSample{
-  flex:none;
+.addSample {
+  flex: none;
 }
-.addSample > .v-input__control > .v-input__slot > label{
+.addSample > .v-input__control > .v-input__slot > label {
   cursor: pointer;
 }
 </style>
