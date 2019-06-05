@@ -160,7 +160,6 @@ export default {
             enabled: true
           }
         },
-
         stroke: {
           width: 1,
           colors: ["#fff"]
@@ -244,7 +243,6 @@ export default {
         stroke: {
           width: 2
         },
-
         grid: {
           row: {
             colors: ["#fff", "#f2f2f2"]

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-container >
+    <v-container>
       <v-toolbar
         class="gradient white--text"
         app 
@@ -21,7 +21,7 @@
       <br>
       <br>
       <v-layout justify-center>
-        <img src="@/assets/logo.svg" alt="Vuetify.js" height="150">
+        <img src="@/assets/logo_black_animation.svg" alt="Vuetify.js" height="150">
       </v-layout>
       <br/>
       <v-content>

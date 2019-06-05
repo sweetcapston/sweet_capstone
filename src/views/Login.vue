@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-toolbar class="v-toolbar--fixed white--text elevation-0 transparent">
-      <img src="@/assets/logo.svg" height="50">
+      <img src="@/assets/logo_white.svg" height="50">
       <v-spacer />
       <sui-button class="transparent" positive @click="OpenLogin">로그인</sui-button>
       <sui-button class="cyan lighten-1" positive @click.native="OpenRegister" id="signbtn">회원가입</sui-button>
@@ -18,9 +18,8 @@
             align-center
             justify-center
             class="white--text"
-          >
-            <img src="@/assets/logo.svg" class="unselectable undraggable" alt="Vuetify.js" height="200">
-            <h1 class="white--text mb-2 display-1 text-xs-center unselectable undraggable">OpenClass</h1>
+          >      
+            <img src="@/assets/logo_white_animation.svg" height="200">
             <div class="subheading mb-3 text-xs-center unselectable undraggable">Powered by Sweet</div>
             <v-btn class="cyan lighten-1 mt-5" dark large @click="alert(1)">
               How to use
