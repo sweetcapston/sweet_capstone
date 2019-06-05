@@ -158,7 +158,6 @@ export default {
         stroke: {
           width: 2
         },
-
         grid: {
           row: {
             colors: ["#fff", "#f2f2f2"]
