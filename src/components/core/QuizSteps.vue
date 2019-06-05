@@ -4,18 +4,20 @@
       <v-btn absolute dark fab top right class="crimson" @click="deleteStep">
         <v-icon>remove</v-icon>
       </v-btn>
+      
       <v-container>
+        <v-btn @click.native="selectFiles()" id="imageUpload">
+          Upload a image
+          <v-icon right aria-hidden="true">add_a_photo</v-icon>
+        </v-btn>
         <v-layout style="align-items:center">
           <div
             :class="`quizQuestion_${n+1}`"
             contenteditable="true"
+            placeholder="퀴즈문제를 작성하세요."
             style="font-size: 1.5rem; background:beige; width:750px; "
-          >퀴즈문제를 작성하세요.</div>
+          ></div>
           <div class="page">
-            <v-btn @click.native="selectFiles()">
-              Upload a image
-              <v-icon right aria-hidden="true">add_a_photo</v-icon>
-            </v-btn>
             <input
               :id="`files${n}`"
               type="file"
@@ -34,46 +36,59 @@
             >{{ progressUpload }}%</v-progress-circular>
           </div>
         </v-layout>
-
-        <div v-if="type === '1'">
-          <div v-for="(type1, index) in samplestype1" :key="type1.id">
-            <v-layout>
-              <v-text-field
-                :class="'type1_'+`${n+1}`"
-                prepend-icon="mdi-checkbox-blank-circle-outline"
-                label="보기를 입력하세요"
-                single-line
-                color="rgb(111, 111, 111)"
-              />
-              <v-spacer/>
-              <v-icon @click="deleteType1(index)">mdi-close</v-icon>
-            </v-layout>
-          </div>
-          <v-layout v-if="type === '1'">
-            <v-icon @click="addType1()">mdi-plus</v-icon>
-            <v-input @click="addType1()" label="보기 추가" class="addSample"/>
-          </v-layout>
-        </div>
-
-        <div v-if="type === '2'">
-          <div :class="'type2_'+`${n+1}`" v-for="(type2, index) in samplestype2" :key="type2.id">
-            <v-layout>
-              <v-text-field
-                prepend-icon="mdi-checkbox-blank-outline"
-                label="보기를 입력하세요"
-                single-line
-                color="rgb(111, 111, 111)"
-              />
-              <v-spacer/>
-              <v-icon @click="deleteType2(index)">mdi-close</v-icon>
+        <v-radio-group v-model="radioGroup" >
+          <div v-if="type === '1'">
+              <div v-for="(type1, index) in samplestype1" :key="type1.id">
+                <v-layout class="type">
+                    <!-- prepend-icon="mdi-checkbox-blank-circle-outline" -->
+                  <!-- <input type="radio" > -->
+                  <v-radio 
+                    :value="`${index}`" 
+                    color="cyan ligten-1" 
+                    :id="`correct${n}`"
+                  />
+                  <v-text-field
+                    :class="'type1_'+`${n+1}`"
+                    label="보기를 입력하세요"
+                    single-line
+                    color="rgb(111, 111, 111)"
+                  />
+                  <v-spacer/>
+                  <v-icon @click="deleteType1(index)">mdi-close</v-icon>
+                </v-layout>
+              </div>
+            <v-layout v-if="type === '1'">
+              <v-icon @click="addType1()">mdi-plus</v-icon>
+              <v-input @click="addType1()" label="보기 추가" class="addSample"/>
             </v-layout>
           </div>
 
-          <v-layout v-if="type=== '2'">
-            <v-icon @click="addType2()">mdi-plus</v-icon>
-            <v-input label="보기 추가" class="addSample" @click="addType2()"/>
-          </v-layout>
-        </div>
+          <div v-if="type === '2'">
+            <div v-for="(type2, index) in samplestype2" :key="type2.id">
+              <v-layout class="type">
+                  <!-- prepend-icon="mdi-checkbox-blank-outline" -->
+                <v-checkbox 
+                  :value="`${index}`" 
+                  color="cyan ligten-1" 
+                  hide-details class="shrink mr-2"
+                  :id="`correct${n}`"
+                />
+                <v-text-field
+                  :class="'type2_'+`${n+1}`" 
+                  label="보기를 입력하세요"
+                  single-line
+                  color="rgb(111, 111, 111)"
+                />
+                <v-spacer/>
+                <v-icon @click="deleteType2(index)">mdi-close</v-icon>
+              </v-layout>
+            </div>
+            <v-layout v-if="type=== '2'">
+              <v-icon @click="addType2()">mdi-plus</v-icon>
+              <v-input label="보기 추가" class="addSample" @click="addType2()"/>
+            </v-layout>
+          </div>
+        </v-radio-group>
         <v-layout v-if="type === '3'">
           <v-textarea solo flat outline color="cyan lighten-1"/>
         </v-layout>
@@ -84,11 +99,9 @@
             <v-radio label="객관식(복수 응답 가능)" value="2" color="cyan ligten-1"/>
             <v-radio label="주관식(단답형)" value="3" color="cyan ligten-1"/>
           </v-radio-group>
+
           <v-flex md3 style="padding:2px">
-            <v-text-field :id="'correct'+ `${n}`" color="cyan ligten-1" label="정답"/>
-          </v-flex>
-          <v-flex md3 style="padding:2px">
-            <v-text-field :id="'point'+ `${n}`" color="cyan ligten-1" label="배점"/>
+            <v-text-field :id="`point${n}`" color="cyan ligten-1" label="배점" type="number"/>
           </v-flex>
         </v-layout>
       </v-container>
@@ -101,6 +114,7 @@
         v-if="n+1 !== steps"
         :key="n"
         class="cyan lighten-1 white--text"
+        id="next"
         @click="nextStep(n)"
       >Next</v-btn>
       <v-btn
@@ -118,6 +132,7 @@ import { imageStorage } from "@/utils/imageStorage";
 export default {
   data() {
     return {
+      radioGroup: 1,
       progressUpload: 0,
       fileName: "",
       uploadTask: "",
@@ -242,5 +257,48 @@ export default {
 input[type="file"] {
   position: absolute;
   clip: rect(0, 0, 0, 0);
+}
+.crimson.v-btn--floating{
+  z-index: 0;
+}
+div.layout.type div.v-radio.theme--light{
+  margin-right: 0px !important;
+}
+div.layout.type div.v-radio.theme--light div.v-input--selection-controls__input{
+  margin-right: 4px !important;
+}
+
+div.layout.type div.v-input.v-text-field.v-text-field--single-line.theme--light div.v-input__control div.v-text-field__details{
+  height: 0px;
+  min-height: 0px;
+}
+div.v-input.v-input--selection-controls.v-input--radio-group > div.v-input__control > div.v-messages.theme--light{
+  height: 0px;
+  min-height: 0px;
+}
+div.layout.type div.v-input.v-text-field.v-text-field--single-line div.v-input__control div.v-text-field__details{
+  height: 0px;
+  min-height: 0px;
+
+}
+.type > div.v-input.shrink.mr-2.v-input--checkbox.v-input--hide-details.theme--light > .v-input__control{
+  margin-top: 10px;
+}
+.v-input.shrink.mr-2.v-input--selection-controls.v-input--checkbox.v-input--hide-details.theme--light{
+  margin-right: 1px !important;
+}
+
+[contenteditable=true]:empty:before{
+  content: attr(placeholder);
+  display: block; /* For Firefox */
+}
+div[contenteditable=true] {
+  border: 1px solid #ddd;
+  color : #333;
+  font-size: 12px;
+  width: 300px;
+  padding: 5px;
+  min-height:200px;
+  margin-bottom: 20px;
 }
 </style>

@@ -50,18 +50,105 @@
         </core-quiz-steps>
       </v-stepper-items>
     </v-stepper>
+    <v-tour name="quizForm" :steps="guide"></v-tour>
   </v-expansion-panel-content>
 </template>
 
 <script>
 /*eslint-disable */
+import Vue from 'vue'
+import VueTour from 'vue-tour'
 import { Prof } from "@/api";
 import { maxHeaderSize } from 'http';
-
+require('vue-tour/dist/vue-tour.css')
+Vue.use(VueTour)
 
 export default {
+  name: "quizForm",
   data() {
     return {
+      guide: [
+        {
+          target: '.addButton',  
+          content: `퀴즈를 생성할 수 있습니다!`,
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.quizName', 
+          content: `<strong>제목을 입력하세요</strong>!`,
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.v-stepper__step__step.cyan.lighten-1', 
+          content: `문항 번호`,
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.mdi-plus-circle',
+          content: '더 많은 문제를 작성하세요.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.v-btn--floating',
+          content: '문제를 삭제할 수 있습니다.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '#imageUpload',
+          content: '퀴즈에 이미지를 추가할 수 있습니다.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },  
+        {
+          target: 'input[type=radio]',
+          content: `<strong>정답을 체크해 주세요</strong>`,
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '[role=radiogroup] .v-radio.theme--light.cyan--text.text--ligten-1',
+          content: '타입을 선택할 수 있습니다.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '#point0',
+          content: '문제의 점수는?',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '#next',
+          content: '버튼을 눌러 다음 문제를 작성하세요.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        }
+      ],
       e1: 1,
       card_datas: [
         {
@@ -104,6 +191,10 @@ export default {
       let moment = require("moment");
       moment.locale("ko");
       const quizName = document.querySelector(".quizName input").value;
+      // if(quizName=="") {
+      //   alert("퀴즈의 제목을 입력하세요")
+      //   return;
+      // }
       const classCode = this.$store.state.currentClass.classCode;
       const date = moment().format("LLL");
       const quizList = [];
@@ -112,31 +203,80 @@ export default {
           ".quizType input[type='radio']:checked"
         )[j].value;
         const quizQuestion = document.querySelector(`.quizQuestion_${j+1}`).innerHTML;
+        if(quizQuestion==""){
+          alert("질문이 입력되지 않았습니다.")
+          this.e1 = j+1
+          setTimeout(()=> document.querySelector(`.quizQuestion_${j+1}`).focus(), 50)
+          return 
+        }
         let content = [];
         let point = [];
         let correct;
-        let doc;
+        let doc, checkedbox;
         let count;
-        point.push(document.querySelector(`#point${j}`).value);
-        correct = document.querySelector(`#correct${j}`).value;
+        let pointDoc = document.querySelector(`#point${j}`);
+        if(pointDoc.value==""){
+          alert("점수를 입력해주세요.")
+          this.e1 = j+1
+          setTimeout(()=> pointDoc.focus(), 50) 
+          return;
+        }
+        point.push(pointDoc.value);
         switch (quizType) {
           case "1":
             doc = document.querySelectorAll(`.type1_${j+1}`);
             for (let i = 0; i < doc.length; i++) {
+              let elem = document.querySelector(`input[type=radio]:checked#correct${j}`);
+              if(elem == null){
+                alert("정답을 체크해주세요")
+                this.e1 = j+1
+                setTimeout(()=> document.querySelector(`input[type=radio]#correct${j}`).focus(), 50)
+                return
+              }
+              correct = String(parseInt(elem.value)+1)
+              if(doc[i].querySelector("input").value == ""){
+                alert("입력되지 않은 항목이 있습니다.")
+                this.e1 = j+1
+                setTimeout(()=> doc[i].querySelector("input").focus(), 50)
+                return
+              }
               content.push(doc[i].querySelector("input").value);
             }
             count = new Array(doc.length).fill(0);
             break;
           case "2":
+            correct = ""
+            checkedbox = document.querySelectorAll(`input[type=checkbox]:checked#correct${j}`)
+            if(checkedbox.length == 0){
+              alert("정답을 체크해주세요")
+              this.e1 = j+1
+              setTimeout(()=> document.querySelector(`input[type=checkbox]#correct${j}`).focus(), 50)
+              return
+            }
+            checkedbox.forEach(checked => {
+              correct += String(parseInt(checked.value)+1)
+            })
             doc = document.querySelectorAll(`.type2_${j+1}`);
             for (let i = 0; i < doc.length; i++) {
+              if(doc[i].querySelector("input").value == ""){
+                alert("입력되지 않은 항목이 있습니다.")
+                this.e1 = j+1
+                setTimeout(()=> doc[i].querySelector("input").focus(), 50)
+                return
+              }
               content.push(doc[i].querySelector("input").value);
             }
             count = new Array(doc.length).fill(0);
             break;
           case "3":
-            doc = document.querySelector("textarea").value;
-            content.push(document.querySelector("textarea").value);
+            doc = document.querySelector("textarea");
+            if(doc.value==""){
+              alert("정답을 입력해주세요")
+              this.e1 = j+1
+              setTimeout(()=> doc.focus(), 50)
+              return
+            }
+            content.push(doc.value);
             count = 1;
             break;
         }
@@ -158,7 +298,6 @@ export default {
         public: true,
         active: false
       };
-
       Prof.quizCreate(newQuiz).then(res => {
         if (res.data) {
           this.$emit("childs-event", true);
@@ -170,8 +309,12 @@ export default {
       this.card_datas.push({
         id:this.newID++,
         type:'1',
-        samplestype1:1,
-        samplestype2:1
+        samplestype1:[{
+          id:1
+        }],
+        samplestype2:[{
+          id:1001
+        }]
       })
     },
     deleteStep(n) {
@@ -188,6 +331,9 @@ export default {
         this.e1 = n - 1;
       }
     }
+  },
+  mounted: function () {
+    this.$tours['quizForm'].start()
   }
 }
 </script>
@@ -240,5 +386,8 @@ input[type="file"] {
 .resize-container:hover img,
 .resize-container:active img {
     outline: 2px dashed rgba(222,60,80,.9);
+}
+div[data-v-aa0cbe42]{
+ z-index: 10;
 }
 </style>
