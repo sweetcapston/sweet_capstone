@@ -2,20 +2,31 @@
   <v-layout row wrap fill-height>
     <v-flex xs12 sm12 md6 lg6 xl6 align-center justify-center>
       <!-- TODO: 질문 -->
-      <v-flex row md12 lg12 xl12 style=" height:50%; padding:5px 8px 0px 5px">
+      <v-flex row xs12 sm12 md12 lg12 xl12 style="padding:5px 8px 0px 5px">
         <material-card color="crimson" title="질문 클래스 통계" text="Question Data">
-          <apexchart type="bar" height="300" :options="chartOptions" :series="series"/>
+          <apexchart type="bar" :options="chartOptions" :series="series"/>
         </material-card>
       </v-flex>
       <!-- TODO: 퀴즈 -->
-      <v-flex row wrap md12 style="height:50%; padding:0px 8px 5px 5px;">
+      <v-flex row wrap md12 style="padding:0px 8px 5px 5px;">
         <material-card color="crimson" title="퀴즈 클래스 통계" text="Quiz Data">
           <v-layout fill-height>
-            <v-flex lg6 style="background:beige;">
-              <h4>퀴즈 리스트</h4>
+            <v-flex lg6>
+              <v-card>
+                <v-card-title>
+                  <h4>퀴즈결과</h4>
+                </v-card-title>
+                <v-divider></v-divider>
+                <v-list dense v-for="(item,index) in quizList" :key="index">
+                  <v-list-tile @click="test(index + 1)">
+                    <v-list-tile-content>{{item.quizName}}</v-list-tile-content>
+                    <v-list-tile-content class="align-end"></v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
+              </v-card>
             </v-flex>
             <v-flex lg6>
-              <apexchart type=bar height=350 :options="chartOptions2" :series="series2" />
+              <core-quiz-list v-bind:series2="series2"></core-quiz-list>
             </v-flex>
           </v-layout>
         </material-card>
@@ -23,26 +34,7 @@
     </v-flex>
     <!-- TODO: 설문 -->
     <v-flex wrap xs12 sm12 md6 lg6 xl6 child-flex style="padding:5px 5px 5px 8px;">
-      <material-card color="crimson" title="설문 클래스 통계" text="Survey Data">
-        <v-expansion-panel v-if="Identity==1">
-          <StudentList
-            v-for="n in surveyList.length"
-            v-bind:survey="surveyList[n-1]"
-            v-bind:answer_S="myAnswer_S[n-1]"
-            v-bind:socket="socket"
-            :key="n"
-          />
-        </v-expansion-panel>
-        <v-expansion-panel v-else>
-          <SurveyForm v-show="formShow"/>
-          <SurveyList
-            v-for="(survey, _id) in surveyList"
-            v-bind:survey="survey"
-            v-bind:socket="socket"
-            :key="_id"
-          />
-        </v-expansion-panel>
-      </material-card>
+      <material-card color="crimson" title="설문 클래스 통계" text="Survey Data"></material-card>
     </v-flex>
   </v-layout>
 </template>
@@ -54,7 +46,6 @@ import SurveyList from "./SurveyList.vue";
 import StudentList from "./StudentList.vue";
 import { Stud, Prof } from "@/api";
 import { URL } from "@/plugins/api.config.js";
-import io from "socket.io-client";
 
 Vue.component("SurveyForm", SurveyForm);
 Vue.component("SurveyList", SurveyList);
@@ -63,150 +54,45 @@ Vue.component("StudentList", StudentList);
 /*eslint-disable */
 
 export default {
-  beforeCreate() {
-    if (this.$store.state.Identity == 1) {
-      Stud.loadSurvey(
-        this.$store.state.currentClass.classCode,
-        this.$store.state.userID
-      ).then(res => {
-        if (res.data === "false") alert("설문 가져오기 실패");
-        else {
-          const { surveyList, myAnswer_S } = res.data;
-          this.surveyList = surveyList;
-          this.myAnswer_S = myAnswer_S;
-          this.elem = new Array(surveyList.length).fill(1);
-          this.steps = [];
-          surveyList.forEach(element => {
-            this.steps.push(element.surveyList.length);
-          });
-        }
-      });
-    } else {
-      Prof.loadSurvey(this.$store.state.currentClass.classCode).then(res => {
-        if (res.data === "false") alert("설문 가져오기 실패");
-        else {
-          const { surveyList } = res.data;
-          this.surveyList = surveyList;
-          this.elem = new Array(surveyList.length).fill(1);
-          this.steps = [];
-          surveyList.forEach(element => {
-            this.steps.push(element.surveyList.length);
-          });
-        }
-      });
-    }
-  },
   created() {
-    this.socket.emit("channelJoin", {
-      classCode: this.$store.state.currentClass.classCode,
-      Identity: this.$store.state.Identity,
-      userName: this.$store.state.userName,
-      userID: this.$store.state.userID
+    Stud.loadStatistics(
+      this.$store.state.currentClass.classCode,
+      this.$store.state.studentID
+    ).then(res => {
+      if (res.data === "false") alert("차트 가져오기 실패");
+      else {
+      }
     });
-    this.socket.on("joinSuccess", data => {
-      console.log("socket connect");
+    this.series[0].data = [10, 20, 30, 40, 50, 60];
+
+    Stud.loadQuiz(
+      this.$store.state.currentClass.classCode,
+      this.$store.state.userID
+    ).then(res => {
+      if (res.data === "false") alert("퀴즈 가져오기 실패");
+      else {
+        const { quizList, myAnswer_Q } = res.data;
+        this.quizList = quizList;
+        this.myAnswer_Q = myAnswer_Q;
+        this.elem = new Array(quizList.length).fill(1);
+        this.steps = [];
+        quizList.forEach(element => {
+          this.steps.push(element.quizList.length);
+        });
+      }
     });
   },
   data() {
     return {
-      socket: io(`${URL}:3000/survey`),
-      icon: "mdi-plus-circle",
-      radios: "radio-1",
+      quizList: [],
+      series2: [{ data: "" }],
+      items: [10, 20, 30, 40, 50, 60, 70],
+      questionData: "",
       Identity: this.$store.state.Identity,
-      elem: [],
-      steps: [],
-      surveyList: [],
-      completeList: [],
-      formShow: false,
-      series2: [
-        {
-          data: [70, 100, 30, 50, 55, 85]
-        }
-      ],
-      chartOptions2: {
-        plotOptions: {
-          bar: {
-            barHeight: "100%",
-            distributed: true,
-            horizontal: true,
-            dataLabels: {
-              position: "bottom"
-            }
-          }
-        },
-        colors: [
-          "#33b2df",
-          "#546E7A",
-          "#d4526e",
-          "#13d8aa",
-          "#A5978B",
-          "#2b908f",
-          "#f9a3a4",
-          "#90ee7e",
-          "#f48024",
-          "#69d2e7"
-        ],
-        dataLabels: {
-          enabled: true,
-          textAnchor: "start",
-          style: {
-            colors: ["#fff"]
-          },
-          formatter: function(val, opt) {
-            return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val;
-          },
-          offsetX: 0,
-          dropShadow: {
-            enabled: true
-          }
-        },
-
-        stroke: {
-          width: 1,
-          colors: ["#fff"]
-        },
-        xaxis: {
-          categories: [
-            "내 점수",
-            "Max",
-            "Min",
-            "Mid",
-            "Avg",
-            "Top5 Avg",
-          ]
-        },
-        yaxis: {
-          labels: {
-            show: false
-          }
-        },
-        title: {
-          text: "n번째 퀴즈 결과",
-          align: "center",
-          floating: true
-        },
-        subtitle: {
-          text: "퀴즈 응시 결과 입니다.",
-          align: "center"
-        },
-        tooltip: {
-          theme: "dark",
-          x: {
-            show: false
-          },
-          y: {
-            title: {
-              formatter: function() {
-                return "";
-              }
-            }
-          }
-        }
-      },
       series: [
         {
           name: "Servings",
-          data: [55, 45, 65, 35, 70, 40]
+          data: ""
         }
       ],
       chartOptions: {
@@ -280,17 +166,9 @@ export default {
     };
   },
   methods: {
-    addSurvey() {
-      this.formShow = !this.formShow;
-      document
-        .querySelector(".createSurvey .v-expansion-panel__header")
-        .click();
+    test(n) {
+      this.series2[0].data = [n * 5, n * 7, n * 10, n * 13, n * 16, n * 20];
     }
-  },
-  beforeRouteLeave(to, from, next) {
-    this.socket.emit("diconnect");
-    this.socket.disconnect();
-    next();
   }
 };
 </script>
