@@ -124,7 +124,6 @@ export default {
       nonce: 0,
       questionList: [],
       content: null,
-      likes:0,
       socket: io(`${URL}:3000/question`),
       anonymous: false,
       userID:this.$store.state.userID, 
@@ -200,14 +199,17 @@ export default {
       }
     });
     this.socket.on("MESSAGE", data => {
+      const{anonymous, userID, userName, studentID, QesID, classCode, question, date} = data
       this.questionList.push({
-        anonymous: data.anonymous,
-        userID: data.userID,
-        userName: data.userName,
-        studentID: data.studentID,
-        classCode: data.classCode,
-        question: data.question,
-        date: data.date
+        anonymous: anonymous,
+        userID: userID,
+        userName: userName,
+        studentID: studentID,
+        likeList:[],
+        QesID:QesID,
+        classCode: classCode,
+        question: question,
+        date: date
       });
       this.notification(data);
     });
@@ -271,7 +273,7 @@ export default {
           var options = {
             body: `${data.question}`,
             //1px = 0.02645833333333 cm
-            image: "/images/24283C3858F778CA2E.jpg", //720px (width) by 240px (height)
+            image: "/images/notify.jpg", //720px (width) by 240px (height)
             icon: "/images/logo.png", //android는 192px   512 512
             badge: "/images/logo-128x128.png", //72px
             tag: getTime,
@@ -312,6 +314,9 @@ export default {
       event.preventDefault();
       let moment = require("moment");
       moment.locale("ko");
+      if(this.content == null) {
+        return 
+      }
       this.socket.emit("chat", {
         classCode: this.$store.state.currentClass.classCode,
         userID: this.$store.state.userID,
