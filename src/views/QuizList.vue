@@ -290,12 +290,12 @@ export default {
   font-size:-webkit-xxx-large;
 }
 .quizStart:hover{
-  background-color:rgba(0,0,0,0.08) !important;
+  transform: scale(1.2);
 }
 .quizEnd{
   font-size:-webkit-xxx-large;
 }
 .quizEnd:hover{
-  background-color:rgba(0,0,0,0.08) !important;
+  transform: scale(1.2);
 }
 </style>

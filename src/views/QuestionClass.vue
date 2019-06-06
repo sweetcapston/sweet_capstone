@@ -7,11 +7,13 @@
         </div>
 
         <div id="chat-message-list">
-          <template v-for="(ques,index) in questionList">
-            <v-flex id="message" :key="ques.index">
+          <template v-for="(ques, index) in questionList">
+            <v-flex id="message" :key="index">
               <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
-
               <v-divider/>
+              <v-flex style="text-align:end">
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-flex>
               <v-list-tile id="auto_height" :key="ques.title">
                 <v-list-tile-avatar>
                   <img :src="image">
@@ -28,10 +30,17 @@
                       <v-card flat>{{ques.date}}</v-card>
                     </v-flex>
                   </v-layout>
-                  <span>
-                    {{ques.question}}
-                    <v-icon @click="like(index)" small :id="`i-${index}`">mdi-heart</v-icon>
-                  </span>
+                  <v-layout id="full-width">
+                    <v-flex xs11 sm11 md11 lg11 xl11>
+                      <span>{{ques.question}}</span>
+                    </v-flex>
+                    <v-flex xs1 sm1 md1 lg1 xl1 style="text-align: end">
+                      <v-icon @click="unlike(ques.QesID)" class="red--text" small v-if="ques.likeList.indexOf(userID)!=-1">mdi-heart</v-icon>
+                      <v-icon @click="like(ques.QesID)" small v-else>mdi-heart</v-icon>
+                      <span v-if="ques.likeList.length == 0">    </span>
+                      <span v-else>{{` ${padding(ques.likeList.length)}`}}</span>
+                    </v-flex>
+                  </v-layout>
                 </v-list-tile-content>
               </v-list-tile>
             </v-flex>
@@ -100,7 +109,7 @@ export default {
         this.socket.emit("channelJoin", {
           classCode: this.$store.state.currentClass.classCode,
           Identity: this.$store.state.Identity,
-          userID: this.$store.state.userID,
+          userID: this.userID,
           userName: this.$store.state.userName
         });
       }
@@ -115,8 +124,10 @@ export default {
       nonce: 0,
       questionList: [],
       content: null,
+      likes:0,
       socket: io(`${URL}:3000/question`),
       anonymous: false,
+      userID:this.$store.state.userID, 
       iconColor: ""
     };
   },
@@ -134,7 +145,22 @@ export default {
     this.socket.on("connect", () => {
       console.log("socket connected");
     });
-
+    this.socket.on("like", (data) => {
+      const { QesID, userID } = data
+      this.questionList.forEach(question => {
+        if(question.QesID == QesID){
+          question.likeList.push(userID);
+        }
+      })
+    });
+    this.socket.on("unlike", (data) => {
+      const { QesID, userID } = data
+      this.questionList.forEach(question => {
+        if(question.QesID == QesID){
+          question.likeList.splice(question.likeList.indexOf(userID), 1)
+        }
+      })
+    });
     this.socket.on("joinSuccess", data => {
       const { Identity, userName, userID } = data;
       if (Identity == 1)
@@ -216,9 +242,20 @@ export default {
     });
   },
   methods: {
-    like(idx) {
-      if (document.querySelector(`#i-${idx}`).style.color == "red") document.querySelector(`#i-${idx}`).style.color = "";
-      else document.querySelector(`#i-${idx}`).style.color = "red";
+    padding: function(number){
+      return (number < 10 ? ' ' : '') + number;
+    },
+    like(QesID) {
+      this.socket.emit("like", {
+        userID: this.userID,
+        QesID: QesID
+      })
+    },
+    unlike(QesID) {
+      this.socket.emit("unlike", {
+        userID: this.userID,
+        QesID: QesID
+      })
     },
     notification(data) {
       const cursor = this;
@@ -441,5 +478,8 @@ export default {
 }
 .v-text-field.v-text-field--solo .v-input__control {
   min-height: 36px;
+}
+.mdi-heart:hover{
+  transform: scale(1.2)
 }
 </style>

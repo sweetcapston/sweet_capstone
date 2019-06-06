@@ -158,5 +158,8 @@ export default {
   .cyan.v-list__tile--active.v-list__tile.v-list__tile--link.v-list__tile--avatar.theme--dark{
     box-shadow: none !important; 
   }
+  .v-list__tile__avatar{
+    cursor: pointer;
+  }
 }
 </style>
