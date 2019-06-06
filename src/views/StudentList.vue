@@ -43,9 +43,10 @@
                   >
                     <template v-slot:label>
                       <v-flex>
-                        <span>{{survey.surveyList[n-1].content[c-1]}} </span> <span v-if="answer_S.None != 0"> ({{survey.surveyList[n-1].count[c-1]}}명)</span>
+                        <span>{{survey.surveyList[n-1].content[c-1]}}</span>
+                        <span v-if="answer_S.None != 0">({{survey.surveyList[n-1].count[c-1]}}명)</span>
                         <v-progress-linear
-                          v-if="answer_S.None != 0"  
+                          v-if="answer_S.None != 0"
                           color="cyan"
                           width="50px"
                           height="20"
@@ -70,9 +71,10 @@
                 >
                   <template v-slot:label>
                     <v-flex>
-                      <span>{{survey.surveyList[n-1].content[c-1]}} </span> <span v-if="answer_S.None != 0"> ({{survey.surveyList[n-1].count[c-1]}}명)</span>
+                      <span>{{survey.surveyList[n-1].content[c-1]}}</span>
+                      <span v-if="answer_S.None != 0">({{survey.surveyList[n-1].count[c-1]}}명)</span>
                       <v-progress-linear
-                        v-if="answer_S.None != 0" 
+                        v-if="answer_S.None != 0"
                         color="cyan"
                         width="50px"
                         height="20"
@@ -91,17 +93,24 @@
                   outline
                   label="답을 입력하세요"
                   color="cyan lighten-1"
-                  v-if="answer_S.None == 0" 
+                  v-if="answer_S.None == 0"
                 ></v-textarea>
-                <v-expansion-panel v-if="answer_S.None != 0" id="scroll-target" style="max-height: 400px" class="scroll-y">
+                <v-expansion-panel
+                  v-if="answer_S.None != 0"
+                  id="scroll-target"
+                  style="max-height: 400px"
+                  class="scroll-y"
+                >
                   <v-expansion-panel-content style="padding:3px 2px 2px 3px">
                     <template v-slot:header>
-                      <div><h4>응답 결과</h4></div>
+                      <div>
+                        <h4>응답 결과</h4>
+                      </div>
                     </template>
                     <v-divider/>
                     <div v-for="i in survey.surveyList[n-1].content.length" :key="i">
-                        <v-card-text>{{survey.surveyList[n-1].content[i-1]}}</v-card-text>
-                        <v-divider/>
+                      <v-card-text>{{survey.surveyList[n-1].content[i-1]}}</v-card-text>
+                      <v-divider/>
                     </div>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -127,21 +136,21 @@ import { Stud } from "@/api";
 /*eslint-disable */
 export default {
   created() {
-    this.socket.on("survey", (data) => {
-      if(this.survey.SID == data.SID){
+    this.socket.on("survey", data => {
+      if (this.survey.SID == data.SID) {
         for (let i = 0; i < data.surveyType.length; i++) {
           if (parseInt(data.surveyType[i]) < 3) {
             let check = parseInt(data.answer[i]);
             while (check >= 1) {
-                this.survey.surveyList[i].count[check % 10 - 1]++;
-                check = parseInt(check / 10)
+              this.survey.surveyList[i].count[(check % 10) - 1]++;
+              check = parseInt(check / 10);
             }
-          } else{
+          } else {
             this.survey.surveyList[i].content.push(data.answer[i]);
           }
         }
       }
-    })
+    });
   },
   data() {
     return {
@@ -149,7 +158,7 @@ export default {
       e1: 1,
       answer: [],
       ans: "",
-      survey: this.survey,
+      // survey: this.survey,
       surveyType: []
     };
   },
@@ -175,6 +184,7 @@ export default {
       }
     },
     answerSurvey() {
+      const studentID = this.$store.state.studentID;
       const userID = this.$store.state.userID;
       const userName = this.$store.state.userName;
       const classCode = this.$store.state.currentClass.classCode;
@@ -213,6 +223,7 @@ export default {
       }
       const answer_S = {
         userID: userID,
+        studentID: studentID,
         userName: userName,
         classCode: classCode,
         SID: SID,
@@ -224,11 +235,13 @@ export default {
     }
   },
   mounted() {
-    if(!this.survey.active){
+    if (!this.survey.active) {
       const el = document.querySelector(`#survey${this.survey.SID}`);
-      el.classList.add("v-expansion-panel__container--disabled")
-      el.querySelector('.v-expansion-panel__header__icon').children[0].classList.add("inactive")
-      el.querySelector('v-expansion-panel__body').style="none";
+      el.classList.add("v-expansion-panel__container--disabled");
+      el.querySelector(
+        ".v-expansion-panel__header__icon"
+      ).children[0].classList.add("inactive");
+      el.querySelector("v-expansion-panel__body").style = "none";
     }
     if (this.answer_S.None == 0) {
       document
@@ -286,12 +299,12 @@ export default {
 }
 .v-input .v-progress-linear {
   position: relative;
-  width:50%;
+  width: 50%;
 }
 .v-input--selection-controls.v-input .v-label {
   width: 100%;
 }
-.inactive{
-  color:transparent !important;
+.inactive {
+  color: transparent !important;
 }
 </style>
