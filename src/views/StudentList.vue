@@ -241,7 +241,7 @@ export default {
       el.querySelector(
         ".v-expansion-panel__header__icon"
       ).children[0].classList.add("inactive");
-      el.querySelector("v-expansion-panel__body").style = "none";
+      el.querySelector(".v-expansion-panel__body").style.display = "none";
     }
     if (this.answer_S.None == 0) {
       document
