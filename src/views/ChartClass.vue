@@ -4,7 +4,8 @@
       <!-- TODO: 질문 -->
       <v-flex row xs12 sm12 md12 lg12 xl12 style="padding:5px 8px 0px 5px">
         <material-card color="crimson" title="질문 클래스 통계" text="Question Data">
-          <apexchart type="bar" :options="chartOptions" :series="series"/>
+          <apexchart v-if="this.$store.state.Identity==1" type="bar" :options="chartOptions" :series="series"/>
+          <div v-if="this.$store.state.Identity==2">교수페이지</div>
         </material-card>
       </v-flex>
       <!-- TODO: 퀴즈 -->
@@ -33,7 +34,8 @@
               </v-card>
             </v-flex>
             <v-flex row xs12 sm12 md6 lg6 xl6>
-              <QuizResult v-bind:quizResult="quizResult"></QuizResult>
+              <StudentQuizResult v-if="this.$store.state.Identity==1" v-bind:quizResult="quizResult"></StudentQuizResult>
+
             </v-flex>
           </v-layout>
         </material-card>
@@ -42,7 +44,8 @@
     <!-- TODO: 설문 -->
     <v-flex wrap xs12 sm12 md6 lg6 xl6 child-flex style="padding:5px 5px 5px 8px;">
       <material-card color="crimson" title="설문 클래스 통계" text="Survey Data">
-        <SurveyResult v-bind:surveyList="surveyList"/>
+        <StudentSurveyResult v-if="this.$store.state.Identity==1" v-bind:surveyList="surveyList"/>
+
       </material-card>
     </v-flex>
   </v-layout>
@@ -55,6 +58,8 @@ import SurveyList from "./SurveyList.vue";
 import StudentList from "./StudentList.vue";
 import QuizResult from "./QuizResult.vue";
 import SurveyResult from "./SurveyResult.vue";
+import StudentQuizResult from "./StudentQuizResult.vue";
+import StudentSurveyResult from "./StudentSurveyResult.vue";
 import { Stud, Prof } from "@/api";
 import { URL } from "@/plugins/api.config.js";
 
@@ -63,6 +68,8 @@ Vue.component("SurveyList", SurveyList);
 Vue.component("StudentList", StudentList);
 Vue.component("QuizResult", QuizResult);
 Vue.component("SurveyResult", SurveyResult);
+Vue.component("StudentQuizResult", QuizResult);
+Vue.component("StudentSurveyResult", SurveyResult);
 /*eslint-disable */
 
 export default {
