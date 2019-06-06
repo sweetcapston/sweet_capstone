@@ -149,7 +149,6 @@ export default {
       e1: 1,
       answer: [],
       ans: "",
-      survey: this.survey,
       surveyType: []
     };
   },
@@ -228,7 +227,7 @@ export default {
       const el = document.querySelector(`#survey${this.survey.SID}`);
       el.classList.add("v-expansion-panel__container--disabled")
       el.querySelector('.v-expansion-panel__header__icon').children[0].classList.add("inactive")
-      el.querySelector('v-expansion-panel__body').style="none";
+      el.querySelector('.v-expansion-panel__body').style.display="none";
     }
     if (this.answer_S.None == 0) {
       document

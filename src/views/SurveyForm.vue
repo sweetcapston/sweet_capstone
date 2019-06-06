@@ -155,15 +155,26 @@ export default {
           count:count
         })
       }
-      const newSurvey = {
-        surveyName:surveyName,
-        surveyList:surveyList,
-        classCode:classCode,
-        date:date,
-        public:true,
-        active:false,
+      let newSurvey;
+      if(surveyName == ""){
+        newSurvey = {
+          surveyList:surveyList,
+          classCode:classCode,
+          date:date,
+          public:true,
+          active:false,
+        }
       }
-      
+      else{
+        newSurvey = {
+          surveyName:surveyName,
+          surveyList:surveyList,
+          classCode:classCode,
+          date:date,
+          public:true,
+          active:false,
+        }
+      }
       Prof.surveyCreate(newSurvey)
       .then(res => {
         if(res.data){
