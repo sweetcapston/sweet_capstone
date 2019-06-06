@@ -10,7 +10,7 @@
       @click="toggleDrawer"
   />
     <v-toolbar-title class="headline text-uppercase">
-      <span >OpenClass</span>
+      <img class="logo" src="@/assets/logo_white.png" height="40">
       <span  class="hidden-md-and-down font-weight-light"> {{this.$store.state.userName}} </span>
     </v-toolbar-title>
     <v-spacer/>
@@ -77,5 +77,9 @@
 <style>
 .gradient {
   background: linear-gradient(100deg, #9198e5, #26C6DA)
+}
+.logo {
+  padding-top: 10px;
 } 
+
 </style>

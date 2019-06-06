@@ -7,7 +7,7 @@
         flat   
       >
         <v-toolbar-title class="headline text-uppercase">
-          <span >OpenClass</span>
+          <img class="logo" src="@/assets/logo_white.png" height="40">
           <span class="font-weight-light"> {{this.$store.state.userName}} </span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
@@ -138,7 +138,7 @@ export default {
           this.$router.push({name: 'login'});
         }
       })
-    }
+    },
   }
 };
 </script>
@@ -147,12 +147,15 @@ export default {
     background:#FAFAFA
   }
   .v-text-field--box.v-text-field--single-line input, .v-text-field--full-width.v-text-field--single-line input, .v-text-field--outline.v-text-field--single-line input{
-    margin-top:0px;
+    margin-top: 0px;
   }
   .v-text-field--box input, .v-text-field--full-width input, .v-text-field--outline input {
     margin-top: 0px;
   }
   .gradient {
     background: linear-gradient(100deg, #9198e5, #26C6DA)
+  }
+  .logo {
+    margin-top: 5px;
   }  
 </style>
