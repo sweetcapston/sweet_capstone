@@ -106,12 +106,12 @@ export default {
     },
     parentsMethod: function(active) {
       this.formShow = false;
-    },
-    beforeRouteLeave(to, from, next) {
-      this.socket.emit("diconnect");
-      this.socket.disconnect();
-      next();
     }
+  },
+  beforeRouteLeave(to, from, next) {
+    this.socket.emit("diconnect");
+    this.socket.disconnect();
+    next();
   }
 };
 </script>
