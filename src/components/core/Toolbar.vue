@@ -11,7 +11,7 @@
   />
     <v-toolbar-title class="headline text-uppercase">
       <img class="logo" src="@/assets/logo_white.png" height="40">
-      <span  class="hidden-md-and-down font-weight-light"> {{this.$store.state.userName}} </span>
+      <span  class="hidden-md-and-down username font-weight"> {{this.$store.state.userName}} </span>
     </v-toolbar-title>
     <v-spacer/>
 
@@ -81,5 +81,11 @@
 .logo {
   padding-top: 10px;
 } 
+.username{
+  margin-left: 9px;
+  margin-top: 11px;
+  position: absolute;
+  font-family:eunyoung
+}
 
 </style>

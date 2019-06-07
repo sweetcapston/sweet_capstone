@@ -191,10 +191,18 @@ export default {
       const SID = this.survey.SID;
       let surveyType = [];
       let answer = [];
+      let elem;
       for (var n = 0; n < this.steps; n++) {
         surveyType.push(this.survey.surveyList[n].surveyType);
         switch (this.survey.surveyList[n].surveyType) {
           case 1:
+            elem = document.querySelector(`#survey${SID} #step${n + 1} input[type='radio']:checked`)
+            if(elem == null){
+              this.e1 = n +1;
+              alert("입력되지 않은 항목이 있습니다.");
+              setTimeout(() => document.querySelector(`#survey${SID} #step${n + 1} input[type='radio']`).focus(), 50);
+              return;
+            }
             answer.push(
               document.querySelector(
                 `#survey${SID} #step${n + 1} input[type='radio']:checked`
@@ -203,21 +211,27 @@ export default {
             break;
           case 2:
             let temp = "";
-            document
-              .querySelectorAll(
-                `#survey${SID} #step${n + 1} input[type='checkbox']:checked`
-              )
-              .forEach(element => {
-                temp += element.id;
-              });
+            elem = document.querySelectorAll(`#survey${SID} #step${n + 1} input[type='checkbox']:checked`)
+            if(elem.length==0){
+              this.e1 = n +1;
+              alert("입력되지 않은 항목이 있습니다.");
+              setTimeout(() => document.querySelector(`#survey${SID} #step${n + 1} input[type='checkbox']`).focus(), 50);
+              return;
+            }
+            elem.forEach(element => {
+              temp += element.id;
+            });
             answer.push(temp);
             break;
           case 3:
-            answer.push(
-              document.querySelector(
-                `#survey${SID} #step${n + 1} .text${SID} textarea`
-              ).value
-            );
+            elem = document.querySelector(`#survey${SID} #step${n + 1} .text${SID} textarea`).value
+            if(elem == ""){
+              this.e1 = n +1;
+              alert("입력되지 않은 항목이 있습니다.");
+              setTimeout(() => document.querySelector(`#survey${SID} #step${n + 1} .text${SID} textarea`).focus(), 50);
+              return;
+            }
+            answer.push(elem);
             break;
         }
       }

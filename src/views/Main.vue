@@ -8,7 +8,7 @@
       >
         <v-toolbar-title class="headline text-uppercase">
           <img class="logo" src="@/assets/logo_white.png" height="40">
-          <span class="font-weight-light"> {{this.$store.state.userName}} </span>
+          <span class="hidden-md-and-down username"> {{this.$store.state.userName}} </span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn
@@ -253,4 +253,14 @@ export default {
   .logo {
     margin-top: 5px;
   }  
+  .username{
+    margin-left: 9px;
+    margin-top: 11px;
+    position: absolute;
+  } 
+  @font-face { 
+    font-family: eunyoung; 
+    src: url(../styles/themes/default/assets/fonts/tvnmedium.ttf) 
+    format('truetype'); 
+  }
 </style>
