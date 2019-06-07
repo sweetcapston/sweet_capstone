@@ -189,14 +189,13 @@ export default {
   methods: {
     completeQuiz() {
       let moment = require("moment");
-      moment.locale("ko");
       const quizName = document.querySelector(".quizName input").value;
       // if(quizName=="") {
       //   alert("퀴즈의 제목을 입력하세요")
       //   return;
       // }
       const classCode = this.$store.state.currentClass.classCode;
-      const date = moment().format("LLL");
+      const date = moment().format();
       const quizList = [];
       for (var j = 0; j < this.card_datas.length; j++) {
         const quizType = document.querySelectorAll(

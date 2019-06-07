@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-toolbar class="v-toolbar--fixed white--text elevation-0 transparent">
-      <img src="@/assets/logo_white.svg" height="50">
+      <img class="logo" src="@/assets/logo_white.svg" height="50">
       <v-spacer />
       <sui-button class="transparent" positive @click="OpenLogin">로그인</sui-button>
       <sui-button class="cyan lighten-1" positive @click.native="OpenRegister" id="signbtn">회원가입</sui-button>
@@ -255,6 +255,9 @@ export default {
     -ms-overflow-style: -ms-autohiding-scrollbar;
   } 
   .signup.ui.positive.button {
-    background-color: #26c6da
+    background-color: #26c6da;
+  }
+  .logo {
+    margin-top: 10px;
   }
 </style>

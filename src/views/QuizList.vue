@@ -6,19 +6,39 @@
     <template v-slot:header>
       <v-layout align-center>
         <v-flex lg5 xs3>{{ quiz.quizName }}</v-flex>
-        <v-flex lg5 xs4>{{ quiz.date }}</v-flex>
-        <v-flex lg2 xs2>
-          <v-btn
-            v-show="!quiz.active"
-            class="green accent-4 white--text quizStart"
-            @click.stop="quizActive()"
-          >퀴즈 시작</v-btn>
-
-          <v-btn
-            v-show="quiz.active"
-            class="crimson white--text quizEnd"
-            @click.stop="quizActive()"
-          >퀴즈 종료</v-btn>
+        <v-flex 
+        lg4 
+        xs3
+        class="dateTime"
+        >{{ new Date(quiz.date).format("yyyy년 MM월 dd일 a/p hh:mm") }}</v-flex>
+        <v-flex lg1 xs1/>
+        <v-flex lg2 xs2 v-if="quiz.active " class="timer">
+          <span class="minute">{{ minutes }}</span>
+          <span>:</span>
+          <span class="seconds">{{ seconds }}</span>
+        </v-flex>
+        <v-flex lg1 xs1 justify-end @click.stop="" v-else-if="!quiz.active">
+          <v-text-field
+            v-model="minutes"
+            class="minutes"
+            type="number"
+            text-align="center"
+            @click.stop=""
+          ></v-text-field>
+        </v-flex>
+        <v-flex lg1 xs1 @click.stop="" v-if="!quiz.active">분</v-flex>
+        <v-flex lg1 xs1 @click.stop=""/>
+        <v-flex lg1 xs1 @click.stop="">
+          <v-icon
+          v-show="!quiz.active"
+          class="transparent  quizStart"
+          @click.stop="quizStart()" 
+          >mdi-play-circle-outline</v-icon>
+          <v-icon 
+          v-show="quiz.active"
+          class="transparent  quizEnd"
+          @click.stop="quizStop()"
+          >mdi-stop-circle-outline</v-icon>
         </v-flex>
       </v-layout>
     </template>
@@ -126,6 +146,7 @@
 
 <script>
 import { Prof } from "@/api";
+let moment = require("moment");
 export default {
   mounted() {
     for (let i = 0; i < this.steps; i++) {
@@ -140,14 +161,65 @@ export default {
   data() {
     return {
       steps: this.quiz.quizList.length,
-      e1: 1
+      e1: 1,
+      minutes:"0",
+      seconds:-1,
+      totalTime:0,
+      timer:null
     };
   },
   props: {
     quiz: Object,
     socket: Object
   },
+  created() {
+    if(this.quiz.active){
+      const {minutes, date} = this.quiz;
+      this.totalTime = parseInt((new Date(date) - Date.now() + minutes*60*1000  )/1000)
+      this.minutes = this.padTime(Math.floor(this.totalTime / 60));
+      this.seconds = this.padTime(this.totalTime - (this.minutes * 60));
+      this.timer = setInterval(()=>{
+        if(this.minutes == "00" && this.seconds == "00"){
+          return;
+        }
+        this.totalTime--;
+        this.minutes = this.padTime(Math.floor(this.totalTime / 60));
+        this.seconds = this.padTime(this.totalTime - (this.minutes * 60));
+      }, 1000);
+    }
+    this.socket.on("quizStart",(data)=>{
+      const{active, minutes, date, QID} = data;
+      if(this.quiz.QID == QID){
+        this.quiz.active = active;
+        this.quiz.date = date;
+        this.minutes = this.padTime(minutes)
+        this.seconds = "00"
+        this.totalTime = minutes * 60;
+        this.timer = setInterval(()=>{
+          if(this.minutes == "00" && this.seconds == "00"){
+            return;
+          }
+          this.totalTime--;
+          this.minutes = this.padTime(Math.floor(this.totalTime / 60));
+          this.seconds = this.padTime(this.totalTime - (this.minutes * 60));
+        }, 1000);
+      }
+    })
+    this.socket.on("quizStop",(data)=>{
+      const {active, QID} = data;
+      if(this.quiz.QID == QID){
+        this.quiz.active = active;
+        this.minutes = "0"
+        this.seconds = -1
+        clearInterval(this.timer);
+        this.timer = null;
+      }
+    })
+  },
   methods: {
+    padTime: function(time){
+      return (time < 10 ? '0' : '') + time;
+    },
     getPercent(array) {
       var sum = 0;
       for (var i = 0; i < array.length; i++) sum = sum + array[i];
@@ -163,10 +235,16 @@ export default {
         this.e1 = n - 1;
       }
     },
-    quizActive() {
-      Prof.quizActive(this.quiz).then(res => {
-        this.quiz.active = res.data;
-      });
+    quizStart() {
+      const date = moment().format();
+      this.socket.emit("quizStart", {
+        minutes:this.minutes,
+        QID:this.quiz.QID,
+        date:date
+      })
+    },
+    quizStop(){
+      this.socket.emit("quizStop", this.quiz.QID)
     }
   }
 };
@@ -187,5 +265,37 @@ export default {
 }
 .surveyStart:hover {
   background: #00e676;
+}
+.minutes .v-input__control{
+  text-align: -webkit-right;
+}
+.minutes .v-input__control .v-input__slot .v-text-field__slot input[type="number"]{
+  text-align: center;
+}
+.minutes .v-input__control .v-input__slot{
+  width:70%;
+}
+.minutes .v-input__control .v-text-field__details{
+  width:0px;
+}
+@media only screen and (max-width: 600px) {
+  .dateTime {
+    display: none !important;
+  }
+}
+.timer{
+  font-size: 3rem;
+}
+.quizStart{
+  font-size:-webkit-xxx-large;
+}
+.quizStart:hover{
+  transform: scale(1.2);
+}
+.quizEnd{
+  font-size:-webkit-xxx-large;
+}
+.quizEnd:hover{
+  transform: scale(1.2);
 }
 </style>

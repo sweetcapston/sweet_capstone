@@ -13,7 +13,7 @@
       <v-layout class="fill-height" tag="v-list" column>
         <v-list-tile avatar>
           <v-list-tile-avatar color="white" @click="moveToMain()">
-            <v-img :src="require('@/assets/logo.svg')" height="34" contain/>
+            <v-img :src="require('@/assets/mini.png')" height="34" contain/>
           </v-list-tile-avatar>
           <v-list-tile-title
             class="title"
@@ -65,7 +65,6 @@ export default {
     return {
     image:
       "https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg",
-    logo: "@/assets/logo.svg",
     color: "cyan",
     links: [
       // 메인페이지 관련
@@ -157,6 +156,9 @@ export default {
   }
   .cyan.v-list__tile--active.v-list__tile.v-list__tile--link.v-list__tile--avatar.theme--dark{
     box-shadow: none !important; 
+  }
+  .v-list__tile__avatar{
+    cursor: pointer;
   }
 }
 </style>

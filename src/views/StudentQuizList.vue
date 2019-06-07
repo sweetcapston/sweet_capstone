@@ -1,10 +1,15 @@
 <template>
-  <v-expansion-panel-content :id="'quiz'+quiz.QID">
+  <v-expansion-panel-content :id="`quiz${quiz.QID}`">
     <template v-slot:header>
       <v-layout align-center>
         <v-flex md5 lg5 xs5>{{ quiz.quizName }}</v-flex>
-        <v-flex md5 lg5 xs5>{{ quiz.date }}</v-flex>
-        <v-flex v-if="answer_Q.None != 0" md2 lg2 xs2>{{ answer_Q.score }}점</v-flex>
+        <v-flex md5 lg5 xs5>{{ new Date(quiz.date).format("yyyy년 MM월 dd일 a/p hh:mm") }}</v-flex>
+        <v-flex v-if="answer_Q.None != 0" md2 lg2 xs2>{{ answer_Q.score }}점 </v-flex>
+        <v-flex lg2 xs2 v-else-if="quiz.active" class="timer">
+          <span class="minute">{{ minutes }}</span>
+          <span>:</span>
+          <span class="seconds">{{ seconds }}</span>
+        </v-flex>
       </v-layout>
     </template>
     <template v-slot:actions>
@@ -126,7 +131,7 @@
           </v-card>
           <v-layout justify-space-between>
             <v-btn class="cyan lighten-1 white--text" @click="preStep(n)">Pre</v-btn>
-            <v-btn class="cyan lighten-1 white--text" v-show="steps==n" @click="answerQuiz()">submit</v-btn>
+            <v-btn class="cyan lighten-1 white--text submit-btn" v-show="steps==n" @click="answerQuiz()">submit</v-btn>
             <v-btn class="cyan lighten-1 white--text" v-show="steps!=n" @click="nextStep(n)">Next</v-btn>
           </v-layout>
         </v-stepper-content>
@@ -140,8 +145,21 @@ import { Stud } from "@/api";
 /*eslint-disable */
 export default {
   created() {
-    this.socket.on("quiz", data => {
-      alert("socket check: " + data.QID);
+    if(this.quiz.active && this.answer_Q.None == 0){
+      const {minutes, date} = this.quiz;
+      this.totalTime = parseInt((new Date(date) - Date.now() + minutes*60*1000  )/1000)
+      this.minutes = this.padTime(Math.floor(this.totalTime / 60));
+      this.seconds = this.padTime(this.totalTime - (this.minutes * 60));
+      this.timer = setInterval(()=>{
+        if(this.minutes == "00" && this.seconds == "00"){
+          return;
+        }
+        this.totalTime--;
+        this.minutes = this.padTime(Math.floor(this.totalTime / 60));
+        this.seconds = this.padTime(this.totalTime - (this.minutes * 60));
+      }, 1000);
+    }
+    this.socket.on("quiz", (data) => {
       if (this.quiz.QID == data.QID) {
         for (let i = 0; i < data.quizType.length; i++) {
           if (parseInt(data.quizType[i]) < 3) {
@@ -156,6 +174,32 @@ export default {
         }
       }
     });
+    this.socket.on("quizStart",(data)=>{
+      const{active, minutes, date, QID} = data;
+      if(this.quiz.QID == QID && this.answer_Q.None == 0){
+        this.quiz.active = active;
+        this.quiz.date = date;
+        this.minutes = this.padTime(minutes)
+        this.seconds ="00"
+        this.totalTime = minutes * 60;
+        this.timer = setInterval(()=>{
+          if(this.minutes == "00" && this.seconds == "00"){
+            return;
+          }
+          this.totalTime--;
+          this.minutes = this.padTime(Math.floor(this.totalTime / 60));
+          this.seconds = this.padTime(this.totalTime - (this.minutes * 60));
+        }, 1000);
+      }
+    })
+    this.socket.on("quizStop",(data)=>{
+      const {active, QID} = data;
+      if(this.quiz.QID == QID && this.answer_Q.None == 0){
+        this.quiz.active = active;
+        clearInterval(this.timer)
+        this.timer= null;
+      }
+    })
   },
   mounted() {
     if (this.answer_Q.None == 0) {
@@ -195,7 +239,11 @@ export default {
       e1: 1,
       answer: [],
       ans: "",
-      quizType: []
+      quizType: [],
+      minutes:"0",
+      seconds:"00",
+      totalTime:0,
+      timer:null
     };
   },
   props: {
@@ -205,6 +253,9 @@ export default {
     num: Number
   },
   methods: {
+    padTime: function(time){
+      return (time < 10 ? '0' : '') + time;
+    },
     getPercent(array) {
       var sum = 0;
       for (var i = 0; i < array.length; i++) sum = sum + array[i];
@@ -262,6 +313,7 @@ export default {
         studentID: this.$store.state.studentID,
         userName: userName,
         classCode: classCode,
+        studentID:this.$store.state.studentID,
         QID: QID,
         quizType: quizType,
         answer: answer
@@ -294,7 +346,7 @@ export default {
   font-size: 2.3rem;
   font-family: "Roboto", sans-serif;
 }
-.v-expansion-panel__container.incomplete {
+.incomplete {
   background: aliceblue !important;
 }
 .v-input--selection-controls .v-input__control {

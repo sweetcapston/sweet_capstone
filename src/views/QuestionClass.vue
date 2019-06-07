@@ -7,32 +7,81 @@
         </div>
 
         <div id="chat-message-list">
-          <template v-for="(ques,index) in questionList">
-            <v-flex id="message" :key="ques.index">
+          <template v-for="(ques, index) in questionList">
+            <v-flex id="message" :key="index">
               <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
-
               <v-divider/>
               <v-list-tile id="auto_height" :key="ques.title">
-                <v-list-tile-avatar>
-                  <img :src="image">
-                </v-list-tile-avatar>
+                <v-speed-dial
+                v-if="ques.userID == userID"
+                v-model="fab[index]"
+                absolute
+                small
+                :direction="'left'"
+                :open-on-hover="false"
+                :transition="'slide-x-reverse-transition'"
+                @click="floating(index)"
+                >
+                  <template v-slot:activator>
+                    <v-btn
+                      class="fab"
+                      v-model="fab[index]"
+                      color="transparent"
+                      fab
+                    >
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-btn
+                    v-model="fab[index]"
+                    fab
+                    dark
+                    small
+                    color = "red"
+                    @click="deleteQuestion(ques.QesID)"
+                  >
+                    <v-icon>delete</v-icon>
+                  </v-btn>
+                  <v-btn
+                    v-model="fab[index]"
+                    fab
+                    dark
+                    small
+                    color="green"
+                    @click="editQuestion(ques.QesID)"
+                  >
+                    <v-icon>edit</v-icon>
+                  </v-btn>
+                </v-speed-dial>
+                <v-layout id ="textDiv">
+                  <v-list-tile-avatar>
+                    <img :src="image">
+                  </v-list-tile-avatar>
 
-                <v-list-tile-content>
-                  <v-layout id="full-width">
-                    <v-flex xs6 sm4 md5 lg5 xl5>
-                      <v-card v-if="!ques.anonymous" flat>{{ques.userName}}</v-card>
-                      <v-card v-else flat>익명</v-card>
-                    </v-flex>
+                  <v-list-tile-content>
+                    <v-layout id="full-width">
+                      <v-flex xs6 sm4 md5 lg5 xl5>
+                        <v-card v-if="!ques.anonymous" flat>{{ques.userName}}</v-card>
+                        <v-card v-else flat>익명</v-card>
+                      </v-flex>
 
-                    <v-flex xs12 sm8 md7 lg7 xl7 style="text-align: end">
-                      <v-card flat>{{ques.date}}</v-card>
-                    </v-flex>
-                  </v-layout>
-                  <span>
-                    {{ques.question}}
-                    <v-icon @click="like(index)" small :id="`i-${index}`">mdi-heart</v-icon>
-                  </span>
-                </v-list-tile-content>
+                      <v-flex xs12 sm8 md7 lg7 xl7 style="text-align: end">
+                        <v-card flat>{{ques.date}}</v-card>
+                      </v-flex>
+                    </v-layout>
+                    <v-layout id="full-width">
+                      <v-flex xs11 sm11 md11 lg11 xl11>
+                        <span>{{ques.question}}</span>
+                      </v-flex>
+                      <v-flex xs1 sm1 md1 lg1 xl1 style="text-align: end">
+                        <v-icon @click="unlike(ques.QesID)" class="red--text" small v-if="ques.likeList.indexOf(userID)!=-1">mdi-heart</v-icon>
+                        <v-icon @click="like(ques.QesID)" small v-else>mdi-heart</v-icon>
+                        <span v-if="ques.likeList.length == 0">    </span>
+                        <span v-else>{{` ${padding(ques.likeList.length)}`}}</span>
+                      </v-flex>
+                    </v-layout>
+                  </v-list-tile-content>
+                </v-layout>
               </v-list-tile>
             </v-flex>
           </template>
@@ -97,10 +146,11 @@ export default {
       if (res.data === "false") alert("질문 가져오기 실패");
       else {
         this.questionList = res.data.questionList;
+        this.fab = new Array(this.questionList.length).fill(false)
         this.socket.emit("channelJoin", {
           classCode: this.$store.state.currentClass.classCode,
           Identity: this.$store.state.Identity,
-          userID: this.$store.state.userID,
+          userID: this.userID,
           userName: this.$store.state.userName
         });
       }
@@ -109,15 +159,18 @@ export default {
   data() {
     return {
       events: [],
+      first:false,
       image:
         "https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg",
       userList: [],
       nonce: 0,
+      oldList:[],
       questionList: [],
       content: null,
       socket: io(`${URL}:3000/question`),
       anonymous: false,
-      iconColor: ""
+      userID:this.$store.state.userID, 
+      fab:[]
     };
   },
   created() {
@@ -134,7 +187,22 @@ export default {
     this.socket.on("connect", () => {
       console.log("socket connected");
     });
-
+    this.socket.on("like", (data) => {
+      const { QesID, userID } = data
+      this.questionList.forEach(question => {
+        if(question.QesID == QesID){
+          question.likeList.push(userID);
+        }
+      })
+    });
+    this.socket.on("unlike", (data) => {
+      const { QesID, userID } = data
+      this.questionList.forEach(question => {
+        if(question.QesID == QesID){
+          question.likeList.splice(question.likeList.indexOf(userID), 1)
+        }
+      })
+    });
     this.socket.on("joinSuccess", data => {
       const { Identity, userName, userID } = data;
       if (Identity == 1)
@@ -174,22 +242,37 @@ export default {
       }
     });
     this.socket.on("MESSAGE", data => {
+      const{anonymous, userID, userName, studentID, QesID, classCode, question, date} = data
       this.questionList.push({
-        anonymous: data.anonymous,
-        userID: data.userID,
-        userName: data.userName,
-        studentID: data.studentID,
-        classCode: data.classCode,
-        question: data.question,
-        date: data.date
+        anonymous: anonymous,
+        userID: userID,
+        userName: userName,
+        studentID: studentID,
+        likeList:[],
+        QesID:QesID,
+        classCode: classCode,
+        question: question,
+        date: date
       });
       this.notification(data);
     });
+    this.socket.on("delete", data => {
+      const {QesID} = data;
+      this.questionList.forEach(question => {
+        if(question.QesID == QesID){
+          this.questionList.splice(this.questionList.indexOf(question), 1);
+        }
+      })
+    })
   },
   updated() {
-    document.querySelector(
-      "#chat-message-list"
-    ).scrollTop = document.querySelector("#chat-message-list").scrollHeight;
+    if(this.oldList != this.questionList || !this.first){
+      document.querySelector(
+        "#chat-message-list"
+      ).scrollTop = document.querySelector("#chat-message-list").scrollHeight;
+      this.oldList = this.questionList;
+      this.first = true;
+    }
   },
 
   beforeRouteLeave(to, from, next) {
@@ -216,9 +299,23 @@ export default {
     });
   },
   methods: {
-    like(idx) {
-      if (document.querySelector(`#i-${idx}`).style.color == "red") document.querySelector(`#i-${idx}`).style.color = "";
-      else document.querySelector(`#i-${idx}`).style.color = "red";
+    floating: function(index){
+      this.$set(this.fab, index, !this.fab[index]);
+    },
+    padding: function(number){
+      return (number < 10 ? ' ' : '') + number;
+    },
+    like(QesID) {
+      this.socket.emit("like", {
+        userID: this.userID,
+        QesID: QesID
+      })
+    },
+    unlike(QesID) {
+      this.socket.emit("unlike", {
+        userID: this.userID,
+        QesID: QesID
+      })
     },
     notification(data) {
       const cursor = this;
@@ -234,7 +331,7 @@ export default {
           var options = {
             body: `${data.question}`,
             //1px = 0.02645833333333 cm
-            image: "/images/24283C3858F778CA2E.jpg", //720px (width) by 240px (height)
+            image: "/images/notify.jpg", //720px (width) by 240px (height)
             icon: "/images/logo.png", //android는 192px   512 512
             badge: "/images/logo-128x128.png", //72px
             tag: getTime,
@@ -255,8 +352,7 @@ export default {
               classCode: cursor.$store.state.currentClass.classCode
             }
           };
-          reg
-            .showNotification(title, options)
+          reg.showNotification(title, options)
             .then(() => reg.getNotifications())
             .then(notifications => {
               setTimeout(
@@ -270,11 +366,20 @@ export default {
         });
       }
     },
+    deleteQuestion(QesID){
+      this.socket.emit("delete", QesID)
+    },
+    editQuestion(QesID){
+      
+    },
     enrollQuestion(event) {
       // alert("yes");
       event.preventDefault();
       let moment = require("moment");
       moment.locale("ko");
+      if(this.content == null) {
+        return 
+      }
       this.socket.emit("chat", {
         classCode: this.$store.state.currentClass.classCode,
         userID: this.$store.state.userID,
@@ -303,8 +408,13 @@ export default {
   height: auto;
   padding-top: 12px;
   padding-bottom: 12px;
+  padding-right:0px;
+  padding-left:0px;
 }
-
+#textDiv{
+  padding-right:20px;
+  padding-left:16px;
+}
 .user-identity {
   color: #ddd;
   font-size: 1rem;
@@ -441,5 +551,55 @@ export default {
 }
 .v-text-field.v-text-field--solo .v-input__control {
   min-height: 36px;
+}
+.mdi-heart:hover{
+  transform: scale(1.2)
+}
+.mdi-dots-vertical{
+  font-size: 18px;
+  position: relative;
+  width:18px !important;
+  top:-2px
+}
+.mdi-dots-vertical:hover{
+  transform: scale(1.2)
+}
+.v-btn--floating{
+  border-radius: 50% !important;
+}
+.v-btn.v-btn--floating.v-btn--small{
+  margin:8px;
+  padding:3px !important;
+  top:5px;
+}
+/* .v-btn.v-btn--active.v-btn--floating.v-btn--small.theme--dark.green > .v-btn__content{ */
+  /* width:18px !important; */
+/* } */
+.fab > .v-btn__content{
+  width:18px !important;
+}
+.fab{
+  padding: 3px !important;
+  width:20px !important;
+  height:20px !important;
+}
+.v-speed-dial{
+  top:0px ;
+  right:0px;
+}
+.v-btn:not(.v-btn--depressed):not(.v-btn--flat){
+  box-shadow: none;
+  -webkit-box-shadow:none;
+}
+.v-btn--floating:not(.v-btn--depressed):not(.v-btn--flat){
+  box-shadow: none;
+  -webkit-box-shadow:none;
+}
+.v-btn:not(.v-btn--depressed):not(.v-btn--flat){
+  box-shadow: none;
+  -webkit-box-shadow:none;
+}
+.v-icon.material-icons.theme--dark{
+  font-size: 18px !important;
 }
 </style>

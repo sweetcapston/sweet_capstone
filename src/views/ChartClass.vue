@@ -124,12 +124,14 @@ export default {
         }
       ],
       chartOptions: {
+        
         annotations: {
           // TODO: 어노테이션.
           points: [
             {
               x: "나",
               seriesIndex: 0,
+              
               label: {
                 borderColor: "#775DD0",
                 offsetY: 0,
