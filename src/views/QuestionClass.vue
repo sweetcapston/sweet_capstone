@@ -24,7 +24,7 @@
                 >
                   <template v-slot:activator>
                     <v-btn
-                      class="fab"
+                      class="fab questionFab"
                       v-model="fab[index]"
                       color="transparent"
                       fab
@@ -38,6 +38,7 @@
                     dark
                     small
                     color = "red"
+                    class="questionFab"
                     @click="deleteQuestion(ques.QesID)"
                   >
                     <v-icon>delete</v-icon>
@@ -47,8 +48,9 @@
                     fab
                     dark
                     small
+                    class="questionFab"
                     color="green"
-                    @click="editQuestion(ques.QesID)"
+                    @click="editQuestion(ques)"
                   >
                     <v-icon>edit</v-icon>
                   </v-btn>
@@ -114,7 +116,7 @@
         </div>
       </div>
     </v-flex>
-
+    <modal-edit-question v-bind:dialog="dialog" v-bind:ques="question"/>
     <v-flex xs6 sm6 md6 lg3 xl3 id="list-container" class="hidden-md-and-down">
       <div id="search-container">
         <span>클래스 접속자</span>
@@ -163,6 +165,7 @@ export default {
       image:
         "https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg",
       userList: [],
+      dialog:false,
       nonce: 0,
       oldList:[],
       questionList: [],
@@ -170,10 +173,14 @@ export default {
       socket: io(`${URL}:3000/question`),
       anonymous: false,
       userID:this.$store.state.userID, 
+      question:{},
       fab:[]
     };
   },
   created() {
+    this.$EventBus.$on("edited", question => {
+      this.edited(question);
+    })
     if ("serviceWorker" in navigator && "PushManager" in window) {
       navigator.serviceWorker
         .register("../../service-worker.js")
@@ -261,6 +268,14 @@ export default {
       this.questionList.forEach(question => {
         if(question.QesID == QesID){
           this.questionList.splice(this.questionList.indexOf(question), 1);
+        }
+      })
+    })
+    this.socket.on("edit", data => {
+      this.questionList.forEach(question => {
+        if(question.QesID == data.QesID){
+          question.question = data.question;
+          question.anonymous = data.anonymous;
         }
       })
     })
@@ -369,8 +384,11 @@ export default {
     deleteQuestion(QesID){
       this.socket.emit("delete", QesID)
     },
-    editQuestion(QesID){
-      
+    editQuestion(question){
+      this.$EventBus.$emit("editQuestion", question);
+    },
+    edited(question){
+      this.socket.emit("edit", question)
     },
     enrollQuestion(event) {
       // alert("yes");
@@ -564,7 +582,7 @@ export default {
 .mdi-dots-vertical:hover{
   transform: scale(1.2)
 }
-.v-btn--floating{
+.questionFab{
   border-radius: 50% !important;
 }
 .v-btn.v-btn--floating.v-btn--small{
