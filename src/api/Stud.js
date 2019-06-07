@@ -15,6 +15,9 @@ export default {
   classDelete(classCode) {
     return axios.delete(`${BaseUrl}/${classCode}/delete`, config);
   },
+  classHome(classCode,userID){
+   return axios.post(`${BaseUrl}/${classCode}/home`,{userID:userID},config)
+  },
   loadQuestion(classCode) {
     return axios.post(`${BaseUrl}/${classCode}/question`, config);
   },

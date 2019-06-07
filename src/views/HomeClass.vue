@@ -242,6 +242,15 @@ import VueCal from 'vue-cal'
 import 'vue-cal/dist/vuecal.css'
 
 export default {
+  created(){
+    Stud.classHome(
+            this.$store.state.currentClass.classCode,
+            this.$store.state.userID
+    ).then(res => {
+      if (res.data === "false") alert("질문차트 가져오기 실패");
+
+    });
+  },
   components: { VueCal },
   data() {
     return {

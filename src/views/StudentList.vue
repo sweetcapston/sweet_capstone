@@ -226,6 +226,7 @@ export default {
         studentID: studentID,
         userName: userName,
         classCode: classCode,
+        studentID: this.$store.state.studentID,
         SID: SID,
         surveyType: surveyType,
         answer: answer

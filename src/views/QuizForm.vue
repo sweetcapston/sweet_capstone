@@ -86,7 +86,7 @@ export default {
         },
         {
           target: '.v-stepper__step__step.cyan.lighten-1', 
-          content: `문항 번호`,
+          content: `문항 번호를 확인 하세요.`,
           params: {
             placement: 'bottom',
             enableScrolling: false

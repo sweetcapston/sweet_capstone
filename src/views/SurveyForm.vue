@@ -46,6 +46,7 @@
         />
       </v-stepper-items>
     </v-stepper>
+    <v-tour name="surveyForm" :steps="guide"></v-tour>
   </v-expansion-panel-content>
 </template>
 
@@ -53,8 +54,84 @@
 /*eslint-disable */
 import { Prof } from "@/api";
 export default {
+  name : "surveyForm",
   data() {
     return {
+      guide: [
+        {
+          target: '.addButton',
+          content: `설문를 생성할 수 있습니다!`,
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.surveyName',
+          content: `<strong>제목을 입력하세요</strong>!`,
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.v-stepper__step__step.cyan.lighten-1',
+          content: `문항 번호를 확인 하세요.`,
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.mdi-plus-circle',
+          content: '더 많은 문항를 작성하세요.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '[role=radiogroup] .v-radio.theme--light.cyan--text.text--ligten-1',
+          content: '타입을 선택할 수 있습니다.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.surveyQuestion',
+          content: '질문을 입력하세요.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.addSample',
+          content: '보기를 추가 할 수 있습니다.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.v-btn--floating',
+          content: '문항를 삭제할 수 있습니다.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.cyan lighten-1 white--text',
+          content: '버튼을 눌러 다음 문항를 작성하세요.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        }
+      ]
+      ,
       e1: 1,
       card_datas: [
         {
@@ -103,6 +180,9 @@ export default {
       icon: "mdi-plus-circle",
       newID: 4
     };
+  },
+  mounted() {
+    this.$tours['surveyForm'].start()
   },
   methods: {
     completeSurvey() {
