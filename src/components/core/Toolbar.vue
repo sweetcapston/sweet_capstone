@@ -35,6 +35,7 @@
     >
       <span class="mr-2 white--text" >logout</span>
     </v-btn>
+    
   </v-toolbar>
 </template>
 
@@ -69,8 +70,15 @@
             this.$router.push({name: 'login'});
           }
         })
+        var img = new Image();
+        img.src = "@/assets/logo_white_animation.svg";
       }
     },
+    computed: {
+      result: function() {
+        return require("@/assets/logo_white_animation.svg") 
+      }
+    }
   }
 </script>
 

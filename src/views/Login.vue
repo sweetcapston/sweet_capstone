@@ -8,6 +8,7 @@
     </v-toolbar>
     <router-view/>
     <v-content>
+
       <section>
         <v-parallax 
           height="700"
@@ -19,16 +20,17 @@
             justify-center
             class="white--text logoImage"
           >      
-            <img src="@/assets/logo_white_animation.svg" height="200">
-            <div class="subheading mb-3 text-xs-center unselectable undraggable">Powered by Sweet</div>
-            <v-btn class="cyan lighten-1 mt-5" dark large @click="alert(1)">
-              How to use
+            <img :src="logo" height="200">
+            <div class="subheading mb-3 text-xs-center unselectable undraggable">Powered by Sweet Team</div>
+            <v-btn class="cyan lighten-1 mt-5" dark large>             
+              <a href="#how-to-use" class="page-scroll white--text">How to use</a>
             </v-btn>
           </v-layout>
         </v-parallax>
       </section>
 
-      <section>
+
+      <section id="how-to-use">
         <v-layout
           column
           wrap
@@ -43,26 +45,15 @@
               </span>
             </div>
           </v-flex>
+
           <v-flex xs12>
             <v-container grid-list-xl>
               <v-layout row wrap align-center>
+
                 <v-flex xs12 md3>
                   <v-card class="elevation-0 transparent">
                     <v-card-text class="text-xs-center">
-                      <v-icon x-large class="cyan--text text--lighten-1">home</v-icon>
-                    </v-card-text>
-                    <v-card-title primary-title class="layout justify-center">
-                      <div class="headline text-xs-center">홈</div>
-                    </v-card-title>
-                    <v-card-text>
-                      설명 작성 가능합니다.
-                    </v-card-text>
-                  </v-card>
-                </v-flex>
-                <v-flex xs12 md3>
-                  <v-card class="elevation-0 transparent">
-                    <v-card-text class="text-xs-center">
-                      <v-icon x-large class="cyan--text text--lighten-1">lightbulb</v-icon>
+                      <v-icon x-large class="cyan--text text--lighten-1">mdi-comment-question-outline</v-icon>
                     </v-card-text>
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline">질문</div>
@@ -72,10 +63,11 @@
                     </v-card-text>
                   </v-card>
                 </v-flex>
+
                 <v-flex xs12 md3>
                   <v-card class="elevation-0 transparent">
                     <v-card-text class="text-xs-center">
-                      <v-icon x-large class="cyan--text text--lighten-1">call</v-icon>
+                      <v-icon x-large class="cyan--text text--lighten-1">mdi-clipboard-text-outline</v-icon>
                     </v-card-text>
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline text-xs-center">설문</div>
@@ -85,10 +77,25 @@
                     </v-card-text>
                   </v-card>
                 </v-flex>
+
                 <v-flex xs12 md3>
                   <v-card class="elevation-0 transparent">
                     <v-card-text class="text-xs-center">
-                      <v-icon x-large class="cyan--text text--lighten-1">dashboard</v-icon>
+                      <v-icon x-large class="cyan--text text--lighten-1">mdi-quora</v-icon>
+                    </v-card-text>
+                    <v-card-title primary-title class="layout justify-center">
+                      <div class="headline text-xs-center">퀴즈</div>
+                    </v-card-title>
+                    <v-card-text>
+                      설명 작성 가능합니다. 
+                    </v-card-text>
+                  </v-card>
+                </v-flex>
+
+                <v-flex xs12 md3>
+                  <v-card class="elevation-0 transparent">
+                    <v-card-text class="text-xs-center">
+                      <v-icon x-large class="cyan--text text--lighten-1">mdi-chart-bar</v-icon>
                     </v-card-text>
                     <v-card-title primary-title class="layout justify-center">
                       <div class="headline text-xs-center">통계</div>
@@ -102,20 +109,94 @@
             </v-container>
           </v-flex>
         </v-layout>
+
+
+        <v-layout>
+          <v-card 
+            height="500" 
+            width="100%"
+            flat
+            class="transparent"  
+          >
+            <v-img src="https://github.com/sweetcapston/sweet_capstone/blob/develop/src/assets/monitor.jpg" height="430" width="70%">
+              <img id="gif" src="@/assets/test.gif" height="400" width="600"/>
+            </v-img>
+            
+<!--
+            <div class="headline text-xs-center pa-5">
+              Active: {{ bottomNav }}
+            </div>
+            <img src="@/assets/test.gif" height="400"/>
+            <v-bottom-nav
+              :active.sync="bottomNav"
+              :value="true"
+              absolute
+              color="transparent"
+              height="70"
+            >
+              <v-btn
+                color="teal" 
+                flat
+                value="home"
+              >
+                <span>홈</span>
+                <v-icon>mdi-home</v-icon>
+              </v-btn>
+
+              <v-btn
+                color="teal" 
+                flat
+                value="question"
+              >
+                <span>질문</span>
+                <v-icon>mdi-comment-question-outline</v-icon>
+              </v-btn>
+
+              <v-btn
+                color="teal" 
+                flat
+                value="survey"
+              >
+                <span>설문</span>
+                <v-icon>mdi-clipboard-text-outline</v-icon>
+              </v-btn>
+
+              <v-btn
+                color="teal" 
+                flat
+                value="quiz"
+              >
+                <span>퀴즈</span>
+                <v-icon>mdi-quora</v-icon>
+              </v-btn>
+
+              <v-btn
+                color="teal" 
+                flat
+                value="chart"
+              >
+                <span>통계</span>
+                <v-icon>mdi-chart-bar</v-icon>
+              </v-btn>
+            </v-bottom-nav>
+-->
+          </v-card>
+        </v-layout>
       </section>
+
 
       <section>
         <v-parallax
-          height="500" 
+          height="600" 
           src="https://cdn.vuetifyjs.com/images/parallax/material2.jpg">
           <v-layout column align-center justify-center>
             <div class="headline white--text mb-3 text-xs-center">For a better lecture</div>
-            <em>Sweet</em>
+            <em>Sweet Team</em>
             <v-btn
               class="cyan lighten-1 mt-5"
               dark
               large
-              href="/pre-made-themes"
+              href="https://github.com/sweetcapston"
             >
               Get Started
             </v-btn>
@@ -123,13 +204,14 @@
         </v-parallax>
       </section>
 
+
       <section>
         <v-container grid-list-xl>
           <v-layout row wrap justify-center class="my-5">
             <v-flex xs12 sm4>
               <v-card class="elevation-0 transparent">
                 <v-card-title primary-title class="layout justify-center">
-                  <div class="headline">Company info</div>
+                  <div class="headline">Our Team Info</div>
                 </v-card-title>
                 <v-card-text>
                   Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare. 
@@ -141,7 +223,7 @@
             <v-flex xs12 sm4 offset-sm1>
               <v-card class="elevation-0 transparent">
                 <v-card-title primary-title class="layout justify-center">
-                  <div class="headline">Contact us</div>
+                  <div class="headline">Contact Us</div>
                 </v-card-title>
                 <v-card-text>
                   Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
@@ -149,26 +231,18 @@
                 <v-list class="transparent">
                   <v-list-tile>
                     <v-list-tile-action>
-                      <v-icon class="cyan--text text--lighten-1">phone</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                      <v-list-tile-title>777-867-5309</v-list-tile-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
-                  <v-list-tile>
-                    <v-list-tile-action>
                       <v-icon class="cyan--text text--lighten-1">place</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
-                      <v-list-tile-title>Chicago, US</v-list-tile-title>
+                      <v-list-tile-title>Seoul, Republic of Korea</v-list-tile-title>
                     </v-list-tile-content>
                   </v-list-tile>
                   <v-list-tile>
                     <v-list-tile-action>
-                      <v-icon class="cyan--text text--lighten-1">email</v-icon>
+                      <v-icon class="cyan--text text--lighten-1">home</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
-                      <v-list-tile-title>john@vuetifyjs.com</v-list-tile-title>
+                      <v-list-tile-title>[github](https://github.com/sweetcapston)</v-list-tile-title>
                     </v-list-tile-content>
                   </v-list-tile>
                 </v-list>
@@ -206,16 +280,22 @@ Vue.use(VueSession);
 
 /* eslint-disable */
 export default {
+  data() {
+    return {
+      bottomNav: 'home'
+    }
+  },
   mounted() {
     document.querySelector("body").addEventListener('scroll', function() {
       var el = document.querySelector('.v-toolbar--fixed.white--text.elevation-0');
       if(document.querySelector("body").scrollTop >= 63) {
         el.classList.add('cyan');
         el.classList.add('lighten-1');
-        el.classList.remove('transparent')
+        el.classList.remove('transparent');
+
       }
       else {
-        el.classList.add('transparent')
+        el.classList.add('transparent');
         el.classList.remove('cyan');
         el.classList.remove('lighten-1');
       }
@@ -235,6 +315,11 @@ export default {
     },
     OpenRegister() {
       this.$router.push("register")
+    },
+  },
+  computed: {
+    logo() {
+      return require("@/assets/logo_white_animation.svg")
     }
   }
 };
@@ -254,5 +339,8 @@ export default {
   }
   .logo {
     margin-top: 10px;
+  }
+  #gif {
+    z-index: 10;
   }
 </style>
