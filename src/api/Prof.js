@@ -25,6 +25,9 @@ export default {
     quizCreate(quiz){
       return axios.post(`${BaseUrl}/${quiz.classCode}/quizAdd`, {quiz:quiz}, config);
     },
+    quizEdit(quiz){
+      return axios.post(`${BaseUrl}/${quiz.classCode}/quizEdit`, quiz, config);
+    },
     loadQuiz(classCode){
       return axios.post(`${BaseUrl}/${classCode}/quiz`, config);
     }

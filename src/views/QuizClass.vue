@@ -4,7 +4,7 @@
       <v-icon class="add" @click="addQuiz()">add_circle</v-icon>
     </v-layout>
     <v-layout class="addButton" v-show="Identity==2 && formShow">
-      <v-icon class="remove" @click="addQuiz()">remove_circle</v-icon>
+      <v-icon class="remove" @click="cancelQuiz()">remove_circle</v-icon>
     </v-layout>
     <v-expansion-panel v-if="Identity==1" >
       <StudentQuizList
@@ -16,11 +16,12 @@
       />
     </v-expansion-panel>
     <v-expansion-panel v-else >
-      <QuizForm v-show="formShow" @childs-event="parentsMethod"/>
+      <QuizForm v-if="formShow" @childs-event="parentsMethod"/>
       <QuizList
         v-for="(quiz, _id) in quizList"
         v-bind:quiz="quiz"
         v-bind:socket="socket"
+        @edited="edited"
         :key="_id"
       />
     </v-expansion-panel>
@@ -76,6 +77,9 @@ export default {
     }
   },
   created() {
+    this.$EventBus.$on("edit", data => {
+      if(data !="-1") this.formShow = false;
+    })
     this.socket.emit("channelJoin", {
       classCode: this.$store.state.currentClass.classCode,
       Identity: this.$store.state.Identity,
@@ -107,12 +111,27 @@ export default {
     };
   },
   methods: {
+    edited(editQuiz){
+      for(let i=0; i<this.quizList.length; i++ ){
+        if(this.quizList[i].QID == editQuiz.QID) {
+          this.$set(this.quizList, i, editQuiz);
+        }
+      }
+    },
     addQuiz() {
       this.formShow = !this.formShow;
-      document.querySelector(".createQuiz .v-expansion-panel__header").click();
+      setTimeout(()=>{
+        document.querySelector(".createQuiz .v-expansion-panel__header").click()
+      },50)
+      
+      this.$EventBus.$emit("edit", "-1")
     },
-    parentsMethod: function(active) {
+    cancelQuiz(){
+      this.formShow = !this.formShow;
+    },
+    parentsMethod: function(result) {
       this.formShow = false;
+      this.quizList.push(result)
     }
   },
   beforeRouteLeave(to, from, next) {

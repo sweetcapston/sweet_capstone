@@ -1,20 +1,4 @@
 <template>
-  <v-container>
-    <template v-slot:actions>
-      <v-icon color="teal">done</v-icon>
-    </template>
-
-    <template v-slot:header>
-      <v-text-field
-        single-line
-        label="제목을 입력하세요"
-        color="cyan ligten-1"
-        v-model="quizName"
-        class="quizName"
-        @click.stop
-      ></v-text-field>
-    </template>
-
     <v-stepper v-model="e1">
       <v-stepper-header>
         <template v-for="n in card_datas.length">
@@ -35,7 +19,7 @@
       </v-stepper-header>
 
       <v-stepper-items>
-        <core-quiz-steps 
+        <core-quiz-edit-steps 
           v-for="(card_data, n) in card_datas"
           :key="card_data.id"
           :step="n+1" 
@@ -43,15 +27,16 @@
           v-bind:n="n"
           v-bind:steps="card_datas.length"
           v-bind:card_data="card_data" 
+          v-bind:quiz="quiz.quizList[n]"
+          v-bind:QID="quiz.QID"
           @remove="deleteStep(n)"
           @preStep="preStep(n+1)"
           @nextStep="nextStep(n+1)"
-          @complete="completeQuiz()"
+          @edit="editQuiz()"
         >
-        </core-quiz-steps>
+        </core-quiz-edit-steps>
       </v-stepper-items>
     </v-stepper>
-  </v-container>
 </template>
 
 <script>
@@ -60,24 +45,23 @@ import { Prof } from "@/api";
 
 export default {
   created() {
-      console.log(this.quiz)
-    this.quizName = this.quiz.quizName;
     let i = 0
     for(i; i<this.quiz.quizList.length;i++){
         let samplestype1=[]
         let samplestype2 = []
-        for(let j = 0; j<this.quiz.quizList[i].content.length;j++){
-            samplestype1.push({id:j+1})
-            samplestype2.push({id:j+1001})
+        if(this.quiz.quizList[i].quizType !=3){
+            for(let j = 0; j<this.quiz.quizList[i].content.length;j++){
+                samplestype1.push({id:j+1})
+                samplestype2.push({id:j+1001})
+            }
         }
-        this.card_datas.push({
+         this.card_datas.push({
             id:i+1,
             type:`${this.quiz.quizList[i].quizeType}`,
             samplestype1:samplestype1,
             samplestype2:samplestype2
         })
     }
-    console.log(this.card_datas)
     this.newID = i+1;
   },
   name: "quizEdit",
@@ -96,6 +80,128 @@ export default {
     quiz: Object
   },
   methods: {
+    editQuiz() {
+      let moment = require("moment");
+      const quizName = document.querySelector(".quizName input").value;
+      const classCode = this.$store.state.currentClass.classCode;
+      const date = moment().format();
+      const quizList = [];
+      for (var j = 0; j < this.card_datas.length; j++) {
+        const quizType = document.querySelectorAll(
+          ".quizType input[type='radio']:checked"
+        )[j].value;
+        const quizQuestion = document.querySelector(`.quizQuestion_${j+1}`).innerHTML;
+        if(quizQuestion==""){
+          alert("질문이 입력되지 않았습니다.")
+          this.e1 = j+1
+          setTimeout(()=> document.querySelector(`.quizQuestion_${j+1}`).focus(), 50)
+          return 
+        }
+        let content = [];
+        
+        let correct;
+        let doc, checkedbox;
+        let count;
+        let pointDoc = document.querySelector(`#point${j}`);
+        if(pointDoc.value==""){
+          alert("점수를 입력해주세요.")
+          this.e1 = j+1
+          setTimeout(()=> pointDoc.focus(), 50) 
+          return;
+        }
+        let point = pointDoc.value;
+        switch (quizType) {
+          case "1":
+            doc = document.querySelectorAll(`.type1_${j+1}`);
+            for (let i = 0; i < doc.length; i++) {
+              let elem = document.querySelector(`input[type=radio]:checked#correct${j}`);
+              if(elem == null){
+                alert("정답을 체크해주세요")
+                this.e1 = j+1
+                setTimeout(()=> document.querySelector(`input[type=radio]#correct${j}`).focus(), 50)
+                return
+              }
+              correct = String(parseInt(elem.value)+1)
+              if(doc[i].querySelector("input").value == ""){
+                alert("입력되지 않은 항목이 있습니다.")
+                this.e1 = j+1
+                setTimeout(()=> doc[i].querySelector("input").focus(), 50)
+                return
+              }
+              content.push(doc[i].querySelector("input").value);
+            }
+            count = new Array(doc.length).fill(0);
+            break;
+          case "2":
+            correct = ""
+            checkedbox = document.querySelectorAll(`input[type=checkbox]:checked#correct${j}`)
+            if(checkedbox.length == 0){
+              alert("정답을 체크해주세요")
+              this.e1 = j+1
+              setTimeout(()=> document.querySelector(`input[type=checkbox]#correct${j}`).focus(), 50)
+              return
+            }
+            checkedbox.forEach(checked => {
+              correct += String(parseInt(checked.value)+1)
+            })
+            doc = document.querySelectorAll(`.type2_${j+1}`);
+            for (let i = 0; i < doc.length; i++) {
+              if(doc[i].querySelector("input").value == ""){
+                alert("입력되지 않은 항목이 있습니다.")
+                this.e1 = j+1
+                setTimeout(()=> doc[i].querySelector("input").focus(), 50)
+                return
+              }
+              content.push(doc[i].querySelector("input").value);
+            }
+            count = new Array(doc.length).fill(0);
+            break;
+          case "3":
+            doc = document.querySelector("textarea");
+            if(doc.value==""){
+              alert("정답을 입력해주세요")
+              this.e1 = j+1
+              setTimeout(()=> doc.focus(), 50)
+              return
+            }
+            correct = doc.value;
+            count = 1;
+            break;
+        }
+        quizList.push({
+          quizType: parseInt(quizType),
+          quizQuestion: quizQuestion,
+          content: content,
+          count: count,
+          point: point,
+          correct: correct
+          // TODO: 정답이랑 배점도 추가해야함.
+        });
+      }
+      let editQuiz;
+      if(quizName == ""){
+        quizName = "이름없음"
+      } 
+      
+      editQuiz = {
+        _id:this.quiz._id,
+        public:this.quiz.public,
+        active:this.quiz.active,
+        minutes:this.quiz.minutes,
+        quizName: quizName,
+        classCode:this.classCode,
+        quizList: quizList,
+        QID: this.quiz.QID,
+        date: date,
+      };
+      if(confirm("기존응답이 모두 삭제됩니다. \n수정하시겠습니까?")){
+        Prof.quizEdit(editQuiz).then(res => {
+          if(res.data){
+            this.$emit("edited",res.data)
+          }
+        })
+      }
+    },
     addStep(n) {
       this.card_datas.push({
         id:this.newID++,

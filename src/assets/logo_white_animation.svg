@@ -16,55 +16,55 @@
       .cls-19 {
         stroke-dasharray: 1000;
         stroke-dashoffset: 1000;
-        animation: dash .6s linear forwards;
+        animation: dash 0.6s linear forwards;
       }
 	  
 	    .cls-17 {
         stroke-dasharray: 1000;
         stroke-dashoffset: 1000;
-        animation: dash .6s linear forwards .30s;
+        animation: dash 0.6s linear forwards 0.30s;
       }
 	  
 	    .cls-15 {
         stroke-dasharray: 1000;
         stroke-dashoffset: 1000;
-        animation: dash .6s linear forwards .60s;
+        animation: dash 0.6s linear forwards 0.60s;
       }
 	  
 	    .cls-13 {
         stroke-dasharray: 1000;
         stroke-dashoffset: 1000;
-        animation: dash .6s linear forwards .45s;
+        animation: dash 0.6s linear forwards 0.45s;
       }
 	  
 	    .cls-11 {
         stroke-dasharray: 1000;
         stroke-dashoffset: 1000;
-        animation: dash .6s linear forwards .60s;
+        animation: dash 0.6s linear forwards 0.60s;
       }
 	  
 	    .cls-9 {
         stroke-dasharray: 1000;
         stroke-dashoffset: 1000;
-        animation: dash .6s linear forwards .75s;
+        animation: dash 0.6s linear forwards 0.75s;
       }
 	  
 	    .cls-7 {
         stroke-dasharray: 1000;
         stroke-dashoffset: 1000;
-        animation: dash .6s linear forwards .90s;
+        animation: dash 0.6s linear forwards 0.90s;
       }
 	  
 	    .cls-5 {
         stroke-dasharray: 1000;
         stroke-dashoffset: 1000;
-        animation: dash .6s linear forwards .105s;
+        animation: dash 0.6s linear forwards 0.105s;
       }
 	  
 	    .cls-3 {
         stroke-dasharray: 1000;
         stroke-dashoffset: 1000;
-        animation: dash .6s linear forwards .130s;
+        animation: dash 0.6s linear forwards 0.130s;
       }
 
       .cls-1 {

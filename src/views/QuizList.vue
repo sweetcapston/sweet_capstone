@@ -1,10 +1,10 @@
 <template>
-  <v-expansion-panel-content>
-    <template v-slot:actions>
+  <v-expansion-panel-content :class="`quiz${quiz.QID}`">
+    <template v-slot:actions >
       <v-icon color="teal">done</v-icon>
     </template>
-    <template v-slot:header>
-      <v-layout align-center v-if="!edit">
+    <template v-slot:header v-if="!edit">
+      <v-layout align-center>
         <v-speed-dial
           v-if="profName == userName "
           v-model="fab"
@@ -85,10 +85,23 @@
           >mdi-stop-circle-outline</v-icon>
         </v-flex>
       </v-layout>
-      
     </template>
-
-    <v-stepper v-model="e1">
+    <template v-slot:header v-else>
+      <v-text-field
+        single-line
+        label="제목을 입력하세요"
+        color="cyan ligten-1"
+        v-model="quizName"
+        class="quizName"
+        @click.stop
+      ></v-text-field>
+      <v-btn 
+      class="red lighten-1 white--text cancelBtn" 
+      @click.stop="cancel">
+        <v-icon>cancel</v-icon>
+      </v-btn>
+    </template>
+    <v-stepper v-model="e1" v-if="!edit">
       <v-stepper-header>
         <template class="step" v-for="n in steps">
           <v-stepper-step
@@ -97,7 +110,7 @@
             :step="n"
             editable
             color="cyan lighten-1"
-          >문항 {{ n }} ({{quiz.quizList[n-1].point[0]}}점)</v-stepper-step>
+          >문항 {{ n }} ({{quiz.quizList[n-1].point}}점)</v-stepper-step>
           <v-divider v-if="n !== steps" :key="n"></v-divider>
         </template>
       </v-stepper-header>
@@ -107,12 +120,17 @@
           <v-card class="mb-5" color="grey lighten-3" min-height="250px">
             <v-container fluid>
               <!-- TODO: 그림 받는 div -->
-              <v-flex xs12 sm12 md6 lg6 xl6 :class="'imgQues_'+`${quiz.QID}_`+`${n-1}`">{{n}}.</v-flex>
+              <div 
+              xs12 sm12 md6 lg6 xl6 
+              :class="'imgQues_'+`${quiz.QID}_`+`${n-1}`"
+              v-html= "`${n}. ${quiz.quizList[n-1].quizQuestion}`"
+              />
               <!-- FIXME: 라디오버튼 -->
               <v-radio-group v-show="quiz.quizList[n-1].quizType == 1" column>
                 <div v-for="c in quiz.quizList[n-1].content.length" :key="`${c}-radio`">
                   <v-radio
                     disabled
+                    value="true"
                     :id="`${c}`"
                     :label="`${quiz.quizList[n-1].content[c-1]} count:  ${quiz.quizList[n-1].count[c-1]}`"
                     color="cyan ligten-1"
@@ -185,24 +203,18 @@
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
+    <QuizEdit v-bind:quiz="quiz" @edited="edited" v-else/>
   </v-expansion-panel-content>
 </template>
 
 
 <script>
 import { Prof } from "@/api";
+import Vue from "vue";
+import QuizEdit from "./QuizEdit.vue";
+Vue.component("QuizEdit", QuizEdit);
 let moment = require("moment");
 export default {
-  mounted() {
-    for (let i = 0; i < this.steps; i++) {
-      document
-        .querySelector(`.imgQues_${this.quiz.QID}_${i}`)
-        .insertAdjacentHTML(
-          "beforeend",
-          `${this.quiz.quizList[i].quizQuestion}`
-        );
-    }
-  },
   data() {
     return {
       steps: this.quiz.quizList.length,
@@ -211,6 +223,7 @@ export default {
       edit:false,
       e1: 1,
       minutes:"0",
+      quizName:"",
       seconds:-1,
       totalTime:0,
       timer:null,
@@ -222,6 +235,16 @@ export default {
     socket: Object
   },
   created() {
+    this.$EventBus.$on("edit", data => {
+      this.fab = false;
+      if(data != this.quiz.QID){
+        this.edit = false;
+        if(document.querySelector(`.quiz${this.quiz.QID} .v-expansion-panel__body`).style.display !="none"){
+          document.querySelector(`.quiz${this.quiz.QID} .v-expansion-panel__header`).click();
+        }
+      }
+    })
+    this.quizName = this.quiz.quizName;
     if(this.quiz.active){
       const {minutes, date} = this.quiz;
       this.totalTime = parseInt((new Date(date) - Date.now() + minutes*60*1000  )/1000)
@@ -266,6 +289,13 @@ export default {
     })
   },
   methods: {
+    cancel(){
+      if(confirm("취소하시겠습니까?")) this.edit = false;
+    },
+    edited: function(editedQuiz){
+      this.$emit("edited", editedQuiz)
+      this.edit = false;
+    },
     floating: function(){
       this.fab = !this.fab;
     },
@@ -303,9 +333,12 @@ export default {
       this.socket.emit("delete", this.quiz.QID)
     },
     editQuiz(){
+      this.$EventBus.$emit("edit", this.quiz.QID)
       this.fab = false;
       this.edit = true;
-      // this.socket.emit("edit", this.quiz.QID)
+      if(document.querySelector(`.quiz${this.quiz.QID} .v-expansion-panel__body`).style.display =="none"){
+        document.querySelector(`.quiz${this.quiz.QID} .v-expansion-panel__header`).click();
+      }
     }
   }
 };
@@ -361,5 +394,9 @@ export default {
 }
 .quizFab{
   border-radius: 50% !important;
+}
+button.cancelBtn{
+  margin-right:30px;
+  margin-left:20px;
 }
 </style>

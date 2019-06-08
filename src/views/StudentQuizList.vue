@@ -24,7 +24,7 @@
             :step="n"
             editable
             color="cyan lighten-1"
-          >문항 {{ n }} ({{quiz.quizList[n-1].point[0]}}점)</v-stepper-step>
+          >문항 {{ n }} ({{quiz.quizList[n-1].point}}점)</v-stepper-step>
           <v-divider v-if="n !== steps" :key="n"/>
         </template>
       </v-stepper-header>

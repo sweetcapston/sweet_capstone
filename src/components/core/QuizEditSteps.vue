@@ -14,7 +14,7 @@
           </v-radio-group>
 
           <v-flex md3 style="padding:2px">
-            <v-text-field :id="`point${n}`" color="cyan ligten-1" label="배점" type="number"/>
+            <v-text-field :id="`point${n}`" v-model="score" color="cyan ligten-1" label="배점" type="number"/>
           </v-flex>
         </v-layout>
         <v-divider/>
@@ -28,7 +28,9 @@
             contenteditable="true"
             placeholder="퀴즈문제를 작성하세요."
             style="font-size: 1.5rem; background:beige; width:750px; "
-          ></div>
+            v-html="quizQuestion"
+          >
+          </div>
           <div class="page">
             <input
               :id="`files${n}`"
@@ -62,6 +64,7 @@
                   <v-text-field
                     :class="'type1_'+`${n+1}`"
                     label="보기를 입력하세요"
+                    v-model="content[index]"
                     single-line
                     color="rgb(111, 111, 111)"
                   />
@@ -83,11 +86,13 @@
                   :value="`${index}`" 
                   color="cyan ligten-1" 
                   hide-details class="shrink mr-2"
+                  v-model="correct"
                   :id="`correct${n}`"
                 />
                 <v-text-field
                   :class="'type2_'+`${n+1}`" 
                   label="보기를 입력하세요"
+                  v-model="content[index]"
                   single-line
                   color="rgb(111, 111, 111)"
                 />
@@ -102,7 +107,10 @@
           </div>
         </v-radio-group>
         <v-layout v-if="type === '3'">
-          <v-textarea solo flat outline color="cyan lighten-1"/>
+          <v-textarea solo flat outline 
+          color="cyan lighten-1"
+          :value="type3"
+          />
         </v-layout>
       </v-container>
     </v-card>
@@ -115,7 +123,7 @@
       <v-btn 
       v-else
       class="red lighten-1 white--text" 
-      @click="cancle">cancle</v-btn>
+      @click="cancel">cancel</v-btn>
       <v-btn
         v-if="n+1 !== steps"
         :key="n"
@@ -124,11 +132,11 @@
         @click="nextStep(n)"
       >Next</v-btn>
       <v-btn
-        v-else
+        v-if="n+1 === steps"
         :key="n"
         class="cyan lighten-1 white--text"
-        @click="complete"
-      >Complete</v-btn>
+        @click="edit"
+      >edit</v-btn>
     </v-layout>
   </v-stepper-content>
 </template>
@@ -136,6 +144,30 @@
 import { imageStorage } from "@/utils/imageStorage";
 
 export default {
+  created() {
+    if(this.quiz!=undefined){
+      this.score = this.quiz.point
+      this.type = `${this.quiz.quizType}`
+      this.samplestype1 = this.card_data.samplestype1;
+      this.samplestype2 = this.card_data.samplestype2;
+      this.newID1 = this.card_data.samplestype1.length+1
+      this.newID2 = this.card_data.samplestype2.length+1001
+      this.quizQuestion = this.quiz.quizQuestion;
+      let elem = document.querySelector(`.quiz${this.QID}`).querySelector(`div[step='${this.n+1}']`)
+      if(this.type == "1"){
+        this.content = this.quiz.content
+        this.radioGroup = `${parseInt(this.quiz.correct.split(" ")[0]) - 1}`;
+      } else if(this.type== "2"){
+        this.correct = this.quiz.correct.split("")
+        for(let i=0;i<this.correct.length;i++){
+          this.correct[i] = String(parseInt(this.correct[i])-1)
+        }
+        this.content = this.quiz.content
+      } else{
+        this.type3 = this.quiz.correct;
+      }
+    }
+  },
   data() {
     return {
       radioGroup: 1,
@@ -144,10 +176,15 @@ export default {
       uploadTask: "",
       uploading: false,
       uploadEnd: false,
+      content:[],
       downloadURL: "",
-      type: this.card_data.type,
-      samplestype1: this.card_data.samplestype1,
-      samplestype2: this.card_data.samplestype1,
+      quizQuestion:"",
+      correct:[],
+      score:"",
+      type: "1",
+      type3:"",
+      samplestype1: [{id:1}],
+      samplestype2: [{id:1001}],
       newID1: 2,
       newID2: 1002,
       num: this.n
@@ -157,6 +194,8 @@ export default {
     card_data: Object,
     n: Number,
     steps: Number,
+    quiz: Object,
+    QID:Number
   },
   methods: {
     getData() {
@@ -184,15 +223,11 @@ export default {
     nextStep() {
       this.$emit("nextStep");
     },
-    complete() {
-      this.$emit("complete");
+    edit() {
+      this.$emit("edit");
     },
     deleteStep() {
       this.$emit("remove");
-    },
-    cancle(){
-      if(confirm("취소하시겠습니까?")) 
-      this.$EventBus.$emit("edit", true);
     },
     selectFiles() {
       document.querySelector(`#files${this.n}`).click();
@@ -225,7 +260,10 @@ export default {
         });
         img.src = url;
       });
-    }
+    },
+    cancel(){
+      if(confirm("취소하시겠습니까?")) this.$EventBus.$emit("edit", true);
+    },
   },
   watch: {
     uploadTask: function() {
