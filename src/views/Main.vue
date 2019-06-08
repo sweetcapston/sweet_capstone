@@ -259,8 +259,8 @@ export default {
     position: absolute;
   } 
   @font-face { 
-    font-family: eunyoung; 
-    src: url(../styles/themes/default/assets/fonts/tvnmedium.ttf) 
+    font-family: userFont; 
+    src: url(../styles/themes/default/assets/fonts/humanletter.ttf) 
     format('truetype'); 
   }
 </style>

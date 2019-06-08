@@ -85,6 +85,13 @@ export default {
     this.socket.on("joinSuccess", data => {
       console.log("socket connect");
     });
+    this.socket.on("delete", (data) => {
+      this.surveyList.forEach(survey => {
+        if(survey.SID == data.SID){
+          this.surveyList.splice(this.surveyList.indexOf(survey), 1);
+        }
+      })
+    })
   },
   data() {
     return {

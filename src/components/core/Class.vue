@@ -15,9 +15,9 @@ export default {
   beforeCreate() {
   },
   created() {
-    // Auth.auth().then(res => {
-    //   if (!res.data) this.$router.push({ name: "login" });
-    // });
+    Auth.auth().then(res => {
+      if (!res.data) this.$router.push({ name: "login" });
+    });
   },
   mounted() {
     if (Notification && Notification.permission != "granted") {

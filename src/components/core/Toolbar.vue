@@ -85,7 +85,7 @@
   margin-left: 9px;
   margin-top: 11px;
   position: absolute;
-  font-family:eunyoung
+  font-family:userFont
 }
 
 </style>

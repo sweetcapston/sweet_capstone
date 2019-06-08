@@ -4,7 +4,51 @@
       <v-icon color="teal">done</v-icon>
     </template>
     <template v-slot:header>
-      <v-layout align-center>
+      <v-layout align-center v-if="!edit">
+        <v-speed-dial
+          v-if="profName == userName "
+          v-model="fab"
+          absolute
+          small
+          :direction="'left'"
+          :open-on-hover="false"
+          :transition="'slide-x-reverse-transition'"
+          @click.stop=""
+          >
+            <template v-slot:activator>
+              <v-btn
+                class="fab quizFab"
+                v-model="fab"
+                color="transparent"
+                fab
+                @click.stop="floating()"
+              >
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </template>
+            <v-btn
+              v-model="fab"
+              fab
+              dark
+              small
+              color = "red"
+              class="quizFab"
+              @click.stop="deleteQuiz()"
+            >
+              <v-icon>delete</v-icon>
+            </v-btn>
+            <v-btn
+              v-model="fab"
+              fab
+              dark
+              small
+              class="quizFab"
+              color="green"
+              @click.stop="editQuiz()"
+            >
+              <v-icon>edit</v-icon>
+            </v-btn>
+          </v-speed-dial>
         <v-flex lg5 xs3>{{ quiz.quizName }}</v-flex>
         <v-flex 
         lg4 
@@ -41,6 +85,7 @@
           >mdi-stop-circle-outline</v-icon>
         </v-flex>
       </v-layout>
+      
     </template>
 
     <v-stepper v-model="e1">
@@ -161,11 +206,15 @@ export default {
   data() {
     return {
       steps: this.quiz.quizList.length,
+      userName: this.$store.state.userName,
+      profName:this.$store.state.currentClass.profName,
+      edit:false,
       e1: 1,
       minutes:"0",
       seconds:-1,
       totalTime:0,
-      timer:null
+      timer:null,
+      fab:false
     };
   },
   props: {
@@ -217,6 +266,9 @@ export default {
     })
   },
   methods: {
+    floating: function(){
+      this.fab = !this.fab;
+    },
     padTime: function(time){
       return (time < 10 ? '0' : '') + time;
     },
@@ -245,6 +297,15 @@ export default {
     },
     quizStop(){
       this.socket.emit("quizStop", this.quiz.QID)
+    },
+    deleteQuiz(){
+      this.fab = false;
+      this.socket.emit("delete", this.quiz.QID)
+    },
+    editQuiz(){
+      this.fab = false;
+      this.edit = true;
+      // this.socket.emit("edit", this.quiz.QID)
     }
   }
 };
@@ -297,5 +358,8 @@ export default {
 }
 .quizEnd:hover{
   transform: scale(1.2);
+}
+.quizFab{
+  border-radius: 50% !important;
 }
 </style>

@@ -17,7 +17,7 @@
             column
             align-center
             justify-center
-            class="white--text"
+            class="white--text logoImage"
           >      
             <img src="@/assets/logo_white_animation.svg" height="200">
             <div class="subheading mb-3 text-xs-center unselectable undraggable">Powered by Sweet</div>
@@ -223,11 +223,6 @@ export default {
   },
   name: "app",
   created() {
-    //서버에서 활성화
-    // if (location.protocol != 'https:')
-    // {
-    //    location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
-    // };
     Auth.auth().then(res => {
       if(!res.data)
         return;

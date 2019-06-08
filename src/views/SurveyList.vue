@@ -5,6 +5,50 @@
     </template>
     <template v-slot:header>
       <v-layout align-center>
+        <v-speed-dial
+          v-if="profName == userName "
+          v-model="fab"
+          absolute
+          small
+          :direction="'left'"
+          :open-on-hover="false"
+          :transition="'slide-x-reverse-transition'"
+          @click.stop=""
+          >
+            <template v-slot:activator>
+              <v-btn
+                class="fab surveyFab"
+                v-model="fab"
+                color="transparent"
+                fab
+                @click.stop="floating()"
+              >
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </template>
+            <v-btn
+              v-model="fab"
+              fab
+              dark
+              small
+              color = "red"
+              class="surveyFab"
+              @click.stop="deleteSurvey()"
+            >
+              <v-icon>delete</v-icon>
+            </v-btn>
+            <v-btn
+              v-model="fab"
+              fab
+              dark
+              small
+              class="surveyFab"
+              color="green"
+              @click.stop="editSurvey()"
+            >
+              <v-icon>edit</v-icon>
+            </v-btn>
+          </v-speed-dial>
         <v-flex lg5 xs3>{{survey.surveyName}}</v-flex>
         <v-flex lg5 xs4>{{survey.date}}</v-flex>
         <v-flex lg2 xs2>
@@ -139,6 +183,9 @@ export default {
     return {
       steps: this.survey.surveyList.length,
       e1: 1,
+      userName: this.$store.state.userName,
+      profName:this.$store.state.currentClass.profName,
+      fab:false
     };
   },
   props: {
@@ -146,6 +193,9 @@ export default {
     socket: Object
   },
   methods: {
+    floating: function(){
+      this.fab = !this.fab;
+    },
     getPercent(array) {
       var sum = 0;
       for (var i = 0; i < array.length; i++) sum = sum + array[i];
@@ -166,6 +216,14 @@ export default {
         console.log(res);
         this.survey.active = res.data;
       });
+    },
+    deleteSurvey(){
+      this.fab = false;
+      this.socket.emit("delete", this.survey.SID)
+    },
+    editSurvey(){
+      this.fab = false;
+      // this.socket.emit("edit", this.survey.SID)
     }
   }
 };
@@ -186,5 +244,9 @@ export default {
 }
 .surveyStart:hover {
   background: #00e676;
+}
+
+.surveyFab{
+  border-radius: 50% !important;
 }
 </style>

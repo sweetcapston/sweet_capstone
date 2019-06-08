@@ -289,14 +289,26 @@ export default {
           // TODO: 정답이랑 배점도 추가해야함.
         });
       }
-      const newQuiz = {
-        quizName: quizName,
-        quizList: quizList,
-        classCode: classCode,
-        date: date,
-        public: true,
-        active: false
-      };
+      let newQuiz;
+      if(quizName == ""){
+        newQuiz = {
+          quizList: quizList,
+          classCode: classCode,
+          date: date,
+          public: true,
+          active: false
+        };
+      } else{
+        newQuiz = {
+          quizName: quizName,
+          quizList: quizList,
+          classCode: classCode,
+          date: date,
+          public: true,
+          active: false
+        };
+      }
+      
       Prof.quizCreate(newQuiz).then(res => {
         if (res.data) {
           this.$emit("childs-event", true);
