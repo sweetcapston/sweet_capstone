@@ -21,7 +21,7 @@
       <br>
       <br>
       <v-layout justify-center>
-        <img src="@/assets/logo_black_animation.svg" alt="Vuetify.js" height="150">
+        <img :src="logo" height="150">
       </v-layout>
       <br/>
       <v-content>
@@ -233,10 +233,16 @@ export default {
           this.$router.push({name: 'login'});
         }
       })
-    },
+    }
+  },
+  computed: {
+    logo() {
+      return require("@/assets/logo_black_animation.svg")
+    }
   }
 };
 </script>
+
 <style>
   div.layout.row.wrap{
     background:#FAFAFA

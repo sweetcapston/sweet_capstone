@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panel-content>
     <template v-slot:actions>
-      <v-icon color="teal">done</v-icon>
+      <v-icon color="cyan ligten-1">$vuetify.icons.expand</v-icon>
     </template>
     <template v-slot:header>
       <v-layout align-center>
