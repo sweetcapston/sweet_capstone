@@ -16,6 +16,9 @@ export default {
     surveyCreate(survey){
       return axios.post(`${BaseUrl}/${survey.classCode}/surveyAdd`, {survey:survey}, config);
     },
+    surveyEdit(survey){
+      return axios.post(`${BaseUrl}/${survey.classCode}/surveyEdit`, survey, config);
+    },
     surveyActive(survey){
       return axios.put(`${BaseUrl}/${survey.classCode}/survey/active`, {SID:survey.SID, active:survey.active}, config);
     },

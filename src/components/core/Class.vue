@@ -1,8 +1,8 @@
 <template>
-  <v-app>
+  <v-app >
     <core-drawer/>
     <core-toolbar/>
-    <v-container>
+    <v-container >
       <router-view/>
     </v-container>
   </v-app>

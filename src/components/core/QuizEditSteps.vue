@@ -54,8 +54,6 @@
           <div v-if="type === '1'">
               <div v-for="(type1, index) in samplestype1" :key="type1.id">
                 <v-layout class="type">
-                    <!-- prepend-icon="mdi-checkbox-blank-circle-outline" -->
-                  <!-- <input type="radio" > -->
                   <v-radio 
                     :value="`${index}`" 
                     color="cyan ligten-1" 
@@ -187,7 +185,6 @@ export default {
       samplestype2: [{id:1001}],
       newID1: 2,
       newID2: 1002,
-      num: this.n
     };
   },
   props: {

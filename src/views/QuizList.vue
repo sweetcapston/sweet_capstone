@@ -239,7 +239,7 @@ export default {
       this.fab = false;
       if(data != this.quiz.QID){
         this.edit = false;
-        if(document.querySelector(`.quiz${this.quiz.QID} .v-expansion-panel__body`).style.display !="none"){
+        if(this.quiz && document.querySelector(`.quiz${this.quiz.QID} .v-expansion-panel__body`).style.display !="none"){
           document.querySelector(`.quiz${this.quiz.QID} .v-expansion-panel__header`).click();
         }
       }

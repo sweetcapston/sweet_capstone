@@ -59,7 +59,7 @@ export default {
     return {
       guide: [
         {
-          target: '.addButton',
+          target: '.remove',
           content: `설문를 생성할 수 있습니다!`,
           params: {
             placement: 'bottom',
@@ -275,8 +275,8 @@ export default {
       }
       Prof.surveyCreate(newSurvey).then(res => {
         if (res.data) {
-          this.$emit("childs-event", true);
-          window.history.go(0);
+          console.log(res.data)
+          this.$emit("childs-event", res.data);
         }
       });
     },

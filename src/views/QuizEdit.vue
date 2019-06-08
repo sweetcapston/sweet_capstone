@@ -72,8 +72,6 @@ export default {
       card_datas: [],
       classCode:this.$store.state.currentClass.classCode,
       newID: 0,
-      icon: "mdi-plus-circle",
-
     };
   },
   props: {

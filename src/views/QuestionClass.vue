@@ -13,7 +13,7 @@
               <v-divider/>
               <v-list-tile id="auto_height" :key="ques.title">
                 <v-speed-dial
-                v-if="ques.userID == userID"
+                v-if="ques.userID == userID || $store.state.Identity == 2"
                 v-model="fab[index]"
                 absolute
                 small
@@ -44,6 +44,7 @@
                     <v-icon>delete</v-icon>
                   </v-btn>
                   <v-btn
+                    v-show="ques.userID == userID"
                     v-model="fab[index]"
                     fab
                     dark
