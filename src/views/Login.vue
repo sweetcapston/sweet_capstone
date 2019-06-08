@@ -118,7 +118,7 @@
             flat
             class="transparent"  
           >
-            <v-img src="https://cdn.vuetifyjs.com/images/parallax/material.jpg" height="430" width="70%">
+            <v-img src="https://github.com/sweetcapston/sweet_capstone/blob/develop/src/assets/monitor.jpg" height="430" width="70%">
               <img id="gif" src="@/assets/test.gif" height="400" width="600"/>
             </v-img>
             
