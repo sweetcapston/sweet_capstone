@@ -10,6 +10,7 @@
         label="제목을 입력하세요"
         color="cyan ligten-1"
         class="quizName"
+        v-model="quizName"
         @click.stop
       ></v-text-field>
     </template>
@@ -59,7 +60,6 @@
 import Vue from 'vue'
 import VueTour from 'vue-tour'
 import { Prof } from "@/api";
-import { maxHeaderSize } from 'http';
 require('vue-tour/dist/vue-tour.css')
 Vue.use(VueTour)
 
@@ -67,9 +67,10 @@ export default {
   name: "quizForm",
   data() {
     return {
+      quizName:"",
       guide: [
         {
-          target: '.addButton',  
+          target: '.remove',  
           content: `퀴즈를 생성할 수 있습니다!`,
           params: {
             placement: 'bottom',
@@ -86,7 +87,7 @@ export default {
         },
         {
           target: '.v-stepper__step__step.cyan.lighten-1', 
-          content: `문항 번호`,
+          content: `문항 번호를 확인 하세요.`,
           params: {
             placement: 'bottom',
             enableScrolling: false
@@ -220,7 +221,7 @@ export default {
           setTimeout(()=> pointDoc.focus(), 50) 
           return;
         }
-        point=pointDoc.value;
+        point = pointDoc.value;
         switch (quizType) {
           case "1":
             doc = document.querySelectorAll(`.type1_${j+1}`);
@@ -275,7 +276,7 @@ export default {
               setTimeout(()=> doc.focus(), 50)
               return
             }
-            content.push(doc.value);
+            correct = doc.value;
             count = 1;
             break;
         }
@@ -289,18 +290,29 @@ export default {
           // TODO: 정답이랑 배점도 추가해야함.
         });
       }
-      const newQuiz = {
-        quizName: quizName,
-        quizList: quizList,
-        classCode: classCode,
-        date: date,
-        public: true,
-        active: false
-      };
+      let newQuiz;
+      if(quizName == ""){
+        newQuiz = {
+          quizList: quizList,
+          classCode: classCode,
+          date: date,
+          public: true,
+          active: false
+        };
+      } else{
+        newQuiz = {
+          quizName: quizName,
+          quizList: quizList,
+          classCode: classCode,
+          date: date,
+          public: true,
+          active: false
+        };
+      }
+      
       Prof.quizCreate(newQuiz).then(res => {
         if (res.data) {
-          this.$emit("childs-event", true);
-          window.history.go(0);
+          this.$emit("childs-event", res.data);
         }
       });
     },

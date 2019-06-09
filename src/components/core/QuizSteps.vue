@@ -6,6 +6,18 @@
       </v-btn>
       
       <v-container>
+        <v-layout>
+          <v-radio-group v-model="type" :mandatory="false" class="quizType" row>
+            <v-radio label="객관식" value="1" color="cyan ligten-1" select/>
+            <v-radio label="객관식(복수 응답 가능)" value="2" color="cyan ligten-1"/>
+            <v-radio label="주관식(단답형)" value="3" color="cyan ligten-1"/>
+          </v-radio-group>
+
+          <v-flex md3 style="padding:2px">
+            <v-text-field :id="`point${n}`" color="cyan ligten-1" label="배점" type="number"/>
+          </v-flex>
+        </v-layout>
+        <v-divider/>
         <v-btn @click.native="selectFiles()" id="imageUpload">
           Upload a image
           <v-icon right aria-hidden="true">add_a_photo</v-icon>
@@ -92,24 +104,18 @@
         <v-layout v-if="type === '3'">
           <v-textarea solo flat outline color="cyan lighten-1"/>
         </v-layout>
-        <v-divider/>
-        <v-layout>
-          <v-radio-group v-model="type" :mandatory="false" class="quizType" row>
-            <v-radio label="객관식" value="1" color="cyan ligten-1" select/>
-            <v-radio label="객관식(복수 응답 가능)" value="2" color="cyan ligten-1"/>
-            <v-radio label="주관식(단답형)" value="3" color="cyan ligten-1"/>
-          </v-radio-group>
-
-          <v-flex md3 style="padding:2px">
-            <v-text-field :id="`point${n}`" color="cyan ligten-1" label="배점" type="number"/>
-          </v-flex>
-        </v-layout>
       </v-container>
     </v-card>
 
     <v-layout justify-space-between>
-      <v-btn class="cyan lighten-1 white--text" @click="preStep">Pre</v-btn>
-
+      <v-btn 
+      v-if="n+1 != 1"
+      class="cyan lighten-1 white--text" 
+      @click="preStep">Pre</v-btn>
+      <v-btn 
+      v-else
+      class="red lighten-1 white--text" 
+      @click="cancle">cancle</v-btn>
       <v-btn
         v-if="n+1 !== steps"
         :key="n"
@@ -118,7 +124,7 @@
         @click="nextStep(n)"
       >Next</v-btn>
       <v-btn
-        v-if="n+1 === steps"
+        v-else
         :key="n"
         class="cyan lighten-1 white--text"
         @click="complete"
@@ -151,7 +157,6 @@ export default {
     card_data: Object,
     n: Number,
     steps: Number,
-    quiz: Object
   },
   methods: {
     getData() {
@@ -184,6 +189,10 @@ export default {
     },
     deleteStep() {
       this.$emit("remove");
+    },
+    cancle(){
+      if(confirm("취소하시겠습니까?")) 
+      this.$EventBus.$emit("edit", true);
     },
     selectFiles() {
       document.querySelector(`#files${this.n}`).click();

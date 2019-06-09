@@ -1,7 +1,7 @@
 <template>
   <v-layout column align-center justify-center class="xs12 sm5 md3 cardLayout">
     <v-btn id="CardButton" @click="enterClass(currentClass.classCode)" flat>
-      <v-card class="mx-auto" width="200">
+      <v-card class="mx-auto classCard" width="200">
         <v-img
           id="image"
           class="white--text"

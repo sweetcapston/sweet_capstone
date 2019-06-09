@@ -1,10 +1,54 @@
-<template>
-  <v-expansion-panel-content>
+<template >
+  <v-expansion-panel-content :class="`survey${survey.SID}`">
     <template v-slot:actions>
       <v-icon color="cyan ligten-1">$vuetify.icons.expand</v-icon>
     </template>
-    <template v-slot:header>
+    <template v-slot:header v-if="!edit">
       <v-layout align-center>
+        <v-speed-dial
+          v-if="profName == userName "
+          v-model="fab"
+          absolute
+          small
+          :direction="'left'"
+          :open-on-hover="false"
+          :transition="'slide-x-reverse-transition'"
+          @click.stop=""
+          >
+            <template v-slot:activator>
+              <v-btn
+                class="fab surveyFab"
+                v-model="fab"
+                color="transparent"
+                fab
+                @click.stop="floating()"
+              >
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </template>
+            <v-btn
+              v-model="fab"
+              fab
+              dark
+              small
+              color = "red"
+              class="surveyFab"
+              @click.stop="deleteSurvey()"
+            >
+              <v-icon>delete</v-icon>
+            </v-btn>
+            <v-btn
+              v-model="fab"
+              fab
+              dark
+              small
+              class="surveyFab"
+              color="green"
+              @click.stop="editSurvey()"
+            >
+              <v-icon>edit</v-icon>
+            </v-btn>
+          </v-speed-dial>
         <v-flex lg5 xs3>{{survey.surveyName}}</v-flex>
         <v-flex lg5 xs4>{{survey.date}}</v-flex>
         <v-flex lg2 xs2>
@@ -21,7 +65,22 @@
         </v-flex>
       </v-layout>
     </template>
-    <v-stepper v-model="e1">
+    <template v-slot:header v-else>
+      <v-text-field
+        single-line
+        label="제목을 입력하세요"
+        color="cyan ligten-1"
+        v-model="survey.surveyName"
+        class="surveyName"
+        @click.stop
+      ></v-text-field>
+      <v-btn 
+      class="red lighten-1 white--text cancelBtn" 
+      @click.stop="cancel">
+        <v-icon>cancel</v-icon>
+      </v-btn>
+    </template>
+    <v-stepper v-model="e1"  v-if="!edit">
       <v-stepper-header>
         <template class="step" v-for="n in steps">
           <v-stepper-step
@@ -111,14 +170,27 @@
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
+    <SurveyEdit v-bind:survey="survey" @edited="edited" v-else/>
   </v-expansion-panel-content>
 </template>
 
 <script>
 import { Prof } from "@/api";
+import Vue from "vue";
+import SurveyEdit from "./SurveyEdit.vue";
+Vue.component("SurveyEdit", SurveyEdit);
 /*eslint-disable */
 export default {
   created() {
+    this.$EventBus.$on("surveyEdit", data => {
+      this.fab = false;
+      if(data != this.survey.SID){
+        this.edit = false;
+        if(this.survey && document.querySelector(`.survey${this.survey.SID} .v-expansion-panel__body`).style.display !="none"){
+          document.querySelector(`.survey${this.survey.SID} .v-expansion-panel__header`).click();
+        }
+      }
+    })
     this.socket.on("survey", (data) => {
       if(this.survey.SID == data.SID){
         for (let i = 0; i < data.surveyType.length; i++) {
@@ -134,11 +206,18 @@ export default {
         }
       }
     })
+    
   },
   data() {
     return {
       steps: this.survey.surveyList.length,
+      userName: this.$store.state.userName,
+      profName:this.$store.state.currentClass.profName,
+      edit:false,
       e1: 1,
+      userName: this.$store.state.userName,
+      profName:this.$store.state.currentClass.profName,
+      fab:false
     };
   },
   props: {
@@ -146,6 +225,17 @@ export default {
     socket: Object
   },
   methods: {
+
+    cancel(){
+      if(confirm("취소하시겠습니까?")) this.edit = false;
+    },
+    edited: function(editedSurvey){
+      this.$emit("edited", editedSurvey)
+      this.edit = false;
+    },
+    floating: function(){
+      this.fab = !this.fab;
+    },
     getPercent(array) {
       var sum = 0;
       for (var i = 0; i < array.length; i++) sum = sum + array[i];
@@ -166,6 +256,18 @@ export default {
         console.log(res);
         this.survey.active = res.data;
       });
+    },
+    deleteSurvey(){
+      this.fab = false;
+      this.socket.emit("delete", this.survey.SID)
+    },
+    editSurvey(){
+      this.$EventBus.$emit("surveyEdit", this.survey.SID)
+      this.fab = false;
+      this.edit = true;
+      if(document.querySelector(`.survey${this.survey.SID} .v-expansion-panel__body`).style.display =="none"){
+        document.querySelector(`.survey${this.survey.SID} .v-expansion-panel__header`).click();
+      }
     }
   }
 };
@@ -186,5 +288,9 @@ export default {
 }
 .surveyStart:hover {
   background: #00e676;
+}
+
+.surveyFab{
+  border-radius: 50% !important;
 }
 </style>

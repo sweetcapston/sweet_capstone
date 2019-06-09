@@ -16,6 +16,9 @@ export default {
     surveyCreate(survey){
       return axios.post(`${BaseUrl}/${survey.classCode}/surveyAdd`, {survey:survey}, config);
     },
+    surveyEdit(survey){
+      return axios.post(`${BaseUrl}/${survey.classCode}/surveyEdit`, survey, config);
+    },
     surveyActive(survey){
       return axios.put(`${BaseUrl}/${survey.classCode}/survey/active`, {SID:survey.SID, active:survey.active}, config);
     },
@@ -24,6 +27,9 @@ export default {
     },
     quizCreate(quiz){
       return axios.post(`${BaseUrl}/${quiz.classCode}/quizAdd`, {quiz:quiz}, config);
+    },
+    quizEdit(quiz){
+      return axios.post(`${BaseUrl}/${quiz.classCode}/quizEdit`, quiz, config);
     },
     loadQuiz(classCode){
       return axios.post(`${BaseUrl}/${classCode}/quiz`, config);

@@ -1,10 +1,10 @@
-<template>
+<template >
   <div>
     <v-layout class="addButton" v-show="Identity==2 && !formShow">
       <v-icon class="add" @click="addSurvey()">add_circle</v-icon>
     </v-layout>
     <v-layout class="deleteButton" v-show="Identity==2 && formShow">
-      <v-icon class="remove" @click="addSurvey()">remove_circle</v-icon>
+      <v-icon class="remove" @click="cancelSurvey()">remove_circle</v-icon>
     </v-layout>
     <v-expansion-panel v-if="Identity==1">
       <material-card color="metal" title="설문 리스트" text="Survey List" style="width:100%; margin-top:30px;">
@@ -25,6 +25,7 @@
         v-for="(survey, _id) in surveyList"
         v-bind:survey="survey"
         v-bind:socket="socket"
+        @edited="edited"
         :key="_id"
       />
       <div v-if="surveyList.length<1" style="padding-left:10px"><h4>데이터가 없습니다.</h4></div>
@@ -82,6 +83,9 @@ export default {
     }
   },
   created() {
+    this.$EventBus.$on("surveyEdit", data => {
+      if(data !="-1") this.formShow = false;
+    })
     this.socket.emit("channelJoin", {
       classCode: this.$store.state.currentClass.classCode,
       Identity: this.$store.state.Identity,
@@ -91,6 +95,13 @@ export default {
     this.socket.on("joinSuccess", data => {
       console.log("socket connect");
     });
+    this.socket.on("delete", (data) => {
+      this.surveyList.forEach(survey => {
+        if(survey.SID == data.SID){
+          this.surveyList.splice(this.surveyList.indexOf(survey), 1);
+        }
+      })
+    })
   },
   data() {
     return {
@@ -106,11 +117,27 @@ export default {
     };
   },
   methods: {
+    edited(editSurvey){
+      for(let i=0; i<this.surveyList.length; i++ ){
+        if(this.surveyList[i].SID == editSurvey.SID) {
+          this.$set(this.surveyList, i, editSurvey);
+        }
+      }
+    },
     addSurvey() {
       this.formShow = !this.formShow;
-      document
-        .querySelector(".createSurvey .v-expansion-panel__header")
-        .click();
+      setTimeout(()=>{
+        document.querySelector(".createSurvey .v-expansion-panel__header").click()
+      },50)
+      
+      this.$EventBus.$emit("surveyEdit", "-1")
+    },
+    cancelSurvey(){
+      this.formShow = !this.formShow;
+    },
+    parentsMethod: function(result) {
+      this.formShow = false;
+      this.surveyList.push(result)
     }
   },
   beforeRouteLeave(to, from, next) {

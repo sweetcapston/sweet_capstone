@@ -4,7 +4,7 @@
       <v-icon class="add" @click="addQuiz()">add_circle</v-icon>
     </v-layout>
     <v-layout class="addButton" v-show="Identity==2 && formShow">
-      <v-icon class="remove" @click="addQuiz()">remove_circle</v-icon>
+      <v-icon class="remove" @click="cancelQuiz()">remove_circle</v-icon>
     </v-layout>
     <v-expansion-panel v-if="Identity==1" >
       <material-card color="metal" title="퀴즈 리스트" text="Quiz List" style="width:100%; margin-top:30px;">
@@ -25,6 +25,7 @@
         v-for="(quiz, _id) in quizList"
         v-bind:quiz="quiz"
         v-bind:socket="socket"
+        @edited="edited"
         :key="_id"
       />
       <div v-if="quizList.length<1" style="padding-left:10px"><h4>데이터가 없습니다.</h4></div>
@@ -82,6 +83,9 @@ export default {
     }
   },
   created() {
+    this.$EventBus.$on("edit", data => {
+      if(data !="-1") this.formShow = false;
+    })
     this.socket.emit("channelJoin", {
       classCode: this.$store.state.currentClass.classCode,
       Identity: this.$store.state.Identity,
@@ -91,6 +95,13 @@ export default {
     this.socket.on("joinSuccess", data => {
       console.log("socket connect");
     });
+    this.socket.on("delete", (data) => {
+      this.quizList.forEach(quiz => {
+        if(quiz.QID == data.QID){
+          this.quizList.splice(this.quizList.indexOf(quiz), 1);
+        }
+      })
+    })
   },
   data() {
     return {
@@ -106,18 +117,33 @@ export default {
     };
   },
   methods: {
+    edited(editQuiz){
+      for(let i=0; i<this.quizList.length; i++ ){
+        if(this.quizList[i].QID == editQuiz.QID) {
+          this.$set(this.quizList, i, editQuiz);
+        }
+      }
+    },
     addQuiz() {
       this.formShow = !this.formShow;
-      document.querySelector(".createQuiz .v-expansion-panel__header").click();
+      setTimeout(()=>{
+        document.querySelector(".createQuiz .v-expansion-panel__header").click()
+      },50)
+      
+      this.$EventBus.$emit("edit", "-1")
     },
-    parentsMethod: function(active) {
+    cancelQuiz(){
+      this.formShow = !this.formShow;
+    },
+    parentsMethod: function(result) {
       this.formShow = false;
-    },
-    beforeRouteLeave(to, from, next) {
-      this.socket.emit("diconnect");
-      this.socket.disconnect();
-      next();
+      this.quizList.push(result)
     }
+  },
+  beforeRouteLeave(to, from, next) {
+    this.socket.emit("diconnect");
+    this.socket.disconnect();
+    next();
   }
 };
 </script>
