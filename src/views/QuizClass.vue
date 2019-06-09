@@ -19,7 +19,7 @@
       </material-card>
     </v-expansion-panel>
     <v-expansion-panel v-else >
-      <material-card color="metal" title="퀴즈 리스트" text="Quiz List" style="width:100%; margin-top:30px;">
+      <material-card color="metal" class="material-card" title="퀴즈 리스트" text="Quiz List" style="width:100%; margin-top:30px;">
       <QuizForm v-show="formShow" @childs-event="parentsMethod"/>
       <QuizList
         v-for="(quiz, _id) in quizList"

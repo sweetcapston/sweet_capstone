@@ -43,7 +43,7 @@
                   <v-btn
                     color="primary"
                     round
-                    class="font-weight-light"
+                    class="font-weight-light Add"
                     @click="addClass()"
                     v-if="this.$store.getters.getIdentity == 1 && (this.$store.state.checkApply == -1)"
                   >수강하기</v-btn>
@@ -110,6 +110,7 @@
         </v-layout>            
       </v-flex>
     </v-layout>
+      <v-tour v-if="this.$store.state.Identity==1 && this.$store.state.classList.length == 0" name="classAdd" :steps="guide"></v-tour>
   </v-container>
 </template>
 
@@ -128,9 +129,20 @@ export default {
 
     });
   },
-  components: { VueCal },
+    components: { VueCal },
+    name: "classAdd",
   data() {
     return {
+            guide: [
+                {
+                    target: '.Add',
+                    content: `수강하기 버튼을 눌러 클래스 목록에 추가 할 수 있습니다.`,
+                    params: {
+                        placement: 'bottom',
+                        enableScrolling: false
+                    }
+                }
+            ],
       color: null,
       colors: [
         'purple',
@@ -239,7 +251,10 @@ export default {
 
       this.snackbar = true
     }
-  }
+  },
+    mounted: function () {
+          this.$tours['classAdd'].start()
+    }
 }
 </script>
 

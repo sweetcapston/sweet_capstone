@@ -54,7 +54,8 @@
                 <v-layout class="type">
                     <!-- prepend-icon="mdi-checkbox-blank-circle-outline" -->
                   <!-- <input type="radio" > -->
-                  <v-radio 
+                  <v-radio
+                          class="correctcheck"
                     :value="`${index}`" 
                     color="cyan ligten-1" 
                     :id="`correct${n}`"

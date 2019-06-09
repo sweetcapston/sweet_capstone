@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <v-expansion-panel-content class="createQuiz">
     <template v-slot:actions>
       <v-icon color="teal">done</v-icon>
@@ -70,7 +70,7 @@ export default {
       quizName:"",
       guide: [
         {
-          target: '.remove',  
+          target: '.material-card',
           content: `퀴즈를 생성할 수 있습니다!`,
           params: {
             placement: 'bottom',
@@ -102,8 +102,16 @@ export default {
           }
         },
         {
-          target: '.v-btn--floating',
-          content: '문제를 삭제할 수 있습니다.',
+          target: '[role=radiogroup] .v-radio.theme--light.cyan--text.text--ligten-1',
+          content: '타입을 선택할 수 있습니다.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '#point0',
+          content: '문제의 점수는?',
           params: {
             placement: 'bottom',
             enableScrolling: false
@@ -118,7 +126,7 @@ export default {
           }
         },  
         {
-          target: 'input[type=radio]',
+          target: '.correctcheck',
           content: `<strong>정답을 체크해 주세요</strong>`,
           params: {
             placement: 'bottom',
@@ -126,16 +134,8 @@ export default {
           }
         },
         {
-          target: '[role=radiogroup] .v-radio.theme--light.cyan--text.text--ligten-1',
-          content: '타입을 선택할 수 있습니다.',
-          params: {
-            placement: 'bottom',
-            enableScrolling: false
-          }
-        },
-        {
-          target: '#point0',
-          content: '문제의 점수는?',
+          target: '.v-btn--floating',
+          content: '문제를 삭제할 수 있습니다.',
           params: {
             placement: 'bottom',
             enableScrolling: false

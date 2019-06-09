@@ -165,7 +165,7 @@
           <v-layout justify-space-between>
             <v-btn class="cyan lighten-1 white--text" @click="preStep(n)">Pre</v-btn>
 
-            <v-btn class="cyan lighten-1 white--text" @click="nextStep(n)">Next</v-btn>
+            <v-btn class="cyan lighten-1 white--text next" @click="nextStep(n)">Next</v-btn>
           </v-layout>
         </v-stepper-content>
       </v-stepper-items>

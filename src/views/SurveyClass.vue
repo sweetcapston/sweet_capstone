@@ -19,7 +19,7 @@
       </material-card>
     </v-expansion-panel>
     <v-expansion-panel v-else>
-      <material-card color="metal" title="설문 리스트" text="Survey List" style="width:100%; margin-top:30px;">
+      <material-card color="metal" class="material-card" title="설문 리스트" text="Survey List" style="width:100%; margin-top:30px;">
       <SurveyForm v-show="formShow"/>
       <SurveyList
         v-for="(survey, _id) in surveyList"
