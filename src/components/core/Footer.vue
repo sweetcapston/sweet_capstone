@@ -2,12 +2,13 @@
   <v-footer
     id="core-footer"
     absolute
-    height="82"
+    height="60"
   >
     <div class="footer-items">
       <span
         v-for="link in links"
         :key="link.name"
+        style="margin-left: 50px"
       >
         <a
           :href="link.Link"
@@ -15,7 +16,7 @@
       </span>
     </div>
     <v-spacer/>
-    <span class="font-weight-light copyright">
+    <span class="font-weight-light copyright" style="margin-right: 50px">
       &copy;
       {{ (new Date()).getFullYear() }}
       <a
@@ -33,8 +34,7 @@
 export default {
   data: () => ({
     links: [
-      { name: 'Home', Link: '/' },
-      { name: 'Sweet Team', Link: 'https://github.com/sweetcapston' }
+      { name: 'Home', Link: '/' }
     ]
   })
 }

@@ -6,10 +6,11 @@
       <sui-button class="transparent" positive @click="OpenLogin">로그인</sui-button>
       <sui-button class="cyan lighten-1" positive @click.native="OpenRegister" id="signbtn">회원가입</sui-button>
     </v-toolbar>
-    <router-view/>
-    <v-content>
 
-      <section>
+    <router-view/>
+
+    <v-content>
+      <section id="main">
         <v-parallax 
           height="700"
           src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
@@ -20,7 +21,7 @@
             justify-center
             class="white--text logoImage"
           >      
-            <img :src="logo" height="200">
+            <img :src="logo" width="70%">
             <div class="subheading mb-3 text-xs-center unselectable undraggable">Powered by Sweet Team</div>
             <v-btn class="cyan lighten-1 mt-5" dark large>             
               <a href="#how-to-use" class="page-scroll white--text">How to use</a>
@@ -40,150 +41,95 @@
           <v-flex xs12 sm4 class="my-3">
             <div class="text-xs-center">
               <h2 class="headline">How to use</h2>
-              <span class="subheading">
-                스크린샷 예시, 설명 
-              </span>
             </div>
           </v-flex>
 
-          <v-flex xs12>
-            <v-container grid-list-xl>
-              <v-layout row wrap align-center>
+          <v-flex>
+            <v-btn-toggle v-model="toggle_one" mandatory>                  
+              <v-btn flat class="">
+                <v-card class="elevation-0 transparent">
+                  <v-card-text class="text-xs-center">
+                    <v-icon x-large class="cyan--text text--lighten-1">mdi-comment-question-outline</v-icon>
+                  </v-card-text>
+                  <v-card-title primary-title class="layout justify-center">
+                    <div class="headline">클래스 생성</div>
+                  </v-card-title>
+                </v-card>
+              </v-btn>
 
-                <v-flex xs12 md3>
-                  <v-card class="elevation-0 transparent">
-                    <v-card-text class="text-xs-center">
-                      <v-icon x-large class="cyan--text text--lighten-1">mdi-comment-question-outline</v-icon>
-                    </v-card-text>
-                    <v-card-title primary-title class="layout justify-center">
-                      <div class="headline">질문</div>
-                    </v-card-title>
-                    <v-card-text>
-                      설명 작성 가능합니다. 
-                    </v-card-text>
-                  </v-card>
-                </v-flex>
+              <v-btn flat class="transparent">
+                <v-card class="elevation-0 transparent">
+                  <v-card-text class="text-xs-center">
+                    <v-icon x-large class="cyan--text text--lighten-1">mdi-comment-question-outline</v-icon>
+                  </v-card-text>
+                  <v-card-title primary-title class="layout justify-center">
+                    <div class="headline">클래스 입장</div>
+                  </v-card-title>
+                </v-card>
+              </v-btn>
 
-                <v-flex xs12 md3>
-                  <v-card class="elevation-0 transparent">
-                    <v-card-text class="text-xs-center">
-                      <v-icon x-large class="cyan--text text--lighten-1">mdi-clipboard-text-outline</v-icon>
-                    </v-card-text>
-                    <v-card-title primary-title class="layout justify-center">
-                      <div class="headline text-xs-center">설문</div>
-                    </v-card-title>
-                    <v-card-text>
-                      설명 작성 가능합니다. 
-                    </v-card-text>
-                  </v-card>
-                </v-flex>
+              <v-btn flat class="transparent">
+                <v-card class="elevation-0 transparent">
+                  <v-card-text class="text-xs-center">
+                    <v-icon x-large class="cyan--text text--lighten-1">mdi-comment-question-outline</v-icon>
+                  </v-card-text>
+                  <v-card-title primary-title class="layout justify-center">
+                    <div class="headline">질문</div>
+                  </v-card-title>
+                </v-card>
+              </v-btn>
 
-                <v-flex xs12 md3>
-                  <v-card class="elevation-0 transparent">
-                    <v-card-text class="text-xs-center">
-                      <v-icon x-large class="cyan--text text--lighten-1">mdi-quora</v-icon>
-                    </v-card-text>
-                    <v-card-title primary-title class="layout justify-center">
-                      <div class="headline text-xs-center">퀴즈</div>
-                    </v-card-title>
-                    <v-card-text>
-                      설명 작성 가능합니다. 
-                    </v-card-text>
-                  </v-card>
-                </v-flex>
+              <v-btn flat class="transparent">
+                <v-card class="elevation-0 transparent">
+                  <v-card-text class="text-xs-center">
+                    <v-icon x-large class="cyan--text text--lighten-1">mdi-clipboard-text-outline</v-icon>
+                  </v-card-text>
+                  <v-card-title primary-title class="layout justify-center">
+                    <div class="headline text-xs-center">설문</div>
+                  </v-card-title>
+                </v-card>
+              </v-btn>
 
-                <v-flex xs12 md3>
-                  <v-card class="elevation-0 transparent">
-                    <v-card-text class="text-xs-center">
-                      <v-icon x-large class="cyan--text text--lighten-1">mdi-chart-bar</v-icon>
-                    </v-card-text>
-                    <v-card-title primary-title class="layout justify-center">
-                      <div class="headline text-xs-center">통계</div>
-                    </v-card-title>
-                    <v-card-text>
-                      설명 작성 가능합니다. 
-                    </v-card-text>
-                  </v-card>
-                </v-flex>
-              </v-layout>
-            </v-container>
+              <v-btn flat class="transparent">
+                <v-card class="elevation-0 transparent">
+                  <v-card-text class="text-xs-center">
+                    <v-icon x-large class="cyan--text text--lighten-1">mdi-quora</v-icon>
+                  </v-card-text>
+                  <v-card-title primary-title class="layout justify-center">
+                    <div class="headline text-xs-center">퀴즈</div>
+                  </v-card-title>
+                </v-card>
+              </v-btn>
+
+              <v-btn flat class="transparent">
+                <v-card class="elevation-0 transparent">
+                  <v-card-text class="text-xs-center">
+                    <v-icon x-large class="cyan--text text--lighten-1">mdi-chart-bar</v-icon>
+                  </v-card-text>
+                  <v-card-title primary-title class="layout justify-center">
+                    <div class="headline text-xs-center">통계</div>
+                  </v-card-title>
+                </v-card>
+              </v-btn>
+              
+            </v-btn-toggle>
+ 
           </v-flex>
         </v-layout>
 
-
         <v-layout>
           <v-card 
-            height="500" 
+            height="600" 
             width="100%"
             flat
             class="transparent"  
           >
-            <v-img src="https://github.com/sweetcapston/sweet_capstone/blob/develop/src/assets/monitor.jpg" height="430" width="70%">
-              <img id="gif" src="@/assets/test.gif" height="400" width="600"/>
-            </v-img>
-            
-<!--
-            <div class="headline text-xs-center pa-5">
-              Active: {{ bottomNav }}
+            <div class="back">
+              <img id="gif" src="@/assets/test.gif" />
             </div>
-            <img src="@/assets/test.gif" height="400"/>
-            <v-bottom-nav
-              :active.sync="bottomNav"
-              :value="true"
-              absolute
-              color="transparent"
-              height="70"
-            >
-              <v-btn
-                color="teal" 
-                flat
-                value="home"
-              >
-                <span>홈</span>
-                <v-icon>mdi-home</v-icon>
-              </v-btn>
-
-              <v-btn
-                color="teal" 
-                flat
-                value="question"
-              >
-                <span>질문</span>
-                <v-icon>mdi-comment-question-outline</v-icon>
-              </v-btn>
-
-              <v-btn
-                color="teal" 
-                flat
-                value="survey"
-              >
-                <span>설문</span>
-                <v-icon>mdi-clipboard-text-outline</v-icon>
-              </v-btn>
-
-              <v-btn
-                color="teal" 
-                flat
-                value="quiz"
-              >
-                <span>퀴즈</span>
-                <v-icon>mdi-quora</v-icon>
-              </v-btn>
-
-              <v-btn
-                color="teal" 
-                flat
-                value="chart"
-              >
-                <span>통계</span>
-                <v-icon>mdi-chart-bar</v-icon>
-              </v-btn>
-            </v-bottom-nav>
--->
           </v-card>
         </v-layout>
       </section>
-
 
       <section>
         <v-parallax
@@ -204,8 +150,7 @@
         </v-parallax>
       </section>
 
-
-      <section>
+      <section id="contact team">
         <v-container grid-list-xl>
           <v-layout row wrap justify-center class="my-5">
             <v-flex xs12 sm4>
@@ -220,6 +165,7 @@
                 </v-card-text>
               </v-card>
             </v-flex>
+            
             <v-flex xs12 sm4 offset-sm1>
               <v-card class="elevation-0 transparent">
                 <v-card-title primary-title class="layout justify-center">
@@ -242,7 +188,7 @@
                       <v-icon class="cyan--text text--lighten-1">home</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
-                      <v-list-tile-title>[github](https://github.com/sweetcapston)</v-list-tile-title>
+                      <v-list-tile-title><a href="https://github.com/sweetcapston">Github</a></v-list-tile-title>
                     </v-list-tile-content>
                   </v-list-tile>
                 </v-list>
@@ -282,7 +228,24 @@ Vue.use(VueSession);
 export default {
   data() {
     return {
-      bottomNav: 'home'
+      /* bottomNav: 'home' */
+      toggle_one: 0,
+      items: [
+        { title: '질문', icon: 'mdi-comment-question-outline'},
+        { title: '설문', icon: 'mdi-clipboard-text-outline'},
+        { title: '퀴즈', icon: 'mdi-quora'},
+        { title: '통계', icon: 'mdi-chart-bar'}
+      ],
+      admins: [
+        ['Management', 'people_outline'],
+        ['Settings', 'settings']
+      ],
+      cruds: [
+        ['Create', 'add'],
+        ['Read', 'insert_drive_file'],
+        ['Update', 'update'],
+        ['Delete', 'delete']
+      ]
     }
   },
   mounted() {
@@ -326,7 +289,7 @@ export default {
 </script>
 <style>
   html{
-    overflow-x:hidden;
+    overflow-x: hidden;
   }
   body::-webkit-scrollbar { 
     display: none; 
@@ -341,6 +304,21 @@ export default {
     margin-top: 10px;
   }
   #gif {
+    margin-top: 27px;
+    margin-bottom: 50px;
     z-index: 10;
+    height: 400px; 
+    width: 46%;
   }
+  .back{
+    text-align: center;
+    background-image: url("../assets/monitor.png");
+    background-position: center center;
+    background-size: 60% 100%;
+  }
+  .v-btn-toggle .v-btn {
+    width: 20%;
+    background-color: #fafafa;
+  }
+
 </style>
