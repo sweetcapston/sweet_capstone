@@ -16,7 +16,7 @@ export default new Vuex.Store({
     currentClass: { // 현재 클래스 정보
       classCode: '', 
       className: '', 
-      profName: '', 
+      profName: ''
     },
     classList: [], // 사용자의 클래스 리스트
   },

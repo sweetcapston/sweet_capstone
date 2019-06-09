@@ -191,10 +191,6 @@ export default {
     completeQuiz() {
       let moment = require("moment");
       const quizName = document.querySelector(".quizName input").value;
-      // if(quizName=="") {
-      //   alert("퀴즈의 제목을 입력하세요")
-      //   return;
-      // }
       const classCode = this.$store.state.currentClass.classCode;
       const date = moment().format();
       const quizList = [];
@@ -312,7 +308,7 @@ export default {
       
       Prof.quizCreate(newQuiz).then(res => {
         if (res.data) {
-          this.$emit("childs-event", res.data);
+          this.$EventBus.$emit("sendQuiz", res.data)
         }
       });
     },

@@ -60,9 +60,16 @@
       </v-container>
     </v-card>
     <v-layout justify-space-between>
-      <v-btn class="cyan lighten-1 white--text" @click="preStep">Pre</v-btn>
-
+      <v-btn 
+      v-if="n+1 != 1"
+      class="cyan lighten-1 white--text" 
+      @click="preStep">Pre</v-btn>
+      <v-btn 
+      v-else
+      class="red lighten-1 white--text" 
+      @click="cancle">cancle</v-btn>
       <v-btn v-if="n+1 !== steps" class="cyan lighten-1 white--text" @click="nextStep">Next</v-btn>
+      
       <v-btn v-if="n+1 === steps" class="cyan lighten-1 white--text" @click="complete">Complete</v-btn>
     </v-layout>
   </v-stepper-content>
@@ -108,6 +115,10 @@ export default {
     },
     nextStep() {
       this.$emit("nextStep");
+    },
+    cancle(){
+      if(confirm("취소하시겠습니까?")) 
+      this.$EventBus.$emit("surveyEdit", true);
     },
     complete() {
       this.$emit("complete");

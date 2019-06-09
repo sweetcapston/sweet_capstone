@@ -54,7 +54,7 @@ export default {
         }
          this.card_datas.push({
             id:i+1,
-            type:`${this.survey.surveyList[i].surveyeType}`,
+            type:`${this.survey.surveyList[i].surveyType}`,
             samplestype1:samplestype1,
             samplestype2:samplestype2
         })
@@ -159,9 +159,12 @@ export default {
           date: date,
         };
         if(confirm("기존응답이 모두 삭제됩니다. \n수정하시겠습니까?")){
-            Prof.surveyEdit(newSurvey).then(res => {
-                if(res.data) this.$emit("edited",res.data)
-            });
+          Prof.surveyEdit(newSurvey).then(res => {
+              if(res.data) {
+                window.history.go(0)
+                // this.$emit("edited",res.data)
+              }
+          });
         }
       
     },

@@ -137,6 +137,11 @@
 import { imageStorage } from "@/utils/imageStorage";
 
 export default {
+  created() {
+    this.type = this.card_data.type;
+    this.samplestype1 = this.card_data.samplestype1
+    this.samplestype2 = this.card_data.samplestype2
+  },
   data() {
     return {
       radioGroup: 1,
@@ -146,9 +151,9 @@ export default {
       uploading: false,
       uploadEnd: false,
       downloadURL: "",
-      type: this.card_data.type,
-      samplestype1: this.card_data.samplestype1,
-      samplestype2: this.card_data.samplestype1,
+      type: "1",
+      samplestype1: [],
+      samplestype2: [],
       newID1: 2,
       newID2: 1002,
       num: this.n

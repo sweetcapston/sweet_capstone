@@ -95,11 +95,6 @@
         class="quizName"
         @click.stop
       ></v-text-field>
-      <v-btn 
-      class="red lighten-1 white--text cancelBtn" 
-      @click.stop="cancel">
-        <v-icon>cancel</v-icon>
-      </v-btn>
     </template>
     <v-stepper v-model="e1" v-if="!edit">
       <v-stepper-header>
@@ -110,7 +105,7 @@
             :step="n"
             editable
             color="cyan lighten-1"
-          >문항 {{ n }} ({{quiz.quizList[n-1].point}}점)</v-stepper-step>
+          >문항 {{ n }} ({{quizList[n-1].point}}점)</v-stepper-step>
           <v-divider v-if="n !== steps" :key="n"></v-divider>
         </template>
       </v-stepper-header>
@@ -120,25 +115,30 @@
           <v-card class="mb-5" color="grey lighten-3" min-height="250px">
             <v-container fluid>
               <!-- TODO: 그림 받는 div -->
-              <v-flex style="font-size:1.5rem; font-weight:600" xs12 sm12 md6 lg6 xl6 :class="'imgQues_'+`${quiz.QID}_`+`${n-1}`">{{n}}.</v-flex>
+              <div 
+              style="font-size:1.5rem; font-weight:600"
+              xs12 sm12 md6 lg6 xl6 
+              :class="'imgQues_'+`${quiz.QID}_`+`${n-1}`"
+              v-html= "`${n}. ${quizList[n-1].quizQuestion}`"
+              />
               <!-- FIXME: 라디오버튼 -->
-              <v-radio-group v-show="quiz.quizList[n-1].quizType == 1" column>
-                <div v-for="c in quiz.quizList[n-1].content.length" :key="`${c}-radio`">
+              <v-radio-group v-show="quizList[n-1].quizType == 1" column>
+                <div v-for="c in quizList[n-1].content.length" :key="`${c}-radio`">
                   <v-radio
                     disabled
                     value="true"
                     :id="`${c}`"
-                    :label="`${quiz.quizList[n-1].content[c-1]} count:  ${quiz.quizList[n-1].count[c-1]}`"
+                    :label="`${quizList[n-1].content[c-1]} count:  ${quizList[n-1].count[c-1]}`"
                     color="cyan ligten-1"
                   >
                     <template v-slot:label>
                       <v-flex>
-                        {{quiz.quizList[n-1].content[c-1]}} ({{quiz.quizList[n-1].count[c-1]}}명)
+                        {{quizList[n-1].content[c-1]}} ({{quizList[n-1].count[c-1]}}명)
                         <v-progress-linear
                           color="cyan"
                           width="50px"
                           height="20"
-                          v-bind:value="quiz.quizList[n-1].count[c-1] * getPercent(quiz.quizList[n-1].count)"
+                          v-bind:value="quizList[n-1].count[c-1] * getPercent(quizList[n-1].count)"
                         />
                       </v-flex>
                     </template>
@@ -146,22 +146,22 @@
                 </div>
               </v-radio-group>
               <!-- FIXME: 체크박스 -->
-              <div v-show="quiz.quizList[n-1].quizType == 2">
+              <div v-if="quizList[n-1].quizType == 2">
                 <v-checkbox
                   disabled
                   :id="`${c}`"
-                  v-for="c in quiz.quizList[n-1].content.length"
+                  v-for="c in quizList[n-1].content.length"
                   :key="`${c}-checkbot`"
                   color="cyan lighten-1"
                 >
                   <template v-slot:label>
                     <v-flex>
-                      {{quiz.quizList[n-1].content[c-1]}} ({{quiz.quizList[n-1].count[c-1]}}명)
+                      {{quizList[n-1].content[c-1]}} ({{quizList[n-1].count[c-1]}}명)
                       <v-progress-linear
                         color="cyan"
                         width="50px"
                         height="20"
-                        v-bind:value="quiz.quizList[n-1].count[c-1] * getPercent(quiz.quizList[n-1].count)"
+                        v-bind:value="quizList[n-1].count[c-1] * getPercent(quizList[n-1].count)"
                       />
                     </v-flex>
                   </template>
@@ -169,7 +169,7 @@
               </div>
               <!-- FIXME:주관식 -->
               <div
-                v-if="quiz.quizList[n-1].quizType == 3"
+                v-if="quizList[n-1].quizType == 3"
                 id="scroll-target"
                 style="max-height: 400px "
                 class="scroll-y"
@@ -182,8 +182,8 @@
                       </div>
                     </template>
                     <v-divider/>
-                    <div v-for="i in quiz.quizList[n-1].content.length" :key="i">
-                      <v-card-text>{{quiz.quizList[n-1].content[i-1]}}</v-card-text>
+                    <div v-for="i in quizList[n-1].content.length" :key="i">
+                      <v-card-text>{{quizList[n-1].content[i-1]}}</v-card-text>
                       <v-divider/>
                     </div>
                   </v-expansion-panel-content>
@@ -199,7 +199,7 @@
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
-    <QuizEdit v-bind:quiz="quiz" @edited="edited" v-else/>
+    <QuizEdit v-bind:quiz="quiz" v-else/>
   </v-expansion-panel-content>
 </template>
 
@@ -213,7 +213,8 @@ let moment = require("moment");
 export default {
   data() {
     return {
-      steps: this.quiz.quizList.length,
+      steps: 0,
+      quizList:[],
       userName: this.$store.state.userName,
       profName:this.$store.state.currentClass.profName,
       edit:false,
@@ -231,11 +232,14 @@ export default {
     socket: Object
   },
   created() {
+    this.steps = this.quiz.quizList.length;
+    this.quizList = this.quiz.quizList
     this.$EventBus.$on("edit", data => {
       this.fab = false;
       if(data != this.quiz.QID){
         this.edit = false;
-        if(this.quiz && document.querySelector(`.quiz${this.quiz.QID} .v-expansion-panel__body`).style.display !="none"){
+        if(document.querySelector(`.quiz${this.quiz.QID} .v-expansion-panel__body`)!=null &&
+          document.querySelector(`.quiz${this.quiz.QID} .v-expansion-panel__body`).style.display !="none"){
           document.querySelector(`.quiz${this.quiz.QID} .v-expansion-panel__header`).click();
         }
       }
@@ -288,10 +292,10 @@ export default {
     cancel(){
       if(confirm("취소하시겠습니까?")) this.edit = false;
     },
-    edited: function(editedQuiz){
-      this.$emit("edited", editedQuiz)
-      this.edit = false;
-    },
+    // edited: function(editedQuiz){
+    //   this.$emit("edited", editedQuiz)
+    //   this.edit = false;
+    // },
     floating: function(){
       this.fab = !this.fab;
     },
@@ -336,7 +340,7 @@ export default {
         document.querySelector(`.quiz${this.quiz.QID} .v-expansion-panel__header`).click();
       }
     }
-  }
+  },
 };
 </script>
 
@@ -390,9 +394,5 @@ export default {
 }
 .quizFab{
   border-radius: 50% !important;
-}
-button.cancelBtn{
-  margin-right:30px;
-  margin-left:20px;
 }
 </style>

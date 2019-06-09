@@ -82,9 +82,7 @@ export default {
           className: this.currentClass.className,
           profName: this.currentClass.profName
         });
-        const checkApply = this.$store.state.classList.findIndex(function(
-          item
-        ) {
+        const checkApply = this.$store.state.classList.findIndex(function(item) {
           return item.classCode === classCode;
         });
         this.$store.commit("setCheckApply", checkApply);
