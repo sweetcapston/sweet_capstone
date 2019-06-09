@@ -139,7 +139,7 @@
 <script>
 /* eslint-disable */
 import { continueStatement } from "@babel/types";
-import { Stud } from "@/api";
+import { Stud,Prof } from "@/api";
 import Vue from "vue";
 import store from "@/store.js";
 import { URL } from "@/plugins/api.config.js";
@@ -335,6 +335,22 @@ export default {
         QesID: QesID
       })
     },
+    blackListAdd(QesID,contents){
+      const blackList={
+        QesID:QesID,
+        contents:contents,
+        profID: this.$store.state.userID}
+      Prof.blackListAdd(this.$store.state.currentClass.classCode,blackList)
+              .then(res=>{
+
+      })
+    },
+    alarmActive() {
+      Prof.alarm(this.$store.state.currentClass.classCode,this.class.alarm)
+              .then(res => {
+        //this.class.active = res.data;
+      });
+    },
     notification(data) {
       const cursor = this;
       let getTime = new Date();
@@ -343,6 +359,7 @@ export default {
         Notification.permission === "granted" &&
         data &&
         this.$store.state.Identity == 2
+        //&& this.class.alarm
       ) {
         navigator.serviceWorker.getRegistration().then(function(reg) {
           const title = "OPEN CLASS❤️";

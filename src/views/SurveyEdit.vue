@@ -77,10 +77,10 @@ export default {
     editSurvey() {
         let moment = require("moment");
         moment.locale("ko");
-        const surveyName = document.querySelector(".surveyName input").value;
+        let surveyName = document.querySelector(".surveyName input").value;
         const classCode = this.$store.state.currentClass.classCode;
         const date = moment().format("LLL");
-        const surveyList = [];
+        let surveyList = [];
 
         for (var j = 0; j < this.card_datas.length; j++) {
             let surveyType = document.querySelectorAll(
