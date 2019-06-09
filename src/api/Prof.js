@@ -27,5 +27,15 @@ export default {
     },
     loadQuiz(classCode){
       return axios.post(`${BaseUrl}/${classCode}/quiz`, config);
+    },
+    loadStatistics(classCode) {
+      return axios.post(`${BaseUrl}/${classCode}/statistics`, config);
+    },
+    loadStatisticsQuiz(classCode, QID) {
+      return axios.post(
+        `${BaseUrl}/${classCode}/statistics/quiz`,
+        { QID: QID },
+        config
+      );
     }
 };

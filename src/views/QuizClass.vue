@@ -7,6 +7,7 @@
       <v-icon class="remove" @click="addQuiz()">remove_circle</v-icon>
     </v-layout>
     <v-expansion-panel v-if="Identity==1" >
+      <material-card color="metal" title="퀴즈 리스트" text="Quiz List" style="width:100%; margin-top:30px;">
       <StudentQuizList
         v-for="n in quizList.length"
         v-bind:quiz="quizList[n-1]"
@@ -14,8 +15,11 @@
         v-bind:socket="socket"
         :key="n"
       />
+      <div v-if="quizList.length<1" style="padding-left:10px"><h4>데이터가 없습니다.</h4></div>
+      </material-card>
     </v-expansion-panel>
     <v-expansion-panel v-else >
+      <material-card color="metal" title="퀴즈 리스트" text="Quiz List" style="width:100%; margin-top:30px;">
       <QuizForm v-show="formShow" @childs-event="parentsMethod"/>
       <QuizList
         v-for="(quiz, _id) in quizList"
@@ -23,6 +27,8 @@
         v-bind:socket="socket"
         :key="_id"
       />
+      <div v-if="quizList.length<1" style="padding-left:10px"><h4>데이터가 없습니다.</h4></div>
+      </material-card>
     </v-expansion-panel>
   </div>
 </template>

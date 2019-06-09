@@ -1,5 +1,5 @@
 <template>
-  <v-data-table style="height:100%;" :headers="headers" :items="quizResult" class="elevation-1">
+  <v-data-table :headers="headers" :items="questionList" class="elevation-1">
     <template v-slot:items="pp">
       <td>{{ pp.item._id }}</td>
       <td>{{ pp.item.count }}</td>
@@ -10,7 +10,7 @@
 <script>
 export default {
   props: {
-    quizResult: Array
+    questionList: Array
   },
   data() {
     return {
@@ -21,7 +21,7 @@ export default {
           sortable: false,
         },
         {
-          text: "점수",
+          text: "질문횟수",
           align: "left",
           sortable: false,
         }

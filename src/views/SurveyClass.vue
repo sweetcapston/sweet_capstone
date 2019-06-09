@@ -7,6 +7,7 @@
       <v-icon class="remove" @click="addSurvey()">remove_circle</v-icon>
     </v-layout>
     <v-expansion-panel v-if="Identity==1">
+      <material-card color="metal" title="설문 리스트" text="Survey List" style="width:100%; margin-top:30px;">
       <StudentList
         v-for="n in surveyList.length"
         v-bind:survey="surveyList[n-1]"
@@ -14,8 +15,11 @@
         v-bind:socket="socket"
         :key="n"
       />
+      <div v-if="surveyList.length<1" style="padding-left:10px"><h4>데이터가 없습니다.</h4></div>
+      </material-card>
     </v-expansion-panel>
     <v-expansion-panel v-else>
+      <material-card color="metal" title="설문 리스트" text="Survey List" style="width:100%; margin-top:30px;">
       <SurveyForm v-show="formShow"/>
       <SurveyList
         v-for="(survey, _id) in surveyList"
@@ -23,6 +27,8 @@
         v-bind:socket="socket"
         :key="_id"
       />
+      <div v-if="surveyList.length<1" style="padding-left:10px"><h4>데이터가 없습니다.</h4></div>
+      </material-card>
     </v-expansion-panel>
   </div>
 </template>

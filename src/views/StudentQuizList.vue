@@ -4,7 +4,7 @@
       <v-layout align-center>
         <v-flex md5 lg5 xs5>{{ quiz.quizName }}</v-flex>
         <v-flex md5 lg5 xs5>{{ new Date(quiz.date).format("yyyy년 MM월 dd일 a/p hh:mm") }}</v-flex>
-        <v-flex v-if="answer_Q.None != 0" md2 lg2 xs2>{{ answer_Q.score }}점 </v-flex>
+        <v-flex v-if="answer_Q.None != 0" md2 lg2 xs2>{{ answer_Q.score }}점</v-flex>
         <v-flex lg2 xs2 v-else-if="quiz.active" class="timer">
           <span class="minute">{{ minutes }}</span>
           <span>:</span>
@@ -24,7 +24,7 @@
             :step="n"
             editable
             color="cyan lighten-1"
-          >문항 {{ n }} ({{quiz.quizList[n-1].point[0]}}점)</v-stepper-step>
+          >문항 {{ n }} ({{quiz.quizList[n-1].point}}점)</v-stepper-step>
           <v-divider v-if="n !== steps" :key="n"/>
         </template>
       </v-stepper-header>
@@ -36,10 +36,10 @@
               <v-flex
                 xs12
                 sm12
-                md6
-                lg6
-                xl6
-                style="background:white;"
+                md8
+                lg8
+                xl8
+                style="font-weight:600; font-size:1.5rem"
                 :class="'imgQues_'+`${quiz.QID}_`+`${n-1}`"
               >{{n}}.</v-flex>
               <!-- FIXME: 라디오버튼 -->
@@ -47,6 +47,7 @@
                 class="radio"
                 style="padding-top:10px"
                 v-if="quiz.quizList[n-1].quizType == 1"
+                v-model="radioValue[n-1]"
               >
                 <div v-for="c in quiz.quizList[n-1].content.length" :key="`${c}-radio`">
                   <v-radio
@@ -59,15 +60,8 @@
                   >
                     <template v-slot:label>
                       <v-flex>
-                        <span>{{quiz.quizList[n-1].content[c-1]}}</span>
-                        <span v-if="answer_Q.None != 0">({{quiz.quizList[n-1].count[c-1]}}명)</span>
-                        <v-progress-linear
-                          v-if="answer_Q.None != 0"
-                          color="cyan"
-                          width="50px"
-                          height="20"
-                          v-bind:value="quiz.quizList[n-1].count[c-1] * getPercent(quiz.quizList[n-1].count)"
-                        />
+                        <span>{{quiz.quizList[n-1].content[c-1]}} </span>
+                        
                       </v-flex>
                     </template>
                   </v-radio>
@@ -80,18 +74,12 @@
                   v-for="c in quiz.quizList[n-1].content.length"
                   :key="`${c}-checkbox`"
                   color="cyan lighten-1"
+                  v-model="checkValue"
+                  :value="`${c}`"
                 >
                   <template v-slot:label>
                     <v-flex>
-                      <span>{{quiz.quizList[n-1].content[c-1]}}</span>
-                      <span v-if="answer_Q.None != 0">({{quiz.quizList[n-1].count[c-1]}}명)</span>
-                      <v-progress-linear
-                        v-if="answer_Q.None != 0"
-                        color="cyan"
-                        width="50px"
-                        height="20"
-                        v-bind:value="quiz.quizList[n-1].count[c-1] * getPercent(quiz.quizList[n-1].count)"
-                      />
+                      <span>{{quiz.quizList[n-1].content[c-1]}} {{checkValue}}</span>
                     </v-flex>
                   </template>
                 </v-checkbox>
@@ -107,31 +95,17 @@
                   color="cyan lighten-1"
                   v-if="answer_Q.None == 0"
                 ></v-textarea>
-                <v-expansion-panel
-                  v-if="answer_Q.None != 0"
-                  id="scroll-target"
-                  style="max-height: 400px"
-                  class="scroll-y"
-                >
-                  <v-expansion-panel-content style="padding:3px 2px 2px 3px">
-                    <template v-slot:header>
-                      <div>
-                        <h4>응답 결과</h4>
-                      </div>
-                    </template>
-                    <v-divider/>
-                    <div v-for="i in quiz.quizList[n-1].content.length" :key="i">
-                      <v-card-text>{{quiz.quizList[n-1].content[i-1]}}</v-card-text>
-                      <v-divider/>
-                    </div>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
+                {{radioValue[n-1]}}
               </div>
             </v-container>
           </v-card>
           <v-layout justify-space-between>
             <v-btn class="cyan lighten-1 white--text" @click="preStep(n)">Pre</v-btn>
-            <v-btn class="cyan lighten-1 white--text submit-btn" v-show="steps==n" @click="answerQuiz()">submit</v-btn>
+            <v-btn
+              class="cyan lighten-1 white--text submit-btn"
+              v-show="steps==n"
+              @click="answerQuiz()"
+            >submit</v-btn>
             <v-btn class="cyan lighten-1 white--text" v-show="steps!=n" @click="nextStep(n)">Next</v-btn>
           </v-layout>
         </v-stepper-content>
@@ -145,21 +119,32 @@ import { Stud } from "@/api";
 /*eslint-disable */
 export default {
   created() {
-    if(this.quiz.active && this.answer_Q.None == 0){
-      const {minutes, date} = this.quiz;
-      this.totalTime = parseInt((new Date(date) - Date.now() + minutes*60*1000  )/1000)
+    // 학생 응시퀴즈 목록화면에서 체되게
+    if (this.answer_Q.None != 0){
+      for(let i=0; i<this.answer_Q.quizType.length; i++){
+        if(this.answer_Q.quizType[i]==2)
+          for(let j=0; j<this.answer_Q.answer[i].length; j++)
+            this.checkValue.push(this.answer_Q.answer[i][j]);
+      }
+      this.radioValue = this.answer_Q.answer;
+    } 
+    if (this.quiz.active && this.answer_Q.None == 0) {
+      const { minutes, date } = this.quiz;
+      this.totalTime = parseInt(
+        (new Date(date) - Date.now() + minutes * 60 * 1000) / 1000
+      );
       this.minutes = this.padTime(Math.floor(this.totalTime / 60));
-      this.seconds = this.padTime(this.totalTime - (this.minutes * 60));
-      this.timer = setInterval(()=>{
-        if(this.minutes == "00" && this.seconds == "00"){
+      this.seconds = this.padTime(this.totalTime - this.minutes * 60);
+      this.timer = setInterval(() => {
+        if (this.minutes == "00" && this.seconds == "00") {
           return;
         }
         this.totalTime--;
         this.minutes = this.padTime(Math.floor(this.totalTime / 60));
-        this.seconds = this.padTime(this.totalTime - (this.minutes * 60));
+        this.seconds = this.padTime(this.totalTime - this.minutes * 60);
       }, 1000);
     }
-    this.socket.on("quiz", (data) => {
+    this.socket.on("quiz", data => {
       if (this.quiz.QID == data.QID) {
         for (let i = 0; i < data.quizType.length; i++) {
           if (parseInt(data.quizType[i]) < 3) {
@@ -174,32 +159,32 @@ export default {
         }
       }
     });
-    this.socket.on("quizStart",(data)=>{
-      const{active, minutes, date, QID} = data;
-      if(this.quiz.QID == QID && this.answer_Q.None == 0){
+    this.socket.on("quizStart", data => {
+      const { active, minutes, date, QID } = data;
+      if (this.quiz.QID == QID && this.answer_Q.None == 0) {
         this.quiz.active = active;
         this.quiz.date = date;
-        this.minutes = this.padTime(minutes)
-        this.seconds ="00"
+        this.minutes = this.padTime(minutes);
+        this.seconds = "00";
         this.totalTime = minutes * 60;
-        this.timer = setInterval(()=>{
-          if(this.minutes == "00" && this.seconds == "00"){
+        this.timer = setInterval(() => {
+          if (this.minutes == "00" && this.seconds == "00") {
             return;
           }
           this.totalTime--;
           this.minutes = this.padTime(Math.floor(this.totalTime / 60));
-          this.seconds = this.padTime(this.totalTime - (this.minutes * 60));
+          this.seconds = this.padTime(this.totalTime - this.minutes * 60);
         }, 1000);
       }
-    })
-    this.socket.on("quizStop",(data)=>{
-      const {active, QID} = data;
-      if(this.quiz.QID == QID && this.answer_Q.None == 0){
+    });
+    this.socket.on("quizStop", data => {
+      const { active, QID } = data;
+      if (this.quiz.QID == QID && this.answer_Q.None == 0) {
         this.quiz.active = active;
-        clearInterval(this.timer)
-        this.timer= null;
+        clearInterval(this.timer);
+        this.timer = null;
       }
-    })
+    });
   },
   mounted() {
     if (this.answer_Q.None == 0) {
@@ -235,15 +220,17 @@ export default {
   },
   data() {
     return {
+      radioValue: [],
+      checkValue: [],
       steps: this.quiz.quizList.length,
       e1: 1,
       answer: [],
       ans: "",
       quizType: [],
-      minutes:"0",
-      seconds:"00",
-      totalTime:0,
-      timer:null
+      minutes: "0",
+      seconds: "00",
+      totalTime: 0,
+      timer: null
     };
   },
   props: {
@@ -253,8 +240,8 @@ export default {
     num: Number
   },
   methods: {
-    padTime: function(time){
-      return (time < 10 ? '0' : '') + time;
+    padTime: function(time) {
+      return (time < 10 ? "0" : "") + time;
     },
     getPercent(array) {
       var sum = 0;
@@ -313,7 +300,7 @@ export default {
         studentID: this.$store.state.studentID,
         userName: userName,
         classCode: classCode,
-        studentID:this.$store.state.studentID,
+        studentID: this.$store.state.studentID,
         QID: QID,
         quizType: quizType,
         answer: answer

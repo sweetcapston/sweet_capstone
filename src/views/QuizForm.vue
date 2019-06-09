@@ -209,7 +209,7 @@ export default {
           return 
         }
         let content = [];
-        let point = [];
+        let point;
         let correct;
         let doc, checkedbox;
         let count;
@@ -220,7 +220,7 @@ export default {
           setTimeout(()=> pointDoc.focus(), 50) 
           return;
         }
-        point.push(pointDoc.value);
+        point=pointDoc.value;
         switch (quizType) {
           case "1":
             doc = document.querySelectorAll(`.type1_${j+1}`);

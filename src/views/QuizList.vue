@@ -52,7 +52,7 @@
             :step="n"
             editable
             color="cyan lighten-1"
-          >문항 {{ n }} ({{quiz.quizList[n-1].point[0]}}점)</v-stepper-step>
+          >문항 {{ n }} ({{quiz.quizList[n-1].point}}점)</v-stepper-step>
           <v-divider v-if="n !== steps" :key="n"></v-divider>
         </template>
       </v-stepper-header>
@@ -62,7 +62,7 @@
           <v-card class="mb-5" color="grey lighten-3" min-height="250px">
             <v-container fluid>
               <!-- TODO: 그림 받는 div -->
-              <v-flex xs12 sm12 md6 lg6 xl6 :class="'imgQues_'+`${quiz.QID}_`+`${n-1}`">{{n}}.</v-flex>
+              <v-flex style="font-size:1.5rem; font-weight:600" xs12 sm12 md6 lg6 xl6 :class="'imgQues_'+`${quiz.QID}_`+`${n-1}`">{{n}}.</v-flex>
               <!-- FIXME: 라디오버튼 -->
               <v-radio-group v-show="quiz.quizList[n-1].quizType == 1" column>
                 <div v-for="c in quiz.quizList[n-1].content.length" :key="`${c}-radio`">

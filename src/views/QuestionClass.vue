@@ -6,9 +6,9 @@
           <span>질문 클래스</span>
         </div>
 
-        <div id="chat-message-list">
+        <div id="chat-message-list" v-if="questionList.length!=0">
           <template v-for="(ques,index) in questionList">
-            <v-flex id="message" :key="ques.index">
+            <v-flex  id="message" :key="ques.index">
               <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
 
               <v-divider/>
@@ -37,7 +37,9 @@
             </v-flex>
           </template>
         </div>
-
+        <div id="chat-message-list" v-else>
+          <v-img :src="require('@/assets/openClass.png')" height="100"><div><h1>이곳에다가 질문을 하세요.</h1></div></v-img>
+        </div>
         <div id="chat-form">
           <template>
             <v-list-tile avatar>

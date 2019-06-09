@@ -1,45 +1,35 @@
 <template>
-  <apexchart type="bar" height="350" :options="chartOptions2" :series="quizResult"/>
-</template>
-
-<script>
-export default {
-  props: {
-    quizResult: Array
-  },
-  data() {
-    return {
-      chartOptions2: {
+  <div>
+    <apexchart
+      type="bar"
+      height="330"
+      :options="{
         plotOptions: {
           bar: {
-            barHeight: "100%",
+            barHeight: '100%',
             distributed: true,
             horizontal: true,
             dataLabels: {
-              position: "bottom"
+              position: 'bottom'
             }
           }
         },
         colors: [
-          "#33b2df",
-          "#546E7A",
-          "#d4526e",
-          "#13d8aa",
-          "#A5978B",
-          "#2b908f",
-          "#f9a3a4",
-          "#90ee7e",
-          "#f48024",
-          "#69d2e7"
+          '#13d8aa',
+          '#A5978B',
+          '#2b908f',
+          '#f9a3a4',
+          '#f48024',
+          '#69d2e7'
         ],
         dataLabels: {
           enabled: true,
-          textAnchor: "start",
+          textAnchor: 'start',
           style: {
-            colors: ["#fff"]
+            colors: ['#fff']
           },
           formatter: function(val, opt) {
-            return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val;
+            return opt.w.globals.labels[opt.dataPointIndex] + ': ' + val;
           },
           offsetX: 0,
           dropShadow: {
@@ -49,10 +39,10 @@ export default {
 
         stroke: {
           width: 1,
-          colors: ["#fff"]
+          colors: ['#fff']
         },
         xaxis: {
-          categories: ["내 점수", "Max", "Min", "Mid", "Avg", "Top5 Avg"]
+          categories: ['내 점수', 'Max', 'Min', 'Mid', 'Avg', 'Top5 Avg']
         },
         yaxis: {
           labels: {
@@ -60,28 +50,49 @@ export default {
           }
         },
         title: {
-          text: "퀴즈 결과",
-          align: "center",
+          text: this.qName,
+          align: 'center',
           floating: true
         },
         subtitle: {
-          text: "축하합니다! 1등 입니다.",
-          align: "center"
+          text: this.msg,
+          align: 'center'
         },
         tooltip: {
-          theme: "dark",
+          theme: 'dark',
           x: {
             show: false
           },
           y: {
             title: {
               formatter: function() {
-                return "";
+                return '';
               }
             }
           }
         }
-      }
+      }"
+      :series="quizResult"
+    />
+  </div>
+</template>
+
+<script>
+export default {
+  updated() {
+    if (this.quizResult[0].data[0] >= this.quizResult[0].data[4]) {
+      this.msg = "잘했습니다! 평균보다 높습니다.";
+    } else {
+      this.msg = "큰일났습니다! 평균보다 낮습니다.";
+    }
+  },
+  props: {
+    quizResult: Array,
+    qName: String
+  },
+  data() {
+    return {
+      msg: ""
     };
   }
 };
