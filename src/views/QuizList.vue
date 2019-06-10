@@ -122,8 +122,8 @@
               v-html= "`${n}. ${quizList[n-1].quizQuestion}`"
               />
               <!-- FIXME: 라디오버튼 -->
-              <v-radio-group v-show="quizList[n-1].quizType == 1" column>
-                <div v-for="c in quizList[n-1].content.length" :key="`${c}-radio`">
+              <v-radio-group v-show="quiz.quizList[n-1].quizType == 1" column>
+                <div style="padding-top:6px" v-for="c in quiz.quizList[n-1].content.length" :key="`${c}-radio`">
                   <v-radio
                     disabled
                     value="true"

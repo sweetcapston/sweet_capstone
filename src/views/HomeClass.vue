@@ -1,133 +1,125 @@
 <template>
-  <v-container
-    fluid
-    grid-list-xl
-    fill-height>
-    <v-layout
-      justify-center
-      align-center
-    >
-      <v-flex xs12>
-        <v-layout
-          row
-          wrap>              
-          <v-flex
-            md6
-            sm12>
-            <material-card class="v-card-profile">
-              <v-avatar
-                slot="offset"
-                class="mx-auto d-block"
-                size="80"
-                color="red"
-              >
-                <v-icon 
-                  class="white--text"
-                  size="30"
-                >mdi-information-outline</v-icon>
-              </v-avatar>
-              <v-card-text class="text-xs-center">
-                <p
-                  class="category font-weight-light">
-                  클래스 이름 : {{this.$store.state.currentClass.className}}
-                </p>
-                <p
-                  class="category font-weight-light">
-                  클래스 코드 : {{this.$store.state.currentClass.classCode}}
-                </p>
-                <p
-                  class="category font-weight-light">
-                  교수 이름 : {{this.$store.state.currentClass.profName}}
-                </p>
-                <div class="text-xs-right">
-                  <v-btn
-                    color="primary"
-                    round
-                    class="font-weight-light Add"
-                    @click="addClass()"
-                    v-if="this.$store.getters.getIdentity == 1 && (this.$store.state.checkApply == -1)"
-                  >수강하기</v-btn>
-                </div>                    
-              </v-card-text>
-            </material-card>
+  <v-layout fill-height>
+    <v-flex md6 sm12 style="padding-right:15px">
+      <material-card class="v-card-profile">
+        <v-avatar slot="offset" class="mx-auto d-block" size="80" color="green">
+          <v-icon class="white--text" size="30">mdi-information-outline</v-icon>
+        </v-avatar>
+        <v-card-text class="text-xs-center">
+          <modal-create-class-form/>
+          <span
+            class="category font-weight-light"
+          >클래스이름 :{{this.$store.state.currentClass.className}}</span>
+          <span
+            class="category font-weight-light"
+          >클래스코드 :{{this.$store.state.currentClass.classCode}}  </span>
+          <span
+            class="category font-weight-light"
+          >교수이름 :{{this.$store.state.currentClass.profName}}  </span>
+          <p>
+            <strong>질문합계:</strong> n
+            <strong>설문합계:</strong> n
+            <strong>퀴즈합계:</strong> n
+            <strong>수강인원 수:</strong> n
+          </p>
 
-            <material-notification
-              class="mb-3"
-              color="info"
-              dismissible
-            >
-              <strong>INFO</strong> - This is a regular notification made with `color="info"`
-            </material-notification>
+          <div class="text-xs-right">
+            <v-btn
+              color="primary"
+              round
+              class="font-weight-light"
+              @click="addClass()"
+              v-if="this.$store.getters.getIdentity == 1 && (this.$store.state.checkApply == -1)"
+            >수강하기</v-btn>
+          </div>
+        </v-card-text>
+      </material-card>
 
-            <material-notification
-              class="mb-3"
-              color="success"
-              dismissible
-            >
-              <strong>SUCCESS</strong> - This is a regular notification made with `color="success"`
-            </material-notification>
+      <material-notification
+        v-for="(i,index) in this.newQuestion.length"
+        :key="index"
+        class="mb-3"
+        color="info"
+        dismissible
+      >
+      <div style="width:100%;" @click="movePage('question')">
+        <strong>오늘의 질문 {{i}}</strong>
+        <span>- {{newQuestion[index]}}.</span>
+        </div>
+      </material-notification>
 
-            <material-notification
-              class="mb-3"
-              color="warning"
-              dismissible
-            >
-              <strong>WARNING</strong> - This is a regular notification made with `color="warning"`
-            </material-notification>
+      <div v-if="this.$store.state.Identity ==1">
+        <material-notification
+          class="mb-3"
+          color="warning"
+          dismissible
+          v-for="(i,index) in this.newSurvey.length"
+          :key="index"
+        >
+        <div style="width:100%;" @click="movePage('survey')">
+          <strong>오늘의 설문 {{i}}</strong>
+          <span>- {{newSurvey[index].Name}}.</span>
+          </div>
+        </material-notification>
 
-            <material-notification
-              class="mb-3"
-              color="error"
-              dismissible
-            >
-              <strong>DANGER</strong> - This is a regular notification made with `color="error"`
-            </material-notification>
-<!--
-            <material-notification
-              class="mb-3"
-              color="purple"
-              dismissible
-            >
-              <strong>PRIMARY</strong> - This is a regular notification made with `color="purple"`
-            </material-notification>
--->
-          </v-flex>
+        <material-notification
+          class="mb-3"
+          color="purple"
+          dismissible
+          v-for="(i,index) in this.newQuiz.length"
+          :key="index"
+        >
+          <div style="width:100%;" @click="movePage('quiz')">
+            <strong>오늘의 퀴즈 {{i}}</strong>
+            <span>- {{newQuiz[index].Name}}.</span>
+          </div>
+        </material-notification>
+      </div>
+    </v-flex>
 
-          <v-flex
-            md6
-            sm12>
-            <vue-cal 
-              weight="530"
-              height="600"
-              :time="false" 
-              class="vuecal--blue-theme"
-              default-view='month'
-              :disable-views="['day', 'week']"
-            />
-
-            
-          </v-flex>
-        </v-layout>            
-      </v-flex>
-    </v-layout>
-      <v-tour v-if="this.$store.state.Identity==1 && this.$store.state.classList.length == 0" name="classAdd" :steps="guide"></v-tour>
-  </v-container>
+    <v-flex md6 sm12 style="padding-left:15px; padding-top:27px; padding-bottom:18px;">
+      <vue-cal
+        height="100%"
+        :time="false"
+        class="vuecal--blue-theme"
+        default-view="month"
+        :disable-views="['day', 'week']"
+      />
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
-import {Stud} from "@/api";
-import VueCal from 'vue-cal'
-import 'vue-cal/dist/vuecal.css'
+import { Stud, Prof } from "@/api";
+import VueCal from "vue-cal";
+import "vue-cal/dist/vuecal.css";
 
 export default {
-  created(){
-    Stud.classHome(
-            this.$store.state.currentClass.classCode,
-            this.$store.state.userID
-    ).then(res => {
-      if (res.data === "false") alert("질문차트 가져오기 실패");
-
-    });
+  created() {
+    if (this.$store.state.Identity == 1) {
+      Stud.classHome(
+        this.$store.state.currentClass.classCode,
+        this.$store.state.userID
+      ).then(res => {
+        if (res.data === "false") alert("홈클래스 정보 가져오기 실패");
+        else {
+          this.newQuestion = res.data.newQuestion;
+          this.newSurvey = res.data.newSurvey;
+          this.newQuiz = res.data.newQuiz;
+        }
+      });
+    } else if (this.$store.state.Identity == 2) {
+      Prof.classHome(
+        this.$store.state.currentClass.classCode,
+        this.$store.state.userID
+        
+      ).then(res => {
+        if (res.data === "false") alert("홈클래스 정보 가져오기 실패");
+        else {
+          this.newQuestion = res.data;
+        }
+      });
+    }
   },
     components: { VueCal },
     name: "classAdd",
@@ -144,116 +136,71 @@ export default {
                 }
             ],
       color: null,
-      colors: [
-        'purple',
-        'info',
-        'success',
-        'warning',
-        'error'
-      ],
-      top: true,
-      bottom: false,
-      left: false,
-      right: false,
-      snackbar: false,
-      type: 'month',
-      start: '2019-05-01',
-      end: '2019-05-06',
-      typeOptions: [
-        { text: 'Day', value: 'day' },
-        { text: '4 Day', value: '4day' },
-        { text: 'Week', value: 'week' },
-        { text: 'Month', value: 'month' },
-        { text: 'Custom Daily', value: 'custom-daily' },
-        { text: 'Custom Weekly', value: 'custom-weekly' }
-      ],
-      events: [
-        {
-          title: 'Vacation',
-          details: 'Going to the beach!',
-          date: '2019-05-01',
-          open: false
-        },
-        {
-          title: 'Meeting',
-          details: 'Spending time on how we do not have enough time',
-          date: '2019-05-07',
-          open: false
-        },
-        {
-          title: '30th Birthday',
-          details: 'Celebrate responsibly',
-          date: '2019-05-03',
-          open: false
-        },
-        {
-          title: 'New Year',
-          details: 'Eat chocolate until you pass out',
-          date: '2019-05-01',
-          open: false
-        },
-        {
-          title: 'Conference',
-          details: 'Mute myself the whole time and wonder why I am on this call',
-          date: '2019-05-21',
-          open: false
-        },
-        {
-          title: 'Hackathon',
-          details: 'Code like there is no tommorrow',
-          date: '2019-06-01',
-          open: false
-        }
-      ]
-    }
+      colors: ["purple", "info", "success", "warning", "error"],
+      newQuestion: [],
+      newSurvey: [],
+      newQuiz: [],
+      fab: false
+    };
   },
   computed: {
     // convert the list of events into a map of lists keyed by date
-    eventsMap () {
-      const map = {}
-      this.events.forEach(e => (map[e.date] = map[e.date] || []).push(e))
-      return map
+    eventsMap() {
+      const map = {};
+      this.events.forEach(e => (map[e.date] = map[e.date] || []).push(e));
+      return map;
     }
   },
   methods: {
-    open (event) {
-      alert(event.title)
+    editClass() {
+      alert("haha");
+    },
+    floating: function() {
+      this.fab = !this.fab;
+    },
+    movePage(page) {
+      this.$router.push(
+        `/class/` + this.$store.state.currentClass.classCode + `/${page}`
+      );
+    },
+    open(event) {
+      alert(event.title);
     },
     addClass() {
       Stud.classAdd(this.$store.state.currentClass.classCode).then(res => {
-        if(res.data === 'false') alert('클래스 수강 실패');
-        else{
+        if (res.data === "false") alert("클래스 수강 실패");
+        else {
           // currentClass객체로 하면 오류남.
           this.$store.commit("addClassList", {
             className: this.$store.state.currentClass.className,
             classCode: this.$store.state.currentClass.classCode,
             profName: this.$store.state.currentClass.profName
           });
-          this.$store.commit('setCheckApply', 1);
-        } 
-      })
+          this.$store.commit("setCheckApply", 1);
+        }
+      });
     },
-    outClass(){
+    outClass() {
       this.$store.commit("removeCurrentClass");
-      this.$router.push({name: 'main'});
+      this.$router.push({ name: "main" });
     },
-    snack (...args) {
-      this.top = false
-      this.bottom = false
-      this.left = false
-      this.right = false
+    snack(...args) {
+      this.top = false;
+      this.bottom = false;
+      this.left = false;
+      this.right = false;
 
       for (const loc of args) {
-        this[loc] = true
+        this[loc] = true;
       }
 
-      this.color = this.colors[Math.floor(Math.random() * this.colors.length)]
+      this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
 
-      this.snackbar = true
+      this.snackbar = true;
     }
   },
     mounted: function () {
-          this.$tours['classAdd'].start()
+          // this.$tours['classAdd'].start()
     }
 }
 </script>

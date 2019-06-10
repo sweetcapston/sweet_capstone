@@ -12,7 +12,7 @@
     <v-img :src="image" height="100%">
       <v-layout class="fill-height" tag="v-list" column>
         <v-list-tile avatar>
-          <v-list-tile-avatar color="white" @click="moveToMain()">
+          <v-list-tile-avatar color="white" @click="outClass()">
             <v-img :src="require('@/assets/mini.png')" height="45" contain/>
           </v-list-tile-avatar>
           <v-list-tile-title
@@ -116,9 +116,6 @@ export default {
       this.$router.push(
         link.to + this.$store.state.currentClass.classCode + link.to2
       );
-    },
-    moveToMain: function() {
-      this.$router.push({ name: "main" });
     },
     outClass(){
       this.$store.commit("removeCurrentClass");

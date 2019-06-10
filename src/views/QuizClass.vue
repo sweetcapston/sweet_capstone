@@ -15,7 +15,7 @@
         v-bind:socket="socket"
         :key="n"
       />
-      <div v-if="quizList.length<1" style="padding-left:10px"><h4>데이터가 없습니다.</h4></div>
+      <div v-if="quizList.length<1" style="padding-left:10px"><h4>등록된 퀴즈가 없습니다.</h4></div>
       </material-card>
     </v-expansion-panel>
     <v-expansion-panel v-else >
@@ -27,7 +27,7 @@
         v-bind:socket="socket"
         :key="_id"
       />
-      <div v-if="quizList.length<1" style="padding-left:10px"><h4>데이터가 없습니다.</h4></div>
+      <div v-if="quizList.length + this.dataCheck <1" style="padding-left:10px"><h4>등록된 퀴즈가 없습니다.</h4></div>
       </material-card>
     </v-expansion-panel>
   </div>
@@ -116,7 +116,8 @@ export default {
       steps: [],
       quizList: [],
       completeList: [],
-      formShow: false
+      formShow: false,
+      dataCheck: 0
     };
   },
   methods: {
@@ -132,11 +133,12 @@ export default {
       setTimeout(()=>{
         document.querySelector(".createQuiz .v-expansion-panel__header").click()
       },50)
-      
+      this.dataCheck =2;
       this.$EventBus.$emit("edit", "-1")
     },
     cancelQuiz(){
       this.formShow = !this.formShow;
+      this.dataCheck = 0;
     },
   },
   beforeRouteLeave(to, from, next) {

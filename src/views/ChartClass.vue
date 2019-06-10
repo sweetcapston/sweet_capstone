@@ -23,6 +23,7 @@
                   <h4>퀴즈결과</h4>
                 </v-card-title>
                 <v-divider></v-divider>
+                <div v-if="quizList.length==0">&nbsp;&nbsp;등록된 퀴즈가 없습니다.</div>
                 <v-expansion-panel v-if="this.$store.state.Identity==1">
                   <v-expansion-panel-content
                     v-for="(item,index) in quizList"
@@ -44,19 +45,15 @@
                         v-else
                       >응시하지 않은 퀴즈</v-card-text>
                     </template>
-                    <!-- TODO:퀴즈 결과 데이터 분석 -->
-                    <p>top5: {{quizStatistics.top5}}</p>
-                    <p>avg: {{quizStatistics.avg}}</p>
-                    <p>mid: {{quizStatistics.mid}}</p>
-                    <p>max: {{quizStatistics.max}}</p>
-                    <p>min: {{quizStatistics.min}}</p>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
+
                 <v-expansion-panel v-else-if="this.$store.state.Identity==2">
                   <v-expansion-panel-content
                     v-for="(item,index) in quizList"
                     :key="index"
                     style="padding:3px 2px 2px 3px"
+                    disable
                   >
                     <template
                       v-slot:header
@@ -64,29 +61,31 @@
                       v-bind:quizStatistics="this.quizStatistics"
                     >
                       <v-card-text
-                        style="padding: 0px 0px 0px 15px;"
+                        style="padding: 0px 0px 0px 15px; background:aliceblue"
                         @click="selectQuiz(quizList[index].QID, quizList[index].QID, myAnswer_Q[index].score, quizList[index].quizName)"
                       >{{quizList[index].quizName}}</v-card-text>
                     </template>
                     <!-- TODO:퀴즈 결과 데이터 분석 -->
-                    <div v-for="idx in quizCorrectRate.length" :key="idx">
-                      <p>{{idx}}번문제 정답률: {{quizCorrectRate[idx-1]}}</p>
-                    </div>
+                    <apexchart
+                      type="radialBar"
+                      height="350"
+                      :options="chartOptions2"
+                      :series="series2"
+                    />
+                    <v-data-table
+                      style="height:100%;"
+                      :headers="headers"
+                      :items="quizCorrectRate"
+                      class="elevation-1"
+                    >
+                      <template v-slot:items="pp">
+                        <td>{{ pp.index+1 }}</td>
+                        <td>{{ quizPoint[pp.index] }}</td>
+                        <td>{{ quizCorrectRate[pp.index] }}%</td>
+                      </template>
+                    </v-data-table>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
-                <!-- <v-list dense v-for="(item,index) in quizList" :key="index">
-                  <div v-if="myAnswer_Q[index].None !=0">
-                  <v-list-tile
-                    @click="selectQuiz(myAnswer_Q[index].QID, quizList[index].QID,myAnswer_Q[index].score)"
-                  >
-                    <v-list-tile-content>{{item.quizName}}</v-list-tile-content>
-                    <v-list-tile-content
-                      v-if="myAnswer_Q[index].None !=0"
-                      class="align-end"
-                    >{{myAnswer_Q[index].score}}</v-list-tile-content>
-                  </v-list-tile>
-                  </div>
-                </v-list>-->
               </v-card>
             </v-flex>
             <v-flex row xs12 sm12 md6 lg6 xl6 style="padding-left:7px">
@@ -104,6 +103,9 @@
     <!-- TODO: 설문통계 -->
     <v-flex wrap xs12 sm12 md6 lg6 xl6 child-flex style="padding:5px 5px 5px 8px;">
       <material-card color="crimson" title="설문 클래스 통계" text="Survey Data">
+        <div v-if="surveyList.length==0">
+          <h3>등록된 설문이 없습니다.</h3>
+        </div>
         <SurveyResult v-bind:surveyList="surveyList"/>
       </material-card>
     </v-flex>
@@ -182,6 +184,47 @@ export default {
   },
   data() {
     return {
+      series2: [],
+      chartOptions2: {
+        plotOptions: {
+          radialBar: {
+            dataLabels: {
+              name: {
+                fontSize: "22px"
+              },
+              value: {
+                fontSize: "16px"
+              },
+              total: {
+                show: true,
+                label: "퀴즈통계",
+                formatter: function(w) {
+                  return;
+                }
+              }
+            }
+          }
+        },
+        labels: ["Top5", "Avg", "Max", "Min", "Mid"]
+      },
+      quizPoint: "",
+      headers: [
+        {
+          text: "문제",
+          align: "left",
+          sortable: false
+        },
+        {
+          text: "배점",
+          align: "left",
+          sortable: false
+        },
+        {
+          text: "정답률",
+          align: "left",
+          sortable: false
+        }
+      ],
       quizCorrectRate: [],
       questionList: [],
       surveyList: [],
@@ -287,6 +330,11 @@ export default {
           }
         });
       } else if (this.$store.state.Identity == 2) {
+        this.quizResult = [];
+        this.quizStatistics = [];
+        this.quizCorrectRate = [];
+        this.quizPoint = "";
+        this.series2 = [];
         Prof.loadStatisticsQuiz(
           this.$store.state.currentClass.classCode,
           QID
@@ -296,6 +344,14 @@ export default {
             this.quizResult = res.data.List;
             this.quizStatistics = res.data.data;
             this.quizCorrectRate = res.data.correctRate;
+            this.quizPoint = res.data.point;
+            let qData = [];
+            qData.push(res.data.data.top5);
+            qData.push(res.data.data.avg);
+            qData.push(res.data.data.max);
+            qData.push(res.data.data.mid);
+            qData.push(res.data.data.min);
+            this.series2 = qData;
           }
         });
       }

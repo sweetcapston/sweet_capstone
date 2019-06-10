@@ -1,7 +1,9 @@
 <template>
-  <v-app>
+
+  <v-app>  
     <v-toolbar class="v-toolbar--fixed white--text elevation-0 transparent">
-      <img class="logo" src="@/assets/logo_white.svg" height="50">
+      <img class="hidden-md-and-up" src="@/assets/logo_white.svg" height="25">
+      <img class="hidden-md-and-down" src="@/assets/logo_white.svg" height="50">
       <v-spacer />
       <sui-button class="transparent" positive @click="OpenLogin">로그인</sui-button>
       <sui-button class="cyan lighten-1" positive @click.native="OpenRegister" id="signbtn">회원가입</sui-button>
@@ -29,18 +31,13 @@
           </v-layout>
         </v-parallax>
       </section>
-      <section id="how-to-use" class="hidden-md-and-up">
+
+      <section id="how-to-use">
         <v-layout
           column
           wrap
           class="my-5"
-        />
-      </section>
-      <section id="how-to-use" class="hidden-md-and-down">
-        <v-layout
-          column
-          wrap
-          class="my-5"
+          align-center
         >
           <v-flex xs12 sm4 class="my-3">
             <div class="text-xs-center">
@@ -48,79 +45,167 @@
             </div>
           </v-flex>
 
-            <v-btn-toggle v-model="toggle_one" mandatory>                  
-              <v-layout align-center justify-center>
-                <v-btn class="transparent">
-                  <v-card class="elevation-0 transparent">
-                    <v-card-text class="text-xs-center">
-                      <v-icon x-large class="cyan--text text--lighten-1">mdi-comment-question-outline</v-icon>
-                    </v-card-text>
-                    <v-card-title primary-title class="layout justify-center">
-                      <div class="headline">클래스 생성</div>
-                    </v-card-title>
-                  </v-card>
-                </v-btn>
+          <v-flex xs12 class="how-to-use-big">
+            <v-container grid-list-xl>
+              <v-btn-toggle v-model="toggle_one" mandatory>
+                <v-layout column wrap align-center>
+                  <v-flex>
+                    <v-btn flat>
+                      <v-card class="elevation-0 transparent">
+                        <v-card-text class="text-xs-center">
+                          <v-icon x-large class="cyan--text text--lighten-1">mdi-google-classroom</v-icon>
+                        </v-card-text>
+                        <v-card-title primary-title class="layout justify-center">
+                          <div class="headline">클래스 생성</div>
+                        </v-card-title>
+                      </v-card>
+                    </v-btn>
 
-                <v-btn class="transparent">
-                  <v-card class="elevation-0 transparent">
-                    <v-card-text class="text-xs-center">
-                      <v-icon x-large class="cyan--text text--lighten-1">mdi-comment-question-outline</v-icon>
-                    </v-card-text>
-                    <v-card-title primary-title class="layout justify-center">
-                      <div class="headline">클래스 입장</div>
-                    </v-card-title>
-                  </v-card>
-                </v-btn>
+                    <v-btn flat>   
+                      <v-card class="elevation-0 transparent">
+                        <v-card-text class="text-xs-center">
+                          <v-icon x-large class="cyan--text text--lighten-1">mdi-application-import</v-icon>
+                        </v-card-text>
+                        <v-card-title primary-title class="layout justify-center">
+                          <div class="headline">클래스 입장</div>
+                        </v-card-title>
+                      </v-card>                      
+                    </v-btn>
 
-                <v-btn class="transparent">
-                  <v-card class="elevation-0 transparent">
-                    <v-card-text class="text-xs-center">
-                      <v-icon x-large class="cyan--text text--lighten-1">mdi-comment-question-outline</v-icon>
-                    </v-card-text>
-                    <v-card-title primary-title class="layout justify-center">
-                      <div class="headline">질문</div>
-                    </v-card-title>
-                  </v-card>
-                </v-btn>
+                    <v-btn flat>                      
+                      <v-card class="elevation-0 transparent">
+                        <v-card-text class="text-xs-center">
+                          <v-icon x-large class="cyan--text text--lighten-1">mdi-comment-question-outline</v-icon>
+                        </v-card-text>
+                        <v-card-title primary-title class="layout justify-center">
+                          <div class="headline">질문</div>
+                        </v-card-title>
+                      </v-card>                      
+                    </v-btn>
+                  </v-flex>
 
-                <v-btn class="transparent">
-                  <v-card class="elevation-0 transparent">
-                    <v-card-text class="text-xs-center">
-                      <v-icon x-large class="cyan--text text--lighten-1">mdi-clipboard-text-outline</v-icon>
-                    </v-card-text>
-                    <v-card-title primary-title class="layout justify-center">
-                      <div class="headline text-xs-center">설문</div>
-                    </v-card-title>
-                  </v-card>
-                </v-btn>
+                  <v-flex>
+                    <v-btn flat>                      
+                      <v-card class="elevation-0 transparent">
+                        <v-card-text class="text-xs-center">
+                          <v-icon x-large class="cyan--text text--lighten-1">mdi-clipboard-text-outline</v-icon>
+                        </v-card-text>
+                        <v-card-title primary-title class="layout justify-center">
+                          <div class="headline">설문</div>
+                        </v-card-title>
+                      </v-card>                      
+                    </v-btn>
 
-                <v-btn class="transparent">
-                  <v-card class="elevation-0 transparent">
-                    <v-card-text class="text-xs-center">
-                      <v-icon x-large class="cyan--text text--lighten-1">mdi-quora</v-icon>
-                    </v-card-text>
-                    <v-card-title primary-title class="layout justify-center">
-                      <div class="headline text-xs-center">퀴즈</div>
-                    </v-card-title>
-                  </v-card>
-                </v-btn>
+                    <v-btn flat>                      
+                      <v-card class="elevation-0 transparent">
+                        <v-card-text class="text-xs-center">
+                          <v-icon x-large class="cyan--text text--lighten-1">mdi-quora</v-icon>
+                        </v-card-text>
+                        <v-card-title primary-title class="layout justify-center">
+                          <div class="headline">퀴즈</div>
+                        </v-card-title>
+                      </v-card>                      
+                    </v-btn>
 
-                <v-btn class="transparent">
-                  <v-card class="elevation-0 transparent">
-                    <v-card-text class="text-xs-center">
-                      <v-icon x-large class="cyan--text text--lighten-1">mdi-chart-bar</v-icon>
-                    </v-card-text>
-                    <v-card-title primary-title class="layout justify-center">
-                      <div class="headline text-xs-center">통계</div>
-                    </v-card-title>
-                  </v-card>
-                </v-btn>
-              </v-layout>
-            </v-btn-toggle>
- 
+                    <v-btn flat>                    
+                      <v-card class="elevation-0 transparent">
+                        <v-card-text class="text-xs-center">
+                          <v-icon x-large class="cyan--text text--lighten-1">mdi-chart-bar</v-icon>
+                        </v-card-text>
+                        <v-card-title primary-title class="layout justify-center">
+                          <div class="headline">통계</div>
+                        </v-card-title>
+                      </v-card> 
+                    </v-btn>
+                  </v-flex>
+                </v-layout>
+              </v-btn-toggle>
+            </v-container>
+          </v-flex>
+
+
+
+          <v-flex xs12 class="how-to-use-small">
+            <v-container grid-list-xl>
+              <v-btn-toggle v-model="toggle_one" mandatory>
+                <v-layout column wrap align-center>
+                  <v-flex>
+                    <v-btn flat>
+                      <v-card class="elevation-0 transparent">
+                        <v-card-text class="text-xs-center">
+                          <v-icon x-large class="cyan--text text--lighten-1">mdi-google-classroom</v-icon>
+                        </v-card-text>
+                        <v-card-title primary-title class="layout justify-center">
+                          <div class="p2">클래스 생성</div>
+                        </v-card-title>
+                      </v-card>
+                    </v-btn>
+
+                    <v-btn flat>   
+                      <v-card class="elevation-0 transparent">
+                        <v-card-text class="text-xs-center">
+                          <v-icon x-large class="cyan--text text--lighten-1">mdi-application-import</v-icon>
+                        </v-card-text>
+                        <v-card-title primary-title class="layout justify-center">
+                          <div class="p2">클래스 입장</div>
+                        </v-card-title>
+                      </v-card>                      
+                    </v-btn>
+
+                    <v-btn flat>                      
+                      <v-card class="elevation-0 transparent">
+                        <v-card-text class="text-xs-center">
+                          <v-icon x-large class="cyan--text text--lighten-1">mdi-comment-question-outline</v-icon>
+                        </v-card-text>
+                        <v-card-title primary-title class="layout justify-center">
+                          <div class="p2">질문</div>
+                        </v-card-title>
+                      </v-card>                      
+                    </v-btn>
+                  </v-flex>
+
+                  <v-flex>
+                    <v-btn flat>                      
+                      <v-card class="elevation-0 transparent">
+                        <v-card-text class="text-xs-center">
+                          <v-icon x-large class="cyan--text text--lighten-1">mdi-clipboard-text-outline</v-icon>
+                        </v-card-text>
+                        <v-card-title primary-title class="layout justify-center">
+                          <div class="p2">설문</div>
+                        </v-card-title>
+                      </v-card>                      
+                    </v-btn>
+
+                    <v-btn flat>                      
+                      <v-card class="elevation-0 transparent">
+                        <v-card-text class="text-xs-center">
+                          <v-icon x-large class="cyan--text text--lighten-1">mdi-quora</v-icon>
+                        </v-card-text>
+                        <v-card-title primary-title class="layout justify-center">
+                          <div class="p2">퀴즈</div>
+                        </v-card-title>
+                      </v-card>                      
+                    </v-btn>
+
+                    <v-btn flat>                    
+                      <v-card class="elevation-0 transparent">
+                        <v-card-text class="text-xs-center">
+                          <v-icon x-large class="cyan--text text--lighten-1">mdi-chart-bar</v-icon>
+                        </v-card-text>
+                        <v-card-title primary-title class="layout justify-center">
+                          <div class="p2">통계</div>
+                        </v-card-title>
+                      </v-card> 
+                    </v-btn>
+                  </v-flex>
+                </v-layout>
+              </v-btn-toggle>
+            </v-container>
+          </v-flex>
+          
         </v-layout>
 
-        <v-layout>
+        <v-layout class="gif">
           <v-card 
             height="600" 
             width="100%"
@@ -153,13 +238,14 @@
         </v-parallax>
       </section>
 
+
       <section id="contact team">
         <v-container grid-list-xl>
-          <v-layout row wrap justify-center class="my-5">
-            <v-flex xs12 sm4>
+          <v-layout row wrap justify-center class="my-5">           
+            <v-flex xs12 sm4 offset-sm1>
               <v-card class="elevation-0 transparent">
                 <v-card-title primary-title class="layout justify-center">
-                  <div class="headline">Our Team Info</div>
+                  <div class="headline">Company info</div>
                 </v-card-title>
                 <v-card-text>
                   Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare. 
@@ -168,9 +254,8 @@
                 </v-card-text>
               </v-card>
             </v-flex>
-            
             <v-flex xs12 sm4 offset-sm1>
-              <v-card class="elevation-0 transparent">
+              <v-card class="elevation-0 transparent">              
                 <v-card-title primary-title class="layout justify-center">
                   <div class="headline">Contact Us</div>
                 </v-card-title>
@@ -214,14 +299,12 @@ import ko from "vee-validate/dist/locale/ko.js";
 import {Auth} from "@/api";
 import VueSession from "vue-session";
 import Vue from "vue";
-
 const config = {
   locale: "ko",
   dictionary: {
     ko
   }
 };
-
 Vue.use(VeeValidate, config);
 Vue.use(SuiVue)
 Vue.use(VueSession);
@@ -229,6 +312,7 @@ Vue.use(VueSession);
 
 /* eslint-disable */
 export default {
+  
   data() {
     return {
       /* bottomNav: 'home' */
@@ -319,14 +403,38 @@ export default {
     background-position: center center;
     background-size: 60% 100%;
   }
-  /* .v-btn-toggle{ */
-    /* width:100% */
-  /* } */
-  .v-btn-toggle .v-btn {
-    width: 15%;
+  .theme--light.v-btn-toggle {
+    background: #fafafa;
+  }
+  .how-to-use-big .v-btn {
+    width: 200px;
     background-color: #fafafa;
   }
-  /* .v-btn-toggle .v-btn::before{
-    position:relative;
-  } */
+  .how-to-use-small .v-btn {
+    width: 100px;
+    background-color: #fafafa;
+  }
+  .v-btn-toggle--selected {
+    box-shadow: none;
+  }
+  @media only screen and (max-width: 600px) {
+  .gif {
+    display: none !important;
+    }
+  }
+  @media only screen and (min-width: 600px) {
+  .how-to-use-small {
+    display: none !important;
+    }
+  }
+  @media only screen and (max-width: 600px) {
+  .how-to-use-big {
+    display: none !important;
+    }
+  }
+  @media (min-width: 600px) {
+  .flex.offset-sm1 {
+    margin: 8.333333333333332%; 
+    }
+  }
 </style>

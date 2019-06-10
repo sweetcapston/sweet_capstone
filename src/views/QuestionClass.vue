@@ -5,7 +5,6 @@
         <div id="chat-title">
           <span>질문 클래스</span>
         </div>
-
         <div id="chat-message-list" v-if="questionList.length!=0">
           <template v-for="(ques,index) in questionList">
             <v-flex  id="message" :key="ques.index">
@@ -69,9 +68,14 @@
                   </v-btn>
                 </v-speed-dial>
                 <v-layout id ="textDiv">
-                  <v-list-tile-avatar>
-                    <img :src="image">
+                  <v-list-tile-avatar 
+                    color="gradient white--text" 
+                    large 
+                    fill-dot
+                  >
+                    <span>SA</span>
                   </v-list-tile-avatar>
+
 
                   <v-list-tile-content>
                     <v-layout id="full-width">
@@ -79,7 +83,6 @@
                         <v-card v-if="!ques.anonymous" flat>{{ques.userName}}</v-card>
                         <v-card v-else flat>익명</v-card>
                       </v-flex>
-
                       <v-flex xs12 sm8 md7 lg7 xl7 style="text-align: end">
                         <v-card flat>{{ques.date}}</v-card>
                       </v-flex>
@@ -102,7 +105,7 @@
           </template>
         </div>
         <div id="chat-message-list" v-else>
-          <v-img :src="require('@/assets/openClass.png')" height="100"><div><h1>이곳에다가 질문을 하세요.</h1></div></v-img>
+          <v-img :src="require('@/assets/question.png')" height="100"><div><h1>이곳에다가 질문을 하세요.</h1></div></v-img>
         </div>
         <div id="chat-form">
           <template>
@@ -110,7 +113,6 @@
               <v-list-tile-avatar color="gradient white--text" large fill-dot>
                 <img :src="image">
               </v-list-tile-avatar>
-
               <v-text-field
                 v-model="content"
                 hide-details

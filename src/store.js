@@ -11,7 +11,6 @@ export default new Vuex.Store({
     Identity: 0, // 1: 학생, 2: 교수, 3: 관리자
     userName:'', // 사용자 이름
     userID:'',
-    alram:true,
     studentID:'',
     checkApply: '', // 수광중인 클래스여부
     currentClass: { // 현재 클래스 정보

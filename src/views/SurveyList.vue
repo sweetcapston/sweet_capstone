@@ -95,7 +95,7 @@
               <span class="question-title" v-html= "`${index+1}. ${survey.surveyQuestion}`"/>
               <!-- FIXME: 라디오버튼 -->
               <v-radio-group v-show="survey.surveyType == 1" column>
-                <div v-for="c in survey.content.length" :key="`${c}-radio`">
+                <div style="padding-top:6px;" v-for="c in survey.content.length" :key="`${c}-radio`">
                   <v-radio disabled :id="`${c}`" color="cyan ligten-1">
                     <template v-slot:label>
                       <v-flex>

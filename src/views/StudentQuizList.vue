@@ -49,7 +49,7 @@
                 v-if="quiz.quizList[n-1].quizType == 1"
                 v-model="radioValue[n-1]"
               >
-                <div v-for="c in quiz.quizList[n-1].content.length" :key="`${c}-radio`">
+                <div style="padding-top:6px" v-for="c in quiz.quizList[n-1].content.length" :key="`${c}-radio`">
                   <v-radio
                     :id="`${c}`"
                     :class="`radioChennel ${c}`"
@@ -60,8 +60,7 @@
                   >
                     <template v-slot:label>
                       <v-flex>
-                        <span>{{quiz.quizList[n-1].content[c-1]}} </span>
-                        
+                        <span>{{quiz.quizList[n-1].content[c-1]}}</span>
                       </v-flex>
                     </template>
                   </v-radio>
@@ -79,7 +78,7 @@
                 >
                   <template v-slot:label>
                     <v-flex>
-                      <span>{{quiz.quizList[n-1].content[c-1]}} {{checkValue}}</span>
+                      <span>{{quiz.quizList[n-1].content[c-1]}}</span>
                     </v-flex>
                   </template>
                 </v-checkbox>
@@ -95,7 +94,7 @@
                   color="cyan lighten-1"
                   v-if="answer_Q.None == 0"
                 ></v-textarea>
-                {{radioValue[n-1]}}
+                <v-textarea solo disabled v-if="answer_Q.None != 0" :value="radioValue[n-1]"></v-textarea>
               </div>
             </v-container>
           </v-card>
@@ -120,24 +119,24 @@ import { Stud } from "@/api";
 export default {
   created() {
     // 학생 응시퀴즈 목록화면에서 체되게
-    if (this.answer_Q.None != 0){
-      for(let i=0; i<this.answer_Q.quizType.length; i++){
-        if(this.answer_Q.quizType[i]==2)
-          for(let j=0; j<this.answer_Q.answer[i].length; j++)
+    if (this.answer_Q.None != 0) {
+      for (let i = 0; i < this.answer_Q.quizType.length; i++) {
+        if (this.answer_Q.quizType[i] == 2)
+          for (let j = 0; j < this.answer_Q.answer[i].length; j++)
             this.checkValue.push(this.answer_Q.answer[i][j]);
       }
       this.radioValue = this.answer_Q.answer;
-    } 
+    }
     if (this.quiz.active && this.answer_Q.None == 0) {
       const { minutes, date } = this.quiz;
       this.totalTime = parseInt(
         (new Date(date) - Date.now() + minutes * 60 * 1000) / 1000
       );
       this.minutes = this.padTime(Math.floor(this.totalTime / 60));
-      this.seconds = this.padTime(this.totalTime - (this.minutes * 60));
-      this.timer = setInterval(()=>{
-        if(this.minutes == "00" && this.seconds == "00"){
-          this.sendAnswer()
+      this.seconds = this.padTime(this.totalTime - this.minutes * 60);
+      this.timer = setInterval(() => {
+        if (this.minutes == "00" && this.seconds == "00") {
+          this.sendAnswer();
           return;
         }
         this.totalTime--;
@@ -168,9 +167,9 @@ export default {
         this.minutes = this.padTime(minutes);
         this.seconds = "00";
         this.totalTime = minutes * 60;
-        this.timer = setInterval(()=>{
-          if(this.minutes == "00" && this.seconds == "00"){
-            this.sendAnswer()
+        this.timer = setInterval(() => {
+          if (this.minutes == "00" && this.seconds == "00") {
+            this.sendAnswer();
             return;
           }
           this.totalTime--;
@@ -183,9 +182,9 @@ export default {
       const { active, QID } = data;
       if (this.quiz.QID == QID && this.answer_Q.None == 0) {
         this.quiz.active = active;
-        clearInterval(this.timer)
-        this.timer= null;
-        this.sendAnswer()
+        clearInterval(this.timer);
+        this.timer = null;
+        this.sendAnswer();
       }
     });
   },
@@ -243,7 +242,7 @@ export default {
     num: Number
   },
   methods: {
-    sendAnswer: function(){
+    sendAnswer: function() {
       const userID = this.$store.state.userID;
       const userName = this.$store.state.userName;
       const classCode = this.$store.state.currentClass.classCode;
@@ -255,19 +254,23 @@ export default {
         quizType.push(this.quiz.quizList[n].quizType);
         switch (this.quiz.quizList[n].quizType) {
           case 1:
-            elem = document.querySelector(`#quiz${QID} #step${n + 1} input[type='radio']:checked`)
-            if(elem == null){
-              answer.push("0")
-            } else{
+            elem = document.querySelector(
+              `#quiz${QID} #step${n + 1} input[type='radio']:checked`
+            );
+            if (elem == null) {
+              answer.push("0");
+            } else {
               answer.push(elem.value);
             }
             break;
           case 2:
             var temp = "";
-            elem = document.querySelectorAll(`#quiz${QID} #step${n + 1} input[type='checkbox']:checked`)
-            if(elem.length==0){
-              answer.push("0")
-            } else{
+            elem = document.querySelectorAll(
+              `#quiz${QID} #step${n + 1} input[type='checkbox']:checked`
+            );
+            if (elem.length == 0) {
+              answer.push("0");
+            } else {
               elem.forEach(element => {
                 temp += element.id;
               });
@@ -275,10 +278,12 @@ export default {
             }
             break;
           case 3:
-            elem = document.querySelector(`#quiz${QID} #step${n + 1} .text${QID} textarea`).value
-            if(elem == ""){
-              answer.push("오답")
-            } else{
+            elem = document.querySelector(
+              `#quiz${QID} #step${n + 1} .text${QID} textarea`
+            ).value;
+            if (elem == "") {
+              answer.push("오답");
+            } else {
               answer.push(elem);
             }
             break;
@@ -289,19 +294,19 @@ export default {
         studentID: this.$store.state.studentID,
         userName: userName,
         classCode: classCode,
-        studentID:this.$store.state.studentID,
+        studentID: this.$store.state.studentID,
         QID: QID,
         quizType: quizType,
         answer: answer
       };
       Stud.answerQuiz(classCode, answer_Q).then(res => {
-        clearInterval(this.timer)
+        clearInterval(this.timer);
         this.timer = null;
         window.history.go(0);
       });
     },
-    padTime: function(time){
-      return (time < 10 ? '0' : '') + time;
+    padTime: function(time) {
+      return (time < 10 ? "0" : "") + time;
     },
     getPercent(array) {
       var sum = 0;
@@ -330,24 +335,42 @@ export default {
         quizType.push(this.quiz.quizList[n].quizType);
         switch (this.quiz.quizList[n].quizType) {
           case 1:
-            elem = document.querySelector(`#quiz${QID} #step${n + 1} input[type='radio']:checked`)
-            if(elem == null){
-              this.e1 = n +1;
+            elem = document.querySelector(
+              `#quiz${QID} #step${n + 1} input[type='radio']:checked`
+            );
+            if (elem == null) {
+              this.e1 = n + 1;
               alert("입력되지 않은 항목이 있습니다.");
-              setTimeout(() => document.querySelector(`#quiz${QID} #step${n + 1} input[type='radio']`).focus(), 50);
+              setTimeout(
+                () =>
+                  document
+                    .querySelector(
+                      `#quiz${QID} #step${n + 1} input[type='radio']`
+                    )
+                    .focus(),
+                50
+              );
               return;
             }
-            answer.push(
-              elem.value
-            );
+            answer.push(elem.value);
             break;
           case 2:
             var temp = "";
-            elem = document.querySelectorAll(`#quiz${QID} #step${n + 1} input[type='checkbox']:checked`)
-            if(elem.length==0){
-              this.e1 = n +1;
+            elem = document.querySelectorAll(
+              `#quiz${QID} #step${n + 1} input[type='checkbox']:checked`
+            );
+            if (elem.length == 0) {
+              this.e1 = n + 1;
               alert("입력되지 않은 항목이 있습니다.");
-              setTimeout(() => document.querySelector(`#quiz${QID} #step${n + 1} input[type='checkbox']`).focus(), 50);
+              setTimeout(
+                () =>
+                  document
+                    .querySelector(
+                      `#quiz${QID} #step${n + 1} input[type='checkbox']`
+                    )
+                    .focus(),
+                50
+              );
               return;
             }
             elem.forEach(element => {
@@ -356,11 +379,21 @@ export default {
             answer.push(temp);
             break;
           case 3:
-            elem = document.querySelector(`#quiz${QID} #step${n + 1} .text${QID} textarea`).value
-            if(elem == ""){
-              this.e1 = n +1;
+            elem = document.querySelector(
+              `#quiz${QID} #step${n + 1} .text${QID} textarea`
+            ).value;
+            if (elem == "") {
+              this.e1 = n + 1;
               alert("입력되지 않은 항목이 있습니다.");
-              setTimeout(() => document.querySelector(`#quiz${QID} #step${n + 1} .text${QID} textarea`).focus(), 50);
+              setTimeout(
+                () =>
+                  document
+                    .querySelector(
+                      `#quiz${QID} #step${n + 1} .text${QID} textarea`
+                    )
+                    .focus(),
+                50
+              );
               return;
             }
             answer.push(elem);

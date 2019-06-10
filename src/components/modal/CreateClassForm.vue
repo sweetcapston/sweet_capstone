@@ -1,44 +1,75 @@
 <template>
   <div>
-    <v-btn dark @click.native="toggle">방 생성하기</v-btn>
+    <v-speed-dial
+      v-model="fab"
+      absolute
+      small
+      :direction="'left'"
+      :open-on-hover="false"
+      :transition="'slide-x-reverse-transition'"
+      @click.stop
+    >
+      <template v-slot:activator>
+        <v-btn class="fab surveyFab" v-model="fab" color="transparent" fab @click.stop="floating()">
+          <v-icon>mdi-dots-vertical</v-icon>
+        </v-btn>
+      </template>
+      <v-btn v-model="fab" fab dark small class="surveyFab" color="info" @click.stop="editClass()">
+        <v-icon>edit</v-icon>
+      </v-btn>
+    </v-speed-dial>
     <sui-modal v-model="open" size="mini">
-      <sui-modal-header>클래스 생성하기</sui-modal-header>
-      <sui-modal-content image>
-        <img height="80px" width="80px" src="@/assets/logo.svg">
-        <sui-modal-content>
-          <label>클래스 이름</label>
-          <sui-input placeholder="클래스이름을 입력해주세요" v-model="className"/>
-          <sui-checkbox v-model="alrarm" label="질문알람"/>
-        </sui-modal-content>
+      <sui-modal-header>클래스 정보수정</sui-modal-header>
+
+      <sui-modal-content>
+        <label>클래스 이름</label>
+        <sui-input placeholder="클래스이름을 입력해주세요" v-model="className" style="margin-bottom:10px"/>
       </sui-modal-content>
       <sui-modal-actions>
-        <sui-button positive @click.native="createClass">생성하기</sui-button>
+        <sui-button primary @click.native="edit()">수정하기</sui-button>
       </sui-modal-actions>
     </sui-modal>
   </div>
 </template>
 
 <script>
+import { Prof } from "@/api";
 export default {
   data() {
     return {
       open: false,
-      alrarm: false, // 서버로 전송
-      className: "" // 서버로 전송
+      className: this.$store.state.currentClass.className,
+      fab: false
     };
   },
   methods: {
+    editClass() {
+      this.open = !this.open;
+    },
+    floating: function() {
+      this.fab = !this.fab;
+    },
     toggle() {
       this.open = !this.open;
     },
-    setAlarm() {
-      this.alrarm = true;
-    },
-    createClass() {
-      alert(this.className + " 클래스 생성이 완료 되었습니다.");
-      alert("알람여부: " + this.alrarm);
-      alert("생성된 클래스코드: " + this.$store.state.classCode);
+    edit() {
       this.toggle();
+      this.$store.commit("setCurrentClass", {
+        className: this.className,
+        classCode: this.$store.state.currentClass.classCode,
+        profName: this.$store.state.currentClass.profName,
+      });
+      // 서버로 전송.
+      // Prof.classEdit(
+      //   this.$store.state.currentClass.classCode,
+      //   this.$store.state.userID,
+      //   this.className,
+      // ).then(res => {
+      //   if (res.data === "false") alert("클래스 수정 실패");
+      //   else {
+      //     alert("클래스 수정 성공");
+      //   }
+      // });
     }
   }
 };
