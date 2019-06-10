@@ -13,6 +13,17 @@ export default {
     classDelete(classCode){
       return axios.delete(`${BaseUrl}/${classCode}/delete`, config);
     },
+    classHome(classCode,userID){
+      return axios.post(`${BaseUrl}/${classCode}/home`,{userID:userID},config)
+    },
+    classEdit(classCode,userID,className){
+      return axios.post(`${BaseUrl}/${classCode}/edit`, 
+      {
+        userID: userID,
+        className: className
+      }
+      , config);
+    },
     surveyCreate(survey){
       return axios.post(`${BaseUrl}/${survey.classCode}/surveyAdd`, {survey:survey}, config);
     },

@@ -33,7 +33,7 @@
                 style="padding-top:10px"
                 v-if="survey.surveyList[n-1].surveyType == 1"
               >
-                <div v-for="c in survey.surveyList[n-1].content.length" :key="`${c}-radio`">
+                <div style="padding-top:6px" v-for="c in survey.surveyList[n-1].content.length" :key="`${c}-radio`">
                   <v-radio
                     :id="`${c}`"
                     column

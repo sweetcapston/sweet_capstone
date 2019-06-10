@@ -10,6 +10,7 @@ import Main from "./views/Main.vue";
 import Class from "./components/core/Class.vue";
 import LoginForm from "./components/modal/LoginForm.vue";
 import SignUpForm from "./components/modal/SignUpForm.vue";
+import Admin from "./views/Admin.vue";
 
 Vue.use(Router);
 
@@ -36,6 +37,11 @@ export default new Router({
       path: "/main",
       name: "main",
       component: Main,
+    },
+    {
+      path: "/admin",
+      name: "admin",
+      component: Admin,
     },
     {
       path: "/class/:classCode",

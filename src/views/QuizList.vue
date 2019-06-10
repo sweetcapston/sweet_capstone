@@ -123,7 +123,7 @@
               <v-flex style="font-size:1.5rem; font-weight:600" xs12 sm12 md6 lg6 xl6 :class="'imgQues_'+`${quiz.QID}_`+`${n-1}`">{{n}}.</v-flex>
               <!-- FIXME: 라디오버튼 -->
               <v-radio-group v-show="quiz.quizList[n-1].quizType == 1" column>
-                <div v-for="c in quiz.quizList[n-1].content.length" :key="`${c}-radio`">
+                <div style="padding-top:6px" v-for="c in quiz.quizList[n-1].content.length" :key="`${c}-radio`">
                   <v-radio
                     disabled
                     value="true"

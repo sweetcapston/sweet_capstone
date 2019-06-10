@@ -100,7 +100,7 @@
               <span class="question-title">{{survey.surveyList[n-1].surveyQuestion}}</span>
               <!-- FIXME: 라디오버튼 -->
               <v-radio-group v-show="survey.surveyList[n-1].surveyType == 1" column>
-                <div v-for="c in survey.surveyList[n-1].content.length" :key="`${c}-radio`">
+                <div style="padding-top:6px" v-for="c in survey.surveyList[n-1].content.length" :key="`${c}-radio`">
                   <v-radio disabled :id="`${c}`" color="cyan ligten-1">
                     <template v-slot:label>
                       <v-flex>
