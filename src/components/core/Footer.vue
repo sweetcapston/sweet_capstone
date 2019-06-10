@@ -11,7 +11,7 @@
         style="margin-left: 50px"
       >
         <a
-          :href="link.Link"
+          @click="goTop()"
           class="tertiary--text footer-links">{{ link.name }}</a>
       </span>
     </div>
@@ -36,7 +36,12 @@ export default {
     links: [
       { name: 'Home', Link: '/' }
     ]
-  })
+  }),
+  methods: {
+    goTop(){
+      document.querySelector("body").scrollTop=0
+    }
+  },
 }
 </script>
 

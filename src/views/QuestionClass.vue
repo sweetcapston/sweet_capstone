@@ -44,6 +44,18 @@
                     <v-icon>delete</v-icon>
                   </v-btn>
                   <v-btn
+                    v-show="$store.state.Identity == 2 && ques.userID != userID"
+                    v-model="fab[index]"
+                    fab
+                    dark
+                    small
+                    color = "black"
+                    class="questionFab red--text"
+                    @click="black(ques)"
+                  >
+                    <v-icon>mdi-alert</v-icon>
+                  </v-btn>
+                  <v-btn
                     v-show="ques.userID == userID"
                     v-model="fab[index]"
                     fab
@@ -252,6 +264,7 @@ export default {
       }
     });
     this.socket.on("MESSAGE", data => {
+      this.first = false;
       const{anonymous, userID, userName, studentID, QesID, classCode, question, date} = data
       this.questionList.push({
         anonymous: anonymous,
@@ -281,6 +294,15 @@ export default {
           question.anonymous = data.anonymous;
         }
       })
+    })
+    this.socket.on("black", data => {
+      const QesID = data;
+      for(let i = 0 ; i<this.questionList.length; i++){
+        if(this.questionList[i].QesID == QesID){
+          this.questionList.splice(i, 1)
+          break;
+        }
+      }
     })
   },
   updated() {
@@ -383,6 +405,18 @@ export default {
             });
         });
       }
+    },
+    black(question){
+      this.socket.emit("black", {
+        classCode: this.$store.state.currentClass.classCode,
+        BlackList: {
+          profID:this.userID,
+          contents:question.question,
+          userID: question.userID,
+          userName: question.userName
+        },
+        QesID:question.QesID
+      })
     },
     deleteQuestion(QesID){
       this.socket.emit("delete", QesID)
@@ -535,11 +569,11 @@ export default {
   padding: 10px 10px 12px 15px;
 }
 .conversation.active {
-  background: #111;
+  background:mediumturquoise;
 }
 .conversation:hover {
   cursor: pointer;
-  background: #111;
+  background:mediumturquoise;
 }
 .conversation > img {
   height: 40px;
