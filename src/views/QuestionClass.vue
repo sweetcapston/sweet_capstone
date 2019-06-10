@@ -1,14 +1,15 @@
 <template>
   <v-layout row wrap fill-height>
-    <v-flex xs12 sm12 md12 lg9 xl9>
+    <v-flex xs12 sm12 md12 lg9 xl9 class="mobile">
       <div id="chat-container">
         <div id="chat-title">
           <span>질문 클래스</span>
         </div>
+
         <div id="chat-message-list" v-if="questionList.length!=0">
           <template v-for="(ques,index) in questionList">
             <v-flex  id="message" :key="ques.index">
-              <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
+              <v-subheader v-if="ques.header" :key="ques.header" inset> {{ ques.header }} </v-subheader>
               <v-divider/>
               <v-list-tile id="auto_height" :key="ques.title">
                 <v-speed-dial
@@ -36,7 +37,7 @@
                     fab
                     dark
                     small
-                    color = "red"
+                    color="red"
                     class="questionFab"
                     @click="deleteQuestion(ques.QesID)"
                   >
@@ -104,6 +105,7 @@
             </v-flex>
           </template>
         </div>
+
         <div id="chat-message-list" v-else>
           <v-img :src="require('@/assets/question.png')" height="100"><div><h1>이곳에다가 질문을 하세요.</h1></div></v-img>
         </div>
@@ -136,6 +138,146 @@
         </div>
       </div>
     </v-flex>
+
+    <v-flex xs12 sm12 md12 lg9 xl9 class="web">
+      <div id="chat-container">
+        <div id="chat-title">
+          <span>질문 클래스</span>
+        </div>
+
+        <div id="chat-message-list" v-if="questionList.length!=0">
+          <template v-for="(ques,index) in questionList">
+            <v-flex  id="message" :key="ques.index">
+              <v-subheader v-if="ques.header" :key="ques.header" inset> {{ ques.header }} </v-subheader>
+              <v-divider/>
+              <v-list-tile id="auto_height" :key="ques.title">
+                <v-speed-dial
+                v-if="ques.userID == userID || $store.state.Identity == 2"
+                v-model="fab[index]"
+                absolute
+                small
+                :direction="'left'"
+                :open-on-hover="false"
+                :transition="'slide-x-reverse-transition'"
+                @click="floating(index)"
+                >
+                  <template v-slot:activator>
+                    <v-btn
+                      class="fab questionFab"
+                      v-model="fab[index]"
+                      color="transparent"
+                      fab
+                    >
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-btn
+                    v-model="fab[index]"
+                    fab
+                    dark
+                    small
+                    color="red"
+                    class="questionFab"
+                    @click="deleteQuestion(ques.QesID)"
+                  >
+                    <v-icon>delete</v-icon>
+                  </v-btn>
+                  <v-btn
+                    v-show="$store.state.Identity == 2 && ques.userID != userID"
+                    v-model="fab[index]"
+                    fab
+                    dark
+                    small
+                    color = "black"
+                    class="questionFab red--text"
+                    @click="black(ques)"
+                  >
+                    <v-icon>mdi-alert</v-icon>
+                  </v-btn>
+                  <v-btn
+                    v-show="ques.userID == userID"
+                    v-model="fab[index]"
+                    fab
+                    dark
+                    small
+                    class="questionFab"
+                    color="green"
+                    @click="editQuestion(ques)"
+                  >
+                    <v-icon>edit</v-icon>
+                  </v-btn>
+                </v-speed-dial>
+                <v-layout id ="textDiv">
+                  <v-list-tile-avatar v-if="!ques.anonymous && ques.studentID!='9999'" :color="`${colorList[parseInt(ques.studentID[ques.studentID.length-1])]} white--text`">
+                    <span>{{ques.userName[0]}}</span>
+                  </v-list-tile-avatar>
+                  <v-list-tile-avatar v-else-if="!ques.anonymous && ques.studentID=='9999'" color="gradient white--text">
+                    <span>{{ques.userName[0]}}</span>
+                  </v-list-tile-avatar>
+                  <v-list-tile-avatar v-else :color="`${colorList[0]} white--text`">
+                    <span>A</span>
+                  </v-list-tile-avatar>
+                  <v-list-tile-content>
+                    <v-layout id="full-width">
+                      <v-flex xs6 sm4 md5 lg5 xl5>
+                        <v-card v-if="!ques.anonymous" flat>{{ques.userName}}</v-card>
+                        <v-card v-else flat>익명</v-card>
+                      </v-flex>
+                      <v-flex xs12 sm8 md7 lg7 xl7 style="text-align: end">
+                        <v-card flat>{{ques.date}}</v-card>
+                      </v-flex>
+                    </v-layout>
+                    <v-layout id="full-width">
+                      <v-flex xs11 sm11 md11 lg11 xl11>
+                        <span>{{ques.question}}</span>
+                      </v-flex>
+                      <v-flex xs1 sm1 md1 lg1 xl1 style="text-align: end">
+                        <v-icon @click="unlike(ques.QesID)" class="red--text" small v-if="ques.likeList.indexOf(userID)!=-1">mdi-heart</v-icon>
+                        <v-icon @click="like(ques.QesID)" small v-else>mdi-heart</v-icon>
+                        <span v-if="ques.likeList.length == 0">    </span>
+                        <span v-else>{{` ${padding(ques.likeList.length)}`}}</span>
+                      </v-flex>
+                    </v-layout>
+                  </v-list-tile-content>
+                </v-layout>
+              </v-list-tile>
+            </v-flex>
+          </template>
+        </div>
+
+        <div id="chat-message-list" v-else>
+          <v-img :src="require('@/assets/question.png')" height="100"><div><h1>이곳에다가 질문을 하세요.</h1></div></v-img>
+        </div>
+        <div id="chat-form">
+          <template>
+            <v-list-tile avatar>
+              <v-list-tile-avatar v-if="this.$store.state.Identity==2" color="gradient white--text" large fill-dot>
+                <span>{{this.$store.state.userName[0]}}</span>
+              </v-list-tile-avatar>
+              <v-list-tile-avatar v-else :color="`${colorList[parseInt($store.state.studentID[$store.state.studentID.length-1])]} white--text`" large fill-dot>
+                <span>{{this.$store.state.userName[0]}}</span>
+              </v-list-tile-avatar>
+              <v-text-field
+                v-model="content"
+                hide-details
+                placeholder="Ask a question..."
+                solo
+                @keydown.enter="enrollQuestion"
+              />&nbsp;&nbsp;&nbsp;
+              <input value="false" type="checkbox" v-model="anonymous">
+              <label style="width:36px">익명</label>
+              <v-btn
+                class="hidden-sm-and-down cyan lighten-1 white--text"
+                depressed
+                @click="enrollQuestion"
+                style="margin-left: 10px"
+              >질문등록</v-btn>
+            </v-list-tile>
+          </template>
+        </div>
+      </div>
+    </v-flex>
+
     <modal-edit-question v-bind:dialog="dialog" v-bind:ques="question"/>
     <v-flex xs6 sm6 md6 lg3 xl3 id="list-container" class="hidden-md-and-down">
       <div id="search-container">
@@ -499,8 +641,33 @@ export default {
   text-overflow: ellipsis;
   margin-top: 10px;
 }
-
-#chat-container {
+.mobile #chat-container {
+  display: grid;
+  grid:
+    "chat-title" 8%
+    "chat-message-list" 1fr
+    "chat-form" 8%
+    / 1fr 2px;
+  width: 100%;
+  height: 90vh;
+  max-height: 100vh;
+  background: #fff;
+  border-radius: 10px 10px 10px 10px;
+  border: 0.5px solid rgb(192, 189, 189);
+}
+.mobile #chat-title {
+  display: grid;
+  grid: 36px /1fr 36px;
+  align-content: center;
+  align-items: center;
+  grid-area: chat-title;
+  font-weight: bold;
+  font-size: 1.5rem;
+  border-radius: 10px 10px 0px 0px;
+  box-shadow: 1px 1px 3px -1px black;
+  padding: 0 30px;
+}
+.web #chat-container {
   display: grid;
   grid:
     "chat-title search-container" 8%
@@ -514,15 +681,14 @@ export default {
   border-radius: 10px 0 0 10px;
   border: 0.5px solid rgb(192, 189, 189);
 }
-#chat-title {
+.web #chat-title {
   display: grid;
   grid: 36px /1fr 36px;
   align-content: center;
   align-items: center;
   grid-area: chat-title;
-  color: #0048aa(34, 63, 63);
   font-weight: bold;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   border-radius: 10px 0px 0px 0px;
   box-shadow: 1px 1px 3px -1px black;
   padding: 0 30px;
@@ -535,7 +701,6 @@ export default {
   margin-top: 3px;
   overflow-y: scroll;
 }
-
 #chat-form {
   display: grid;
   grid-area: chat-form;
@@ -545,6 +710,7 @@ export default {
   border-radius: 0 0 0 10px;
   border-top: 1px solid rgba(0, 0, 0, 0.25);
 }
+
 #search-container {
   display: grid;
   align-items: center;
@@ -566,7 +732,7 @@ export default {
   background-size: 20px 20px;
 }
 #conversation-list {
-  height: 75vh;
+  height: 75.5vh;
   max-height: 100vh;
   background: rgb(23, 179, 179);
   overflow-y: scroll;
@@ -601,7 +767,7 @@ export default {
   background: rgb(5, 161, 161);
   border-top: 1px solid #ddd;
   border-radius: 0 0 10px 0;
-  height: 8.2%;
+  height: 8.1%;
   padding: 0 15px;
 }
 #chat-message-list::-webkit-scrollbar {
@@ -669,4 +835,16 @@ export default {
 .v-icon.material-icons.theme--dark{
   font-size: 18px !important;
 }
+
+@media only screen and (min-width: 1264px) {
+  .mobile {
+    display: none !important;
+  }
+}
+@media only screen and (max-width: 1264px) {
+  .web {
+    display: none !important;
+  }
+}
+
 </style>
