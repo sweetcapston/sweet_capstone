@@ -258,7 +258,7 @@ export default {
       ).children[0].classList.add("inactive");
       el.querySelector(".v-expansion-panel__body").style.display = "none";
     }
-    if (this.answer_S.None == 0) {
+    if (this.answer_S.None == 0  && this.survey.active) {
       document
         .querySelector(`#survey${this.survey.SID}`)
         .classList.add("incomplete");

@@ -4,7 +4,7 @@
       <template v-slot:header>
         <div>{{survey.surveyName}}</div>
       </template>
-      <v-card style="background:aliceblue">
+      <v-card style="background:aliceblue" v-if="survey.surveyList[0].count.reduce((a, b) => a + b, 0) != 0">
         <v-card-text v-for="(item,index) in survey.surveyList.length" :key="index">
           <h4>{{index+1}}. {{survey.surveyList[index].surveyQuestion}}</h4>
           <apexchart
@@ -75,6 +75,13 @@
           <v-divider/>
         </v-card-text>
       </v-card>
+       <v-card v-else>
+        <v-card-text>
+          <v-layout align-center justify-center>
+            No data available
+          </v-layout>
+        </v-card-text>
+       </v-card>
     </v-expansion-panel-content>
   </v-expansion-panel>
 </template>

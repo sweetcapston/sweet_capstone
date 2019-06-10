@@ -54,12 +54,12 @@
         <v-flex lg2 xs2>
           <v-btn
             v-show="!survey.active"
-            class="green accent-4 white--text surveyStart"
+            class="transparent accent-4 green--text surveyStart"
             @click.stop="surveyActive()"
           >설문 시작</v-btn>
           <v-btn
             v-show="survey.active"
-            class="crimson white--text surveyEnd"
+            class="transparent red--text surveyEnd"
             @click.stop="surveyActive()"
           >설문 종료</v-btn>
         </v-flex>
@@ -292,5 +292,13 @@ export default {
 
 .surveyFab{
   border-radius: 50% !important;
+}
+.surveyEnd > .v-btn__content{
+  font-weight: bold;
+  font-size:15px;
+}
+.surveyStart > .v-btn__content{
+  font-weight: bold;
+  font-size:15px;
 }
 </style>

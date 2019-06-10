@@ -13,11 +13,11 @@
         <v-list>
           <v-list-tile avatar>
             <v-list-tile-avatar :color="`${avatarColor} white--text`">
-              <span>{{userName[0]}}</span>
+              <span>{{this.$store.state.userName[0]}}</span>
             </v-list-tile-avatar>
 
             <v-list-tile-content>
-              <v-list-tile-title>{{userName}}</v-list-tile-title>
+              <v-list-tile-title>{{this.$store.state.userName}}</v-list-tile-title>
               <v-list-tile-sub-title>{{userID}}</v-list-tile-sub-title>
             </v-list-tile-content>
 
@@ -38,9 +38,9 @@
         <v-list v-if="Identity==1">
           <v-list-tile>
             <v-list-tile-title>
-                학번
+                <p>학번</p>
             </v-list-tile-title>
-            <v-list-tile-title>{{studentID}}</v-list-tile-title>
+            <v-list-tile-title><p>{{this.$store.state.studentID}}</p></v-list-tile-title>
           </v-list-tile>
 
         </v-list>
@@ -61,8 +61,6 @@ let colorList = ["blue", "purple", "brown", "pink", "navy", "teal", "orange", "i
         return{
             avatarColor: this.$store.state.Identity!=2 ? colorList[parseInt(this.$store.state.studentID[this.$store.state.studentID.length-1])] : "gradient",
             userID:this.$store.state.userID,
-            userName:this.$store.state.userName,
-            studentID:this.$store.state.studentID,
             Identity:this.$store.state.Identity,
             fav: true,
             menu: false

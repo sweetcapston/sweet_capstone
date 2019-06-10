@@ -45,6 +45,10 @@ export default new Vuex.Store({
       state.classList = '';
       state.Identity = '';
     },
+    setEditData: (state, payload)=>{
+      state.userName = payload.userName;
+      state.studentID = payload.studentId;
+    },
 
     addClassList:(state, payload) => (state.classList.push(payload)),
     //editClassList:(state, payload) => {(state.classList = payload.classList);

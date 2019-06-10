@@ -278,7 +278,8 @@
       </div>
     </v-flex>
 
-    <modal-edit-question v-bind:dialog="dialog" v-bind:ques="question"/>
+    <modal-edit-question />
+    <modal-new-black-list />
     <v-flex xs6 sm6 md6 lg3 xl3 id="list-container" class="hidden-md-and-down">
       <div id="search-container">
         <span>클래스 접속자</span>
@@ -342,6 +343,9 @@ export default {
     };
   },
   created() {
+    this.$EventBus.$on("sendBlack", data => {
+      this.socket.emit("black", data)
+    })
     this.$EventBus.$on("edited", question => {
       this.edited(question);
     })
@@ -561,16 +565,7 @@ export default {
       }
     },
     black(question){
-      this.socket.emit("black", {
-        classCode: this.$store.state.currentClass.classCode,
-        BlackList: {
-          profID:this.userID,
-          contents:question.question,
-          userID: question.userID,
-          userName: question.userName
-        },
-        QesID:question.QesID
-      })
+      this.$EventBus.$emit("blackList", question)
     },
     deleteQuestion(QesID){
       this.socket.emit("delete", QesID)

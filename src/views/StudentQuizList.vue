@@ -189,7 +189,15 @@ export default {
     });
   },
   mounted() {
-    if (this.answer_Q.None == 0) {
+    if (this.answer_Q.None == 0 && !this.quiz.active) {
+      const el = document.querySelector(`#quiz${this.quiz.QID}`);
+      el.classList.add("v-expansion-panel__container--disabled");
+      el.querySelector(
+        ".v-expansion-panel__header__icon"
+      ).children[0].classList.add("inactive");
+      el.querySelector(".v-expansion-panel__body").style.display = "none";
+    }
+    if (this.answer_Q.None == 0 && this.quiz.active) {
       document
         .querySelector(`#quiz${this.quiz.QID}`)
         .classList.add("incomplete");

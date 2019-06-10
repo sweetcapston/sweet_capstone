@@ -36,7 +36,7 @@
                             v-model="userName"
                         />&nbsp;&nbsp;&nbsp;
                     </v-flex>
-                    <v-flex v-show="checked">
+                    <v-flex v-show="checked && Identity==1">
                         <p>학번
                         &nbsp;&nbsp;&nbsp;</p>
                         <v-text-field
@@ -163,7 +163,7 @@ let colorList = ["blue", "purple", "brown", "pink", "navy", "teal", "orange", "i
             })
         },
         editUser(){
-            if(!this.newPW && this.errors.items.length!=0 ){
+            if(this.newPW && this.errors.items.length!=0 ){
                 return;
             }
 
@@ -171,10 +171,30 @@ let colorList = ["blue", "purple", "brown", "pink", "navy", "teal", "orange", "i
                 alert("기존과 다른 비밀번호를 사용해주세요.")
                 return;
             }
-            // if(c)
-            // Auth.editInfo({
-                
-            // })
+            if(this.Identity==1 && this.studentID=="9999"){
+                alert("사용할 수 없는 학번입니다.")
+                return;
+            }
+            Auth.editInfo({
+                userID:this.userID,
+                userName:this.userName,
+                studentID:this.studentID,
+                password:this.newPassword
+            }).then(res => {
+                this.$store.commit("setEditData", {
+                    userName:res.data.userName,
+                    studentID:res.data.studentID
+                })
+                this.checked = false;
+                this.dialog = true;
+                this.password = "";
+                this.newPassword = "";
+                this.newPassword2 = "";
+                this.userID = this.$store.state.userID;
+                this.userName = this.$store.state.userName;
+                this.newPW = false;
+                this.dialog = false;
+            })
         },
         validate: function() {
             this.$validator.validateAll();

@@ -29,6 +29,8 @@
                     v-for="(item,index) in quizList"
                     :key="index"
                     style="padding:3px 2px 2px 3px"
+                    class="getQuiz"
+                    :id="`quiz${index}`"
                   >
                     <template
                       v-slot:header
@@ -38,7 +40,6 @@
                       <v-card-text
                         v-if="myAnswer_Q[index].None !=0"
                         style="padding: 0px 0px 0px 15px;"
-                        @click="selectQuiz(quizList[index].QID, quizList[index].QID, myAnswer_Q[index].score, quizList[index].quizName)"
                       >{{quizList[index].quizName}}</v-card-text>
                       <v-card-text
                         style="padding: 0px 0px 0px 15px; background:silver"
@@ -54,6 +55,8 @@
                     :key="index"
                     style="padding:3px 2px 2px 3px"
                     disable
+                    class="getQuiz"
+                    :id="`quiz${index}`"
                   >
                     <template
                       v-slot:header
@@ -61,8 +64,7 @@
                       v-bind:quizStatistics="this.quizStatistics"
                     >
                       <v-card-text
-                        style="padding: 0px 0px 0px 15px; background:aliceblue"
-                        @click="selectQuiz(quizList[index].QID, quizList[index].QID, myAnswer_Q[index].score, quizList[index].quizName)"
+                        style="padding: 0px 0px 0px 15px; "
                       >{{quizList[index].quizName}}</v-card-text>
                     </template>
                     <!-- TODO:퀴즈 결과 데이터 분석 -->
@@ -79,9 +81,9 @@
                       class="elevation-1"
                     >
                       <template v-slot:items="pp">
-                        <td>{{ pp.index+1 }}</td>
-                        <td>{{ quizPoint[pp.index] }}</td>
-                        <td>{{ quizCorrectRate[pp.index] }}%</td>
+                        <td class="quizResult">{{ pp.index+1 }}</td>
+                        <td class="quizResult">{{ quizPoint[pp.index] }}</td>
+                        <td class="quizResult">{{ quizCorrectRate[pp.index] }}%</td>
                       </template>
                     </v-data-table>
                   </v-expansion-panel-content>
@@ -184,6 +186,7 @@ export default {
   },
   data() {
     return {
+      first:false,
       series2: [],
       chartOptions2: {
         plotOptions: {
@@ -211,17 +214,17 @@ export default {
       headers: [
         {
           text: "문제",
-          align: "left",
+          align: "center",
           sortable: false
         },
         {
           text: "배점",
-          align: "left",
+          align: "center",
           sortable: false
         },
         {
           text: "정답률",
-          align: "left",
+          align: "center",
           sortable: false
         }
       ],
@@ -356,6 +359,21 @@ export default {
         });
       }
     }
+  },
+  updated() {
+    if(!this.first){
+      
+      let elem = document.getElementsByClassName("getQuiz")
+      for(let i=0;i<elem.length; i++){
+        this.first = true
+        elem[i].addEventListener("click",(target)=>{
+          let index = parseInt(target.currentTarget.id.split("quiz")[1])
+          let quizList = this.quizList
+          this.selectQuiz(quizList[index].QID, quizList[index].QID, this.myAnswer_Q[index].score, quizList[index].quizName)
+          
+        })
+      }
+    }
   }
 };
 </script>
@@ -364,5 +382,7 @@ export default {
 .v-card .v-offset .v-card--material__header.v-card {
   padding: 10px;
 }
-
+td.quizResult{
+  text-align:center;
+}
 </style>
