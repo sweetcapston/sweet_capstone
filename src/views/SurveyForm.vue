@@ -182,7 +182,8 @@ export default {
     };
   },
   mounted() {
-    this.$tours['surveyForm'].start()
+    setTimeout(()=> this.$tours['surveyForm'].start(), 150);
+
   },
   methods: {
     completeSurvey() {

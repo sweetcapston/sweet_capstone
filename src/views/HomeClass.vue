@@ -37,7 +37,6 @@
         :key="index"
         class="mb-3"
         color="info"
-        dismissible
       >
         <div style="width:100%;" @click="movePage('question')">
           <strong>새로운 질문</strong>
@@ -49,7 +48,6 @@
         <material-notification
           class="mb-3"
           color="warning"
-          dismissible
           v-for="(i,index) in this.newSurvey.length"
           :key="index"
         >
@@ -62,7 +60,6 @@
         <material-notification
           class="mb-3"
           color="purple"
-          dismissible
           v-for="(i,index) in this.newQuiz.length"
           :key="index"
         >
@@ -97,12 +94,12 @@ export default {
       this.$store.state.currentClass.classCode,
       this.$store.state.userID
     ).then(res => {
-      if (res.data === "false") alert("홈클래스 정보 가져오기 실패");
+      if (res.data === "false") {return false}
       else {
-        this.studentNum = res.data.student;
-        (this.questionNum = res.data.student),
-          (this.surveyNum = res.data.survey),
-          (this.quizNum = res.data.quiz);
+            this.studentNum = res.data.student;
+            this.questionNum = res.data.question
+            this.surveyNum = res.data.survey
+            this.quizNum = res.data.quiz
       }
     });
     if (this.$store.state.Identity == 1) {
@@ -110,15 +107,15 @@ export default {
         this.$store.state.currentClass.classCode,
         this.$store.state.userID
       ).then(res => {
-        if (res.data === "false") alert("홈클래스 정보 가져오기 실패");
+        if (res.data === "false") {return false}
         else {
-          this.newQuestion = res.data.newQuestion;
-          this.newSurvey = res.data.newSurvey;
-          this.newQuiz = res.data.newQuiz;
-          this.studentNum = res.data.student;
-          (this.questionNum = res.data.student),
-            (this.surveyNum = res.data.survey),
-            (this.quizNum = res.data.quiz);
+            this.newQuestion = res.data.newQuestion;
+            this.newSurvey = res.data.newSurvey;
+            this.newQuiz = res.data.newQuiz;
+            this.studentNum = res.data.student;
+            this.questionNum = res.data.question
+            this.surveyNum = res.data.survey
+            this.quizNum = res.data.quiz
         }
       });
     } else if (this.$store.state.Identity == 2) {
@@ -126,7 +123,7 @@ export default {
         this.$store.state.currentClass.classCode,
         this.$store.state.userID
       ).then(res => {
-        if (res.data === "false") alert("홈클래스 정보 가져오기 실패");
+        if (res.data === "false") {return false}
         else {
           this.newQuestion = res.data;
         }
@@ -153,10 +150,10 @@ export default {
       newSurvey: [],
       newQuiz: [],
       fab: false,
-      studentNum: "",
-      questionNum: "",
-      surveyNum: "",
-      quizNum: ""
+      studentNum: 0,
+      questionNum: 0,
+      surveyNum: 0,
+      quizNum: 0
     };
   },
   computed: {
@@ -216,8 +213,8 @@ export default {
     }
   },
     mounted: function () {
-      if(this.$store.state.Identity==1 && this.$store.state.classList.length == 0)
-        this.$tours['classAdd'].start()
+    //   if(this.$store.state.Identity==1 && this.$store.state.classList.length == 0)
+    //     this.$tours['classAdd'].start()
     }
 }
 </script>

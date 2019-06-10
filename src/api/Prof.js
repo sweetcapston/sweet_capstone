@@ -17,11 +17,7 @@ export default {
       return axios.post(`${BaseUrl}/${classCode}/home`,{userID:userID},config)
     },
     classEdit(classCode, className){
-      return axios.put(`${BaseUrl}/${classCode}/classEdit`, 
-      {
-        className: className
-      }
-      , config);
+      return axios.put(`${BaseUrl}/${classCode}/classEdit`, {className: className}, config);
     },
     alarmActive(classCode,alarm){
         return axios.put(`${BaseUrl}/${classCode}/alarm`, {alarm: alarm}, config);
@@ -54,11 +50,7 @@ export default {
       return axios.post(`${BaseUrl}/${classCode}/statistics`, config);
     },
     loadStatisticsQuiz(classCode, QID) {
-      return axios.post(
-        `${BaseUrl}/${classCode}/statistics/quiz`,
-        { QID: QID },
-        config
-      );
+      return axios.post(`${BaseUrl}/${classCode}/statistics/quiz`, { QID: QID }, config);
     },
     getClassData(classCode){
         return axios.get(`${BaseUrl}/${classCode}/class`, config);

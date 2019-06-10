@@ -340,7 +340,8 @@ export default {
     }
   },
   mounted: function () {
-    this.$tours['quizForm'].start()
+    setTimeout(()=> this.$tours['quizForm'].start(), 150);
+
   }
 }
 </script>

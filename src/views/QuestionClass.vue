@@ -245,9 +245,9 @@
           </template>
         </div>
 
-        <div id="chat-message-list" v-else>
-          <v-img :src="require('@/assets/question.png')" height="100"><div><h1>이곳에다가 질문을 하세요.</h1></div></v-img>
-        </div>
+        <!--<div id="chat-message-list" v-else>-->
+          <!--<v-img :src="require('@/assets/question.png')" height="60"><div><h1>&nbsp;자유롭게 질문을 하세요.</h1></div></v-img>-->
+        <!--</div>-->
         <div id="chat-form">
           <template>
             <v-list-tile avatar>

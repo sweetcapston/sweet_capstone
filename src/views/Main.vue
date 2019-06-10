@@ -3,6 +3,7 @@
     <v-container>
       <v-toolbar
         class="gradient white--text"
+        height="50px"
         app 
         flat   
       >
@@ -35,6 +36,7 @@
             solo
             outline
             flat
+            spellcheck="false"
             v-on:keyup.enter='enterClass(getClassCode())'
           ></v-text-field>
           </v-flex>
@@ -50,6 +52,7 @@
               outline
               solo
               flat
+              spellcheck="false"
               v-on:keyup.enter='createClass(getClassName())'
             ></v-text-field>
           </v-flex>
@@ -182,7 +185,8 @@ export default {
     }
   },
   mounted() {
-    this.$tours['classCreate'].start();
+  //setTimeout(()=> this.$tours['classCreate'].start(), 150);
+
   },
   methods: {
     // v-model의 코드와 이름을 얻기 위한 임시 비동기 처리

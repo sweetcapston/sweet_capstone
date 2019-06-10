@@ -140,7 +140,7 @@ export default {
       this.$store.state.currentClass.classCode,
       this.$store.state.studentID
     ).then(res => {
-      if (res.data === "false") alert("질문차트 가져오기 실패");
+      if (res.data === "false") {}
       else {
         this.series[0].data = [
           res.data.data.user,
@@ -152,7 +152,7 @@ export default {
       }
     });
     Prof.loadStatistics(this.$store.state.currentClass.classCode).then(res => {
-      if (res.data === "false") alert("질문차트 가져오기 실패");
+      if (res.data === "false") {}
       else {
         this.questionList = res.data.List;
       }
@@ -162,7 +162,7 @@ export default {
       this.$store.state.currentClass.classCode,
       this.$store.state.userID
     ).then(res => {
-      if (res.data === "false") alert("퀴즈 가져오기 실패");
+      if (res.data === "false"){}
       else {
         const { quizList, myAnswer_Q } = res.data;
         this.myAnswer_Q = myAnswer_Q;
@@ -174,7 +174,7 @@ export default {
       this.$store.state.currentClass.classCode,
       this.$store.state.userID
     ).then(res => {
-      if (res.data === "false") alert("설문 가져오기 실패");
+      if (res.data === "false"){}
       else {
         const { surveyList, myAnswer_S } = res.data;
         this.surveyList = surveyList;
@@ -316,7 +316,7 @@ export default {
           this.$store.state.currentClass.classCode,
           StudentQID
         ).then(res => {
-          if (res.data === "false") alert("퀴즈통계 가져오기 실패");
+          if (res.data === "false") {}
           else {
             this.quizResult[0].data = [
               score,
@@ -339,7 +339,7 @@ export default {
           this.$store.state.currentClass.classCode,
           QID
         ).then(res => {
-          if (res.data === "false") alert("퀴즈통계 가져오기 실패");
+          if (res.data === "false") {}
           else {
             this.quizResult = res.data.List;
             this.quizStatistics = res.data.data;

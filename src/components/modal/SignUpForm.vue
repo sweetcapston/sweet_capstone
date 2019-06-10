@@ -196,7 +196,7 @@
                   }
                 })
                 .catch(error => {
-                  alert("error")
+                  alert("올바르지 못한 양식 입니다.")
                 });
         this.$router.push({name:'login'})
       },
@@ -214,10 +214,10 @@
                     }
                   })
                   .catch(error => {
-                    alert("오류");
+                    alert("서버와의 연결상태를 확인해주세요.");
                   });
         } else {
-          alert("형식을 맞춰주세요")
+          alert("형식을 맞춰주세요.")
           return false;
         }
       },

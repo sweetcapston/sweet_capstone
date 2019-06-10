@@ -22,5 +22,17 @@ export default {
   },
   duplicate(params) {
     return axios.get(`${BaseUrl}/duplicate/${params}`);
+  },
+  passwordCheck(params){
+    return axios.post(`${BaseUrl}/passwordCheck`,params);
+  },
+  editInfo(params){
+    return axios.post(`${BaseUrl}/edit`,params);
+  },
+  editPassword(params){
+    return axios.post(`${BaseUrl}/editPassword`,params);
+  },
+  withdraw(params){
+    return axios.post(`${BaseUrl}/withdraw`,params);
   }
 };

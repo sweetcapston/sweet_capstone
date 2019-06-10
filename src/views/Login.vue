@@ -356,6 +356,10 @@ export default {
     Auth.auth().then(res => {
       if(!res.data)
         return;
+      if(this.$store.state.Identity==3){
+        this.$router.push({name: 'admin'});
+        return;
+      }else
       this.$router.push({name: 'main'});
     });
   },
