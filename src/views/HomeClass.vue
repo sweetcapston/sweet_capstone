@@ -7,16 +7,16 @@
         </v-avatar>
         <v-card-text class="text-xs-center">
           <modal-create-class-form/>
-          <p class="category font-weight-light">클래스이름 :{{this.$store.state.currentClass.className}}</p>
-          <p class="category font-weight-light">클래스코드 :{{this.$store.state.currentClass.classCode}}</p>
-          <p class="category font-weight-light">교수이름 :{{this.$store.state.currentClass.profName}}</p>
-          <p>수강인원 수: {{this.studentNum}}</p>
+          <p class="category font-weight-light">클래스이름 : {{this.$store.state.currentClass.className}}</p>
+          <p class="category font-weight-light">클래스코드 : {{this.$store.state.currentClass.classCode}}</p>
+          <p class="category font-weight-light">교수이름 : {{this.$store.state.currentClass.profName}}</p>
+          <p>수강인원 수 : {{this.studentNum}}</p>
           <p>
-            <strong>질문합계:</strong>
+            <strong>질문합계 : </strong>
             {{this.questionNum}}&nbsp;
-            <strong>설문합계:</strong>
+            <strong>설문합계 : </strong>
             {{this.surveyNum}}&nbsp;
-            <strong>퀴즈합계:</strong>
+            <strong>퀴즈합계 : </strong>
             {{this.quizNum}}
           </p>
 

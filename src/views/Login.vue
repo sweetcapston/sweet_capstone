@@ -25,8 +25,8 @@
           >      
             <img :src="logo" width="70%">
             <div class="subheading mb-3 text-xs-center unselectable undraggable">Powered by Sweet Team</div>
-            <v-btn class="cyan lighten-1 mt-5" dark large>             
-              <a href="#how-to-use" class="page-scroll white--text">How to use</a>
+            <v-btn href="#how-to-use" class="cyan lighten-1 mt-5" dark large>             
+              <a class="page-scroll white--text">How to use</a>
             </v-btn>
           </v-layout>
         </v-parallax>
@@ -235,7 +235,7 @@
               class="cyan lighten-1 mt-5"
               dark
               large
-              href="https://github.com/sweetcapston"
+              href="#main"
             >
               Get Started
             </v-btn>
