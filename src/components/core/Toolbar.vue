@@ -19,8 +19,7 @@
       <v-flex
         align-center
         layout
-        py-2
-        
+        py-2        
       >
         <v-icon v-if="alarm && this.$store.state.Identity==2" class="hidden-md-and-down" color="tertiary" margin="2px" @click="alarmActive">mdi-bell</v-icon>
         <v-icon v-if="!alarm && this.$store.state.Identity==2" class="hidden-md-and-down" color="tertiary" margin="2px" @click="alarmActive">mdi-bell-off</v-icon>
@@ -107,11 +106,23 @@
 .logo {
   padding-top: 10px;
 } 
-.username{
+.username {
   margin-left: 9px;
   margin-top: 11px;
   position: absolute;
-  font-family:userFont
+  font-family: userFont
+}
+.mdi-bell {
+  margin: 5px;
+}
+.mdi-bell-off {
+  margin: 5px;
+}
+.mdi-account-circle {
+  margin: 5px;
+}
+.mdi-cogs {
+  margin: 5px;
 }
 .mdi-bell:hover{
   transform: scale(1.2)

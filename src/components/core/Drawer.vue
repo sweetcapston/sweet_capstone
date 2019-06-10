@@ -64,7 +64,7 @@ export default {
   data() { 
     return {
     image:
-      "https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg",
+      "/images/side_bg.jpg",
     color: "cyan",
     links: [
       // 메인페이지 관련
