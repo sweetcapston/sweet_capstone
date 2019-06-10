@@ -109,8 +109,8 @@
                     </template>
                     <v-divider/>
                     <div v-for="i in survey.surveyList[n-1].content.length" :key="i">
-                      <v-card-text>{{survey.surveyList[n-1].content[i-1]}}</v-card-text>
-                      <v-divider/>
+                      <v-card-text> {{ survey.surveyList[n-1].content[i-1] }} </v-card-text>
+                      <v-divider></v-divider>
                     </div>
                   </v-expansion-panel-content>
                 </v-expansion-panel>

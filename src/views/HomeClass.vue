@@ -34,13 +34,17 @@
 
       <material-notification
         v-for="(i,index) in this.newQuestion.length"
-        :key="index"
+        :key="`ques${index}`"
         class="mb-3"
         color="info"
+<<<<<<< HEAD
+=======
+        @click="movePage('question')"
+>>>>>>> 984def26d5cbe132f0e865ef53e23786515f8369
       >
         <div style="width:100%;" @click="movePage('question')">
           <strong>새로운 질문</strong>
-          <span>- {{newQuestion[index]}}</span>
+          <span>  {{newQuestion[index]}}</span>
         </div>
       </material-notification>
 
@@ -49,11 +53,11 @@
           class="mb-3"
           color="warning"
           v-for="(i,index) in this.newSurvey.length"
-          :key="index"
+          :key="`survey${index}`"
         >
           <div style="width:100%;" @click="movePage('survey')">
             <strong>새로운 설문</strong>
-            <span>- {{newSurvey[index].Name}}</span>
+            <span>  {{newSurvey[index].Name}}</span>
           </div>
         </material-notification>
 
@@ -61,11 +65,11 @@
           class="mb-3"
           color="purple"
           v-for="(i,index) in this.newQuiz.length"
-          :key="index"
+          :key="`quiz${index}`"
         >
           <div style="width:100%;" @click="movePage('quiz')">
             <strong>새로운 퀴즈</strong>
-            <span>- {{newQuiz[index].Name}}</span>
+            <span>  {{newQuiz[index].Name}}</span>
           </div>
         </material-notification>
       </div>

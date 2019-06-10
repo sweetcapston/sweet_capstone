@@ -18,21 +18,19 @@ export default {
     return axios.get(`${BaseUrl}/logout`, config)
   },
   SignUp(params) {
-    return axios.post(`${BaseUrl}/signup`, params);
+    return axios.post(`${BaseUrl}/signup`, params, config);
   },
   duplicate(params) {
-    return axios.get(`${BaseUrl}/duplicate/${params}`);
+
+    return axios.get(`${BaseUrl}/duplicate/${params}`, config);
   },
   passwordCheck(params){
-    return axios.post(`${BaseUrl}/passwordCheck`,params);
+    return axios.post(`${BaseUrl}/passwordCheck`, params, config);
   },
   editInfo(params){
-    return axios.post(`${BaseUrl}/edit`,params);
-  },
-  editPassword(params){
-    return axios.post(`${BaseUrl}/editPassword`,params);
+    return axios.post(`${BaseUrl}/edit`, params, config);
   },
   withdraw(params){
-    return axios.post(`${BaseUrl}/withdraw`,params);
+    return axios.post(`${BaseUrl}/withdraw`, params, config);
   }
 };

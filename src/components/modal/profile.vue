@@ -13,7 +13,7 @@
         <v-list>
           <v-list-tile avatar>
             <v-list-tile-avatar :color="`${avatarColor} white--text`">
-              <span>{{this.userName[0]}}</span>
+              <span>{{userName[0]}}</span>
             </v-list-tile-avatar>
 
             <v-list-tile-content>
@@ -46,10 +46,9 @@
         </v-list>
 
         <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn flat @click="menu = false">Cancel</v-btn>
-          <v-btn color="primary" flat @click="menu = false">Save</v-btn>
+          <v-btn color="red" flat @click="menu = false">회원탈퇴</v-btn>
+          <v-btn flat @click="menu = false">취소</v-btn>
+          <v-btn color="primary" flat @click="editUser">수정</v-btn>
         </v-card-actions>
       </v-card>
     </v-menu>
@@ -72,7 +71,10 @@ let colorList = ["blue", "purple", "brown", "pink", "navy", "teal", "orange", "i
     created() {
     },
     methods: {
-        
+        editUser(){
+            this.menu = false;
+            this.$EventBus.$emit("editUser");
+        }
     }
   }
 </script>

@@ -205,7 +205,7 @@
           
         </v-layout>
 
-        <v-layout class="gif">
+        <v-layout class="explanation">
           <v-card 
             height="600" 
             width="100%"
@@ -213,7 +213,12 @@
             class="transparent"  
           >
             <div class="back">
-              <img id="gif" src="@/assets/test.gif" />
+              <img v-if="toggle_one == 0" id="gif" src="@/assets/1-new-class.gif" />
+              <img v-if="toggle_one == 1" id="gif" src="@/assets/2-enter-class.gif" />
+              <img v-if="toggle_one == 2" id="gif" src="@/assets/3-question-class.gif" />
+              <img v-if="toggle_one == 3" id="gif" src="@/assets/4-survey-class.gif" />
+              <img v-if="toggle_one == 4" id="gif" src="@/assets/5-quiz-class.gif" />
+              <img v-if="toggle_one == 5" id="gif" src="@/assets/6-chart-class.gif" />
             </div>
           </v-card>
         </v-layout>
@@ -245,12 +250,13 @@
             <v-flex xs12 sm4 offset-sm1>
               <v-card class="elevation-0 transparent">
                 <v-card-title primary-title class="layout justify-center">
-                  <div class="headline">Company info</div>
+                  <div class="headline">Our Team Info</div>
                 </v-card-title>
                 <v-card-text>
-                  Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare. 
-                  Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
-                  Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti. 
+                  이동진<br>
+                  박종환<br>
+                  임승배<br>
+                  이송아
                 </v-card-text>
               </v-card>
             </v-flex>
@@ -422,7 +428,7 @@ export default {
     box-shadow: none;
   }
   @media only screen and (max-width: 600px) {
-  .gif {
+  .explanation {
     display: none !important;
     }
   }
