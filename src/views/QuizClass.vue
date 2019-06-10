@@ -19,13 +19,12 @@
       </material-card>
     </v-expansion-panel>
     <v-expansion-panel v-else >
-      <material-card color="metal" title="퀴즈 리스트" text="Quiz List" style="width:100%; margin-top:30px;">
-      <QuizForm v-show="formShow" @childs-event="parentsMethod"/>
+      <material-card color="metal" class="material-card" title="퀴즈 리스트" text="Quiz List" style="width:100%; margin-top:30px;">
+      <QuizForm v-if="formShow"/>
       <QuizList
         v-for="(quiz, _id) in quizList"
         v-bind:quiz="quiz"
         v-bind:socket="socket"
-        @edited="edited"
         :key="_id"
       />
       <div v-if="quizList.length + this.dataCheck <1" style="padding-left:10px"><h4>등록된 퀴즈가 없습니다.</h4></div>
@@ -83,6 +82,10 @@ export default {
     }
   },
   created() {
+    this.$EventBus.$on("sendQuiz", data => {
+      this.formShow = false;
+      this.quizList.push(data)
+    })
     this.$EventBus.$on("edit", data => {
       if(data !="-1") this.formShow = false;
     })
@@ -118,13 +121,13 @@ export default {
     };
   },
   methods: {
-    edited(editQuiz){
-      for(let i=0; i<this.quizList.length; i++ ){
-        if(this.quizList[i].QID == editQuiz.QID) {
-          this.$set(this.quizList, i, editQuiz);
-        }
-      }
-    },
+    // edited(editQuiz){
+    //   for(let i=0; i<this.quizList.length; i++ ){
+    //     if(this.quizList[i].QID == editQuiz.QID) {
+    //       this.$set(this.quizList, i, editQuiz);
+    //     }
+    //   }
+    // },
     addQuiz() {
       this.formShow = !this.formShow;
       setTimeout(()=>{
@@ -137,10 +140,6 @@ export default {
       this.formShow = !this.formShow;
       this.dataCheck = 0;
     },
-    parentsMethod: function(result) {
-      this.formShow = false;
-      this.quizList.push(result)
-    }
   },
   beforeRouteLeave(to, from, next) {
     this.socket.emit("diconnect");

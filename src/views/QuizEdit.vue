@@ -57,7 +57,7 @@ export default {
         }
          this.card_datas.push({
             id:i+1,
-            type:`${this.quiz.quizList[i].quizeType}`,
+            type:`${this.quiz.quizList[i].quizType}`,
             samplestype1:samplestype1,
             samplestype2:samplestype2
         })
@@ -195,7 +195,8 @@ export default {
       if(confirm("기존응답이 모두 삭제됩니다. \n수정하시겠습니까?")){
         Prof.quizEdit(editQuiz).then(res => {
           if(res.data){
-            this.$emit("edited",res.data)
+            // this.$emit("edited",res.data)
+            window.history.go(0)
           }
         })
       }

@@ -9,19 +9,18 @@
           <modal-create-class-form/>
           <span
             class="category font-weight-light"
-          >클래스이름 : {{this.$store.state.currentClass.className}}</span>
+          >클래스이름 :{{this.$store.state.currentClass.className}}</span>
           <span
             class="category font-weight-light"
-          >클래스코드 : {{this.$store.state.currentClass.classCode}}</span>
+          >클래스코드 :{{this.$store.state.currentClass.classCode}}  </span>
           <span
             class="category font-weight-light"
-          >교수이름 : {{this.$store.state.currentClass.profName}}</span>
-          <span class="category font-weight-light">알람여부 : {{this.$store.state.currentClass.alarm}}</span>
+          >교수이름 :{{this.$store.state.currentClass.profName}}  </span>
           <p>
             <strong>질문합계:</strong> n
             <strong>설문합계:</strong> n
             <strong>퀴즈합계:</strong> n
-            <strong>수강학생수:</strong> n
+            <strong>수강인원 수:</strong> n
           </p>
 
           <div class="text-xs-right">
@@ -96,7 +95,6 @@ import VueCal from "vue-cal";
 import "vue-cal/dist/vuecal.css";
 
 export default {
-  beforeCreate() {},
   created() {
     if (this.$store.state.Identity == 1) {
       Stud.classHome(
@@ -114,6 +112,7 @@ export default {
       Prof.classHome(
         this.$store.state.currentClass.classCode,
         this.$store.state.userID
+        
       ).then(res => {
         if (res.data === "false") alert("홈클래스 정보 가져오기 실패");
         else {
@@ -122,10 +121,20 @@ export default {
       });
     }
   },
-
-  components: { VueCal },
+    components: { VueCal },
+    name: "classAdd",
   data() {
     return {
+            guide: [
+                {
+                    target: '.Add',
+                    content: `수강하기 버튼을 눌러 클래스 목록에 추가 할 수 있습니다.`,
+                    params: {
+                        placement: 'bottom',
+                        enableScrolling: false
+                    }
+                }
+            ],
       color: null,
       colors: ["purple", "info", "success", "warning", "error"],
       newQuestion: [],
@@ -189,8 +198,11 @@ export default {
 
       this.snackbar = true;
     }
-  }
-};
+  },
+    mounted: function () {
+          // this.$tours['classAdd'].start()
+    }
+}
 </script>
 
 <style lang="stylus" scoped>

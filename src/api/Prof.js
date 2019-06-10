@@ -24,6 +24,12 @@ export default {
       }
       , config);
     },
+    alarmActive(classCode,alarm){
+        return axios.put(`${BaseUrl}/${classCode}/alarm`, {alarm: alarm}, config);
+    },
+    blackListAdd(classCode,blackList){
+        return axios.post(`${BaseUrl}/${classCode}/black`,{blackList:blackList}, config);
+    },
     surveyCreate(survey){
       return axios.post(`${BaseUrl}/${survey.classCode}/surveyAdd`, {survey:survey}, config);
     },
@@ -54,5 +60,8 @@ export default {
         { QID: QID },
         config
       );
+    },
+    getClassData(classCode){
+        return axios.get(`${BaseUrl}/${classCode}/class`, config);
     }
 };

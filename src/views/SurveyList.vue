@@ -74,11 +74,6 @@
         class="surveyName"
         @click.stop
       ></v-text-field>
-      <v-btn 
-      class="red lighten-1 white--text cancelBtn" 
-      @click.stop="cancel">
-        <v-icon>cancel</v-icon>
-      </v-btn>
     </template>
     <v-stepper v-model="e1"  v-if="!edit">
       <v-stepper-header>
@@ -94,22 +89,22 @@
         </template>
       </v-stepper-header>
       <v-stepper-items>
-        <v-stepper-content v-for="n in steps" :key="`${n}-content`" :step="n">
+        <v-stepper-content v-for="(survey, index) in this.surveyList" :key="index+1" :step="index+1">
           <v-card class="mb-5" color="grey lighten-3" style="padding-bottom:3%">
             <v-container fluid>
-              <span class="question-title">{{survey.surveyList[n-1].surveyQuestion}}</span>
+              <span class="question-title" v-html= "`${index+1}. ${survey.surveyQuestion}`"/>
               <!-- FIXME: 라디오버튼 -->
-              <v-radio-group v-show="survey.surveyList[n-1].surveyType == 1" column>
-                <div style="padding-top:6px" v-for="c in survey.surveyList[n-1].content.length" :key="`${c}-radio`">
+              <v-radio-group v-show="survey.surveyType == 1" column>
+                <div style="padding-top:6px;" v-for="c in survey.content.length" :key="`${c}-radio`">
                   <v-radio disabled :id="`${c}`" color="cyan ligten-1">
                     <template v-slot:label>
                       <v-flex>
-                        {{survey.surveyList[n-1].content[c-1]}} ({{survey.surveyList[n-1].count[c-1]}}명)
+                        {{survey.content[c-1]}} ({{survey.count[c-1]}}명)
                         <v-progress-linear
                           color="cyan"
                           width="50px"
                           height="20"
-                          v-bind:value="survey.surveyList[n-1].count[c-1] * getPercent(survey.surveyList[n-1].count)"
+                          v-bind:value="survey.count[c-1] * getPercent(survey.count)"
                         />
                       </v-flex>
                     </template>
@@ -117,22 +112,22 @@
                 </div>
               </v-radio-group>
               <!-- FIXME: 체크박스 -->
-              <div v-show="survey.surveyList[n-1].surveyType == 2">
+              <div v-show="survey.surveyType == 2">
                 <v-checkbox
                   disabled
                   :id="`${c}`"
-                  v-for="c in survey.surveyList[n-1].content.length"
+                  v-for="c in survey.content.length"
                   :key="`${c}-checkbox`"
                   color="cyan ligten-1"
                 >
                   <template v-slot:label>
                     <v-flex>
-                      {{survey.surveyList[n-1].content[c-1]}} ({{survey.surveyList[n-1].count[c-1]}}명)
+                      {{survey.content[c-1]}} ({{survey.count[c-1]}}명)
                       <v-progress-linear
                         color="cyan"
                         width="50px"
                         height="20"
-                        v-bind:value="survey.surveyList[n-1].count[c-1] * getPercent(survey.surveyList[n-1].count)"
+                        v-bind:value="survey.count[c-1] * getPercent(survey.count)"
                       />
                     </v-flex>
                   </template>
@@ -140,7 +135,7 @@
               </div>
               <!-- FIXME: 주관식 -->
               <div
-                v-if="survey.surveyList[n-1].surveyType == 3"
+                v-if="survey.surveyType == 3"
                 id="scroll-target"
                 style="max-height: 400px "
                 class="scroll-y"
@@ -153,8 +148,8 @@
                       </div>
                     </template>
                     <v-divider/>
-                    <div v-for="i in survey.surveyList[n-1].content.length" :key="i">
-                      <v-card-text>{{survey.surveyList[n-1].content[i-1]}}</v-card-text>
+                    <div v-for="i in survey.content.length" :key="i">
+                      <v-card-text>{{survey.content[i-1]}}</v-card-text>
                       <v-divider/>
                     </div>
                   </v-expansion-panel-content>
@@ -163,14 +158,14 @@
             </v-container>
           </v-card>
           <v-layout justify-space-between>
-            <v-btn class="cyan lighten-1 white--text" @click="preStep(n)">Pre</v-btn>
+            <v-btn class="cyan lighten-1 white--text" @click="preStep(index+1)">Pre</v-btn>
 
-            <v-btn class="cyan lighten-1 white--text" @click="nextStep(n)">Next</v-btn>
+            <v-btn class="cyan lighten-1 white--text next" @click="nextStep(index+1)">Next</v-btn>
           </v-layout>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
-    <SurveyEdit v-bind:survey="survey" @edited="edited" v-else/>
+    <SurveyEdit v-bind:survey="survey" v-else/>
   </v-expansion-panel-content>
 </template>
 
@@ -182,11 +177,14 @@ Vue.component("SurveyEdit", SurveyEdit);
 /*eslint-disable */
 export default {
   created() {
+    this.steps = this.survey.surveyList.length
+    this.surveyList = this.survey.surveyList
     this.$EventBus.$on("surveyEdit", data => {
       this.fab = false;
       if(data != this.survey.SID){
         this.edit = false;
-        if(this.survey && document.querySelector(`.survey${this.survey.SID} .v-expansion-panel__body`).style.display !="none"){
+        if(document.querySelector(`.quiz${this.survey.SID} .v-expansion-panel__body`)!=null &&
+          document.querySelector(`.survey${this.survey.SID} .v-expansion-panel__body`).style.display !="none"){
           document.querySelector(`.survey${this.survey.SID} .v-expansion-panel__header`).click();
         }
       }
@@ -197,11 +195,11 @@ export default {
           if (parseInt(data.surveyType[i]) < 3) {
             let check = parseInt(data.answer[i]);
             while (check >= 1) {
-                this.survey.surveyList[i].count[check % 10 - 1]++;
+                this.surveyList[i].count[check % 10 - 1]++;
                 check = parseInt(check / 10)
             }
           } else{
-            this.survey.surveyList[i].content.push(data.answer[i]);
+            this.surveyList[i].content.push(data.answer[i]);
           }
         }
       }
@@ -210,7 +208,8 @@ export default {
   },
   data() {
     return {
-      steps: this.survey.surveyList.length,
+      steps: 0,
+      surveyList:[],
       userName: this.$store.state.userName,
       profName:this.$store.state.currentClass.profName,
       edit:false,
@@ -229,10 +228,11 @@ export default {
     cancel(){
       if(confirm("취소하시겠습니까?")) this.edit = false;
     },
-    edited: function(editedSurvey){
-      this.$emit("edited", editedSurvey)
-      this.edit = false;
-    },
+    // edited: function(editedSurvey){
+    //   this.survey = editedSurvey;
+    //   // this.$emit("edited", editedSurvey)
+    //   this.edit = false;
+    // },
     floating: function(){
       this.fab = !this.fab;
     },

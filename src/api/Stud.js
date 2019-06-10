@@ -6,8 +6,8 @@ const config = {
   withCredentials: true
 };
 export default {
-  classEnter(classCode) {
-    return axios.post(`${BaseUrl}/enter`, { classCode: classCode }, config);
+  classEnter(classCode,userID) {
+    return axios.post(`${BaseUrl}/enter`, { classCode: classCode ,userID: userID}, config);
   },
   classAdd(classCode) {
     return axios.get(`${BaseUrl}/${classCode}/classAdd`, config);

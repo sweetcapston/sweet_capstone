@@ -19,13 +19,12 @@
       </material-card>
     </v-expansion-panel>
     <v-expansion-panel v-else>
-      <material-card color="metal" title="설문 리스트" text="Survey List" style="width:100%; margin-top:30px;">
-      <SurveyForm v-show="formShow"/>
+      <material-card color="metal" class="material-card" title="설문 리스트" text="Survey List" style="width:100%; margin-top:30px;">
+      <SurveyForm v-if="formShow"/>
       <SurveyList
         v-for="(survey, _id) in surveyList"
         v-bind:survey="survey"
         v-bind:socket="socket"
-        @edited="edited"
         :key="_id"
       />
       <div v-if="surveyList.length+ this.dataCheck < 1" style="padding-left:10px"><h4>등록된 설문이 없습니다.</h4></div>
@@ -83,6 +82,10 @@ export default {
     }
   },
   created() {
+    this.$EventBus.$on("sendSurvey", data => {
+      this.formShow = false;
+      this.surveyList.push(data)
+    })
     this.$EventBus.$on("surveyEdit", data => {
       if(data !="-1") this.formShow = false;
     })
@@ -118,13 +121,13 @@ export default {
     };
   },
   methods: {
-    edited(editSurvey){
-      for(let i=0; i<this.surveyList.length; i++ ){
-        if(this.surveyList[i].SID == editSurvey.SID) {
-          this.$set(this.surveyList, i, editSurvey);
-        }
-      }
-    },
+    // edited(editSurvey){
+    //   for(let i=0; i<this.surveyList.length; i++ ){
+    //     if(this.surveyList[i].SID == editSurvey.SID) {
+    //       this.$set(this.surveyList, i, editSurvey);
+    //     }
+    //   }
+    // },
     addSurvey() {
       this.formShow = !this.formShow;
       setTimeout(()=>{
@@ -136,10 +139,6 @@ export default {
     cancelSurvey(){
       this.dataCheck = 0;
       this.formShow = !this.formShow;
-    },
-    parentsMethod: function(result) {
-      this.formShow = false;
-      this.surveyList.push(result)
     }
   },
   beforeRouteLeave(to, from, next) {

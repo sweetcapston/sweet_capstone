@@ -22,7 +22,8 @@
         py-2
         
       >
-        <v-icon class="hidden-md-and-down" color="tertiary" margin="2px">mdi-bell</v-icon>
+        <v-icon v-if="alarm" class="hidden-md-and-down" color="tertiary" margin="2px" @click="alarmActive">mdi-bell</v-icon>
+        <v-icon v-else class="hidden-md-and-down" color="tertiary" margin="2px" @click="alarmActive">mdi-bell-off</v-icon>
         <v-icon class="hidden-md-and-down" color="tertiary" margin="2px">mdi-account-circle</v-icon>
         <v-icon class="hidden-md-and-down" color="tertiary" margin="2px">mdi-cogs</v-icon>
       </v-flex>
@@ -40,6 +41,7 @@
 </template>
 
 <script>
+  import { Prof } from "@/api";
 /*eslint-disable */
   // Utilities
   import {
@@ -50,8 +52,15 @@
   } from "@/api"
 
   export default {
+    created(){
+      Prof.getClassData(this.$store.state.currentClass.classCode).then(res => {
+        this.$store.commit("setAlarmActive",res.data.alarm)
+        this.alarm =res.data.alarm;
+      })
+    },
     data: () => ({
-      title: null
+      title: null,
+      alarm:true
     }),
 
     watch: {
@@ -72,6 +81,13 @@
         })
         var img = new Image();
         img.src = "@/assets/logo_white_animation.svg";
+      },
+      alarmActive() {
+        Prof.alarmActive(this.$store.state.currentClass.classCode,this.alarm)
+        .then(res => {
+          this.$store.commit("setAlarmActive", res.data);
+          this.alarm = res.data
+        });
       }
     },
     computed: {

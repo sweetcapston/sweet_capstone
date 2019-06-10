@@ -18,6 +18,15 @@ export default {
     Auth.auth().then(res => {
       if (!res.data) this.$router.push({ name: "login" });
     });
+    if(this.$store.state.Identity==2){
+      let count = 0
+      this.$store.state.classList.forEach(element => {
+        if(element.classCode == this.$store.state.currentClass.classCode) count++;
+      });
+      if(count==0){
+        this.$router.push({ name: "main" });
+      }
+    }
   },
   mounted() {
     if (Notification && Notification.permission != "granted") {

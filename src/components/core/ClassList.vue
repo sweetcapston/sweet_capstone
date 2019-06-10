@@ -56,8 +56,12 @@ export default {
     // 클래스 입장
     enterClass: function(classCode) {
       if (this.$store.state.Identity == 1) {
-        Stud.classEnter(classCode).then(res => {
-          if (!res.data) {
+        Stud.classEnter(classCode,this.$store.state.userID).then(res => {
+          if(res.data=="black") {
+            alert("해당 클래스에서 제재 되었습니다.");
+            return;
+          }
+          else if (!res.data) {
             alert("삭제된 클래스 입니다!");
             return;
           } else {
@@ -82,9 +86,7 @@ export default {
           className: this.currentClass.className,
           profName: this.currentClass.profName
         });
-        const checkApply = this.$store.state.classList.findIndex(function(
-          item
-        ) {
+        const checkApply = this.$store.state.classList.findIndex(function(item) {
           return item.classCode === classCode;
         });
         this.$store.commit("setCheckApply", checkApply);

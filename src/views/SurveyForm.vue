@@ -59,7 +59,7 @@ export default {
     return {
       guide: [
         {
-          target: '.remove',
+          target: '.material-card',
           content: `설문를 생성할 수 있습니다!`,
           params: {
             placement: 'bottom',
@@ -123,7 +123,7 @@ export default {
           }
         },
         {
-          target: '.cyan lighten-1 white--text',
+          target: '.cyan lighten-1 white--text next',
           content: '버튼을 눌러 다음 문항를 작성하세요.',
           params: {
             placement: 'bottom',
@@ -276,7 +276,7 @@ export default {
       Prof.surveyCreate(newSurvey).then(res => {
         if (res.data) {
           console.log(res.data)
-          this.$emit("childs-event", res.data);
+          this.$EventBus.$emit("sendSurvey", res.data)
         }
       });
     },
