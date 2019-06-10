@@ -192,9 +192,10 @@ export default {
       return this.className;
     },
     enterClass(classCode) {
-      Stud.classEnter(classCode)
+      Stud.classEnter(classCode,this.$store.state.userID)
       .then(res => {
-        if(res.data == false) alert('없는 클래스 입니다.');
+        if(res.data=="black") alert('해당 클래스에서 제재 되었습니다.');
+        else if(res.data == false) alert('없는 클래스 입니다.');
         else{
           //클래스 입장시에 해당 클래스코드 vuex에 저장. 클래스 퇴장시 저장된 클래스코드 삭제
           this.$store.commit("setCurrentClass", {
