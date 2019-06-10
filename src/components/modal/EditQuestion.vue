@@ -11,8 +11,8 @@
             <div style="width: 100%;">
               <template>
                 <v-list-tile avatar>
-                  <v-list-tile-avatar color="gradient white--text" large fill-dot>
-                    <img src="https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg">
+                  <v-list-tile-avatar :color="`${avatarColor} white--text`">
+                    <span>{{$store.state.userName[0]}}</span>
                   </v-list-tile-avatar>
 
                   <v-text-field
@@ -39,9 +39,11 @@
   </v-layout>
 </template>
 <script>
+let colorList = ["blue", "purple", "brown", "pink", "navy", "teal", "orange", "indigo", "lime", "deep-purple lighten-3"];
   export default {
     data() {
       return {
+        avatarColor: this.$store.state.Identity!=2 ? colorList[parseInt(this.$store.state.studentID[this.$store.state.studentID.length-1])] : "gradient",
         dialog:false,
         question:{},
         anonymous: false,

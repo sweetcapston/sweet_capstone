@@ -37,12 +37,12 @@
 
       <material-notification
         v-for="(i,index) in this.newQuestion.length"
-        :key="index"
+        :key="`ques${index}`"
         class="mb-3"
         color="info"
-        dismissible
+        @click="movePage('question')"
       >
-      <div style="width:100%;" @click="movePage('question')">
+      <div style="width:100%;" >
         <strong>오늘의 질문 {{i}}</strong>
         <span>- {{newQuestion[index]}}.</span>
         </div>
@@ -52,9 +52,8 @@
         <material-notification
           class="mb-3"
           color="warning"
-          dismissible
           v-for="(i,index) in this.newSurvey.length"
-          :key="index"
+          :key="`survey${index}`"
         >
         <div style="width:100%;" @click="movePage('survey')">
           <strong>오늘의 설문 {{i}}</strong>
@@ -65,9 +64,8 @@
         <material-notification
           class="mb-3"
           color="purple"
-          dismissible
           v-for="(i,index) in this.newQuiz.length"
-          :key="index"
+          :key="`quiz${index}`"
         >
           <div style="width:100%;" @click="movePage('quiz')">
             <strong>오늘의 퀴즈 {{i}}</strong>

@@ -3,47 +3,129 @@
     <v-dialog v-model="dialog" persistent max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="headline">회원 ㅈ어보 수정</span>
+          <span class="headline">회원 정보 수정</span>
+          <!-- <p v-if="!checked">비밀번호를 입력해주세요</p> -->
         </v-card-title>
         <v-divider/>
         <v-card-text>
           <v-layout wrap>
             <div style="width: 100%;">
               <template>
-                <v-list-tile avatar>
-                  <v-list-tile-avatar color="gradient white--text" large fill-dot>
-                    <img src="https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg">
-                  </v-list-tile-avatar>
-
-                  <v-text-field
-                    hide-details
-                    placeholder="Ask a question..."
-                    solo
-                    @keydown.enter="editUser()"
-                  />&nbsp;&nbsp;&nbsp;
-                  <input value="false" type="checkbox" >
-                  <label style="width:36px">익명</label>
-                </v-list-tile>
+                <v-layout column>
+                    <v-flex>
+                        <p>비밀번호 확인
+                        &nbsp;&nbsp;&nbsp;</p>
+                        <v-text-field
+                            class="password"
+                            hide-details
+                            type="password"
+                            placeholder="비밀번호를 입력해주세요."
+                            solo
+                            v-model="password"
+                            @keydown.enter="checkPassword()"
+                        />&nbsp;&nbsp;&nbsp;
+                    </v-flex>
+                    <v-flex v-show="checked">
+                        <p>이름
+                        &nbsp;&nbsp;&nbsp;</p>
+                        <v-text-field
+                            class="password"
+                            hide-details
+                            placeholder="비밀번호를 입력해주세요."
+                            solo
+                            v-model="userName"
+                        />&nbsp;&nbsp;&nbsp;
+                    </v-flex>
+                    <v-flex v-show="checked">
+                        <p>학번
+                        &nbsp;&nbsp;&nbsp;</p>
+                        <v-text-field
+                            class="password"
+                            hide-details
+                            placeholder="비밀번호를 입력해주세요."
+                            solo
+                            v-model="studentID"
+                        />&nbsp;&nbsp;&nbsp;
+                    </v-flex>
+                    <v-flex v-show="checked">
+                        <v-checkbox v-model="newPW" label="비밀번호 변경"></v-checkbox>
+                    </v-flex>
+                    <v-flex v-show="checked && newPW">
+                        <p>새 비밀번호
+                        &nbsp;&nbsp;&nbsp;</p>
+                        <v-text-field
+                            :disabled="newPW == false"
+                            class="newPassword"
+                            hide-details
+                            type="password"
+                            placeholder="비밀번호를 입력해주세요."
+                            solo
+                            name="password"
+                            data-vv-as="비밀번호"
+                            v-validate="'required|min:6'"
+                            @input="validate"
+                            ref="password"
+                            v-model="newPassword"
+                        />&nbsp;&nbsp;&nbsp;
+                        <p
+                            class="pw-error undraggable unselectable"
+                            v-show="errors.has('password') && (newPassword)"
+                        >{{errors.first('password')}}</p>
+                    </v-flex>
+                    <v-flex v-show="checked && newPW">
+                        <p>새 비밀번호 확인
+                        &nbsp;&nbsp;&nbsp;</p>
+                        <v-text-field
+                            :disabled="newPW == false"
+                            class="newPassword2"
+                            hide-details
+                            type="password"
+                            placeholder="비밀번호를 입력해주세요."
+                            solo
+                            name="password2"
+                            v-validate="'required|confirmed:password'"
+                            data-vv-as="비밀번호 확인"
+                            @input="validate"
+                            v-model="newPassword2"
+                        />&nbsp;&nbsp;&nbsp;
+                        <p class="p-error"
+                        v-show="errors.has('password2') && (newPassword2) "
+                        >{{errors.first('password2')}}</p>
+                    </v-flex>
+                </v-layout>
               </template>
             </div>
           </v-layout>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
-          <v-btn color="blue darken-1" flat @click="editUser()">Save</v-btn>
+          <v-btn color="blue darken-1" flat @click="dialog = false">닫기</v-btn>
+          <v-btn v-if="!checked" color="blue darken-1" flat @click="checkPassword()">확인</v-btn>
+          <v-btn v-else color="blue darken-1" flat @click="editUser">수정</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
   </v-layout>
 </template>
 <script>
+import {Auth} from "@/api"
+import ko from "vee-validate/dist/locale/ko.js";
+ko.messages.confirmed = field =>
+          `${field.split(" ")[0]}값이 일치하지 않습니다.`;
+ko.messages.min = (field, n) => `${field}는 최소 ${n}자리 글자이어야 합니다.`;
+
+let colorList = ["blue", "purple", "brown", "pink", "navy", "teal", "orange", "indigo", "lime", "deep-purple lighten-3"];
   export default {
     data() {
       return {
         dialog:false,
-        userID:"",
-        userName:"",
+        checked:false,
+        avatarColor: this.$store.state.Identity!=2 ? colorList[parseInt(this.$store.state.studentID[this.$store.state.studentID.length-1])] : "gradient",
+        userID:this.$store.state.userID,
+        userName:this.$store.state.userName,
+        studentID:this.$store.state.studentID,
+        Identity:this.$store.state.Identity,
+        newPW:false,
         password:"",
         newPassword:"",
         newPassword2:"",        
@@ -51,20 +133,60 @@
     },
     created() {
         this.$EventBus.$on("editUser", () => {
+            this.checked = false;
             this.dialog = true;
-            // this.user = this.$store.state.
+            this.password = "";
+            this.newPassword = "";
+            this.newPassword2 = "";
+            this.userID = this.$store.state.userID;
+            this.userName = this.$store.state.userName;
+            this.newPW = false;
+            document.querySelector(".password").classList.remove("v-input--is-disabled")
+            document.querySelector(".password .v-input__control .v-input__slot .v-text-field__slot input").disabled = false;
         });
     },
+
     methods: {
-      editUser(){
         
-        // this.$EventBus.$emit("editUser", this.question);
-      }
+        checkPassword(){
+            Auth.passwordCheck({
+                userID: this.userID,
+                password:this.password
+            }).then(res => {
+                if(res.data){
+                    this.checked= true;
+                    document.querySelector(".password").classList.add("v-input--is-disabled")
+                    document.querySelector(".password .v-input__control .v-input__slot .v-text-field__slot input").disabled = true;
+                } else {
+                    alert("비밀번호가 올바르지 않습니다.")
+                }
+            })
+        },
+        editUser(){
+            if(!this.newPW && this.errors.items.length!=0 ){
+                return;
+            }
+
+            if(this.newPassword==this.password){
+                alert("기존과 다른 비밀번호를 사용해주세요.")
+                return;
+            }
+            // if(c)
+            // Auth.editInfo({
+                
+            // })
+        },
+        validate: function() {
+            this.$validator.validateAll();
+        }
     },
   }
 </script>
 <style>
 .v-dialog{
   border-radius: 10px;
+}
+.flex p{
+  font-size:15px;  
 }
 </style>
