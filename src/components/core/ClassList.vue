@@ -76,7 +76,6 @@ export default {
               return item.classCode === classCode;
             });
             this.$store.commit("setCheckApply", checkApply);
-
             this.$router.push({ path: `class/${classCode}/home` });
           }
         });

@@ -16,10 +16,9 @@ export default {
     classHome(classCode,userID){
       return axios.post(`${BaseUrl}/${classCode}/home`,{userID:userID},config)
     },
-    classEdit(classCode,userID,className){
-      return axios.post(`${BaseUrl}/${classCode}/edit`, 
+    classEdit(classCode, className){
+      return axios.put(`${BaseUrl}/${classCode}/classEdit`, 
       {
-        userID: userID,
         className: className
       }
       , config);

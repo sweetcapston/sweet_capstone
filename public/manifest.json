@@ -1,29 +1,55 @@
 {
     "name": "sweet_capstone",
     "short_name": "sweet_capstone",
-    "icons": [ {
+    "icons": [ 
+      {
         "src": "/images/logo.png",
         "sizes": "200x200",
         "type": "image/png"
-      }, {
+      },
+      {
         "src": "/images/cropped-choc-logo-512x512.png",
         "sizes": "512x512",
         "type": "image/png"
-      },{
+      },
+      {
         "src": "/images/notify.jpg",
         "sizes": "512x512",
         "type": "image/jpeg"
-      },{
+      },
+      {
         "src": "/images/mini.png",
         "sizes": "512x512",
         "type": "image/png"
-      },{
+      },
+      {
         "src": "/images/material.png",
         "sizes": "1024x1024",
         "type": "image/png"
-      },{
+      },
+      {
         "src": "/images/material2.jpg",
         "sizes": "1024x1024",
+        "type": "image/jpeg"
+      },
+      {
+        "src": "/images/material3.jpg",
+        "sizes": "1024x1024",
+        "type": "image/jpeg"
+      },
+      {
+        "src": "/images/side_bg.jpg",
+        "sizes": "512x512",
+        "type": "image/jpeg"
+      },
+      {
+        "src": "/images/side_bg2.jpg",
+        "sizes": "512x512",
+        "type": "image/jpeg"
+      },
+      {
+        "src": "/images/side_bg3.jpg",
+        "sizes": "512x512",
         "type": "image/jpeg"
       }
     ],

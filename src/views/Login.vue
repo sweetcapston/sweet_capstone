@@ -15,7 +15,7 @@
       <section id="main">
         <v-parallax 
           height="700"
-          src="/images/material.png"
+          src="/images/material3.jpg"
         >
           <v-layout
             column

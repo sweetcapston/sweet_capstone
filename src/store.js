@@ -47,6 +47,8 @@ export default new Vuex.Store({
     },
 
     addClassList:(state, payload) => (state.classList.push(payload)),
+    //editClassList:(state, payload) => {(state.classList = payload.classList);
+      //},
     removeClassList:(state) => (state.classList),
 
     // 현재 클래스 정보

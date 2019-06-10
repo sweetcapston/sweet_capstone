@@ -26,7 +26,7 @@
         <sui-input placeholder="클래스이름을 입력해주세요" v-model="className" style="margin-bottom:10px"/>
       </sui-modal-content>
       <sui-modal-actions>
-        <sui-button primary @click.native="edit()">수정하기</sui-button>
+        <sui-button primary @click.native="edit(getClassCode())">수정하기</sui-button>
       </sui-modal-actions>
     </sui-modal>
   </div>
@@ -39,10 +39,16 @@ export default {
     return {
       open: false,
       className: this.$store.state.currentClass.className,
-      fab: false
+      fab: false,
+      classCode : this.$store.state.currentClass.classCode,
+      classList : [],
+      testList: [1,2,3]
     };
   },
   methods: {
+    getClassCode(){
+      return this.$store.state.currentClass.classCode
+    },
     editClass() {
       this.open = !this.open;
     },
@@ -52,24 +58,31 @@ export default {
     toggle() {
       this.open = !this.open;
     },
-    edit() {
+    edit(classCode) {
       this.toggle();
       this.$store.commit("setCurrentClass", {
         className: this.className,
         classCode: this.$store.state.currentClass.classCode,
         profName: this.$store.state.currentClass.profName,
       });
-      // 서버로 전송.
-      // Prof.classEdit(
-      //   this.$store.state.currentClass.classCode,
-      //   this.$store.state.userID,
-      //   this.className,
-      // ).then(res => {
-      //   if (res.data === "false") alert("클래스 수정 실패");
-      //   else {
-      //     alert("클래스 수정 성공");
-      //   }
-      // });
+
+      this.classList = this.$store.state.classList;
+
+      const idx =  this.classList.findIndex(function(item) {
+              return item.classCode === classCode
+            });
+      
+      this.classList[idx].className =  this.className;
+      this.$store.commit("editClassList", this.classList);
+      Prof.classEdit(
+        this.$store.state.currentClass.classCode,
+        this.className,
+      ).then(res => {
+        if (res.data === "false") alert("클래스 수정 실패");
+        else {
+          alert("클래스 수정 성공");
+        }
+      });
     }
   }
 };

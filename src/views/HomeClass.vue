@@ -7,20 +7,17 @@
         </v-avatar>
         <v-card-text class="text-xs-center">
           <modal-create-class-form/>
-          <span
-            class="category font-weight-light"
-          >클래스이름 :{{this.$store.state.currentClass.className}}</span>
-          <span
-            class="category font-weight-light"
-          >클래스코드 :{{this.$store.state.currentClass.classCode}}  </span>
-          <span
-            class="category font-weight-light"
-          >교수이름 :{{this.$store.state.currentClass.profName}}  </span>
+          <p class="category font-weight-light">클래스이름 :{{this.$store.state.currentClass.className}}</p>
+          <p class="category font-weight-light">클래스코드 :{{this.$store.state.currentClass.classCode}}</p>
+          <p class="category font-weight-light">교수이름 :{{this.$store.state.currentClass.profName}}</p>
+          <p>수강인원 수: {{this.studentNum}}</p>
           <p>
-            <strong>질문합계:</strong> n
-            <strong>설문합계:</strong> n
-            <strong>퀴즈합계:</strong> n
-            <strong>수강인원 수:</strong> n
+            <strong>질문합계:</strong>
+            {{this.questionNum}}&nbsp;
+            <strong>설문합계:</strong>
+            {{this.surveyNum}}&nbsp;
+            <strong>퀴즈합계:</strong>
+            {{this.quizNum}}
           </p>
 
           <div class="text-xs-right">
@@ -42,9 +39,9 @@
         color="info"
         @click="movePage('question')"
       >
-      <div style="width:100%;" >
-        <strong>오늘의 질문 {{i}}</strong>
-        <span>- {{newQuestion[index]}}.</span>
+        <div style="width:100%;" @click="movePage('question')">
+          <strong>새로운 질문</strong>
+          <span>  {{newQuestion[index]}}</span>
         </div>
       </material-notification>
 
@@ -55,9 +52,9 @@
           v-for="(i,index) in this.newSurvey.length"
           :key="`survey${index}`"
         >
-        <div style="width:100%;" @click="movePage('survey')">
-          <strong>오늘의 설문 {{i}}</strong>
-          <span>- {{newSurvey[index].Name}}.</span>
+          <div style="width:100%;" @click="movePage('survey')">
+            <strong>새로운 설문</strong>
+            <span>  {{newSurvey[index].Name}}</span>
           </div>
         </material-notification>
 
@@ -68,8 +65,8 @@
           :key="`quiz${index}`"
         >
           <div style="width:100%;" @click="movePage('quiz')">
-            <strong>오늘의 퀴즈 {{i}}</strong>
-            <span>- {{newQuiz[index].Name}}.</span>
+            <strong>새로운 퀴즈</strong>
+            <span>  {{newQuiz[index].Name}}</span>
           </div>
         </material-notification>
       </div>
@@ -94,6 +91,18 @@ import "vue-cal/dist/vuecal.css";
 
 export default {
   created() {
+    Stud.classHome(
+      this.$store.state.currentClass.classCode,
+      this.$store.state.userID
+    ).then(res => {
+      if (res.data === "false") alert("홈클래스 정보 가져오기 실패");
+      else {
+        this.studentNum = res.data.student;
+        (this.questionNum = res.data.student),
+          (this.surveyNum = res.data.survey),
+          (this.quizNum = res.data.quiz);
+      }
+    });
     if (this.$store.state.Identity == 1) {
       Stud.classHome(
         this.$store.state.currentClass.classCode,
@@ -104,13 +113,16 @@ export default {
           this.newQuestion = res.data.newQuestion;
           this.newSurvey = res.data.newSurvey;
           this.newQuiz = res.data.newQuiz;
+          this.studentNum = res.data.student;
+          (this.questionNum = res.data.student),
+            (this.surveyNum = res.data.survey),
+            (this.quizNum = res.data.quiz);
         }
       });
     } else if (this.$store.state.Identity == 2) {
       Prof.classHome(
         this.$store.state.currentClass.classCode,
         this.$store.state.userID
-        
       ).then(res => {
         if (res.data === "false") alert("홈클래스 정보 가져오기 실패");
         else {
@@ -119,26 +131,30 @@ export default {
       });
     }
   },
-    components: { VueCal },
-    name: "classAdd",
+  components: { VueCal },
+  name: "classAdd",
   data() {
     return {
-            guide: [
-                {
-                    target: '.Add',
-                    content: `수강하기 버튼을 눌러 클래스 목록에 추가 할 수 있습니다.`,
-                    params: {
-                        placement: 'bottom',
-                        enableScrolling: false
-                    }
-                }
-            ],
+      guide: [
+        {
+          target: ".Add",
+          content: `수강하기 버튼을 눌러 클래스 목록에 추가 할 수 있습니다.`,
+          params: {
+            placement: "bottom",
+            enableScrolling: false
+          }
+        }
+      ],
       color: null,
       colors: ["purple", "info", "success", "warning", "error"],
       newQuestion: [],
       newSurvey: [],
       newQuiz: [],
-      fab: false
+      fab: false,
+      studentNum: "",
+      questionNum: "",
+      surveyNum: "",
+      quizNum: ""
     };
   },
   computed: {
