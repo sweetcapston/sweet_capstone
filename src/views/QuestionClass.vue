@@ -56,9 +56,14 @@
                   </v-btn>
                 </v-speed-dial>
                 <v-layout id ="textDiv">
-                  <v-list-tile-avatar>
-                    <img :src="image">
+                  <v-list-tile-avatar 
+                    color="gradient white--text" 
+                    large 
+                    fill-dot
+                  >
+                    <span>SA</span>
                   </v-list-tile-avatar>
+
 
                   <v-list-tile-content>
                     <v-layout id="full-width">
