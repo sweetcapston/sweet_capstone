@@ -49,5 +49,8 @@ export default {
         { QID: QID },
         config
       );
+    },
+    getClassData(classCode){
+        return axios.get(`${BaseUrl}/${classCode}/class`, config);
     }
 };

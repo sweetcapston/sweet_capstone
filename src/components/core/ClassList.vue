@@ -57,7 +57,7 @@ export default {
     enterClass: function(classCode) {
       if (this.$store.state.Identity == 1) {
         Stud.classEnter(classCode,this.$store.state.userID).then(res => {
-          if(res.data=="blackList") {
+          if(res.data=="black") {
             alert("해당 클래스에서 제재 되었습니다.");
             return;
           }

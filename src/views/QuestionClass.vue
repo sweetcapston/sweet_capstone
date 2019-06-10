@@ -345,12 +345,6 @@ export default {
 
       })
     },
-    alarmActive() {
-      Prof.alarm(this.$store.state.currentClass.classCode,this.class.alarm)
-              .then(res => {
-        //this.class.active = res.data;
-      });
-    },
     notification(data) {
       const cursor = this;
       let getTime = new Date();
@@ -359,7 +353,7 @@ export default {
         Notification.permission === "granted" &&
         data &&
         this.$store.state.Identity == 2
-        //&& this.class.alarm
+        && this.$store.state.alarm
       ) {
         navigator.serviceWorker.getRegistration().then(function(reg) {
           const title = "OPEN CLASS❤️";
