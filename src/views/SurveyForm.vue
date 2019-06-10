@@ -209,7 +209,7 @@ export default {
         surveyQuestion = surveyQuestion.value;
         let content = [];
         let doc;
-        let count;
+        let count = 0;
         switch (surveyType) {
           case "1":
             doc = document
@@ -240,11 +240,6 @@ export default {
               content.push(doc[i].querySelector("input").value);
             }
             count = new Array(doc.length).fill(0);
-            break;
-          case "3":
-            doc = document.querySelector("textarea").value;
-            content.push(doc);
-            count = 1;
             break;
         }
         surveyList.push({

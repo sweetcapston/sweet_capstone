@@ -5,6 +5,7 @@
     <v-container >
       <router-view/>
     </v-container>
+    <modal-edit-user/>
   </v-app>
 </template>
 

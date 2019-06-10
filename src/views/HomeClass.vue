@@ -40,8 +40,8 @@
         dismissible
       >
         <div style="width:100%;" @click="movePage('question')">
-          <strong>오늘의 질문 {{i}}</strong>
-          <span>- {{newQuestion[index]}}.</span>
+          <strong>새로운 질문</strong>
+          <span>- {{newQuestion[index]}}</span>
         </div>
       </material-notification>
 
@@ -54,8 +54,8 @@
           :key="index"
         >
           <div style="width:100%;" @click="movePage('survey')">
-            <strong>오늘의 설문 {{i}}</strong>
-            <span>- {{newSurvey[index].Name}}.</span>
+            <strong>새로운 설문</strong>
+            <span>- {{newSurvey[index].Name}}</span>
           </div>
         </material-notification>
 
@@ -67,8 +67,8 @@
           :key="index"
         >
           <div style="width:100%;" @click="movePage('quiz')">
-            <strong>오늘의 퀴즈 {{i}}</strong>
-            <span>- {{newQuiz[index].Name}}.</span>
+            <strong>새로운 퀴즈</strong>
+            <span>- {{newQuiz[index].Name}}</span>
           </div>
         </material-notification>
       </div>
@@ -215,10 +215,11 @@ export default {
       this.snackbar = true;
     }
   },
-  mounted: function() {
-    // this.$tours['classAdd'].start()
-  }
-};
+    mounted: function () {
+      if(this.$store.state.Identity==1 && this.$store.state.classList.length == 0)
+        this.$tours['classAdd'].start()
+    }
+}
 </script>
 
 <style lang="stylus" scoped>

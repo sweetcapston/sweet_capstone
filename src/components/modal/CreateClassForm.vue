@@ -26,7 +26,7 @@
         <sui-input placeholder="클래스이름을 입력해주세요" v-model="className" style="margin-bottom:10px"/>
       </sui-modal-content>
       <sui-modal-actions>
-        <sui-button primary @click.native="edit(getClassCode())">수정하기{{this.$store.state.classList}}</sui-button>
+        <sui-button primary @click.native="edit(getClassCode())">수정하기</sui-button>
       </sui-modal-actions>
     </sui-modal>
   </div>
@@ -71,14 +71,9 @@ export default {
       const idx =  this.classList.findIndex(function(item) {
               return item.classCode === classCode
             });
-      alert(idx);
       
       this.classList[idx].className =  this.className;
-      
       this.$store.commit("editClassList", this.classList);
-      alert(this.classList);
-
-
       Prof.classEdit(
         this.$store.state.currentClass.classCode,
         this.className,

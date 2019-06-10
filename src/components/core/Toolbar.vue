@@ -14,18 +14,16 @@
       <span  class="hidden-md-and-down username font-weight"> {{this.$store.state.userName}} </span>
     </v-toolbar-title>
     <v-spacer/>
-
+      
     <v-toolbar-items>
       <v-flex
         align-center
         layout
-        py-2
-        
+        py-2        
       >
-        <v-icon v-if="alarm" class="hidden-md-and-down" color="tertiary" margin="2px" @click="alarmActive">mdi-bell</v-icon>
-        <v-icon v-else class="hidden-md-and-down" color="tertiary" margin="2px" @click="alarmActive">mdi-bell-off</v-icon>
-        <v-icon class="hidden-md-and-down" color="tertiary" margin="2px">mdi-account-circle</v-icon>
-        <v-icon class="hidden-md-and-down" color="tertiary" margin="2px">mdi-cogs</v-icon>
+        <v-icon v-if="alarm && this.$store.state.Identity==2" class="hidden-md-and-down" color="tertiary" margin="2px" @click="alarmActive">mdi-bell</v-icon>
+        <v-icon v-if="!alarm && this.$store.state.Identity==2" class="hidden-md-and-down" color="tertiary" margin="2px" @click="alarmActive">mdi-bell-off</v-icon>
+        <modal-profile/>
       </v-flex>
     </v-toolbar-items>
 
@@ -36,7 +34,6 @@
     >
       <span class="mr-2 white--text" >logout</span>
     </v-btn>
-    
   </v-toolbar>
 </template>
 
@@ -55,7 +52,7 @@
     created(){
       Prof.getClassData(this.$store.state.currentClass.classCode).then(res => {
         this.$store.commit("setAlarmActive",res.data.alarm)
-        this.alarm =res.data.alarm;
+        this.alarm = res.data.alarm;
       })
     },
     data: () => ({
@@ -88,6 +85,10 @@
           this.$store.commit("setAlarmActive", res.data);
           this.alarm = res.data
         });
+      },
+      profile(){
+        alert("edit")
+        this.$EventBus.$emit("profile")
       }
     },
     computed: {
@@ -105,11 +106,34 @@
 .logo {
   padding-top: 10px;
 } 
-.username{
+.username {
   margin-left: 9px;
   margin-top: 11px;
   position: absolute;
-  font-family:userFont
+  font-family: userFont
 }
-
+.mdi-bell {
+  margin: 5px;
+}
+.mdi-bell-off {
+  margin: 5px;
+}
+.mdi-account-circle {
+  margin: 5px;
+}
+.mdi-cogs {
+  margin: 5px;
+}
+.mdi-bell:hover{
+  transform: scale(1.2)
+}
+.mdi-bell-off:hover{
+  transform: scale(1.2)
+}
+.mdi-account-circle:hover{
+  transform: scale(1.2)
+}
+.flex.align-center.layout.py-2{
+  margin-right:25px;
+}
 </style>
