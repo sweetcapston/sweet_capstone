@@ -11,6 +11,7 @@
           <span class="hidden-md-and-down username"> {{this.$store.state.userName}} </span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
+        <v-icon class="hidden-md-and-down" color="tertiary" margin="2px">mdi-account-circle</v-icon>
         <v-btn
           flat
           @click="logout"
@@ -270,4 +271,10 @@ export default {
     src: url(../styles/themes/default/assets/fonts/humanletter.ttf) 
     format('truetype'); 
   }
+.mdi-account-circle{
+  margin-left:20%;
+}
+.mdi-account-circle:hover{
+  transform: scale(1.2)
+}
 </style>

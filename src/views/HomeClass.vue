@@ -200,7 +200,8 @@ export default {
     }
   },
     mounted: function () {
-          // this.$tours['classAdd'].start()
+      if(this.$store.state.Identity==1 && this.$store.state.classList.length == 0)
+        this.$tours['classAdd'].start()
     }
 }
 </script>

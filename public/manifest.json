@@ -12,7 +12,19 @@
       },{
         "src": "/images/notify.jpg",
         "sizes": "512x512",
+        "type": "image/jpeg"
+      },{
+        "src": "/images/mini.png",
+        "sizes": "512x512",
         "type": "image/png"
+      },{
+        "src": "/images/material.png",
+        "sizes": "1024x1024",
+        "type": "image/png"
+      },{
+        "src": "/images/material2.jpg",
+        "sizes": "1024x1024",
+        "type": "image/jpeg"
       }
     ],
     "start_url": "http://localhost:8080",

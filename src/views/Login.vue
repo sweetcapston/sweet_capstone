@@ -15,7 +15,7 @@
       <section id="main">
         <v-parallax 
           height="700"
-          src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+          src="/images/material.png"
         >
           <v-layout
             column
@@ -222,7 +222,7 @@
       <section>
         <v-parallax
           height="600" 
-          src="https://cdn.vuetifyjs.com/images/parallax/material2.jpg">
+          src="/images/material2.jpg">
           <v-layout column align-center justify-center>
             <div class="headline white--text mb-3 text-xs-center">For a better lecture</div>
             <em>Sweet Team</em>

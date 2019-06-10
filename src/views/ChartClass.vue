@@ -364,4 +364,5 @@ export default {
 .v-card .v-offset .v-card--material__header.v-card {
   padding: 10px;
 }
+
 </style>

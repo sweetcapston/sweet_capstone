@@ -68,15 +68,15 @@
                   </v-btn>
                 </v-speed-dial>
                 <v-layout id ="textDiv">
-                  <v-list-tile-avatar 
-                    color="gradient white--text" 
-                    large 
-                    fill-dot
-                  >
-                    <span>SA</span>
+                  <v-list-tile-avatar v-if="!ques.anonymous && ques.studentID!='9999'" :color="`${colorList[parseInt(ques.studentID[ques.studentID.length-1])]} white--text`">
+                    <span>{{ques.userName[0]}}</span>
                   </v-list-tile-avatar>
-
-
+                  <v-list-tile-avatar v-else-if="!ques.anonymous && ques.studentID=='9999'" color="gradient white--text">
+                    <span>{{ques.userName[0]}}</span>
+                  </v-list-tile-avatar>
+                  <v-list-tile-avatar v-else :color="`${colorList[0]} white--text`">
+                    <span>A</span>
+                  </v-list-tile-avatar>
                   <v-list-tile-content>
                     <v-layout id="full-width">
                       <v-flex xs6 sm4 md5 lg5 xl5>
@@ -110,8 +110,11 @@
         <div id="chat-form">
           <template>
             <v-list-tile avatar>
-              <v-list-tile-avatar color="gradient white--text" large fill-dot>
-                <img :src="image">
+              <v-list-tile-avatar v-if="this.$store.state.Identity==2" color="gradient white--text" large fill-dot>
+                <span>{{this.$store.state.userName[0]}}</span>
+              </v-list-tile-avatar>
+              <v-list-tile-avatar v-else :color="`${colorList[parseInt($store.state.studentID[$store.state.studentID.length-1])]} white--text`" large fill-dot>
+                <span>{{this.$store.state.userName[0]}}</span>
               </v-list-tile-avatar>
               <v-text-field
                 v-model="content"
@@ -158,7 +161,7 @@ import Vue from "vue";
 import store from "@/store.js";
 import { URL } from "@/plugins/api.config.js";
 import io from "socket.io-client";
-
+let colorList = ["blue", "purple", "brown", "pink", "navy", "teal", "orange", "indigo", "lime", "deep-purple lighten-3"];
 export default {
   beforeCreate() {
     Stud.loadQuestion(this.$store.state.currentClass.classCode).then(res => {
@@ -178,6 +181,8 @@ export default {
   data() {
     return {
       events: [],
+      colorList:colorList,
+      avatarColor: colorList[parseInt(this.$store.state.studentID[this.$store.state.studentID.length-1])],
       first:false,
       image:
         "https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg",
@@ -385,19 +390,13 @@ export default {
             body: `${data.question}`,
             //1px = 0.02645833333333 cm
             image: "/images/notify.jpg", //720px (width) by 240px (height)
-            icon: "/images/logo.png", //android는 192px   512 512
+            icon: "/images/mini.png", //android는 192px   512 512
             badge: "/images/logo-128x128.png", //72px
             tag: getTime,
             actions: [
               {
-                action: "off-action",
-                title: "알림끄기 추가할 예정",
-                icon: "/images/logo.png"
-              },
-              {
                 action: "new-action",
-                title: "새 창에서 열기",
-                icon: "/images/logo.png"
+                title: "질문클래스 바로가기",
               }
             ],
             vibrate: [100, 50, 100], //movile에서만 가능
@@ -413,7 +412,7 @@ export default {
                   notifications.forEach(notification => {
                     if (notification.tag == getTime) notification.close();
                   }),
-                3000
+                5000
               );
             });
         });

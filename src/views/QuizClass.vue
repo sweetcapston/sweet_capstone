@@ -194,4 +194,7 @@ label {
 .addSample > .v-input__control > .v-input__slot > label{
   cursor: pointer;
 }
+.material-icons:hover{
+  transform: scale(1.2)
+}
 </style>
