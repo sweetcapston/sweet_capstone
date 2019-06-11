@@ -73,6 +73,7 @@
       </v-content>
     </v-container>
     <modal-edit-user/>
+    <modal-withdraw-user/>
     <v-tour v-if="this.$store.state.Identity==1 &&  this.$store.state.classList.length != 0" name="classCreate" :steps="guideStuCard"></v-tour>
     <v-tour v-else-if="this.$store.state.Identity==1 &&  this.$store.state.classList.length == 0" name="classCreate" :steps="guideStu"></v-tour>
     <v-tour v-else-if="this.$store.state.Identity==2 && this.$store.state.classList.length != 0 " name="classCreate" :steps="guideProfCard"></v-tour>

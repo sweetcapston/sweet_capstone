@@ -6,6 +6,7 @@
       <router-view/>
     </v-container>
     <modal-edit-user/>
+    <modal-withdraw-user/>
   </v-app>
 </template>
 

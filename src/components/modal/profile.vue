@@ -46,7 +46,7 @@
         </v-list>
 
         <v-card-actions>
-          <v-btn color="red" flat @click="menu = false">회원탈퇴</v-btn>
+          <v-btn color="red" flat @click="withdrawUser">회원탈퇴</v-btn>
           <v-btn flat @click="menu = false">취소</v-btn>
           <v-btn color="primary" flat @click="editUser">수정</v-btn>
         </v-card-actions>
@@ -70,8 +70,12 @@ let colorList = ["blue", "purple", "brown", "pink", "navy", "teal", "orange", "i
     },
     methods: {
         editUser(){
-            this.menu = false;
-            this.$EventBus.$emit("editUser");
+          this.menu = false;
+          this.$EventBus.$emit("editUser");
+        },
+        withdrawUser(){
+          this.menu = false;
+          this.$EventBus.$emit("withdrawUser");
         }
     }
   }
