@@ -23,7 +23,7 @@
                   <h4>퀴즈결과</h4>
                 </v-card-title>
                 <v-divider></v-divider>
-                <div v-if="quizList.length==0">&nbsp;&nbsp;등록된 퀴즈가 없습니다.</div>
+                <!-- <div v-if="quizList.length==0">&nbsp;&nbsp;등록된 퀴즈가 없습니다.</div> -->
                 <v-expansion-panel v-if="this.$store.state.Identity==1">
                   <v-expansion-panel-content
                     v-for="(item,index) in quizList"
@@ -106,7 +106,7 @@
     <v-flex wrap xs12 sm12 md6 lg6 xl6 child-flex style="padding:5px 5px 5px 8px;">
       <material-card color="crimson" title="설문 클래스 통계" text="Survey Data">
         <div v-if="surveyList.length==0">
-          <h3>등록된 설문이 없습니다.</h3>
+          <!-- 등록된 설문이 없습니다. -->
         </div>
         <SurveyResult v-bind:surveyList="surveyList"/>
       </material-card>

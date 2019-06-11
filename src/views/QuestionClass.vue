@@ -304,7 +304,7 @@ import Vue from "vue";
 import store from "@/store.js";
 import { URL } from "@/plugins/api.config.js";
 import io from "socket.io-client";
-let colorList = ["blue", "purple", "brown", "pink", "navy", "teal", "orange", "indigo", "lime", "deep-purple lighten-3"];
+let colorList = ["blue", "purple", "brown", "pink", "black", "teal", "orange", "indigo", "lime", "deep-purple lighten-3"];
 export default {
   beforeCreate() {
     Stud.loadQuestion(this.$store.state.currentClass.classCode).then(res => {
@@ -461,8 +461,14 @@ export default {
   updated() {
     if(this.oldList != this.questionList || !this.first){
       document.querySelector(
-        "#chat-message-list"
-      ).scrollTop = document.querySelector("#chat-message-list").scrollHeight;
+        ".web #chat-container #chat-message-list"
+      ).scrollTop = document.querySelector(".web #chat-container #chat-message-list").scrollHeight;
+      this.oldList = this.questionList;
+      this.first = true;
+
+      document.querySelector(
+        ".mobile #chat-container #chat-message-list"
+      ).scrollTop = document.querySelector(".mobile #chat-container #chat-message-list").scrollHeight;
       this.oldList = this.questionList;
       this.first = true;
     }

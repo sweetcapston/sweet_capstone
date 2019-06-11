@@ -39,7 +39,7 @@
   </v-layout>
 </template>
 <script>
-let colorList = ["blue", "purple", "brown", "pink", "navy", "teal", "orange", "indigo", "lime", "deep-purple lighten-3"];
+let colorList = ["blue", "purple", "brown", "pink", "black", "teal", "orange", "indigo", "lime", "deep-purple lighten-3"];
   export default {
     data() {
       return {
