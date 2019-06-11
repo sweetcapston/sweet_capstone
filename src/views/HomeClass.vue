@@ -1,16 +1,16 @@
 <template>
   <v-layout fill-height>
-    <v-flex xs12 sm12 md6 lg6 xl6 style="padding-right:15px">
+    <v-flex xs12 sm12 md6 lg6 xl6 >
       <material-card class="v-card-profile">
         <v-avatar slot="offset" class="mx-auto d-block" size="80" color="green">
           <v-icon class="white--text" size="30">mdi-information-outline</v-icon>
         </v-avatar>
         <v-card-text class="text-xs-center">
           <modal-edit-class/>
-          <p class="category font-weight-light">클래스이름 : {{this.$store.state.currentClass.className}}</p>
-          <p class="category font-weight-light">클래스코드 : {{this.$store.state.currentClass.classCode}}</p>
-          <p class="category font-weight-light">교수이름 : {{this.$store.state.currentClass.profName}}</p>
-          <p>수강인원 수 : {{this.studentNum}}</p>
+          <p><strong>클래스이름 :</strong> {{this.$store.state.currentClass.className}}</p>
+          <p><strong>클래스코드 :</strong> {{this.$store.state.currentClass.classCode}}</p>
+          <p><strong>교수이름 :</strong> {{this.$store.state.currentClass.profName}}</p>
+          <p><strong>수강인원 수 :</strong> {{this.studentNum}}</p>
           <p>
             <strong>질문합계 : </strong>
             {{this.questionNum}}&nbsp;

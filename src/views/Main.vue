@@ -221,7 +221,6 @@ export default {
       .then(res => {
         if (res.data == undefined ) alert('error');
         else{
-          // currentClass객체로 하면 오류남.
           if(res.data.errors) return false;
           this.$store.commit("addClassList", {
             className: className,

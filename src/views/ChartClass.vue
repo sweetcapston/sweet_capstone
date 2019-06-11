@@ -245,25 +245,25 @@ export default {
         }
       ],
       chartOptions: {
-        annotations: {
-          // TODO: 어노테이션.
-          points: [
-            {
-              x: "나",
-              seriesIndex: 0,
+        // annotations: {
+        //   // TODO: 어노테이션.
+        //   points: [
+        //     {
+        //       x: "나",
+        //       seriesIndex: 0,
 
-              label: {
-                borderColor: "#775DD0",
-                offsetY: 0,
-                style: {
-                  color: "#fff",
-                  background: "#775DD0"
-                },
-                text: "평균보다 높네요."
-              }
-            }
-          ]
-        },
+        //       label: {
+        //         borderColor: "#775DD0",
+        //         offsetY: 0,
+        //         style: {
+        //           color: "#fff",
+        //           background: "#775DD0"
+        //         },
+        //         text: "평균보다 높네요."
+        //       }
+        //     }
+        //   ]
+        // },
         chart: {
           height: 350,
           type: "bar"

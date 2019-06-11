@@ -115,12 +115,12 @@
           <v-card class="mb-5" color="grey lighten-3" min-height="250px">
             <v-container fluid>
               <!-- TODO: 그림 받는 div -->
-              <div 
+              <v-flex
               style="font-size:1.5rem; font-weight:600"
-              xs12 sm12 md6 lg6 xl6 
+              xs12 sm12 md8 lg8 xl8 
               :class="'imgQues_'+`${quiz.QID}_`+`${n-1}`"
               v-html= "`${n}. ${quizList[n-1].quizQuestion}`"
-              />
+              ></v-flex>
               <!-- FIXME: 라디오버튼 -->
               <v-radio-group v-show="quiz.quizList[n-1].quizType == 1" column>
                 <div style="padding-top:6px" v-for="c in quiz.quizList[n-1].content.length" :key="`${c}-radio`">

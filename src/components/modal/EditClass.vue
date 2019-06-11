@@ -42,7 +42,6 @@ export default {
       fab: false,
       classCode : this.$store.state.currentClass.classCode,
       classList : [],
-      testList: [1,2,3]
     };
   },
   methods: {
