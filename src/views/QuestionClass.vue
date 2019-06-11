@@ -461,14 +461,11 @@ export default {
   updated() {
     if(this.oldList != this.questionList || !this.first){
       document.querySelector(
-        ".web #chat-container #chat-message-list"
-      ).scrollTop = document.querySelector(".web #chat-container #chat-message-list").scrollHeight;
-      this.oldList = this.questionList;
-      this.first = true;
-
+        ".web #chat-message-list"
+      ).scrollTop = document.querySelector(".web #chat-message-list").scrollHeight;
       document.querySelector(
-        ".mobile #chat-container #chat-message-list"
-      ).scrollTop = document.querySelector(".mobile #chat-container #chat-message-list").scrollHeight;
+        ".mobile #chat-message-list"
+      ).scrollTop = document.querySelector(".mobile #chat-message-list").scrollHeight;
       this.oldList = this.questionList;
       this.first = true;
     }
