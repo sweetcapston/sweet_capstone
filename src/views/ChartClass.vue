@@ -16,8 +16,8 @@
       <!-- TODO: 퀴즈통계 -->
       <v-flex row wrap md12 style="padding:0px 8px 5px 5px;">
         <material-card color="crimson" title="퀴즈 클래스 통계" text="Quiz Data">
-          <v-layout fill-height>
-            <v-flex xs12 sm12 md6 lg6 xl6 style="padding-right:7px">
+          <v-layout fill-height  row wrap>
+            <v-flex xs12 sm12 md12 lg6 xl6 style="padding-right:5px">
               <v-card>
                 <v-card-title>
                   <h4>퀴즈결과</h4>
@@ -90,7 +90,7 @@
                 </v-expansion-panel>
               </v-card>
             </v-flex>
-            <v-flex row xs12 sm12 md6 lg6 xl6 style="padding-left:7px">
+            <v-flex row xs12 sm12 md6 lg6 xl6 >
               <StudentQuizResult
                 v-if="this.$store.state.Identity==1"
                 v-bind:quizResult="quizResult"

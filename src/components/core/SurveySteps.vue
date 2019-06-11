@@ -1,6 +1,6 @@
 <template>
   <v-stepper-content :step="n+1">
-    <v-card color="grey lighten-3" height="50px" class="typeCard">
+    <v-card color="grey lighten-3" class="typeCard">
       <v-radio-group v-model="type" :mandatory="false" class="surveyType" row>
         <v-radio label="객관식" value="1" color="cyan ligten-1" select/>
         <v-radio label="객관식 (복수 응답 가능)" value="2" color="cyan ligten-1"/>

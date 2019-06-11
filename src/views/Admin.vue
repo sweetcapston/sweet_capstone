@@ -1,43 +1,26 @@
 <template>
-  <v-layout  wrap>
+  <v-layout wrap>
     <v-flex xs12 sm12 md7 style="margin:15px; 15px; 15px; 15px;">
-      <v-card>
-        <v-toolbar color="metal" dark>
-          <v-toolbar-side-icon></v-toolbar-side-icon>
-
-          <v-toolbar-title>차단요청 리스트</v-toolbar-title>
-
-          <v-spacer></v-spacer>
-
-          <v-btn icon>
-            <v-icon>search</v-icon>
-          </v-btn>
-
-          <v-btn icon>
-            <v-icon>check_circle</v-icon>
-          </v-btn>
-        </v-toolbar>
-
-        <v-list two-line>
-          <template v-for="(item, index) in blackRequest">
-            <v-list-tile :key="item.title" avatar ripple @click="toggle(index)">
-              <v-list-tile-content>
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                <v-list-tile-sub-title class="text--primary">{{ item.headline }}</v-list-tile-sub-title>
-                <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
-              </v-list-tile-content>
-
-              <v-list-tile-action>
-                <v-list-tile-action-text>{{ item.action }}</v-list-tile-action-text>
-                <v-icon v-if="selected.indexOf(index) < 0" color="grey lighten-1">star_border</v-icon>
-
-                <v-icon v-else color="yellow darken-2">star</v-icon>
-              </v-list-tile-action>
-            </v-list-tile>
-            <v-divider v-if="index + 1 < blackRequest.length" :key="index"></v-divider>
-          </template>
-        </v-list>
-      </v-card>
+      <material-card color="metal" title="블랙 요청 리스트" text="Survey Data">
+        <v-expansion-panel>
+          <v-expansion-panel-content v-for="(item,idx) in blackRequest" :key="idx">
+            <template v-slot:header>
+              <v-list-tile :key="item.title" avatar ripple>
+                <v-list-tile-content>
+                  <v-divider/>
+                  <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                  <v-list-tile-sub-title class="text--primary">{{ item.headline }}</v-list-tile-sub-title>
+                  <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
+            <div style="align-content:end">
+              <v-btn dark>승인{{idx}}</v-btn>
+              <v-btn dark>거절</v-btn>
+            </div>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </material-card>
     </v-flex>
 
     <v-flex xs12 sm12 md4 style="margin:15px; 15px; 15px; 15px;">
@@ -74,12 +57,15 @@
         </v-list>
       </v-card>
     </v-flex>
-
-    
   </v-layout>
 </template>
 <script>
 export default {
+  methods: {
+    blackReq() {
+      this.$EventBus.$on("clickBlack");
+    }
+  },
   data() {
     return {
       blackList: [
@@ -106,8 +92,13 @@ export default {
           action: "15 min",
           headline: "윤대균교수",
           title: "임승배학생",
-          subtitle:
-            "이 친구가 자꾸 쓰레기같은 질문만 올려요."
+          subtitle: "이 친구가 자꾸 쓰레기같은 질문만 올려요."
+        },
+        {
+          action: "15 min",
+          headline: "윤대균교수",
+          title: "임승배학생",
+          subtitle: "이 친구가 자꾸 쓰레기같은 질문만 올려요."
         }
       ],
       selected: [2],

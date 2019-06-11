@@ -27,7 +27,7 @@
             :class="`quizQuestion_${n+1}`"
             contenteditable="true"
             placeholder="퀴즈문제를 작성하세요."
-            style="font-size: 1.5rem; background:beige; width:750px; "
+            style="font-size: 1.5rem; background:white; width:750px; "
           ></div>
           <div class="page">
             <input
@@ -224,8 +224,8 @@ export default {
             height = this.naturalHeight * (100 / this.naturalWidth);
           }
           else {
-            width = this.naturalWidth * (100 / this.naturalHeight);
-            height = 100;
+            width = this.naturalWidth * (80 / this.naturalHeight);
+            height = 80;
           }
           resolve([width, height]);
         });
