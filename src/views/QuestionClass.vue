@@ -107,7 +107,7 @@
         </div>
 
         <div id="chat-message-list" v-else>
-          <v-img :src="require('@/assets/question.png')" height="100"><div><h1>이곳에다가 질문을 하세요.</h1></div></v-img>
+          <v-img src="/images/notify.jpg" height="100"><div><h1>이곳에다가 질문을 하세요.</h1></div></v-img>
         </div>
         <div id="chat-form">
           <template>
@@ -286,7 +286,7 @@
       </div>
       <div class="scroll" id="conversation-list">
         <div class="conversation" v-for="(user, i) in userList" :key="i">
-          <img :src="require(`@/assets/${user.image}.png`)" height="100%">
+          <img :src="`/images/${user.image}.png`" height="100%">
           <div class="user-name">{{user.userName}}</div>
           <div class="user-identity">{{user.value}}</div>
         </div>

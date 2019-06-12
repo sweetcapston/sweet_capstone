@@ -10,7 +10,7 @@
       @click="toggleDrawer"
   />
     <v-toolbar-title class="headline text-uppercase">
-      <img class="logo" src="@/assets/logo_white.png" height="40">
+      <img class="logo" src="/images/logo_white.png" height="40">
       <span  class="hidden-md-and-down username font-weight"> {{this.$store.state.userName}} </span>
     </v-toolbar-title>
     <v-spacer/>
@@ -77,7 +77,7 @@
           }
         })
         var img = new Image();
-        img.src = "@/assets/logo_white_animation.svg";
+        img.src = "/images/logo_white_animation.svg";
       },
       alarmActive() {
         Prof.alarmActive(this.$store.state.currentClass.classCode,this.alarm)

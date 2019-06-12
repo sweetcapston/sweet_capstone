@@ -2,8 +2,8 @@
 
   <v-app>  
     <v-toolbar class="v-toolbar--fixed white--text elevation-0 transparent">
-      <img class="hidden-md-and-up" src="@/assets/logo_white.svg" height="25">
-      <img class="hidden-md-and-down" src="@/assets/logo_white.svg" height="50">
+      <img class="hidden-md-and-up" src="/images/logo_white.svg" height="25">
+      <img class="hidden-md-and-down" src="/images/logo_white.svg" height="50">
       <v-spacer />
       <sui-button class="transparent" positive @click="OpenLogin">로그인</sui-button>
       <sui-button class="cyan lighten-1" positive @click.native="OpenRegister" id="signbtn">회원가입</sui-button>
@@ -15,7 +15,7 @@
       <section id="main">
         <v-parallax 
           height="700"
-          src="/images/material3.jpg"
+          src="/images/material.jpg"
         >
           <v-layout
             column

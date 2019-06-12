@@ -3,12 +3,12 @@
     "short_name": "sweet_capstone",
     "icons": [ 
       {
-        "src": "/images/logo.png",
-        "sizes": "200x200",
-        "type": "image/png"
+        "src": "/images/logo_white.svg",
+        "sizes": "512x512",
+        "type": "image/svg"
       },
       {
-        "src": "/images/cropped-choc-logo-512x512.png",
+        "src": "/images/logo_white.png",
         "sizes": "512x512",
         "type": "image/png"
       },
@@ -28,14 +28,9 @@
         "type": "image/png"
       },
       {
-        "src": "/images/material2.jpg",
+        "src": "/images/material2.png",
         "sizes": "1024x1024",
-        "type": "image/jpeg"
-      },
-      {
-        "src": "/images/material3.jpg",
-        "sizes": "1024x1024",
-        "type": "image/jpeg"
+        "type": "image/png"
       },
       {
         "src": "/images/side_bg.jpg",
@@ -43,14 +38,19 @@
         "type": "image/jpeg"
       },
       {
-        "src": "/images/side_bg2.jpg",
+        "src": "/images/openClass.png",
         "sizes": "512x512",
-        "type": "image/jpeg"
+        "type": "image/png"
       },
       {
-        "src": "/images/side_bg3.jpg",
+        "src": "/images/professor.png",
         "sizes": "512x512",
-        "type": "image/jpeg"
+        "type": "image/png"
+      },
+      {
+        "src": "/images/student.png",
+        "sizes": "512x512",
+        "type": "image/png"
       }
     ],
     "start_url": "http://localhost:8080",

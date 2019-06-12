@@ -13,7 +13,7 @@
       <v-layout class="fill-height" tag="v-list" column>
         <v-list-tile avatar>
           <v-list-tile-avatar color="white" @click="outClass()">
-            <v-img :src="require('@/assets/mini.png')" height="45" contain/>
+            <v-img src="/images/mini.png" height="45" contain/>
           </v-list-tile-avatar>
           <v-list-tile-title
             class="title"
