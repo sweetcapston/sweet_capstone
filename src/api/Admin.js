@@ -6,9 +6,18 @@ const config = {
                   headers: {'Content-Type' : 'application/json'},
                   withCredentials: true
                 }
-
 export default {
-  getBlackData() {
+  loadBlackList() {
     return axios.get(`${BaseUrl}`, config);
+  },
+  acceptBlack(userID, classCode) {
+    alert(userID);
+    return axios.post(`${BaseUrl}/userBlock`, {userID: userID, classCode: classCode}, config);
+  },
+  denyBlack(userID, classCode) {
+    return axios.post(`${BaseUrl}/userRelease`, {userID: userID, classCode: classCode},config);
+  },
+  deleteBlack(userID, classCode) {
+    return axios.post(`${BaseUrl}/userRelease`, {userID: userID, classCode: classCode},config);
   }
 };

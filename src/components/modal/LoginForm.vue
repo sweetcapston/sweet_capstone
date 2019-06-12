@@ -75,9 +75,6 @@ export default {
       this.userID = "";
       this.password = "";
     },
-    test1() {
-      alert('11');
-    },
     LogIn() {
       if (this.errors.items.length != 0) {
         this.errsign = true;

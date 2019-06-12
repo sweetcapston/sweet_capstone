@@ -72,7 +72,8 @@ export default {
             });
       
       this.classList[idx].className =  this.className;
-      this.$store.commit("editClassList", this.classList);
+      //this.$store.commit("editClassList", this.classList);
+
       Prof.classEdit(
         this.$store.state.currentClass.classCode,
         this.className,

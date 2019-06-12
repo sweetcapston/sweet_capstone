@@ -89,6 +89,9 @@
       profile(){
         alert("edit")
         this.$EventBus.$emit("profile")
+      },
+      moveToMain(){
+        this.$router.push({name: 'main'}) ;
       }
     },
     computed: {
