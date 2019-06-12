@@ -286,7 +286,7 @@
       </div>
       <div class="scroll" id="conversation-list">
         <div class="conversation" v-for="(user, i) in userList" :key="i">
-          <img :src="`/images/${user.image}.png`" height="100%">
+          <img :src="`/images/${user.image}.png`" height="100%" />
           <div class="user-name">{{user.userName}}</div>
           <div class="user-identity">{{user.value}}</div>
         </div>

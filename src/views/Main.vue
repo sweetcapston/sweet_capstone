@@ -8,7 +8,7 @@
         flat   
       >
         <v-toolbar-title class="headline text-uppercase">
-          <img class="logo" src="/images/logo_white.png" height="40">
+          <img class="logo" src="/images/logo_white.png" height="40" />
           <span class="hidden-md-and-down username"> {{this.$store.state.userName}} </span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
@@ -23,7 +23,7 @@
       <br>
       <br>
       <v-layout justify-center>
-        <img :src="logo" height="150">
+        <img :src="logo" height="150" />
       </v-layout>
       <br/>
       <v-content>
