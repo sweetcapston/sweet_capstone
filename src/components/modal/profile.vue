@@ -5,7 +5,7 @@
       :nudge-width="200"
       offset-x
     >
-      <template v-slot:activator="{ on }">
+      <template v-slot:activator="{ on }" v-if="this.$store.state.Identity != 3">
         <v-icon class="hidden-md-and-down" color="tertiary" margin="2px" v-on="on">mdi-account-circle</v-icon>
       </template>
 
