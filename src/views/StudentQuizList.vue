@@ -49,7 +49,11 @@
                 v-if="quiz.quizList[n-1].quizType == 1"
                 v-model="radioValue[n-1]"
               >
-                <div style="padding-top:6px" v-for="c in quiz.quizList[n-1].content.length" :key="`${c}-radio`">
+                <div
+                  style="padding-top:6px"
+                  v-for="c in quiz.quizList[n-1].content.length"
+                  :key="`${c}-radio`"
+                >
                   <v-radio
                     :id="`${c}`"
                     :class="`radioChennel ${c}`"
@@ -144,6 +148,7 @@ export default {
         this.seconds = this.padTime(this.totalTime - this.minutes * 60);
       }, 1000);
     }
+
     this.socket.on("quiz", data => {
       if (this.quiz.QID == data.QID) {
         for (let i = 0; i < data.quizType.length; i++) {
@@ -162,6 +167,20 @@ export default {
     this.socket.on("quizStart", data => {
       const { active, minutes, date, QID } = data;
       if (this.quiz.QID == QID && this.answer_Q.None == 0) {
+        const el = document.querySelector(`#quiz${this.quiz.QID}`);
+        el.classList.remove("v-expansion-panel__container--disabled");
+        el.querySelectorAll("input").forEach(doc => {
+          doc.disabled = false;
+        });
+        el.querySelectorAll(".v-input").forEach(doc => {
+          doc.classList.remove("v-input--is-disabled");
+        });
+        el.querySelectorAll("textarea").forEach(doc => {
+          doc.disabled = false;
+        });
+        el.querySelectorAll(".v-radio").forEach(doc => {
+          doc.classList.remove("v-radio--is-disabled");
+        });
         this.quiz.active = active;
         this.quiz.date = date;
         this.minutes = this.padTime(minutes);
@@ -214,9 +233,6 @@ export default {
       });
       el.querySelectorAll(".v-radio").forEach(doc => {
         doc.classList.add("v-radio--is-disabled");
-      });
-      el.querySelectorAll(".submit-btn").forEach(element => {
-        element.remove(self);
       });
     }
     for (let i = 0; i < this.steps; i++) {

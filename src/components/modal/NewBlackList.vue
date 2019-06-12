@@ -49,10 +49,11 @@ let colorList = ["blue", "purple", "brown", "pink", "navy", "teal", "orange", "i
         this.question = {
             classCode: this.$store.state.currentClass.classCode,
             BlackList: {
-                profID:this.userID,
+                profID:this.$store.state.userID,
                 contents:question.question,
                 userID: question.userID,
-                userName: question.userName
+                userName: question.userName,
+                state: false
             },
             QesID:question.QesID
         }

@@ -8,27 +8,22 @@
 
         <div id="chat-message-list" v-if="questionList.length!=0">
           <template v-for="(ques,index) in questionList">
-            <v-flex  id="message" :key="ques.index">
-              <v-subheader v-if="ques.header" :key="ques.header" inset> {{ ques.header }} </v-subheader>
+            <v-flex id="message" :key="ques.index">
+              <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
               <v-divider/>
               <v-list-tile id="auto_height" :key="ques.title">
                 <v-speed-dial
-                v-if="ques.userID == userID || $store.state.Identity == 2"
-                v-model="fab[index]"
-                absolute
-                small
-                :direction="'left'"
-                :open-on-hover="false"
-                :transition="'slide-x-reverse-transition'"
-                @click="floating(index)"
+                  v-if="ques.userID == userID || $store.state.Identity == 2"
+                  v-model="fab[index]"
+                  absolute
+                  small
+                  :direction="'left'"
+                  :open-on-hover="false"
+                  :transition="'slide-x-reverse-transition'"
+                  @click="floating(index)"
                 >
                   <template v-slot:activator>
-                    <v-btn
-                      class="fab questionFab"
-                      v-model="fab[index]"
-                      color="transparent"
-                      fab
-                    >
+                    <v-btn class="fab questionFab" v-model="fab[index]" color="transparent" fab>
                       <v-icon>mdi-dots-vertical</v-icon>
                     </v-btn>
                   </template>
@@ -49,7 +44,7 @@
                     fab
                     dark
                     small
-                    color = "black"
+                    color="black"
                     class="questionFab red--text"
                     @click="black(ques)"
                   >
@@ -68,11 +63,17 @@
                     <v-icon>edit</v-icon>
                   </v-btn>
                 </v-speed-dial>
-                <v-layout id ="textDiv">
-                  <v-list-tile-avatar v-if="!ques.anonymous && ques.studentID!='9999'" :color="`${colorList[parseInt(ques.studentID[ques.studentID.length-1])]} white--text`">
+                <v-layout id="textDiv">
+                  <v-list-tile-avatar
+                    v-if="!ques.anonymous && ques.studentID!='9999'"
+                    :color="`${colorList[parseInt(ques.studentID[ques.studentID.length-1])]} white--text`"
+                  >
                     <span>{{ques.userName[0]}}</span>
                   </v-list-tile-avatar>
-                  <v-list-tile-avatar v-else-if="!ques.anonymous && ques.studentID=='9999'" color="gradient white--text">
+                  <v-list-tile-avatar
+                    v-else-if="!ques.anonymous && ques.studentID=='9999'"
+                    color="gradient white--text"
+                  >
                     <span>{{ques.userName[0]}}</span>
                   </v-list-tile-avatar>
                   <v-list-tile-avatar v-else :color="`${colorList[0]} white--text`">
@@ -93,9 +94,14 @@
                         <span>{{ques.question}}</span>
                       </v-flex>
                       <v-flex xs1 sm1 md1 lg1 xl1 style="text-align: end">
-                        <v-icon @click="unlike(ques.QesID)" class="red--text" small v-if="ques.likeList.indexOf(userID)!=-1">mdi-heart</v-icon>
+                        <v-icon
+                          @click="unlike(ques.QesID)"
+                          class="red--text"
+                          small
+                          v-if="ques.likeList.indexOf(userID)!=-1"
+                        >mdi-heart</v-icon>
                         <v-icon @click="like(ques.QesID)" small v-else>mdi-heart</v-icon>
-                        <span v-if="ques.likeList.length == 0">    </span>
+                        <span v-if="ques.likeList.length == 0"></span>
                         <span v-else>{{` ${padding(ques.likeList.length)}`}}</span>
                       </v-flex>
                     </v-layout>
@@ -105,17 +111,23 @@
             </v-flex>
           </template>
         </div>
-
-        <div id="chat-message-list" v-else>
-          <v-img :src="require('@/assets/question.png')" height="100"><div><h1>이곳에다가 질문을 하세요.</h1></div></v-img>
-        </div>
         <div id="chat-form">
           <template>
             <v-list-tile avatar>
-              <v-list-tile-avatar v-if="this.$store.state.Identity==2" color="gradient white--text" large fill-dot>
+              <v-list-tile-avatar
+                v-if="this.$store.state.Identity==2"
+                color="gradient white--text"
+                large
+                fill-dot
+              >
                 <span>{{this.$store.state.userName[0]}}</span>
               </v-list-tile-avatar>
-              <v-list-tile-avatar v-else :color="`${colorList[parseInt($store.state.studentID[$store.state.studentID.length-1])]} white--text`" large fill-dot>
+              <v-list-tile-avatar
+                v-else
+                :color="`${colorList[parseInt($store.state.studentID[$store.state.studentID.length-1])]} white--text`"
+                large
+                fill-dot
+              >
                 <span>{{this.$store.state.userName[0]}}</span>
               </v-list-tile-avatar>
               <v-text-field
@@ -147,27 +159,22 @@
 
         <div id="chat-message-list" v-if="questionList.length!=0">
           <template v-for="(ques,index) in questionList">
-            <v-flex  id="message" :key="ques.index">
-              <v-subheader v-if="ques.header" :key="ques.header" inset> {{ ques.header }} </v-subheader>
+            <v-flex id="message" :key="ques.index">
+              <!-- <v-subheader inset>today</v-subheader> -->
               <v-divider/>
               <v-list-tile id="auto_height" :key="ques.title">
                 <v-speed-dial
-                v-if="ques.userID == userID || $store.state.Identity == 2"
-                v-model="fab[index]"
-                absolute
-                small
-                :direction="'left'"
-                :open-on-hover="false"
-                :transition="'slide-x-reverse-transition'"
-                @click="floating(index)"
+                  v-if="ques.userID == userID || $store.state.Identity == 2"
+                  v-model="fab[index]"
+                  absolute
+                  small
+                  :direction="'left'"
+                  :open-on-hover="false"
+                  :transition="'slide-x-reverse-transition'"
+                  @click="floating(index)"
                 >
                   <template v-slot:activator>
-                    <v-btn
-                      class="fab questionFab"
-                      v-model="fab[index]"
-                      color="transparent"
-                      fab
-                    >
+                    <v-btn class="fab questionFab" v-model="fab[index]" color="transparent" fab>
                       <v-icon>mdi-dots-vertical</v-icon>
                     </v-btn>
                   </template>
@@ -188,7 +195,7 @@
                     fab
                     dark
                     small
-                    color = "black"
+                    color="black"
                     class="questionFab red--text"
                     @click="black(ques)"
                   >
@@ -207,11 +214,17 @@
                     <v-icon>edit</v-icon>
                   </v-btn>
                 </v-speed-dial>
-                <v-layout id ="textDiv">
-                  <v-list-tile-avatar v-if="!ques.anonymous && ques.studentID!='9999'" :color="`${colorList[parseInt(ques.studentID[ques.studentID.length-1])]} white--text`">
+                <v-layout id="textDiv">
+                  <v-list-tile-avatar
+                    v-if="!ques.anonymous && ques.studentID!='9999'"
+                    :color="`${colorList[parseInt(ques.studentID[ques.studentID.length-1])]} white--text`"
+                  >
                     <span>{{ques.userName[0]}}</span>
                   </v-list-tile-avatar>
-                  <v-list-tile-avatar v-else-if="!ques.anonymous && ques.studentID=='9999'" color="gradient white--text">
+                  <v-list-tile-avatar
+                    v-else-if="!ques.anonymous && ques.studentID=='9999'"
+                    color="gradient white--text"
+                  >
                     <span>{{ques.userName[0]}}</span>
                   </v-list-tile-avatar>
                   <v-list-tile-avatar v-else :color="`${colorList[0]} white--text`">
@@ -232,9 +245,14 @@
                         <span>{{ques.question}}</span>
                       </v-flex>
                       <v-flex xs1 sm1 md1 lg1 xl1 style="text-align: end">
-                        <v-icon @click="unlike(ques.QesID)" class="red--text" small v-if="ques.likeList.indexOf(userID)!=-1">mdi-heart</v-icon>
+                        <v-icon
+                          @click="unlike(ques.QesID)"
+                          class="red--text"
+                          small
+                          v-if="ques.likeList.indexOf(userID)!=-1"
+                        >mdi-heart</v-icon>
                         <v-icon @click="like(ques.QesID)" small v-else>mdi-heart</v-icon>
-                        <span v-if="ques.likeList.length == 0">    </span>
+                        <span v-if="ques.likeList.length == 0"></span>
                         <span v-else>{{` ${padding(ques.likeList.length)}`}}</span>
                       </v-flex>
                     </v-layout>
@@ -246,15 +264,25 @@
         </div>
 
         <!--<div id="chat-message-list" v-else>-->
-          <!--<v-img :src="require('@/assets/question.png')" height="60"><div><h1>&nbsp;자유롭게 질문을 하세요.</h1></div></v-img>-->
+        <!--<v-img :src="require('@/assets/question.png')" height="60"><div><h1>&nbsp;자유롭게 질문을 하세요.</h1></div></v-img>-->
         <!--</div>-->
         <div id="chat-form">
           <template>
             <v-list-tile avatar>
-              <v-list-tile-avatar v-if="this.$store.state.Identity==2" color="gradient white--text" large fill-dot>
+              <v-list-tile-avatar
+                v-if="this.$store.state.Identity==2"
+                color="gradient white--text"
+                large
+                fill-dot
+              >
                 <span>{{this.$store.state.userName[0]}}</span>
               </v-list-tile-avatar>
-              <v-list-tile-avatar v-else :color="`${colorList[parseInt($store.state.studentID[$store.state.studentID.length-1])]} white--text`" large fill-dot>
+              <v-list-tile-avatar
+                v-else
+                :color="`${colorList[parseInt($store.state.studentID[$store.state.studentID.length-1])]} white--text`"
+                large
+                fill-dot
+              >
                 <span>{{this.$store.state.userName[0]}}</span>
               </v-list-tile-avatar>
               <v-text-field
@@ -278,8 +306,8 @@
       </div>
     </v-flex>
 
-    <modal-edit-question />
-    <modal-new-black-list />
+    <modal-edit-question/>
+    <modal-new-black-list/>
     <v-flex xs6 sm6 md6 lg3 xl3 id="list-container" class="hidden-md-and-down">
       <div id="search-container">
         <span>클래스 접속자</span>
@@ -299,19 +327,31 @@
 <script>
 /* eslint-disable */
 import { continueStatement } from "@babel/types";
-import { Stud,Prof } from "@/api";
+import { Stud, Prof } from "@/api";
 import Vue from "vue";
 import store from "@/store.js";
 import { URL } from "@/plugins/api.config.js";
 import io from "socket.io-client";
-let colorList = ["blue", "purple", "brown", "pink", "black", "teal", "orange", "indigo", "lime", "deep-purple lighten-3"];
+let colorList = [
+  "blue",
+  "purple",
+  "brown",
+  "pink",
+  "black",
+  "teal",
+  "orange",
+  "indigo",
+  "lime",
+  "deep-purple lighten-3"
+];
 export default {
   beforeCreate() {
     Stud.loadQuestion(this.$store.state.currentClass.classCode).then(res => {
       if (res.data === "false") alert("질문 가져오기 실패");
       else {
         this.questionList = res.data.questionList;
-        this.fab = new Array(this.questionList.length).fill(false)
+
+        this.fab = new Array(this.questionList.length).fill(false);
         this.socket.emit("channelJoin", {
           classCode: this.$store.state.currentClass.classCode,
           Identity: this.$store.state.Identity,
@@ -324,31 +364,36 @@ export default {
   data() {
     return {
       events: [],
-      colorList:colorList,
-      avatarColor: colorList[parseInt(this.$store.state.studentID[this.$store.state.studentID.length-1])],
-      first:false,
+      colorList: colorList,
+      avatarColor:
+        colorList[
+          parseInt(
+            this.$store.state.studentID[this.$store.state.studentID.length - 1]
+          )
+        ],
+      first: false,
       image:
         "https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg",
       userList: [],
-      dialog:false,
+      dialog: false,
       nonce: 0,
-      oldList:[],
+      oldList: [],
       questionList: [],
       content: null,
       socket: io(`${URL}:3000/question`),
       anonymous: false,
-      userID:this.$store.state.userID, 
-      question:{},
-      fab:[]
+      userID: this.$store.state.userID,
+      question: {},
+      fab: []
     };
   },
   created() {
     this.$EventBus.$on("sendBlack", data => {
-      this.socket.emit("black", data)
-    })
+      this.socket.emit("black", data);
+    });
     this.$EventBus.$on("edited", question => {
       this.edited(question);
-    })
+    });
     if ("serviceWorker" in navigator && "PushManager" in window) {
       navigator.serviceWorker
         .register("../../service-worker.js")
@@ -362,21 +407,21 @@ export default {
     this.socket.on("connect", () => {
       console.log("socket connected");
     });
-    this.socket.on("like", (data) => {
-      const { QesID, userID } = data
+    this.socket.on("like", data => {
+      const { QesID, userID } = data;
       this.questionList.forEach(question => {
-        if(question.QesID == QesID){
+        if (question.QesID == QesID) {
           question.likeList.push(userID);
         }
-      })
+      });
     });
-    this.socket.on("unlike", (data) => {
-      const { QesID, userID } = data
+    this.socket.on("unlike", data => {
+      const { QesID, userID } = data;
       this.questionList.forEach(question => {
-        if(question.QesID == QesID){
-          question.likeList.splice(question.likeList.indexOf(userID), 1)
+        if (question.QesID == QesID) {
+          question.likeList.splice(question.likeList.indexOf(userID), 1);
         }
-      })
+      });
     });
     this.socket.on("joinSuccess", data => {
       const { Identity, userName, userID } = data;
@@ -418,14 +463,23 @@ export default {
     });
     this.socket.on("MESSAGE", data => {
       this.first = false;
-      const{anonymous, userID, userName, studentID, QesID, classCode, question, date} = data
+      const {
+        anonymous,
+        userID,
+        userName,
+        studentID,
+        QesID,
+        classCode,
+        question,
+        date
+      } = data;
       this.questionList.push({
         anonymous: anonymous,
         userID: userID,
         userName: userName,
         studentID: studentID,
-        likeList:[],
-        QesID:QesID,
+        likeList: [],
+        QesID: QesID,
         classCode: classCode,
         question: question,
         date: date
@@ -433,39 +487,43 @@ export default {
       this.notification(data);
     });
     this.socket.on("delete", data => {
-      const {QesID} = data;
+      const { QesID } = data;
       this.questionList.forEach(question => {
-        if(question.QesID == QesID){
+        if (question.QesID == QesID) {
           this.questionList.splice(this.questionList.indexOf(question), 1);
         }
-      })
-    })
+      });
+    });
     this.socket.on("edit", data => {
       this.questionList.forEach(question => {
-        if(question.QesID == data.QesID){
+        if (question.QesID == data.QesID) {
           question.question = data.question;
           question.anonymous = data.anonymous;
         }
-      })
-    })
+      });
+    });
     this.socket.on("black", data => {
       const QesID = data;
-      for(let i = 0 ; i<this.questionList.length; i++){
-        if(this.questionList[i].QesID == QesID){
-          this.questionList.splice(i, 1)
+      for (let i = 0; i < this.questionList.length; i++) {
+        if (this.questionList[i].QesID == QesID) {
+          this.questionList.splice(i, 1);
           break;
         }
       }
-    })
+    });
   },
   updated() {
-    if(this.oldList != this.questionList || !this.first){
+    if (this.oldList != this.questionList || !this.first) {
       document.querySelector(
         ".web #chat-message-list"
-      ).scrollTop = document.querySelector(".web #chat-message-list").scrollHeight;
+      ).scrollTop = document.querySelector(
+        ".web #chat-message-list"
+      ).scrollHeight;
       document.querySelector(
         ".mobile #chat-message-list"
-      ).scrollTop = document.querySelector(".mobile #chat-message-list").scrollHeight;
+      ).scrollTop = document.querySelector(
+        ".mobile #chat-message-list"
+      ).scrollHeight;
       this.oldList = this.questionList;
       this.first = true;
     }
@@ -477,6 +535,22 @@ export default {
     next();
   },
   mounted() {
+    window.setTimeout(() => {
+     // for (let i = 0; i < this.questionList.length; i++) {
+        // var jbString = this.questionList[30].date;
+        // var month = jbString.split("월");
+        // alert(month[1][2]);
+        // var day = jbString.split("일");
+        // var dayCheck1, dayCheck2;
+        // if(isNaN(month[1][2]==false)) alert(month[0][1]);//dayCheck1 = day[0][day[0].length - 2]*10 +day[0][day[0].length - 1];
+        // else {alert(month[0][1]+'ha'+month[0][2])}
+        // alert(dayCheck1);
+        // if(isNaN(day[0][day[0].length - 2])==false) alert(day[0][day[0].length - 2]+''+day[0][day[0].length - 1]);
+        // else alert(day[0][day[0].length - 1]);
+        
+      //}
+    }, 1500);
+
     window.setTimeout(() => {
       this.socket.emit("getUsers", {
         socketID: this.socket.id,
@@ -495,33 +569,35 @@ export default {
     });
   },
   methods: {
-    floating: function(index){
+    floating: function(index) {
       this.$set(this.fab, index, !this.fab[index]);
     },
-    padding: function(number){
-      return (number < 10 ? ' ' : '') + number;
+    padding: function(number) {
+      return (number < 10 ? " " : "") + number;
     },
     like(QesID) {
       this.socket.emit("like", {
         userID: this.userID,
         QesID: QesID
-      })
+      });
     },
     unlike(QesID) {
       this.socket.emit("unlike", {
         userID: this.userID,
         QesID: QesID
-      })
+      });
     },
-    blackListAdd(QesID,contents){
-      const blackList={
-        QesID:QesID,
-        contents:contents,
-        profID: this.$store.state.userID}
-      Prof.blackListAdd(this.$store.state.currentClass.classCode,blackList)
-              .then(res=>{
-
-      })
+    blackListAdd(QesID, contents) {
+      const blackList = {
+        QesID: QesID,
+        contents: contents,
+        profID: this.$store.state.userID,
+        state: false
+      };
+      Prof.blackListAdd(
+        this.$store.state.currentClass.classCode,
+        blackList
+      ).then(res => {});
     },
     notification(data) {
       const cursor = this;
@@ -530,8 +606,8 @@ export default {
         Notification &&
         Notification.permission === "granted" &&
         data &&
-        this.$store.state.Identity == 2
-        && this.$store.state.alarm
+        this.$store.state.Identity == 2 &&
+        this.$store.state.alarm
       ) {
         navigator.serviceWorker.getRegistration().then(function(reg) {
           const title = "OPEN CLASS❤️";
@@ -545,7 +621,7 @@ export default {
             actions: [
               {
                 action: "new-action",
-                title: "질문클래스 바로가기",
+                title: "질문클래스 바로가기"
               }
             ],
             vibrate: [100, 50, 100], //movile에서만 가능
@@ -553,7 +629,8 @@ export default {
               classCode: cursor.$store.state.currentClass.classCode
             }
           };
-          reg.showNotification(title, options)
+          reg
+            .showNotification(title, options)
             .then(() => reg.getNotifications())
             .then(notifications => {
               setTimeout(
@@ -567,25 +644,25 @@ export default {
         });
       }
     },
-    black(question){
-      this.$EventBus.$emit("blackList", question)
+    black(question) {
+      this.$EventBus.$emit("blackList", question);
     },
-    deleteQuestion(QesID){
-      this.socket.emit("delete", QesID)
+    deleteQuestion(QesID) {
+      this.socket.emit("delete", QesID);
     },
-    editQuestion(question){
+    editQuestion(question) {
       this.$EventBus.$emit("editQuestion", question);
     },
-    edited(question){
-      this.socket.emit("edit", question)
+    edited(question) {
+      this.socket.emit("edit", question);
     },
     enrollQuestion(event) {
       // alert("yes");
       event.preventDefault();
       let moment = require("moment");
       moment.locale("ko");
-      if(this.content == null) {
-        return 
+      if (this.content == null) {
+        return;
       }
       this.socket.emit("chat", {
         classCode: this.$store.state.currentClass.classCode,
@@ -615,12 +692,12 @@ export default {
   height: auto;
   padding-top: 12px;
   padding-bottom: 12px;
-  padding-right:0px;
-  padding-left:0px;
+  padding-right: 0px;
+  padding-left: 0px;
 }
-#textDiv{
-  padding-right:20px;
-  padding-left:16px;
+#textDiv {
+  padding-right: 20px;
+  padding-left: 16px;
 }
 .user-identity {
   color: #ddd;
@@ -644,7 +721,7 @@ export default {
   grid:
     "chat-title" 8%
     "chat-message-list" 1fr
-    "chat-form" 8%
+    "chat-form" 13%
     / 1fr 2px;
   width: 100%;
   height: 90vh;
@@ -745,11 +822,11 @@ export default {
   padding: 10px 10px 12px 15px;
 }
 .conversation.active {
-  background:mediumturquoise;
+  background: mediumturquoise;
 }
 .conversation:hover {
   cursor: pointer;
-  background:mediumturquoise;
+  background: mediumturquoise;
 }
 .conversation > img {
   height: 40px;
@@ -783,54 +860,54 @@ export default {
 .v-text-field.v-text-field--solo .v-input__control {
   min-height: 36px;
 }
-.mdi-heart:hover{
-  transform: scale(1.2)
+.mdi-heart:hover {
+  transform: scale(1.2);
 }
-.mdi-dots-vertical{
+.mdi-dots-vertical {
   font-size: 18px;
   position: relative;
-  width:18px !important;
-  top:-2px
+  width: 18px !important;
+  top: -2px;
 }
-.mdi-dots-vertical:hover{
-  transform: scale(1.2)
+.mdi-dots-vertical:hover {
+  transform: scale(1.2);
 }
-.questionFab{
+.questionFab {
   border-radius: 50% !important;
 }
-.v-btn.v-btn--floating.v-btn--small{
-  margin:8px;
-  padding:3px !important;
-  top:5px;
+.v-btn.v-btn--floating.v-btn--small {
+  margin: 8px;
+  padding: 3px !important;
+  top: 5px;
 }
 /* .v-btn.v-btn--active.v-btn--floating.v-btn--small.theme--dark.green > .v-btn__content{ */
-  /* width:18px !important; */
+/* width:18px !important; */
 /* } */
-.fab > .v-btn__content{
-  width:18px !important;
+.fab > .v-btn__content {
+  width: 18px !important;
 }
-.fab{
+.fab {
   padding: 3px !important;
-  width:20px !important;
-  height:20px !important;
+  width: 20px !important;
+  height: 20px !important;
 }
-.v-speed-dial{
-  top:0px ;
-  right:0px;
+.v-speed-dial {
+  top: 0px;
+  right: 0px;
 }
-.v-btn:not(.v-btn--depressed):not(.v-btn--flat){
+.v-btn:not(.v-btn--depressed):not(.v-btn--flat) {
   box-shadow: none;
-  -webkit-box-shadow:none;
+  -webkit-box-shadow: none;
 }
-.v-btn--floating:not(.v-btn--depressed):not(.v-btn--flat){
+.v-btn--floating:not(.v-btn--depressed):not(.v-btn--flat) {
   box-shadow: none;
-  -webkit-box-shadow:none;
+  -webkit-box-shadow: none;
 }
-.v-btn:not(.v-btn--depressed):not(.v-btn--flat){
+.v-btn:not(.v-btn--depressed):not(.v-btn--flat) {
   box-shadow: none;
-  -webkit-box-shadow:none;
+  -webkit-box-shadow: none;
 }
-.v-icon.material-icons.theme--dark{
+.v-icon.material-icons.theme--dark {
   font-size: 18px !important;
 }
 
@@ -844,5 +921,4 @@ export default {
     display: none !important;
   }
 }
-
 </style>

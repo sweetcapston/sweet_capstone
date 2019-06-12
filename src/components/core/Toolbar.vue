@@ -10,7 +10,7 @@
       @click="toggleDrawer"
   />
     <v-toolbar-title class="headline text-uppercase">
-      <img class="logo" src="@/assets/logo_white.png" height="40">
+      <img class="logo" src="@/assets/logo_white.png" height="40" @click="moveToMain">
       <span  class="hidden-md-and-down username font-weight"> {{this.$store.state.userName}} </span>
     </v-toolbar-title>
     <v-spacer/>
@@ -89,6 +89,9 @@
       profile(){
         alert("edit")
         this.$EventBus.$emit("profile")
+      },
+      moveToMain(){
+        this.$router.push({name: 'main'}) ;
       }
     },
     computed: {

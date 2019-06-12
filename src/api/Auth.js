@@ -12,6 +12,7 @@ export default {
     return axios.get(`${BaseUrl}`, config);
   },
   login(params) {
+    console.log(config);
     return axios.post(`${BaseUrl}/login`, params, config);
   },
   logout(){
