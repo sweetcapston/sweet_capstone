@@ -15,7 +15,7 @@
       <section id="main">
         <v-parallax 
           height="700"
-          src="https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2F06111703_1.jpg?alt=media&token=35c276d3-6a7f-4b51-9cee-3e4f5434c8a6"
+          src="https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2Fmaterial.png?alt=media&token=539fabab-994c-4a60-b21e-7e3fb463a245"
         >
           <v-layout
             column
