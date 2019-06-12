@@ -13,7 +13,7 @@
       <v-layout class="fill-height" tag="v-list" column>
         <v-list-tile avatar>
           <v-list-tile-avatar color="white" @click="outClass()">
-            <v-img src="/images/mini.png" height="45" contain/>
+            <v-img src="https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2Fmini.png?alt=media&token=98f4ae8b-06bb-40ff-8222-45ae62a76b57" height="45" contain/>
           </v-list-tile-avatar>
           <v-list-tile-title
             class="title"
@@ -64,7 +64,7 @@ export default {
   data() { 
     return {
     image:
-      "/images/side_bg.jpg",
+      "https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2Fside_bg.jpg?alt=media&token=fcddbb57-de15-4502-aed8-5cd74da1dc0f",
     color: "cyan",
     links: [
       // 메인페이지 관련

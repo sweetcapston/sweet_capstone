@@ -10,7 +10,7 @@
       @click="toggleDrawer"
   />
     <v-toolbar-title class="headline text-uppercase">
-      <img class="logo" src="/images/logo_white.png" height="40" />
+      <img class="logo" src="https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2Flogo_white.png?alt=media&token=a3200e5d-5428-4282-8fe9-e65df67088b4" height="40" />
       <span  class="hidden-md-and-down username font-weight"> {{this.$store.state.userName}} </span>
     </v-toolbar-title>
     <v-spacer/>

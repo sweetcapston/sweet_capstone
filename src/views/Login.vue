@@ -15,7 +15,7 @@
       <section id="main">
         <v-parallax 
           height="700"
-          src="/images/material.jpg"
+          src="https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2F06111703_1.jpg?alt=media&token=35c276d3-6a7f-4b51-9cee-3e4f5434c8a6"
         >
           <v-layout
             column
@@ -227,7 +227,7 @@
       <section>
         <v-parallax
           height="600" 
-          src="/images/material2.jpg">
+          src="https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2Fmaterial2.jpg?alt=media&token=db102feb-c2cc-47ea-8d38-a44de61ee516">
           <v-layout column align-center justify-center>
             <div class="headline white--text mb-3 text-xs-center">For a better lecture</div>
             <em>Sweet Team</em>
