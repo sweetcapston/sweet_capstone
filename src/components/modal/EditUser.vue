@@ -216,11 +216,10 @@ export default {
         alert("사용할 수 없는 학번입니다.");
         return;
       }
-      var oldUserName = this.$store.state.userName;
-
       Auth.editInfo({
         userID: this.userID,
         userName: this.userName,
+        originName: this.$store.state.userName,
         studentID: this.studentID,
         password: this.newPassword
       }).then(res => {
@@ -228,60 +227,6 @@ export default {
           userName: res.data.userName,
           studentID: res.data.studentID
         });
-        
-        checkPassword(){
-            Auth.passwordCheck({
-                userID: this.userID,
-                password:this.password
-            }).then(res => {
-                if(res.data){
-                    this.checked= true;
-                    document.querySelector(".password").classList.add("v-input--is-disabled")
-                    document.querySelector(".password .v-input__control .v-input__slot .v-text-field__slot input").disabled = true;
-                } else {
-                    alert("비밀번호가 올바르지 않습니다.")
-                }
-            })
-        },
-        editUser(){
-            if(this.newPW && this.errors.items.length!=0 ){
-                return;
-            }
-
-            if(this.newPassword==this.password){
-                alert("기존과 다른 비밀번호를 사용해주세요.")
-                return;
-            }
-            if(this.Identity==1 && this.studentID=="9999"){
-                alert("사용할 수 없는 학번입니다.")
-                return;
-            }
-            Auth.editInfo({
-                userID:this.userID,
-                userName:this.userName,
-                originName:this.$store.state.userName,
-                studentID:this.studentID,
-                password:this.newPassword
-            }).then(res => {
-                this.$store.commit("setEditData", {
-                    userName:res.data.userName,
-                    studentID:res.data.studentID
-                })
-                this.checked = false;
-                this.dialog = true;
-                this.password = "";
-                this.newPassword = "";
-                this.newPassword2 = "";
-                this.userID = this.$store.state.userID;
-                this.userName = this.$store.state.userName;
-                this.newPW = false;
-                this.dialog = false;
-            })
-        },
-        validate: function() {
-            this.$validator.validateAll();
-        }
-        
         this.checked = false;
         this.dialog = true;
         this.password = "";
@@ -296,6 +241,9 @@ export default {
     validate: function() {
       this.$validator.validateAll();
     }
+  },
+  validate: function() {
+    this.$validator.validateAll();
   }
 };
 </script>
