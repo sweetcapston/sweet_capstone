@@ -6,7 +6,7 @@
     <template v-slot:header v-if="!edit">
       <v-layout align-center>
         <v-speed-dial
-          v-if="profName == userName "
+          v-if="Identity==2"
           v-model="fab"
           absolute
           small
@@ -214,8 +214,7 @@ export default {
       profName:this.$store.state.currentClass.profName,
       edit:false,
       e1: 1,
-      userName: this.$store.state.userName,
-      profName:this.$store.state.currentClass.profName,
+      Identity: this.$store.state.Identity,
       fab:false
     };
   },

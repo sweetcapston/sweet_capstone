@@ -178,6 +178,7 @@ let colorList = ["blue", "purple", "brown", "pink", "navy", "teal", "orange", "i
             Auth.editInfo({
                 userID:this.userID,
                 userName:this.userName,
+                originName:this.$store.state.userName,
                 studentID:this.studentID,
                 password:this.newPassword
             }).then(res => {
