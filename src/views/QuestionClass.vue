@@ -5,11 +5,10 @@
         <div id="chat-title">
           <span>질문 클래스</span>
         </div>
-
         <div id="chat-message-list" v-if="questionList.length!=0">
           <template v-for="(ques,index) in questionList">
             <v-flex id="message" :key="ques.index">
-              <v-subheader v-if="ques.header" :key="ques.header" inset>{{ ques.header }}</v-subheader>
+              <v-subheader inset v-if="dateState[index]==true">{{dayDate[index]}}</v-subheader>
               <v-divider/>
               <v-list-tile id="auto_height" :key="ques.title">
                 <v-speed-dial
@@ -161,7 +160,8 @@
         <div id="chat-message-list" v-if="questionList.length!=0">
           <template v-for="(ques,index) in questionList">
             <v-flex id="message" :key="ques.index">
-              <!-- <v-subheader inset>today</v-subheader> -->
+              <!-- FIXME: 여기에서 수정 -->
+              <v-subheader inset v-if="dateState[index]==true">{{dayDate[index]}}</v-subheader>
               <v-divider/>
               <v-list-tile id="auto_height" :key="ques.title">
                 <v-speed-dial
@@ -315,7 +315,7 @@
       </div>
       <div class="scroll" id="conversation-list">
         <div class="conversation" v-for="(user, i) in userList" :key="i">
-          <img :src="`/images/${user.image}.png`" height="100%" />
+          <img :src="`/images/${user.image}.png`" height="100%">
           <div class="user-name">{{user.userName}}</div>
           <div class="user-identity">{{user.value}}</div>
         </div>
@@ -350,8 +350,24 @@ export default {
     Stud.loadQuestion(this.$store.state.currentClass.classCode).then(res => {
       if (res.data === "false") alert("질문 가져오기 실패");
       else {
-        this.questionList = res.data.questionList;
+        var curDay; //현재포인터날짜
+        var prevDay; //이전날짜
+        for (let i = 0; i < res.data.questionList.length; i++) {
+          var jbString = res.data.questionList[i].date;
 
+          var month = jbString.split("월");
+          var day = jbString.split("오");
+          if (isNaN(month[1][2]) == false)
+            curDay = month[1][1] + "" + month[1][2];
+          else if (isNaN(month[1][2]) == true) curDay = month[1][1];
+
+          if (!prevDay) this.dateState.push(true);
+          else if (prevDay == curDay) this.dateState.push(false);
+          else if (prevDay != curDay) this.dateState.push(true);
+          prevDay = curDay;
+          this.dayDate.push(day[0]);
+        }
+        this.questionList = res.data.questionList;
         this.fab = new Array(this.questionList.length).fill(false);
         this.socket.emit("channelJoin", {
           classCode: this.$store.state.currentClass.classCode,
@@ -362,8 +378,11 @@ export default {
       }
     });
   },
+
   data() {
     return {
+      dayDate: [], // 년,월,일 까지만 보여주는 데이터.
+      dateState: [], // 날짜변경 인식하는 상태. true: 날짜변경, false: 동일날짜
       events: [],
       colorList: colorList,
       avatarColor:
@@ -528,6 +547,8 @@ export default {
       this.oldList = this.questionList;
       this.first = true;
     }
+    this.dateState.push('test');
+    this.dateState.pop();
   },
 
   beforeRouteLeave(to, from, next) {
@@ -536,21 +557,34 @@ export default {
     next();
   },
   mounted() {
-    window.setTimeout(() => {
-     // for (let i = 0; i < this.questionList.length; i++) {
-        // var jbString = this.questionList[30].date;
-        // var month = jbString.split("월");
-        // alert(month[1][2]);
-        // var day = jbString.split("일");
-        // var dayCheck1, dayCheck2;
-        // if(isNaN(month[1][2]==false)) alert(month[0][1]);//dayCheck1 = day[0][day[0].length - 2]*10 +day[0][day[0].length - 1];
-        // else {alert(month[0][1]+'ha'+month[0][2])}
-        // alert(dayCheck1);
-        // if(isNaN(day[0][day[0].length - 2])==false) alert(day[0][day[0].length - 2]+''+day[0][day[0].length - 1]);
-        // else alert(day[0][day[0].length - 1]);
-        
-      //}
-    }, 1500);
+    // window.setTimeout(() => {
+    // var curDay; //현재포인터날짜
+    // var prevDay; //이전날짜
+
+    // for (let i = 19; i < this.questionList.length - 6; i++) {
+    //   this.dateState = false;
+    //   var jbString = this.questionList[i].date;
+    //   alert(jbString);
+    //   var month = jbString.split("월");
+
+    //   if (isNaN(month[1][2]) == false)
+    //     curDay = month[1][1] + "" + month[1][2];
+    //   else if (isNaN(month[1][2]) == true) curDay = month[1][1];
+
+    //   if (!prevDay) this.dateState = true;
+    //   else if (prevDay == curDay) this.dateState = false;
+    //   else if (prevDay != curDay) this.dateState = true;
+    //   prevDay = curDay;
+    //   alert(this.dateState)
+    // var day = jbString.split("일");
+    // var dayCheck1, dayCheck2;
+    // if(isNaN(month[1][2]==false)) alert(month[0][1]);//dayCheck1 = day[0][day[0].length - 2]*10 +day[0][day[0].length - 1];
+    // else {alert(month[0][1]+'ha'+month[0][2])}
+    // alert(dayCheck1);
+    // if(isNaN(day[0][day[0].length - 2])==false) alert(day[0][day[0].length - 2]+''+day[0][day[0].length - 1]);
+    // else alert(day[0][day[0].length - 1]);
+    //   }
+    // }, 1500);
 
     window.setTimeout(() => {
       this.socket.emit("getUsers", {
@@ -615,8 +649,10 @@ export default {
           var options = {
             body: `${data.question}`,
             //1px = 0.02645833333333 cm
-            image: "https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2Fnotify.jpg?alt=media&token=47929830-0008-4056-81f4-847dfc86cf21", //720px (width) by 240px (height)
-            icon: "https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2Fmini.png?alt=media&token=98f4ae8b-06bb-40ff-8222-45ae62a76b57", //android는 192px   512 512
+            image:
+              "https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2Fnotify.jpg?alt=media&token=47929830-0008-4056-81f4-847dfc86cf21", //720px (width) by 240px (height)
+            icon:
+              "https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2Fmini.png?alt=media&token=98f4ae8b-06bb-40ff-8222-45ae62a76b57", //android는 192px   512 512
             tag: getTime,
             actions: [
               {
