@@ -24,7 +24,7 @@
             <v-btn
               color="primary"
               round
-              class="font-weight-light"
+              class="font-weight-light Add"
               @click="addClass()"
               v-if="this.$store.getters.getIdentity == 1 && (this.$store.state.checkApply == -1)"
             >수강하기</v-btn>
@@ -215,9 +215,8 @@ export default {
     }
   },
     mounted: function () {
-      if(this.$store.state.Identity==1 //&& this.$store.state.classList.length == 0
-      )
-        this.$tours['classAdd'].start()
+      if(this.$store.state.Identity==1 && this.$store.state.classList.length == 0)
+        setTimeout(()=>this.$tours['classAdd'].start(), 150);
     }
 }
 </script>
