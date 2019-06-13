@@ -41,7 +41,7 @@
         >
           <v-flex xs12 sm4 class="my-3">
             <div class="text-xs-center">
-              <h2 class="headline">How to use</h2>
+              <h1 style="font-size:3rem;">How to use</h1>
             </div>
           </v-flex>
 
