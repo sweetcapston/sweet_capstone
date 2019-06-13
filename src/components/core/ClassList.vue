@@ -6,7 +6,7 @@
           id="image"
           class="white--text"
           height="150px"
-          src="/images/openClass.png"
+          :src="require('@/assets/openClass.png')"
         >
           <v-icon
             id="delete"

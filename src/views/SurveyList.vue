@@ -300,4 +300,7 @@ export default {
   font-weight: bold;
   font-size:15px;
 }
+.v-expansion-panel__header{
+  display:flex !important;
+}
 </style>

@@ -264,9 +264,6 @@
           </template>
         </div>
 
-        <!--<div id="chat-message-list" v-else>-->
-        <!--<v-img :src="require('@/assets/question.png')" height="60"><div><h1>&nbsp;자유롭게 질문을 하세요.</h1></div></v-img>-->
-        <!--</div>-->
         <div id="chat-form">
           <template>
             <v-list-tile avatar>
@@ -315,7 +312,7 @@
       </div>
       <div class="scroll" id="conversation-list">
         <div class="conversation" v-for="(user, i) in userList" :key="i">
-          <img :src="`/images/${user.image}.png`" height="100%" />
+          <img :src="require(`@/assets/${user.image}.png`)" height="100%" />
           <div class="user-name">{{user.userName}}</div>
           <div class="user-identity">{{user.value}}</div>
         </div>
@@ -615,8 +612,10 @@ export default {
           var options = {
             body: `${data.question}`,
             //1px = 0.02645833333333 cm
-            image: "https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2Fnotify.jpg?alt=media&token=47929830-0008-4056-81f4-847dfc86cf21", //720px (width) by 240px (height)
-            icon: "https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2Fmini.png?alt=media&token=98f4ae8b-06bb-40ff-8222-45ae62a76b57", //android는 192px   512 512
+            image:require("@/assets/notify.jpg"),
+            icon:require("@/assets/mini.png"),
+            // image: "https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2Fnotify.jpg?alt=media&token=47929830-0008-4056-81f4-847dfc86cf21", //720px (width) by 240px (height)
+            // icon: "https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2Fmini.png?alt=media&token=98f4ae8b-06bb-40ff-8222-45ae62a76b57", //android는 192px   512 512
             tag: getTime,
             actions: [
               {

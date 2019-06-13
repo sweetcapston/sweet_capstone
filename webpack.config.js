@@ -78,12 +78,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(png|jpg)$/,
-        use: [
-            'file-loader'
-        ]
-      },
-      {
         test: /\.(sa|sc|c)ss$/,
           use: [
               isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
@@ -131,7 +125,7 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|gif|svg|ico)$/,
-        loader: 'file-loader',
+        loader: 'file-loader?name=[name].[ext]',
       },
       {
         test: /\.(woff|woff2|ttf|eot)$/,
@@ -210,14 +204,13 @@ else if(process.env.NODE_ENV === 'development') {
 else if (process.env.NODE_ENV === 'production') {
   module.exports.devServer = {
     hot: true, 
-    host: '0.0.0.0', 
     compress: true,
     historyApiFallback: true,
     contentBase: path.join(__dirname, 'dist'),
     open: true,
     disableHostCheck: true,
     overlay: true,
-    port: 80,
+    port: 8080,
     stats: {
     normal: true,
     lazy: false

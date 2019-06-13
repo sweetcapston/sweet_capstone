@@ -2,8 +2,8 @@
 
   <v-app>  
     <v-toolbar class="v-toolbar--fixed white--text elevation-0 transparent">
-      <img class="hidden-md-and-up" src="/images/logo_white.svg" height="25" />
-      <img class="hidden-md-and-down" src="/images/logo_white.svg" height="50" />
+      <img class="hidden-md-and-up" :src="require('@/assets/logo_white.svg')" height="25" />
+      <img class="hidden-md-and-down" :src="require('@/assets/logo_white.svg')" height="50" />
       <v-spacer />
       <sui-button class="transparent" positive @click="OpenLogin">로그인</sui-button>
       <sui-button class="cyan lighten-1" positive @click.native="OpenRegister" id="signbtn">회원가입</sui-button>
@@ -15,7 +15,7 @@
       <section id="main">
         <v-parallax 
           height="700"
-          src="https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2Fmaterial.png?alt=media&token=539fabab-994c-4a60-b21e-7e3fb463a245"
+          :src="require('@/assets/material.jpg')"
         >
           <v-layout
             column
@@ -227,7 +227,7 @@
       <section>
         <v-parallax
           height="600" 
-          src="https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2Fmaterial2.jpg?alt=media&token=db102feb-c2cc-47ea-8d38-a44de61ee516">
+          :src="require('@/assets/material2.jpg')">
           <v-layout column align-center justify-center>
             <div class="headline white--text mb-3 text-xs-center">For a better lecture</div>
             <em>Sweet Team</em>
