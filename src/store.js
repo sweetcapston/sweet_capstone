@@ -11,11 +11,12 @@ export default new Vuex.Store({
     Identity: 0, // 1: 학생, 2: 교수, 3: 관리자
     userName:'', // 사용자 이름
     userID:'',
+    studentID:'',
     checkApply: '', // 수광중인 클래스여부
     currentClass: { // 현재 클래스 정보
       classCode: '', 
       className: '', 
-      profName: '', 
+      profName: ''
     },
     classList: [], // 사용자의 클래스 리스트
   },
@@ -27,22 +28,31 @@ export default new Vuex.Store({
   mutations: { // state값을 변경하고자 할 때, commit을 이용해서 변경시킬 것임, State 관리
     // 네비게이션 바
     setDrawer: (state, payload) => (state.drawer = payload),
+    setAlarmActive:(state, payload) =>(state.alarm = payload),
     toggleDrawer: state => (state.drawer = !state.drawer), // 상태 토글
 
     setLoginData:(state, payload) => {
       state.userName = payload.userName;
       state.userID = payload.userID;
+      state.studentID = payload.studentId;
       state.classList = payload.classList;
       state.Identity = payload.Identity;
     },
     removeLoginData:(state) => {
       state.userName = '';
       state.userID = '';
+      state.studentID = '';
       state.classList = '';
       state.Identity = '';
     },
+    setEditData: (state, payload)=>{
+      state.userName = payload.userName;
+      state.studentID = payload.studentId;
+    },
 
     addClassList:(state, payload) => (state.classList.push(payload)),
+    //editClassList:(state, payload) => {(state.classList = payload.classList);
+      //},
     removeClassList:(state) => (state.classList),
 
     // 현재 클래스 정보

@@ -1,321 +1,364 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <v-expansion-panel-content class="createQuiz">
     <template v-slot:actions>
       <v-icon color="teal">done</v-icon>
     </template>
-    
-    <template
-      v-slot:header
-    >
+
+    <template v-slot:header>
       <v-text-field
         single-line
         label="제목을 입력하세요"
         color="cyan ligten-1"
         class="quizName"
+        v-model="quizName"
         @click.stop
       ></v-text-field>
     </template>
 
     <v-stepper v-model="e1">
       <v-stepper-header>
-        <template v-for="n in steps">
+        <template v-for="n in card_datas.length">
           <v-stepper-step
             :key="`${n}-step`"
             :complete="e1 > n"
             :step="n"
             editable
             color="cyan lighten-1"
-          >
-            문항 {{ n }}
-          </v-stepper-step>
-          
-          <v-divider 
-            v-if="n !== steps" 
-            :key="n"
-          ></v-divider>        
+          >문항 {{ n }}</v-stepper-step>
+
+          <v-divider v-if="n !== card_datas.length" :key="n"></v-divider>
         </template>
 
         <template>
-          <v-icon
-          class="cyan lighten-1 white--text"
-          @click="addStep()"
-          >mdi-plus-circle</v-icon>
-        </template>        
+          <v-icon class="cyan lighten-1 white--text" @click="addStep()">mdi-plus-circle</v-icon>
+        </template>
       </v-stepper-header>
 
       <v-stepper-items>
-        <v-stepper-content
-          v-for="n in steps"
-          :key="`${n}-content`"
-          :step="n"
+        <core-quiz-steps 
+          v-for="(card_data, n) in card_datas"
+          :key="card_data.id"
+          :step="n+1" 
           class="listItem"
+          v-bind:n="n"
+          v-bind:steps="card_datas.length"
+          v-bind:card_data="card_data" 
+          @remove="deleteStep(n)"
+          @preStep="preStep(n+1)"
+          @nextStep="nextStep(n+1)"
+          @complete="completeQuiz()"
         >
-          <v-card
-            color="grey lighten-3"
-            height="50px"
-            class="typeCard"      
-          >
-            <v-radio-group v-model="type[n-1]" :mandatory="false" class="quizType" row>
-              <v-radio label="객관식" value="1" color="cyan ligten-1" select></v-radio>
-              <v-radio label="객관식 (복수 응답 가능)" value="2" color="cyan ligten-1"></v-radio>
-              <v-radio label="주관식" value="3" color="cyan ligten-1"></v-radio>
-            </v-radio-group>
-          </v-card>
-
-          <v-card
-            class="mb-5"
-            color="grey lighten-3"
-          >
-            <v-btn
-              absolute
-              dark
-              fab
-              top
-              right
-              class="crimson"
-              @click="deleteStep()"
-            >
-              <v-icon>remove</v-icon>
-            </v-btn>
-
-            <v-container>
-              <v-text-field
-                label="질문을 입력하세요"
-                single-line	                
-                color="cyan ligten-1"	
-                class="quizQuestion"
-              ></v-text-field>
-              <div v-if="type[n-1] === '1'">
-                <template v-for="i in samplestype1[n-1].length" >
-                  <v-layout :key="i">
-                    <v-text-field 
-                      class="type1"
-                      prepend-icon="mdi-checkbox-blank-circle-outline"
-                      label="보기를 입력하세요"
-                      single-line
-                      color="rgb(111, 111, 111)"
-                    ></v-text-field>
-                    <v-spacer/>
-                    <v-icon
-                      @click="deleteType1(i)"
-                    >mdi-close</v-icon>
-                  </v-layout>
-                </template>
-                
-                <v-layout 
-                  v-if="type[n-1] === '1'"
-                  @click="addType1(n)"
-                >
-                  <v-icon>mdi-plus</v-icon>
-                  <v-input
-                    label="보기 추가"
-                    class="addSample"
-                  ></v-input>               
-                </v-layout>
-              </div>
-
-              <div  v-if="type[n-1] === '2'">
-                <template class="type2" v-for="j in samplestype2[n-1].length">
-                  <v-layout :key="1000+j">
-                    <v-text-field 
-                      class="type2"
-                      prepend-icon="mdi-checkbox-blank-outline"
-                      label="보기를 입력하세요"
-                      single-line
-                      color="rgb(111, 111, 111)"
-                    ></v-text-field>
-                    <v-spacer />
-                    <v-icon
-                      @click="deleteType2(j)"
-                    >mdi-close</v-icon>  
-                  </v-layout>
-                </template>
-
-                <v-layout 
-                  v-if="type[n-1] === '2'"
-                  @click="addType2(n)"
-                >
-                  <v-icon>mdi-plus</v-icon>
-                  <v-input
-                    label="보기 추가"
-                    class="addSample"
-                  ></v-input>               
-                </v-layout> 
-              </div>
-
-              <v-layout v-if="type[n-1] === '3'">
-                <v-textarea
-                  solo
-                  flat
-                  outline 
-                  color="cyan lighten-1"
-                ></v-textarea>
-              </v-layout>
-            </v-container>
-          </v-card>
-
-          <v-layout justify-space-between>
-            <v-btn 
-              class="cyan lighten-1 white--text"
-              @click="preStep(n)"
-            >
-              Pre
-            </v-btn>
-
-            <v-btn 
-              v-if="n !== steps" 
-              :key="n"
-              class="cyan lighten-1 white--text"
-              @click="nextStep(n)"
-            >
-              Next
-            </v-btn>
-            <v-btn
-              v-if="n === steps" 
-              :key="n"
-              class="cyan lighten-1 white--text"
-              @click="completeQuiz()"
-            >
-              Complete
-            </v-btn>
-          </v-layout>
-        </v-stepper-content>
+        </core-quiz-steps>
       </v-stepper-items>
     </v-stepper>
+    <v-tour name="quizForm" :steps="guide"></v-tour>
   </v-expansion-panel-content>
 </template>
 
 <script>
 /*eslint-disable */
-import store from '@/store.js'
+import Vue from 'vue'
+import VueTour from 'vue-tour'
 import { Prof } from "@/api";
-export default {
-  data () {
-    return {
-      e1: 1,
-      steps: 3,
-      icon: "mdi-plus-circle",
-      type: new Array(3).fill('1'),
-      samplestype1:[[1], [1], [1]],
-      samplestype2:[[1], [1], [1]]
+require('vue-tour/dist/vue-tour.css')
+Vue.use(VueTour)
 
-    }
-  },
-  watch: {
-    steps (val) {
-      if (this.e1 > val) {
-        this.e1 = val
-      }
-    }
+export default {
+  name: "quizForm",
+  data() {
+    return {
+      quizName:"",
+      guide: [
+        {
+          target: '.material-card',
+          content: `퀴즈를 생성할 수 있습니다!`,
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.quizName', 
+          content: `<strong>제목을 입력하세요</strong>!`,
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.v-stepper__step__step.cyan.lighten-1', 
+          content: `문항 번호를 확인 하세요.`,
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.mdi-plus-circle',
+          content: '더 많은 문제를 작성하세요.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '[role=radiogroup] .v-radio.theme--light.cyan--text.text--ligten-1',
+          content: '타입을 선택할 수 있습니다.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '#point0',
+          content: '문제의 점수는?',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '#imageUpload',
+          content: '퀴즈에 이미지를 추가할 수 있습니다.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },  
+        {
+          target: '.correctcheck',
+          content: `<strong>정답을 체크해 주세요</strong>`,
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '.v-btn--floating',
+          content: '문제를 삭제할 수 있습니다.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        },
+        {
+          target: '#next',
+          content: '버튼을 눌러 다음 문제를 작성하세요.',
+          params: {
+            placement: 'bottom',
+            enableScrolling: false
+          }
+        }
+      ],
+      e1: 1,
+      card_datas: [
+        {
+          id:1,
+          type:'1',
+          samplestype1:[{
+            id:1
+          }],
+          samplestype2:[{
+            id:1001
+          }]
+        },
+        {
+          id:2,
+          type:'1',
+          samplestype1:[{
+            id:1
+          }],
+          samplestype2:[{
+            id:1001
+          }]
+        },
+        {
+          id:3,
+          type:'1',
+          samplestype1:[{
+            id:1
+          }],
+          samplestype2:[{
+            id:1001
+          }]
+        }
+      ],
+      newID: 4,
+      icon: "mdi-plus-circle"
+    };
   },
   methods: {
     completeQuiz() {
-      let moment = require('moment');
-      moment.locale('ko');
-      const quizName = document.querySelector('.quizName input').value;
+      let moment = require("moment");
+      const quizName = document.querySelector(".quizName input").value;
       const classCode = this.$store.state.currentClass.classCode;
-      const date = moment().format("LLL");
-      const quizList = []
-      
-      for(var j = 0; j<this.steps; j++){
-        const quizType = document.querySelectorAll(".quizType input[type='radio']:checked")[j].value;
-        const quizQuestion = document.querySelectorAll(".listItem .quizQuestion input[type='text']")[j].value;
+      const date = moment().format();
+      const quizList = [];
+      for (var j = 0; j < this.card_datas.length; j++) {
+        const quizType = document.querySelectorAll(
+          ".quizType input[type='radio']:checked"
+        )[j].value;
+        const quizQuestion = document.querySelector(`.quizQuestion_${j+1}`).innerHTML;
+        if(quizQuestion==""){
+          alert("질문이 입력되지 않았습니다.")
+          this.e1 = j+1
+          setTimeout(()=> document.querySelector(`.quizQuestion_${j+1}`).focus(), 50)
+          return 
+        }
         let content = [];
-        let doc;
+        let point;
+        let correct;
+        let doc, checkedbox;
         let count;
-        switch(quizType){
-          case "1": 
-            doc = document.querySelectorAll('.type1')
-            for(let i = 0 ; i<doc.length; i++)              
-              content.push(doc[i].querySelector('input').value);
-            count = new Array(doc.length).fill(0)
+        let pointDoc = document.querySelector(`#point${j}`);
+        if(pointDoc.value==""){
+          alert("점수를 입력해주세요.")
+          this.e1 = j+1
+          setTimeout(()=> pointDoc.focus(), 50) 
+          return;
+        }
+        point = pointDoc.value;
+        switch (quizType) {
+          case "1":
+            doc = document.querySelectorAll(`.type1_${j+1}`);
+            for (let i = 0; i < doc.length; i++) {
+              let elem = document.querySelector(`input[type=radio]:checked#correct${j}`);
+              if(elem == null){
+                alert("정답을 체크해주세요")
+                this.e1 = j+1
+                setTimeout(()=> document.querySelector(`input[type=radio]#correct${j}`).focus(), 50)
+                return
+              }
+              correct = String(parseInt(elem.value)+1)
+              if(doc[i].querySelector("input").value == ""){
+                alert("입력되지 않은 항목이 있습니다.")
+                this.e1 = j+1
+                setTimeout(()=> doc[i].querySelector("input").focus(), 50)
+                return
+              }
+              content.push(doc[i].querySelector("input").value);
+            }
+            count = new Array(doc.length).fill(0);
             break;
-          case "2": 
-            doc = document.querySelectorAll('.type2')
-            for(let i = 0 ; i<doc.length; i++)              
-              content.push(doc[i].querySelector('input').value);
-            count = new Array(doc.length).fill(0)
+          case "2":
+            correct = ""
+            checkedbox = document.querySelectorAll(`input[type=checkbox]:checked#correct${j}`)
+            if(checkedbox.length == 0){
+              alert("정답을 체크해주세요")
+              this.e1 = j+1
+              setTimeout(()=> document.querySelector(`input[type=checkbox]#correct${j}`).focus(), 50)
+              return
+            }
+            checkedbox.forEach(checked => {
+              correct += String(parseInt(checked.value)+1)
+            })
+            doc = document.querySelectorAll(`.type2_${j+1}`);
+            for (let i = 0; i < doc.length; i++) {
+              if(doc[i].querySelector("input").value == ""){
+                alert("입력되지 않은 항목이 있습니다.")
+                this.e1 = j+1
+                setTimeout(()=> doc[i].querySelector("input").focus(), 50)
+                return
+              }
+              content.push(doc[i].querySelector("input").value);
+            }
+            count = new Array(doc.length).fill(0);
             break;
-          case "3": 
-            doc = document.querySelector('textarea').value;
-            content.push(document.querySelector('textarea').value);
+          case "3":
+            doc = document.querySelector("textarea");
+            if(doc.value==""){
+              alert("정답을 입력해주세요")
+              this.e1 = j+1
+              setTimeout(()=> doc.focus(), 50)
+              return
+            }
+            correct = doc.value;
             count = 1;
             break;
         }
         quizList.push({
-          quizType: parseInt(quizType), 
-          quizQuestion: quizQuestion, 
-          content:content, 
-          count:count
-        })
+          quizType: parseInt(quizType),
+          quizQuestion: quizQuestion,
+          content: content,
+          count: count,
+          point: point,
+          correct: correct
+          // TODO: 정답이랑 배점도 추가해야함.
+        });
       }
-      const newQuiz = {
-        quizName:quizName,
-        quizList:quizList,
-        classCode:classCode,
-        date:date,
-        public:true,
-        active:false,
+      let newQuiz;
+      if(quizName == ""){
+        newQuiz = {
+          quizList: quizList,
+          classCode: classCode,
+          date: date,
+          public: true,
+          active: false
+        };
+      } else{
+        newQuiz = {
+          quizName: quizName,
+          quizList: quizList,
+          classCode: classCode,
+          date: date,
+          public: true,
+          active: false
+        };
       }
       
-      Prof.quizCreate(newQuiz)
-      .then(res => {
-        if(res.data){
-          this.$emit("childs-event",true)
-          window.history.go(0);
+      Prof.quizCreate(newQuiz).then(res => {
+        if (res.data) {
+          this.$EventBus.$emit("sendQuiz", res.data)
         }
       });
     },
     addStep(n) {
-      this.steps = this.steps + 1
-      this.type.push('1');
-      this.samplestype1.push([1])
-      this.samplestype2.push([1])
+      this.card_datas.push({
+        id:this.newID++,
+        type:'1',
+        samplestype1:[{
+          id:1
+        }],
+        samplestype2:[{
+          id:1001
+        }]
+      })
     },
     deleteStep(n) {
-      this.steps = this.e1 - 1
-      this.type.pop()
-      this.samplestype1.pop()
-      this.samplestype2.pop()
+      this.card_datas.splice(n, 1);
+      this.e1 -= 1;
     },
     nextStep(n) {
-      this.e1 = n + 1
+      this.e1 = n + 1;
     },
     preStep(n) {
       if (1 === this.steps) {
-        this.e1 = 1
+        this.e1 = 1;
       } else {
-        this.e1 = n - 1
+        this.e1 = n - 1;
       }
-    },
-    addType1(n) {
-      this.samplestype1[n-1].push(1)
-    },
-    addType2(n) {
-      this.samplestype2[n-1].push(1)
-    },
-    deleteType1(i) {
-      this.samplestype1 = this.samplestype1 - 1
-    },
-    deleteType2(j) {
-      this.samplestype2 = this.samplestype2 - 1
     }
+  },
+  mounted: function () {
+    setTimeout(()=> this.$tours['quizForm'].start(), 150);
+
   }
 }
 </script>
 <style>
 .mdi.mdi-plus-circle:hover {
-  background:aqua !important;
+  background: aqua !important;
 }
 .mdi.mdi-plus-circle:active {
-  box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12);
+  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 .newQuiz:hover {
   background: cyan;
 }
-.quizName > .v-input__control > .v-text-field__details{
-  height:0px;
-  margin-bottom:0px;
+.quizName > .v-input__control > .v-text-field__details {
+  height: 0px;
+  margin-bottom: 0px;
 }
 .addSample > .v-input__control > .v-message {
   height: 0px;
@@ -325,11 +368,34 @@ export default {
   height: 0px;
   margin: 0px;
 }
-.quizType > .v-input__control > .v-input__slot{
+.quizType > .v-input__control > .v-input__slot {
   margin-top: 10px;
   margin-left: 5px;
 }
-.addSample{
-  margin-top:20px;
+.addSample {
+  margin-top: 20px;
+}
+.progress-bar {
+  margin: 10px 0;
+}
+input[type="file"] {
+  position: absolute;
+  clip: rect(0,0,0,0);
+}
+.resize-container {
+    position: relative;
+    display: inline-block;
+    cursor: move;
+    margin: 0 auto;
+}
+.resize-container img {
+    display: block
+}
+.resize-container:hover img,
+.resize-container:active img {
+    outline: 2px dashed rgba(222,60,80,.9);
+}
+div[data-v-aa0cbe42]{
+ z-index: 10;
 }
 </style>

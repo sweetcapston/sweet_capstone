@@ -1,9 +1,11 @@
 .DS_Store
 node_modules
 coverage
+package-lock.json
 /dist
 .nyc_output
 .editorconfig
+/src/utils/imageStorage.js
 # local env files
 .env.local
 .env.*.local

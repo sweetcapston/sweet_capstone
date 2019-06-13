@@ -12,8 +12,8 @@
     <v-img :src="image" height="100%">
       <v-layout class="fill-height" tag="v-list" column>
         <v-list-tile avatar>
-          <v-list-tile-avatar color="white" @click="moveToMain()">
-            <v-img :src="require('@/assets/logo.svg')" height="34" contain/>
+          <v-list-tile-avatar color="white" @click="outClass()">
+            <v-img :src="require('@/assets/mini.png')" height="45" contain/>
           </v-list-tile-avatar>
           <v-list-tile-title
             class="title"
@@ -64,8 +64,7 @@ export default {
   data() { 
     return {
     image:
-      "https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-4.3b7e38ed.jpg",
-    logo: "@/assets/logo.svg",
+      require('@/assets/side_bg.jpg'),
     color: "cyan",
     links: [
       // 메인페이지 관련
@@ -118,14 +117,10 @@ export default {
         link.to + this.$store.state.currentClass.classCode + link.to2
       );
     },
-    moveToMain: function() {
-      this.$router.push({ name: "main" });
-    },
     outClass(){
       this.$store.commit("removeCurrentClass");
       this.$router.push({name: 'main'});
     }
-    //....
   }
 };
 </script>
@@ -155,6 +150,12 @@ export default {
   .v-navigation-drawer .v-list .v-list-item .v-list__tile.v-list__tile--active{
     -webkit-box-shadow:0 !important;
     box-shadow:0 !important;
+  }
+  .cyan.v-list__tile--active.v-list__tile.v-list__tile--link.v-list__tile--avatar.theme--dark{
+    box-shadow: none !important; 
+  }
+  .v-list__tile__avatar{
+    cursor: pointer;
   }
 }
 </style>

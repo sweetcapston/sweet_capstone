@@ -1,128 +1,222 @@
 <template>
-  <v-app>
-    <h1>클래스 이름 : {{this.$store.state.currentClass.className}}</h1>
-    <h1>클래스 코드 : {{this.$store.state.currentClass.classCode}}</h1>
-    <h1>교수 이름 : {{this.$store.state.currentClass.profName}}</h1>
-    <span>
-      <v-btn color="primary"
-        @click="addClass()"
-        v-if="this.$store.getters.getIdentity == 1 && (this.$store.state.checkApply == -1)" >수강하기</v-btn> <!-- 수강하지않고있는 학생에게만 보여지도록.. 학생의 수강리스트에서 -->
-    </span>
+  <v-layout fill-height>
+    <v-flex xs12 sm12 md6 lg6 xl6 >
+      <material-card class="v-card-profile">
+        <v-avatar slot="offset" class="mx-auto d-block" size="80" color="green">
+          <v-icon class="white--text" size="30">mdi-information-outline</v-icon>
+        </v-avatar>
+        <v-card-text class="text-xs-center">
+          <modal-edit-class/>
+          <p><strong>클래스이름 :</strong> {{this.$store.state.currentClass.className}}</p>
+          <p><strong>클래스코드 :</strong> {{this.$store.state.currentClass.classCode}}</p>
+          <p><strong>교수이름 :</strong> {{this.$store.state.currentClass.profName}}</p>
+          <p><strong>수강인원 수 :</strong> {{this.studentNum}}</p>
+          <p>
+            <strong>질문합계 : </strong>
+            {{this.questionNum}}&nbsp;
+            <strong>설문합계 : </strong>
+            {{this.surveyNum}}&nbsp;
+            <strong>퀴즈합계 : </strong>
+            {{this.quizNum}}
+          </p>
 
-    <v-layout>
-      <v-card
-        class="mx-auto"
-        width="500"
-        hegith="500"
-      > 
-        <v-card-title>
-          <v-flex
-            sm4
-            xs12
-            class="text-sm-left text-xs-center"
-          >
-            <v-btn @click="$refs.calendar.prev()">
-              <v-icon
-                dark
-                left
-              >
-                keyboard_arrow_left
-              </v-icon>
-              Prev
-            </v-btn>
-          </v-flex>
+          <div class="text-xs-right">
+            <v-btn
+              color="primary"
+              round
+              class="font-weight-light Add"
+              @click="addClass()"
+              v-if="this.$store.getters.getIdentity == 1 && (this.$store.state.checkApply == -1)"
+            >수강하기</v-btn>
+          </div>
+        </v-card-text>
+      </material-card>
 
-          <v-flex
-            sm4
-            xs12
-            class="text-xs-center"
-          >
-            <v-select
-              v-model="type"
-              :items="typeOptions"
-              label="Type"
-            ></v-select>
-          </v-flex>
+      <material-notification
+        v-for="(i,index) in this.newQuestion.length"
+        :key="`ques${index}`"
+        class="mb-3"
+        color="info"
+        @click="movePage('question')"
+      >
+        <div style="width:100%;" @click="movePage('question')">
+          <strong>새로운 질문</strong>
+          <span>  {{newQuestion[index]}}</span>
+        </div>
+      </material-notification>
 
-          <v-flex
-            sm4
-            xs12
-            class="text-sm-right text-xs-center"
-          >
-            <v-btn @click="$refs.calendar.next()">
-              Next
-              <v-icon
-                right
-                dark
-              >
-                keyboard_arrow_right
-              </v-icon>
-            </v-btn>
-          </v-flex>
-        </v-card-title>
-        
-        <v-card-actions>
-          <v-flex
-            xs12
-            class="mb-3"
-          >
-            <v-sheet 
-              height="400"
-            >
-              <v-calendar
-                ref="calendar"
-                v-model="start"
-                :type="type"
-                :end="end"
-                color="cyan lighten-1"
-              > 
-              </v-calendar>
-            </v-sheet>
-          </v-flex>  
-        </v-card-actions>
-      </v-card>
-    </v-layout>
-  </v-app> 
+      <div v-if="this.$store.state.Identity ==1">
+        <material-notification
+          class="mb-3"
+          color="warning"
+          v-for="(i,index) in this.newSurvey.length"
+          :key="`survey${index}`"
+        >
+          <div style="width:100%;" @click="movePage('survey')">
+            <strong>새로운 설문</strong>
+            <span>  {{newSurvey[index].Name}}</span>
+          </div>
+        </material-notification>
+
+        <material-notification
+          class="mb-3"
+          color="purple"
+          v-for="(i,index) in this.newQuiz.length"
+          :key="`quiz${index}`"
+        >
+          <div style="width:100%;" @click="movePage('quiz')">
+            <strong>새로운 퀴즈</strong>
+            <span>  {{newQuiz[index].Name}}</span>
+          </div>
+        </material-notification>
+      </div>
+    </v-flex>
+
+    <v-flex class="hidden-md-and-down" md6 sm12 style="padding-left:15px; padding-top:27px; padding-bottom:18px;">
+      <vue-cal
+        height="100%"
+        :time="false"
+        class="vuecal--blue-theme"
+        default-view="month"
+        :disable-views="['day', 'week']"
+      />
+    </v-flex>
+    <v-tour v-if="this.$store.state.Identity==1 &&  this.$store.state.classList.length == 0" name="classAdd" :steps="guide"></v-tour>
+  </v-layout>
 </template>
 
 <script>
-import {Stud} from "@/api";
+import { Stud, Prof } from "@/api";
+import VueCal from "vue-cal";
+import "vue-cal/dist/vuecal.css";
 
 export default {
-  data(){
-    return{
-      type: 'month',
-      start: '2019-01-01',
-      end: '2019-01-06',
-      typeOptions: [
-        { text: 'Day', value: 'day' },
-        { text: '4 Day', value: '4day' },
-        { text: 'Week', value: 'week' },
-        { text: 'Month', value: 'month' },
-        { text: 'Custom Daily', value: 'custom-daily' },
-        { text: 'Custom Weekly', value: 'custom-weekly' }
-      ]
+  created() {
+    Stud.classHome(
+      this.$store.state.currentClass.classCode,
+      this.$store.state.userID
+    ).then(res => {
+      if (res.data === "false") {return false}
+      else {
+            this.studentNum = res.data.student;
+            this.questionNum = res.data.question
+            this.surveyNum = res.data.survey
+            this.quizNum = res.data.quiz
+      }
+    });
+    if (this.$store.state.Identity == 1) {
+      Stud.classHome(
+        this.$store.state.currentClass.classCode,
+        this.$store.state.userID
+      ).then(res => {
+        if (res.data === "false") {return false}
+        else {
+            this.newQuestion = res.data.newQuestion;
+            this.newSurvey = res.data.newSurvey;
+            this.newQuiz = res.data.newQuiz;
+            this.studentNum = res.data.student;
+            this.questionNum = res.data.question
+            this.surveyNum = res.data.survey
+            this.quizNum = res.data.quiz
+        }
+      });
+    } else if (this.$store.state.Identity == 2) {
+      Prof.classHome(
+        this.$store.state.currentClass.classCode,
+        this.$store.state.userID
+      ).then(res => {
+        if (res.data === "false") {return false}
+        else {
+          this.newQuestion = res.data;
+        }
+      });
     }
-  }, 
+  },
+  components: { VueCal },
+  name: "classAdd",
+  data() {
+    return {
+      guide: [
+        {
+          target: ".Add",
+          content: `수강하기 버튼을 눌러 클래스 목록에 추가 할 수 있습니다.`,
+          params: {
+            placement: "bottom",
+            enableScrolling: false
+          }
+        }
+      ],
+      color: null,
+      colors: ["purple", "info", "success", "warning", "error"],
+      newQuestion: [],
+      newSurvey: [],
+      newQuiz: [],
+      fab: false,
+      studentNum: 0,
+      questionNum: 0,
+      surveyNum: 0,
+      quizNum: 0
+    };
+  },
+  computed: {
+    // convert the list of events into a map of lists keyed by date
+    eventsMap() {
+      const map = {};
+      this.events.forEach(e => (map[e.date] = map[e.date] || []).push(e));
+      return map;
+    }
+  },
   methods: {
+    editClass() {
+      alert("haha");
+    },
+    floating: function() {
+      this.fab = !this.fab;
+    },
+    movePage(page) {
+      this.$router.push(
+        `/class/` + this.$store.state.currentClass.classCode + `/${page}`
+      );
+    },
+    open(event) {
+      alert(event.title);
+    },
     addClass() {
       Stud.classAdd(this.$store.state.currentClass.classCode).then(res => {
-        if(res.data === 'false') alert('클래스 수강 실패');
-        else{
+        if (res.data === "false") alert("클래스 수강 실패");
+        else {
           // currentClass객체로 하면 오류남.
           this.$store.commit("addClassList", {
             className: this.$store.state.currentClass.className,
             classCode: this.$store.state.currentClass.classCode,
             profName: this.$store.state.currentClass.profName
           });
-          this.$store.commit('setCheckApply', 1);
-        } 
-      })
+          this.$store.commit("setCheckApply", 1);
+        }
+      });
     },
-    outClass(){
+    outClass() {
       this.$store.commit("removeCurrentClass");
-      this.$router.push({name: 'main'});
+      this.$router.push({ name: "main" });
+    },
+    snack(...args) {
+      this.top = false;
+      this.bottom = false;
+      this.left = false;
+      this.right = false;
+
+      for (const loc of args) {
+        this[loc] = true;
+      }
+
+      this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
+
+      this.snackbar = true;
     }
-  }
-};
+  },
+    mounted: function () {
+      if(this.$store.state.Identity==1 && this.$store.state.classList.length == 0)
+        setTimeout(()=>this.$tours['classAdd'].start(), 150);
+    }
+}
 </script>

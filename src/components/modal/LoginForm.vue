@@ -75,9 +75,6 @@ export default {
       this.userID = "";
       this.password = "";
     },
-    test1() {
-      alert('11');
-    },
     LogIn() {
       if (this.errors.items.length != 0) {
         this.errsign = true;
@@ -100,7 +97,7 @@ export default {
         }
       })
       .catch(error => {
-        alert("error");
+        alert("아이디 비밀번호를 확인해주세요");
       });
     },
     routeChange(Identity){
@@ -112,7 +109,7 @@ export default {
           this.$router.push({name: 'main'}) // 로그인 성공후 메인페이지로 이동
           break;
         case 3: //관리자
-          // 로그인 성공후 관리자페이지로 이동
+          this.$router.push({name: 'admin'}) // 로그인 성공후 관리자페이지로 이동
           break;
       }
     },
