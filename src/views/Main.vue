@@ -186,7 +186,7 @@ export default {
     }
   },
   mounted() {
-  //setTimeout(()=> this.$tours['classCreate'].start(), 150);
+  setTimeout(()=> this.$tours['classCreate'].start(), 150);
 
   },
   methods: {

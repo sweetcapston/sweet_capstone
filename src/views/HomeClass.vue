@@ -81,6 +81,7 @@
         :disable-views="['day', 'week']"
       />
     </v-flex>
+    <v-tour v-if="this.$store.state.Identity==1 &&  this.$store.state.classList.length == 0" name="classAdd" :steps="guide"></v-tour>
   </v-layout>
 </template>
 
@@ -214,8 +215,9 @@ export default {
     }
   },
     mounted: function () {
-    //   if(this.$store.state.Identity==1 && this.$store.state.classList.length == 0)
-    //     this.$tours['classAdd'].start()
+      if(this.$store.state.Identity==1 //&& this.$store.state.classList.length == 0
+      )
+        this.$tours['classAdd'].start()
     }
 }
 </script>
