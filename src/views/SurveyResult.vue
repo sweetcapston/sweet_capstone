@@ -75,13 +75,13 @@
           <v-divider/>
         </v-card-text>
       </v-card>
-       <v-card v-else>
+        <v-card v-else>
         <v-card-text>
           <v-layout align-center justify-center>
             No data available
           </v-layout>
         </v-card-text>
-       </v-card>
+        </v-card>
     </v-expansion-panel-content>
   </v-expansion-panel>
 </template>
