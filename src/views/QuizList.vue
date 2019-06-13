@@ -123,6 +123,7 @@
               ></v-flex>
               <!-- FIXME: 라디오버튼 -->
               <v-radio-group
+                class="radio"
                 v-show="quiz.quizList[n-1].quizType == 1"
                 column
                 v-model="radioValue[n-1]"
@@ -134,7 +135,7 @@
                 >
                   <v-radio
                     disabled
-                    value="true"
+                    :value="`${c}`"
                     :id="`${c}`"
                     :label="`${quizList[n-1].content[c-1]} count:  ${quizList[n-1].count[c-1]}`"
                     color="cyan ligten-1"
@@ -188,7 +189,8 @@
                   <v-expansion-panel-content style="padding:3px 2px 2px 3px">
                     <template v-slot:header>
                       <div>
-                        <h4>응답 결과</h4>
+                        <strong>응답 결과</strong>
+                        (정답: {{shortAnswerValue}})
                       </div>
                     </template>
                     <v-divider/>
@@ -225,12 +227,13 @@ export default {
     return {
       radioValue: [],
       checkValue: [],
+      shortAnswerValue: "",
       steps: 0,
       quizList: [],
       userName: this.$store.state.userName,
-      profName:this.$store.state.currentClass.profName,
+      profName: this.$store.state.currentClass.profName,
       Identity: this.$store.state.Identity,
-      edit:false,
+      edit: false,
       e1: 1,
       minutes: "0",
       quizName: "",
@@ -310,11 +313,18 @@ export default {
         this.timer = null;
       }
     });
-    // this.radioValue = 
-    for(let i=0; i<this.quizList.length; i++){
-      this.radioValue.push(this.quizList[i].correct)
+
+    for (let i = 0; i < this.quizList.length; i++) {
+      if (this.quizList[i].quizType == 1) {
+        this.radioValue.push(this.quizList[i].correct);
+      } else if (this.quizList[i].quizType == 2) {
+        for (let j = 0; j < this.quizList[i].correct.length; j++) {
+          this.checkValue.push(this.quizList[i].correct[j]);
+        }
+      } else if (this.quizList[i].quizType == 3) {
+        this.shortAnswerValue = this.quizList[i].correct;
+      }
     }
-    alert(this.radioValue)
   },
   methods: {
     cancel() {

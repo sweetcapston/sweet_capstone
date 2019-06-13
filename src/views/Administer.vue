@@ -1,7 +1,7 @@
 <template>
   <v-layout wrap>
     <v-flex xs12 sm12 md7 style="margin: 15px; 15px; 15px; 15px;">
-      <material-card color="coralblack" title="차단 요청 리스트" text="Black Request List">
+      <material-card color="coralblack" title="차단 요청 목록" text="Black Request List">
         <v-expansion-panel>
           <v-expansion-panel-content v-for="(item,idx) in this.blackReqList" :key="idx">
             <template v-slot:header>
@@ -26,7 +26,7 @@
     <v-flex xs12 sm12 md4 style="margin: 15px; 15px; 15px; 15px;">
       <v-card style="margin-top: 24px;">
         <v-toolbar dark>
-          <v-toolbar-title>차단 리스트</v-toolbar-title>
+          <v-toolbar-title>차단 목록</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>
         <v-list>
