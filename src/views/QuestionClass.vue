@@ -547,8 +547,6 @@ export default {
       this.oldList = this.questionList;
       this.first = true;
     }
-    this.dateState.push('test');
-    this.dateState.pop();
   },
 
   beforeRouteLeave(to, from, next) {
@@ -557,35 +555,6 @@ export default {
     next();
   },
   mounted() {
-    // window.setTimeout(() => {
-    // var curDay; //현재포인터날짜
-    // var prevDay; //이전날짜
-
-    // for (let i = 19; i < this.questionList.length - 6; i++) {
-    //   this.dateState = false;
-    //   var jbString = this.questionList[i].date;
-    //   alert(jbString);
-    //   var month = jbString.split("월");
-
-    //   if (isNaN(month[1][2]) == false)
-    //     curDay = month[1][1] + "" + month[1][2];
-    //   else if (isNaN(month[1][2]) == true) curDay = month[1][1];
-
-    //   if (!prevDay) this.dateState = true;
-    //   else if (prevDay == curDay) this.dateState = false;
-    //   else if (prevDay != curDay) this.dateState = true;
-    //   prevDay = curDay;
-    //   alert(this.dateState)
-    // var day = jbString.split("일");
-    // var dayCheck1, dayCheck2;
-    // if(isNaN(month[1][2]==false)) alert(month[0][1]);//dayCheck1 = day[0][day[0].length - 2]*10 +day[0][day[0].length - 1];
-    // else {alert(month[0][1]+'ha'+month[0][2])}
-    // alert(dayCheck1);
-    // if(isNaN(day[0][day[0].length - 2])==false) alert(day[0][day[0].length - 2]+''+day[0][day[0].length - 1]);
-    // else alert(day[0][day[0].length - 1]);
-    //   }
-    // }, 1500);
-
     window.setTimeout(() => {
       this.socket.emit("getUsers", {
         socketID: this.socket.id,
