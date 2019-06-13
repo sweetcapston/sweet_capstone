@@ -2,8 +2,8 @@
   <v-toolbar class="gradient white--text" height="50px" app flat>
     <v-toolbar-side-icon class="hidden-md-and-up" @click="toggleDrawer"/>
     <v-toolbar-title class="headline text-uppercase">
-      <img class="logo" :src="require('@/assets/logo_white.png')" height="40" />
-      <span  class="hidden-md-and-down username font-weight"> {{this.$store.state.userName}} </span>
+      <img class="logo" :src="require('@/assets/logo_white.png')" height="40" @click="moveToMain">
+      <span class="hidden-md-and-down username font-weight">{{this.$store.state.userName}}</span>
     </v-toolbar-title>
     <v-spacer/>
 
@@ -58,33 +58,18 @@ export default {
     }
   },
 
-    methods: {
-      ...mapMutations(['toggleDrawer']),
-      logout(){
-        this.$session.destroy();
-        Auth.logout().then(res => {
-          if(res.data == "logout"){
-            this.$store.commit('removeLoginData');
-            this.$router.push({name: 'login'});
-          }
-        })
-        var img = new Image();
-        img.src = require('@/assets/logo_white_animation.svg');
-      },
-      alarmActive() {
-        Prof.alarmActive(this.$store.state.currentClass.classCode,this.alarm)
-        .then(res => {
-          this.$store.commit("setAlarmActive", res.data);
-          this.alarm = res.data
-        });
-      },
-      profile(){
-        alert("edit")
-        this.$EventBus.$emit("profile")
-      },
-      moveToMain(){
-        this.$router.push({name: 'main'}) ;
-      }
+  methods: {
+    ...mapMutations(["toggleDrawer"]),
+    logout() {
+      this.$session.destroy();
+      Auth.logout().then(res => {
+        if (res.data == "logout") {
+          this.$store.commit("removeLoginData");
+          this.$router.push({ name: "login" });
+        }
+      });
+      var img = new Image();
+      img.src = require("@/assets/logo_white_animation.svg");
     },
     alarmActive() {
       Prof.alarmActive(
