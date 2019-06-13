@@ -18,6 +18,6 @@ export default {
     return axios.post(`${BaseUrl}/userRelease`, {userID: userID, classCode: classCode},config);
   },
   deleteBlack(userID, classCode) {
-    return axios.post(`${BaseUrl}/userRelease`, {userID: userID, classCode: classCode},config);
+    return axios.post(`${BaseUrl}/userDelete`, {userID: userID, classCode: classCode},config);
   }
 };

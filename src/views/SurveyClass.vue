@@ -15,7 +15,6 @@
         v-bind:socket="socket"
         :key="n"
       />
-      <div v-if="surveyList.length+ this.dataCheck < 1" style="padding-left:10px"><h4>등록된 설문이 없습니다.</h4></div>
       </material-card>
     </v-expansion-panel>
     <v-expansion-panel v-else>
@@ -27,7 +26,6 @@
         v-bind:socket="socket"
         :key="_id"
       />
-      <div v-if="surveyList.length+ this.dataCheck < 1" style="padding-left:10px"><h4>등록된 설문이 없습니다.</h4></div>
       </material-card>
     </v-expansion-panel>
   </div>

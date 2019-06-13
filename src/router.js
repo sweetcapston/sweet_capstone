@@ -40,7 +40,7 @@ export default new Router({
     },
     {
       path: "/admin",
-      name: "administer",
+      name: "admin",
       component: Administer,
     },
     {
