@@ -25,7 +25,7 @@
           >      
             <img :src="logo" width="70%" />
             <div class="subheading mb-3 text-xs-center unselectable undraggable">Powered by Sweet Team</div>
-            <v-btn href="#how-to-use" class="cyan lighten-1 mt-5" dark large>             
+            <v-btn @click="howto()" class="cyan lighten-1 mt-5" dark large>             
               <a class="page-scroll white--text">How to use</a>
             </v-btn>
           </v-layout>
@@ -235,7 +235,7 @@
               class="cyan lighten-1 mt-5"
               dark
               large
-              href="#main"
+              @click="goTop()"
             >
               Get Started
             </v-btn>
@@ -376,6 +376,12 @@ export default {
     OpenRegister() {
       this.$router.push("register")
     },
+    howto(){
+      document.querySelector("body").scrollTop=document.querySelector("#how-to-use").offsetTop;
+    },
+    goTop(){
+      document.querySelector("body").scrollTop=0;
+    }
   },
   computed: {
     logo() {

@@ -611,14 +611,11 @@ export default {
         this.$store.state.alarm
       ) {
         navigator.serviceWorker.getRegistration().then(function(reg) {
-          const title = "OPEN CLASS❤️";
+          const title = `${data.question}`;
           var options = {
-            body: `${data.question}`,
-            //1px = 0.02645833333333 cm
+            body: "OPEN CLASS❤️",
             image:require("@/assets/notify.jpg"),
             icon:require("@/assets/mini.png"),
-            // image: "https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2Fnotify.jpg?alt=media&token=47929830-0008-4056-81f4-847dfc86cf21", //720px (width) by 240px (height)
-            // icon: "https://firebasestorage.googleapis.com/v0/b/openclass-e8b92.appspot.com/o/images%2Fmini.png?alt=media&token=98f4ae8b-06bb-40ff-8222-45ae62a76b57", //android는 192px   512 512
             tag: getTime,
             actions: [
               {

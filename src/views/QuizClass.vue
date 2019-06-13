@@ -121,13 +121,6 @@ export default {
     };
   },
   methods: {
-    // edited(editQuiz){
-    //   for(let i=0; i<this.quizList.length; i++ ){
-    //     if(this.quizList[i].QID == editQuiz.QID) {
-    //       this.$set(this.quizList, i, editQuiz);
-    //     }
-    //   }
-    // },
     addQuiz() {
       this.formShow = !this.formShow;
       setTimeout(()=>{
